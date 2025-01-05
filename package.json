@@ -1,0 +1,33 @@
+{
+  "name": "playgrounds-app",
+  "private": "true",
+  "version": "1.0.0",
+  "description": "The BlockCode Playgrounds application.",
+  "main": "desktop/main.js",
+  "author": {
+    "name": "Yeqin Gong",
+    "email": "gon@gyeq.in",
+    "url": "http://gon.gyeq.in/"
+  },
+  "scripts": {
+    "dev": "bun --smol ./scripts/combine & bunx serve dist",
+    "build": "bun --smol ./scripts/build",
+    "build:all": "bun run build:core && bun run build:blocks && bun run build:gui",
+    "build:core": "bun run build -- packages/utils packages/core packages/paint packages/sound",
+    "build:gui": "bun run build -- packages/gui/editors/mpyblocks packages/gui/editors/arcade packages/gui/editors/tankwar packages/gui",
+    "build:blocks": "bun run build -- packages/blocks/extensions/light packages/blocks/extensions/time packages/blocks"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/bun": "latest",
+    "fs-extra": "^11.2.0",
+    "lightningcss": "^1.28.2",
+    "mkdirp": "^3.0.1",
+    "yaml": "^2.6.1"
+  },
+  "workspaces": [
+    "packages/*",
+    "packages/gui/editors/*",
+    "packages/blocks/extensions/*"
+  ]
+}
