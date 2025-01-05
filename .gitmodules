@@ -10,3 +10,9 @@
 [submodule "packages/gui"]
 	path = packages/gui
 	url = https://github.com/BlockCodeLab/gui.git
+[submodule "packages/paint"]
+	path = packages/paint
+	url = https://github.com/BlockCodeLab/paint.git
+[submodule "packages/sound"]
+	path = packages/sound
+	url = https://github.com/BlockCodeLab/sound.git
