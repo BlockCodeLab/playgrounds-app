@@ -10,13 +10,12 @@
     - [extensions](packages/blocks/extensions): 图形积木扩展
   - [board/](packages/board/): 开发板硬件支持库
   - [core/](packages/core/): 核心模块，包含核心全局状态机、标准UI、主题样式定义等
-  - [examples/](packages/examples/): 精选事例项目
+  - [examples/](packages/examples/): 精选实例作品
   - [gui/](packages/gui/): 基于 Preact 框架的浏览器端图形界面
     - [editors](packages/gui/editors): 编辑器扩展
   - [paint/](packages/paint/): 像素风格画图组件
   - [sound/](packages/sound/): 声音编辑组件
   - [utils/](packages/utils/): 工具和第三方公共引用库
-  - [vm/](packages/vm/): 硬件模拟器
 - [public/](public/): 静态文件，包含LOGO、图片、HTML等
 - [scripts/](scripts/): 编译程序工具
 - [src](src/): 基于 Electron 的 windows/macos/linux 跨平台的应用程序
