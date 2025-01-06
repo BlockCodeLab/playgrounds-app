@@ -16,3 +16,6 @@
 [submodule "packages/sound"]
 	path = packages/sound
 	url = https://github.com/BlockCodeLab/sound.git
+[submodule "packages/board"]
+	path = packages/board
+	url = https://github.com/BlockCodeLab/board.git
