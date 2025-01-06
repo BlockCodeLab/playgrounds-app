@@ -12,10 +12,11 @@
   "scripts": {
     "dev": "bun --smol ./scripts/combine & bunx serve dist",
     "build": "bun --smol ./scripts/build",
-    "build:all": "bun run build:core && bun run build:blocks && bun run build:gui",
-    "build:core": "bun run build -- packages/utils packages/core packages/paint packages/sound",
-    "build:gui": "bun run build -- packages/gui/editors/mpyblocks packages/gui/editors/arcade packages/gui/editors/tankwar packages/gui",
-    "build:blocks": "bun run build -- packages/blocks/extensions/light packages/blocks/extensions/time packages/blocks"
+    "build:all": "bun run build:core && bun run build:components && bun run build:blocks && bun run build:gui",
+    "build:core": "bun run build -- packages/utils packages/core packages/board",
+    "build:components": "bun run build -- packages/paint packages/sound",
+    "build:blocks": "bun run build -- packages/blocks/extensions/* packages/blocks",
+    "build:gui": "bun run build -- packages/gui/editors/* packages/gui"
   },
   "dependencies": {},
   "devDependencies": {
