@@ -16,15 +16,18 @@
     "build:core": "bun run build -- packages/utils packages/core packages/board",
     "build:components": "bun run build -- packages/paint packages/sound",
     "build:blocks": "bun run build -- packages/blocks/extensions/* packages/blocks",
-    "build:gui": "bun run build -- packages/gui/editors/* packages/gui"
+    "build:gui": "bun run build -- packages/gui/editors/* packages/gui",
+    "predeploy": "BUN_ENV=production bun run build:all && BUN_ENV=production bun --smol ./scripts/combine",
+    "deploy": "bun x gh-pages -d dist -b",
+    "postdeploy": "bun x gh-pages-clean"
   },
-  "dependencies": {},
   "devDependencies": {
     "@types/bun": "latest",
     "fs-extra": "^11.2.0",
+    "gh-pages": "^6.3.0",
     "lightningcss": "^1.28.2",
     "mkdirp": "^3.0.1",
-    "yaml": "^2.6.1"
+    "yaml": "^2.7.0"
   },
   "workspaces": [
     "packages/*",
