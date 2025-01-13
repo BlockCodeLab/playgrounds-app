@@ -34,7 +34,7 @@
     "@types/bun": "latest",
     "fs-extra": "^11.2.0",
     "gh-pages": "^6.3.0",
-    "lightningcss": "^1.28.2",
+    "lightningcss": "^1.29.1",
     "mkdirp": "^3.0.1",
     "yaml": "^2.7.0"
   },
