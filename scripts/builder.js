@@ -6,6 +6,10 @@ import { yamlLoader } from './yaml-loader';
 
 const isRelease = Bun.env.BUN_ENV === 'production';
 
+const isTrue = (env) => env === 'yes' || env === 'on' || env === 'true'
+
+const isFalse = (env) => env === 'no' || env === 'off' || env === 'false'
+
 const getValueByPath = (res, path) => {
   if (!path) return '';
   const keys = path.split('.');
@@ -40,6 +44,7 @@ export async function build(dir) {
     },
     define: {
       DEBUG: JSON.stringify(Bun.env.BUN_ENV !== 'production'),
+      BETA: JSON.stringify(isTrue(Bun.env.BETA)),
       ...(config.define ?? {}),
     },
     plugins: [
