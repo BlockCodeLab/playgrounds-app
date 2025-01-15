@@ -24,20 +24,18 @@ $ bun install
 $ bun run build
 ```
 
-4. 进入 `playgrounds-app` 项目文件夹，在 `/packages/gui/editors/` 路径下新建文件夹 `example`。
-
-5. 编译 `playgrounds-app` 项目的 `gui` 模块（只需要编译一次，为了加入扩展编辑器信息）。
+4. 编译 `playgrounds-app` 项目的 `gui` 模块（只需要编译一次，为了加入扩展编辑器信息）。
 
 ```bash
 $ cd playgrounds-app
 $ bun run build:gui
 ```
 
-6. 运行服务器，用浏览器打开 `localhost:3000`
+5. 运行服务器，用浏览器打开 `localhost:3000`
 
 ```bash
 $ cd playgrounds-app
 $ bun run dev
 ```
 
-> 之后对编辑器的开发只需要执行步骤 3（有必须时还需执行步骤 6）就可以在浏览器中查看了。
+> 之后对编辑器的开发只需要执行步骤 3（有必须时还需执行步骤 5）就可以在浏览器中查看了。
