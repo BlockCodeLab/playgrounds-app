@@ -1,0 +1,11 @@
+en:
+  blocks.example.name: Example
+  blocks.example.blockA: block [KEY]
+
+zh-Hans:
+  blocks.example.name: 案例
+  blocks.example.blockA: 积木 [KEY]
+
+zh-Hant:
+  blocks.example.name: 案例
+  blocks.example.blockA: 積木 [KEY]
