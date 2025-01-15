@@ -1,0 +1,14 @@
+{
+  "name": "@blockcode/board",
+  "private": "true",
+  "version": "1.0.0",
+  "type": "module",
+  "module": "./dist/index.js",
+  "dependencies": {
+    "crypto-js": "^4.2.0",
+    "esptool-js": "^0.5.3"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  }
+}
