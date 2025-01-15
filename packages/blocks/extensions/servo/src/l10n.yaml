@@ -1,0 +1,26 @@
+en:
+  blocks.servo.name: Servo
+  blocks.servo.90servo: set PIN [PIN] 90° servo angle to [ANGLE]°
+  blocks.servo.180servo: set PIN [PIN] 180° servo angle to [ANGLE]°
+  blocks.servo.motor: set PIN [PIN] 360° servo rotate [ROTATE]
+  blocks.servo.motorClockwise: clockwise
+  blocks.servo.motorAnticlockwise: anticlockwise
+  blocks.servo.motorStop: stop
+
+zh-Hans:
+  blocks.servo.name: 舵机
+  blocks.servo.90servo: 将引脚 [PIN] 90° 舵机角度设为 [ANGLE]°
+  blocks.servo.180servo: 将引脚 [PIN] 180° 舵机角度设为 [ANGLE]°
+  blocks.servo.motor: 将引脚 [PIN] 360° 舵机转向设为 [ROTATE]
+  blocks.servo.motorClockwise: 顺时针
+  blocks.servo.motorAnticlockwise: 逆时针
+  blocks.servo.motorStop: 停止
+
+zh-Hant:
+  blocks.servo.name: 舵機
+  blocks.servo.90servo: 將引腳 [PIN] 90° 舵機角度設為 [ANGLE]°
+  blocks.servo.180servo: 將引腳 [PIN] 180° 舵機角度設為 [ANGLE]°
+  blocks.servo.motor: 將引腳 [PIN] 360° 舵機轉向設為 [ROTATE]
+  blocks.servo.motorClockwise: 順時針
+  blocks.servo.motorAnticlockwise: 逆時針
+  blocks.servo.motorStop: 停止

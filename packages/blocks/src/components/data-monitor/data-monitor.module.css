@@ -1,0 +1,112 @@
+.data-monitor-wrapper {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 0.75rem 1.25rem;
+  font-size: var(--standard-font-size);
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.monitor-item {
+  opacity: 0.4;
+  margin-bottom: var(--space);
+  position: relative;
+  border: 1px solid;
+  border-radius: var(--form-radius);
+  overflow: hidden;
+  animation: slidein 0.5s ease-in;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  background: var(--ui-white-dim);
+}
+
+.data-monitor-wrapper:hover .monitor-item {
+  opacity: 1;
+  backdrop-filter: blur(3px);
+}
+
+@keyframes slidein {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 0.4;
+    transform: translateX(0);
+  }
+}
+
+.info,
+.value {
+  display: inline-block;
+  padding: calc(var(--space) / 2) calc(var(--space) * 0.7);
+  min-width: 1.5rem;
+  text-align: center;
+}
+
+.info {
+  color: var(--ui-white);
+  border: 1px solid;
+  border-radius: var(--form-radius);
+  font-size: var(--small-font-size);
+}
+
+.info .label {
+  font-weight: bold;
+  border-right: 2px solid;
+  padding-right: calc(var(--space) / 2);
+  margin-right: calc(var(--space) / 2);
+}
+
+.info .target {
+}
+
+.monitor-value .list-length {
+  color: var(--ui-black-transparent);
+}
+
+.monitor-value .list {
+  max-height: 10rem;
+  overflow-y: auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  counter-reset: line;
+}
+
+.monitor-value .list .value {
+  display: block;
+  padding: 0 var(--space);
+  line-height: 2;
+  text-align: left;
+  width: 100%;
+}
+
+.monitor-value .list .value:before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  border-right: 1px solid var(--ui-black-transparent);
+  padding: 0 0.5em 0 0;
+  margin-right: 0.5em;
+  width: 1.5em;
+  text-align: right;
+  color: var(--ui-black-transparent);
+}
+
+.monitor-line .value {
+  width: 120px;
+  height: 90px;
+}
+
+.monitor-line .info {
+  position: absolute;
+  top: 0;
+  right: 0;
+}

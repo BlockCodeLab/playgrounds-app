@@ -1,0 +1,41 @@
+en:
+  blocks.time.name: Time
+  blocks.time.sync: sync world time
+  blocks.time.setTimezone: set timezone to [TIMEZONE]
+  blocks.time.getTime: current [OPTION]
+  blocks.time.option.year: year
+  blocks.time.option.month: month
+  blocks.time.option.date: date
+  blocks.time.option.weekday: day of week
+  blocks.time.option.hour: hour
+  blocks.time.option.minute: minute
+  blocks.time.option.second: second
+  blocks.time.days: days since 2000
+
+zh-Hans:
+  blocks.time.name: 时间
+  blocks.time.sync: 同步时间
+  blocks.time.setTimezone: 将时区设为 [TIMEZONE]
+  blocks.time.getTime: 当前时间的 [OPTION]
+  blocks.time.option.year: 年
+  blocks.time.option.month: 月
+  blocks.time.option.date: 日
+  blocks.time.option.weekday: 星期
+  blocks.time.option.hour: 时
+  blocks.time.option.minute: 分
+  blocks.time.option.second: 秒
+  blocks.time.days: 2000 年至今的天数
+
+zh-Hant:
+  blocks.time.name: 時間
+  blocks.time.sync: 同步時間
+  blocks.time.setTimezone: 將時區設為 [TIMEZONE]
+  blocks.time.getTime: 當前時間的 [OPTION]
+  blocks.time.option.year: 年
+  blocks.time.option.month: 月
+  blocks.time.option.date: 日
+  blocks.time.option.weekday: 星期
+  blocks.time.option.hour: 時
+  blocks.time.option.minute: 分
+  blocks.time.option.second: 秒
+  blocks.time.days: 2000 年至今的天數

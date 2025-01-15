@@ -1,0 +1,61 @@
+.prompt-modal {
+  width: 360px;
+}
+
+.prompt-content {
+  background: var(--ui-white);
+  padding: 1.5rem 2.25rem;
+}
+
+.prompt-content input[type='checkbox'],
+.prompt-content input[type='radio'] {
+  margin: 3px;
+}
+
+.label {
+  font-weight: 500;
+  margin: 0 0 0.75rem;
+}
+
+.variable-name-text-input {
+  margin-bottom: 1.5rem;
+  width: 100%;
+  border: 1px solid var(--ui-black-transparent);
+  border-radius: 5px;
+  padding: 0 1rem;
+  height: 3rem;
+  color: var(--text-transparent);
+  font-size: 0.875rem;
+}
+
+.info-message {
+  font-weight: normal;
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.options {
+  display: flex;
+  font-weight: normal;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.button-row {
+  font-weight: bolder;
+  text-align: right;
+}
+
+.button {
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.ok-button {
+  background: var(--theme-primary);
+  border: var(--theme-primary);
+  color: var(--ui-white);
+  margin-left: var(--space);
+}

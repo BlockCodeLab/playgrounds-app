@@ -1,0 +1,105 @@
+.prompt-modal {
+  width: 700px;
+  margin: 50px auto; /* This modal is taller than most, reduce top margin */
+}
+
+.body {
+  background: var(--ui-white);
+  padding: 1.5rem 2.25rem;
+}
+
+.body input[type='checkbox'],
+.body input[type='radio'] {
+  margin: 3px;
+}
+
+/* Blocks workspace for custom procedure declaration editor */
+.workspace {
+  min-height: 200px;
+  position: relative;
+}
+
+.workspace :global(.injectionDiv) {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.workspace :global(.blocklySvg) {
+  background-color: var(--ui-primary);
+}
+
+/* Row of "card" buttons for modifying custom procedures */
+.options-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.option-card {
+  background: var(--ui-white);
+  border: 2px solid var(--ui-black-transparent);
+  border-radius: var(--space);
+  padding: calc(var(--space) * 2);
+  text-align: center;
+  flex-grow: 1;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-basis: 100px;
+}
+
+.option-card:hover {
+  border: 2px solid var(--theme-primary);
+  box-shadow: 0px 0px 0px 4px var(--theme-transparent);
+}
+
+.option-card + .option-card {
+  margin-left: 1rem;
+}
+
+.option-icon {
+  max-height: 48px;
+  margin-bottom: 0.5rem;
+}
+
+.option-title {
+  font-weight: bold;
+}
+
+/* block type row */
+.radiobox-row {
+  display: flex;
+  font-weight: normal;
+  justify-content: space-between;
+  margin: 1rem 6rem 1.5rem;
+}
+
+.checkbox-row {
+  margin-top: 1rem;
+}
+
+/* Confirmation buttons at the bottom of the modal */
+.button-row {
+  margin-top: 1rem;
+  font-weight: bolder;
+  text-align: right;
+}
+
+.button-row button {
+  border: 1px solid var(--ui-black-transparent);
+  border-radius: 0.25rem;
+  padding: 0.75rem 1rem;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+.button-row button.ok-button {
+  background: var(--theme-primary);
+  border: var(--theme-primary);
+  color: var(--ui-white);
+}
+
+.button-row button + button {
+  margin-left: 0.5rem;
+}

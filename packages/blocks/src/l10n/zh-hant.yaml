@@ -1,0 +1,59 @@
+blocks.menu.file: 文件
+blocks.menu.file.newProject: 新作品
+blocks.menu.file.openProject: 打開
+blocks.menu.file.saveProject: 保存
+blocks.menu.file.uploadProject: 從電腦中打開
+blocks.menu.file.downloadProject: 保存到電腦
+blocks.menu.file.saveAlert: 已保存。
+
+blocks.menu.edit: 編輯
+blocks.menu.edit.undo: 撤銷
+blocks.menu.edit.redo: 恢復
+
+blocks.menu.device: 設備
+blocks.menu.device.connect: 連接{name}
+blocks.menu.device.disconnect: 斷開{name}連接
+blocks.menu.device.download: 下載程序
+blocks.menu.device.turnOnAutoDownload: 打開自動下載
+blocks.menu.device.turnOffAutoDownload: 關閉自動下載
+
+blocks.tabs.code: 程式
+blocks.tabs.codeReview: 程式審查
+
+blocks.panes.monitor: 監視器
+
+blocks.extensions.addExtension: 添加擴展
+blocks.extensions.empty: 沒有擴展！
+
+blocks.prompt.ok: 確定
+blocks.prompt.cancel: 取消
+blocks.dataPrompt.forAllTargets: 適用於全局
+blocks.dataPrompt.forThisTarget: 僅適用於當前
+blocks.dataPrompt.availableToAllTargets: 全局都可使用該變量。
+blocks.dataPrompt.listAvailableToAllTargets: 全局都可使用該列表。
+
+blocks.myBlockPrompt.title: 製作新的積木
+blocks.myBlockPrompt.addAnInputNumberText: 添加輸入項
+blocks.myBlockPrompt.numberTextType: 數字或文本
+blocks.myBlockPrompt.addAnInputBoolean: 添加輸入項
+blocks.myBlockPrompt.booleanType: 布爾值
+blocks.myBlockPrompt.addALabel: 添加文本標簽
+blocks.myBlockPrompt.command: 無返回值
+blocks.myBlockPrompt.reporterNumberText: 返回數字或文本
+blocks.myBlockPrompt.reporterBoolean: 返回布爾值
+blocks.myBlockPrompt.warpLabel: 開啟加速模式
+
+blocks.events.programStart: 當程序開始運行
+blocks.control.stopOther: 其他腳本
+blocks.operators.and: '%1 且 %2'
+
+blocks.myblock.addLabel: 文本
+blocks.myblock.addBoolean: 布爾值
+blocks.myblock.addNumbetText: 數字或文本
+
+blocks.monitor: 監視
+blocks.monitor.showValue: 顯示 %1 值
+blocks.monitor.showNamedValue: 顯示名為 %2 的 %1 值
+blocks.monitor.trueValue: 真
+blocks.monitor.falseValue: 假
+blocks.monitor.listLength: '{length} 項'

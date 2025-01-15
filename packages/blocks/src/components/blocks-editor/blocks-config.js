@@ -1,0 +1,95 @@
+import { themeColors } from '@blockcode/core';
+
+export default {
+  zoom: {
+    controls: true,
+    wheel: true,
+    startScale: 0.7,
+  },
+  grid: {
+    spacing: 40,
+    length: 2,
+    colour: '#DDDDDD',
+  },
+  colours: {
+    motion: {
+      primary: themeColors.blocks.motion.primary,
+      secondary: themeColors.blocks.motion.secondary,
+      tertiary: themeColors.blocks.motion.tertiary,
+      quaternary: themeColors.blocks.motion.quaternary,
+    },
+    looks: {
+      primary: themeColors.blocks.looks.primary,
+      secondary: themeColors.blocks.looks.secondary,
+      tertiary: themeColors.blocks.looks.tertiary,
+      quaternary: themeColors.blocks.looks.quaternary,
+    },
+    sounds: {
+      primary: themeColors.blocks.sounds.primary,
+      secondary: themeColors.blocks.sounds.secondary,
+      tertiary: themeColors.blocks.sounds.tertiary,
+      quaternary: themeColors.blocks.sounds.quaternary,
+    },
+    control: {
+      primary: themeColors.blocks.control.primary,
+      secondary: themeColors.blocks.control.secondary,
+      tertiary: themeColors.blocks.control.tertiary,
+      quaternary: themeColors.blocks.control.quaternary,
+    },
+    event: {
+      primary: themeColors.blocks.events.primary,
+      secondary: themeColors.blocks.events.secondary,
+      tertiary: themeColors.blocks.events.tertiary,
+      quaternary: themeColors.blocks.events.quaternary,
+    },
+    sensing: {
+      primary: themeColors.blocks.sensing.primary,
+      secondary: themeColors.blocks.sensing.secondary,
+      tertiary: themeColors.blocks.sensing.tertiary,
+      quaternary: themeColors.blocks.sensing.quaternary,
+    },
+    operators: {
+      primary: themeColors.blocks.operators.primary,
+      secondary: themeColors.blocks.operators.secondary,
+      tertiary: themeColors.blocks.operators.tertiary,
+      quaternary: themeColors.blocks.operators.quaternary,
+    },
+    data: {
+      primary: themeColors.blocks.variables.primary,
+      secondary: themeColors.blocks.variables.secondary,
+      tertiary: themeColors.blocks.variables.tertiary,
+      quaternary: themeColors.blocks.variables.quaternary,
+    },
+    data_lists: {
+      primary: themeColors.blocks.lists.primary,
+      secondary: themeColors.blocks.lists.secondary,
+      tertiary: themeColors.blocks.lists.tertiary,
+      quaternary: themeColors.blocks.lists.quaternary,
+    },
+    more: {
+      primary: themeColors.blocks.myblocks.primary,
+      secondary: themeColors.blocks.myblocks.secondary,
+      tertiary: themeColors.blocks.myblocks.tertiary,
+      quaternary: themeColors.blocks.myblocks.quaternary,
+    },
+    monitor: {
+      primary: themeColors.blocks.monitor.primary,
+      secondary: themeColors.blocks.monitor.secondary,
+      tertiary: themeColors.blocks.monitor.tertiary,
+      quaternary: themeColors.blocks.monitor.quaternary,
+    },
+    workspace: '#F9F9F9',
+    flyout: '#F9F9F9',
+    toolbox: '#FFFFFF',
+    toolboxSelected: '#E9EEF2',
+    scrollbar: '#CECDCE',
+    scrollbarHover: '#CECDCE',
+    insertionMarker: '#000000',
+    insertionMarkerOpacity: 0.2,
+    fieldShadow: 'rgba(255, 255, 255, 0.3)',
+    dragShadowOpacity: 0.6,
+  },
+  comments: true,
+  collapse: false,
+  sounds: false,
+};

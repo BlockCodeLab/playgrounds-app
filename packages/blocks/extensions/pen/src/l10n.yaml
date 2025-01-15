@@ -1,0 +1,44 @@
+en:
+  blocks.pen.name: Pen
+  blocks.pen.erase: erase all
+  blocks.pen.stamp: stamp
+  blocks.pen.down: pen down
+  blocks.pen.up: pen up
+  blocks.pen.penColor: set pen color to [COLOR]
+  blocks.pen.color: color
+  blocks.pen.saturation: saturation
+  blocks.pen.brightness: brightness
+  blocks.pen.changePen: change pen [OPTION] by [VALUE]
+  blocks.pen.setPen: set pen [OPTION] to [VALUE]
+  blocks.pen.changeSize: change pen size by [SIZE]
+  blocks.pen.setSize: set pen size to [SIZE]
+
+zh-Hans:
+  blocks.pen.name: 画笔
+  blocks.pen.erase: 全部擦除
+  blocks.pen.stamp: 图章
+  blocks.pen.down: 落笔
+  blocks.pen.up: 抬笔
+  blocks.pen.penColor: 将笔的颜色设为 [COLOR]
+  blocks.pen.color: 颜色
+  blocks.pen.saturation: 饱和度
+  blocks.pen.brightness: 亮度
+  blocks.pen.changePen: 将笔的 [OPTION] 增加 [VALUE]
+  blocks.pen.setPen: 将笔的 [OPTION] 设为 [VALUE]
+  blocks.pen.changeSize: 将笔的粗细增加 [SIZE]
+  blocks.pen.setSize: 将笔的粗细设为 [SIZE]
+
+zh-Hant:
+  blocks.pen.name: 畫筆
+  blocks.pen.erase: 全部擦除
+  blocks.pen.stamp: 圖章
+  blocks.pen.down: 落筆
+  blocks.pen.up: 抬筆
+  blocks.pen.penColor: 將筆的顏色設為 [COLOR]
+  blocks.pen.color: 顏色
+  blocks.pen.saturation: 飽和度
+  blocks.pen.brightness: 亮度
+  blocks.pen.changePen: 將筆的 [OPTION] 增加 [VALUE]
+  blocks.pen.setPen: 將筆的 [OPTION] 設為 [VALUE]
+  blocks.pen.changeSize: 將筆的粗細增加 [SIZE]
+  blocks.pen.setSize: 將筆的粗細設為 [SIZE]

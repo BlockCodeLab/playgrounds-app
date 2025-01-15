@@ -1,0 +1,11 @@
+en:
+  blocks.nes.name: NES emulator
+  blocks.nes.download: Download ROM to Arcade
+
+zh-Hans:
+  blocks.nes.name: NES 模拟器
+  blocks.nes.download: 下载 ROM 到游戏机
+
+zh-Hant:
+  blocks.nes.name: NES 模擬器
+  blocks.nes.download: 下載 ROM 到遊戲機

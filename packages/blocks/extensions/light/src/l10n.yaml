@@ -1,0 +1,26 @@
+en:
+  blocks.light.name: Light
+  blocks.light.led: set PIN [PIN] LED [STATE]
+  blocks.light.led.off: off
+  blocks.light.led.on: on
+  blocks.light.ledToggle: toggle PIN [PIN] LED state
+  blocks.light.ledIsOn: PIN [PIN] LED is on?
+  blocks.light.brightness: PIN [PIN] ambient light brightness
+
+zh-Hans:
+  blocks.light.name: 灯光
+  blocks.light.led: 将引脚 [PIN] 的 LED 灯 [STATE]
+  blocks.light.led.off: 关闭
+  blocks.light.led.on: 开启
+  blocks.light.ledToggle: 切换引脚 [PIN] 的 LED 灯状态
+  blocks.light.ledIsOn: 引脚 [PIN] 的 LED 灯开启？
+  blocks.light.brightness: 引脚 [PIN] 的环境光亮度
+
+zh-Hant:
+  blocks.light.name: 燈光
+  blocks.light.led: 將引腳 [PIN] 的 LED 燈 [STATE]
+  blocks.light.led.off: 關閉
+  blocks.light.led.on: 開啟
+  blocks.light.ledToggle: 切換引腳 [PIN] 的 LED 燈狀態
+  blocks.light.ledIsOn: 引腳 [PIN] 的 LED 燈開啟？
+  blocks.light.brightness: 引腳 [PIN] 的環境光亮度

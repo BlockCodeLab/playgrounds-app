@@ -1,0 +1,50 @@
+en:
+  blocks.request.name: HTTP Request
+  blocks.request.request: send [MOTHOD] request to [URL]
+  blocks.request.getText: text content
+  blocks.request.getContent: item [PATH] of responds
+  blocks.request.clearCache: clear request cache
+  blocks.request.whenResponds: when a site responds
+  blocks.request.whenFails: when a request fails
+  blocks.request.statusCode: status code
+  blocks.request.isResponds: site responds?
+  blocks.request.setHeader: set headers [HEADER] to [VALUE]
+  blocks.request.setContentType: set content type to [CONTENTTYPE]
+  blocks.request.setParam: set param [KEY] to [VALUE]
+  blocks.request.setBody: set body [KEY] to [VALUE]
+  blocks.request.key: key
+  blocks.request.value: value
+
+zh-Hans:
+  blocks.request.name: HTTP 请求
+  blocks.request.request: 用 [MOTHOD] 方法从 [URL] 请求数据
+  blocks.request.getText: 文本数据内容
+  blocks.request.getContent: 数据路径 [PATH] 的内容
+  blocks.request.clearCache: 清除请求应答缓存
+  blocks.request.whenResponds: 当网站有应答
+  blocks.request.whenFails: 当请求失败
+  blocks.request.statusCode: 应答状态码
+  blocks.request.isResponds: 网站有应答？
+  blocks.request.setHeader: 将标头 [HEADER] 设为 [VALUE]
+  blocks.request.setContentType: 将内容类型设为 [CONTENTTYPE]
+  blocks.request.setParam: 将请求参数 [KEY] 设为 [VALUE]
+  blocks.request.setBody: 将提交数据 [KEY] 设为 [VALUE]
+  blocks.request.key: 键
+  blocks.request.value: 值
+
+zh-Hant:
+  blocks.request.name: HTTP 請求
+  blocks.request.request: 用 [MOTHOD] 方法從 [URL] 請求數據
+  blocks.request.getText: 文本數據內容
+  blocks.request.getContent: 數據路徑 [PATH] 的內容
+  blocks.request.clearCache: 清除請求應答緩存
+  blocks.request.whenResponds: 當網站有應答
+  blocks.request.whenFails: 當請求失敗
+  blocks.request.statusCode: 應答狀態碼
+  blocks.request.isResponds: 網站有應答？
+  blocks.request.setHeader: 將標頭 [HEADER] 信息設為 [VALUE]
+  blocks.request.setContentType: 將內容類型設為 [CONTENTTYPE]
+  blocks.request.setParam: 將請求參數項 [KEY] 設為 [VALUE]
+  blocks.request.setBody: 將請求數據項 [KEY] 設為 [VALUE]
+  blocks.request.key: 鍵
+  blocks.request.value: 值
