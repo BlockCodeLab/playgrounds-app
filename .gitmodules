@@ -1,0 +1,3 @@
+[submodule "packages/gui/editors/mpyblocks"]
+	path = packages/gui/editors/mpyblocks
+	url = https://github.com/BlockCodeLab/gui-mpyblocks.git
