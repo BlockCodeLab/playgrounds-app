@@ -1,0 +1,6 @@
+.wave-editor-wrapper {
+  display: flex;
+  flex-grow: 1;
+  background: var(--ui-white);
+  border-radius: inherit;
+}

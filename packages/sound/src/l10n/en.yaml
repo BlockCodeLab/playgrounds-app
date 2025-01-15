@@ -1,0 +1,15 @@
+sound.sound: Sound
+sound.play: Play
+sound.record: Record
+sound.stop: Stop
+sound.name: name
+
+sound.contextMenu.export: export
+sound.contextMenu.delete: delete
+
+sound.actionButton.upload: Upload Sound
+sound.actionButton.surprise: Surprise
+sound.actionButton.record: Record
+sound.actionButton.sound: Choose a Sound
+
+sound.error.formatNotSupperted: This wav format is not supported.

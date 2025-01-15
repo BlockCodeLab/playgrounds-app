@@ -1,0 +1,15 @@
+sound.sound: 聲音
+sound.play: 播放
+sound.record: 録音
+sound.stop: 停止
+sound.name: 名稱
+
+sound.contextMenu.export: 導齣
+sound.contextMenu.delete: 刪除
+
+sound.actionButton.upload: 上傳聲音
+sound.actionButton.surprise: 隨機
+sound.actionButton.record: 録製
+sound.actionButton.sound: 選擇一個聲音
+
+sound.error.formatNotSupperted: 聲音文件格式不支持。
