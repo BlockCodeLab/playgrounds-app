@@ -1,0 +1,92 @@
+.icon-selector-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  position: relative;
+
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  border: 2px solid var(--ui-black-transparent);
+  border-radius: var(--space);
+
+  text-align: center;
+  cursor: pointer;
+
+  user-select: none;
+}
+
+.icon-selector-item:hover {
+  border: 2px solid var(--theme-primary);
+  background: var(--ui-white);
+}
+
+.selector {
+  display: none;
+}
+
+.selector:checked + .icon-selector-item {
+  box-shadow: 0px 0px 0px 4px var(--theme-transparent);
+  border: 2px solid var(--theme-primary);
+  background: var(--ui-white);
+}
+
+.icon-outer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.icon-inner {
+  max-width: 32px;
+  max-height: 32px;
+  user-select: none;
+  pointer-events: none;
+}
+
+.icon-order {
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  font-weight: bold;
+  font-size: var(--small-font-size);
+}
+
+.icon-info {
+  padding: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+
+  font-size: var(--small-font-size);
+  color: var(--text-primary);
+  user-select: none;
+}
+
+.icon-title,
+.icon-details {
+  /*
+        For truncating overflowing text gracefully
+        Min-width is for a bug: https://css-tricks.com/flexbox-truncated-text
+    */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.icon-details {
+  margin-top: 0.125rem;
+  font-size: 0.5rem;
+}
+
+.selector:checked + .icon-selector-item .icon-info {
+  background: var(--theme-primary);
+  color: var(--ui-white);
+}
+
+.selector:checked + .icon-selector-item .delete-button {
+  display: flex;
+  top: -0.625rem;
+  right: -0.625rem;
+}

@@ -1,0 +1,129 @@
+/* inspired by scratch-gui */
+:root {
+  --main-button-size: 2.75rem;
+  --more-button-size: 2.25rem;
+  --arrow-size: 0.5rem;
+  --arrow-inset: -0.25rem;
+  --arrow-rounding: 0.125rem;
+}
+
+.action-button-wrapper {
+  display: flex;
+  flex-direction: column-reverse;
+  transition: 0.2s;
+  position: relative;
+}
+
+.button {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: var(--theme-primary);
+  border: 0;
+  outline: none;
+  border: none;
+  transition: background-color 0.2s;
+}
+
+.disabled {
+  cursor: auto;
+  background: var(--ui-black-transparent);
+}
+
+.button:not(.disabled):hover {
+  background: var(--blocks-primary);
+}
+
+.button:active {
+  padding: inherit;
+}
+
+.main-button {
+  border-radius: 100%;
+  width: var(--main-button-size);
+  height: var(--main-button-size);
+  box-shadow: 0 0 0 4px var(--theme-transparent);
+  z-index: var(--z-index-add-button);
+  transition:
+    transform,
+    box-shadow 0.5s;
+}
+
+.main-button.disabled {
+  box-shadow: none;
+}
+
+.main-button:not(.disabled):hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 0 6px var(--theme-transparent);
+}
+
+.main-icon {
+  width: calc(var(--main-button-size) - 1rem);
+  height: calc(var(--main-button-size) - 1rem);
+}
+
+.more-buttons-outer {
+  background: var(--theme-tertiary);
+  border-top-left-radius: var(--more-button-size);
+  border-top-right-radius: var(--more-button-size);
+  width: var(--more-button-size);
+  margin-left: calc((var(--main-button-size) - var(--more-button-size)) / 2);
+  margin-right: calc((var(--main-button-size) - var(--more-button-size)) / 2);
+
+  position: absolute;
+  bottom: calc(var(--main-button-size));
+
+  margin-bottom: calc(var(--main-button-size) / -2);
+  padding-bottom: calc(var(--main-button-size) / 2);
+
+  overflow: hidden;
+}
+
+.more-buttons {
+  max-height: 0;
+  transition: max-height 1s;
+  flex-direction: column;
+  z-index: 10; /* @todo justify */
+}
+
+.expanded .more-buttons-outer {
+  overflow: visible;
+}
+
+.expanded .more-buttons {
+  max-height: 1000px; /* Arbitrary, needs to be a value in order for animation to run */
+}
+
+.force-hidden .more-buttons-outer {
+  display: none;
+}
+
+.force-hidden .more-Buttons {
+  transition: 0s !important;
+}
+
+.more-buttons:first-child {
+  /* Round off top button */
+  border-top-right-radius: var(--more-button-size);
+  border-top-left-radius: var(--more-button-size);
+  overflow: hidden;
+}
+
+.more-button {
+  width: var(--more-button-size);
+  height: var(--more-button-size);
+  background: var(--theme-tertiary);
+}
+
+.more-icon {
+  width: calc(var(--more-button-size) - 1rem);
+  height: calc(var(--more-button-size) - 1rem);
+}
+
+.tooltip {
+  background: var(--blocks-primary);
+}

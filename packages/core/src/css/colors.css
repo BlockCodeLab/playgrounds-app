@@ -1,0 +1,49 @@
+:root {
+  --ui-primary: token('ui.primary');
+  --ui-secondary: token('ui.secondary');
+  --ui-tertiary: token('ui.tertiary');
+  --ui-light: token('ui.light');
+  --ui-transparent: hsla(0, 100%, 100%, 0);
+
+  --ui-white: hsla(0, 100%, 100%, 1);
+  --ui-white-dim: hsla(0, 100%, 100%, 0.75);
+  --ui-white-transparent: hsla(0, 100%, 100%, 0.25);
+
+  --ui-black-transparent: hsla(0, 0%, 0%, 0.15);
+
+  --modal-overlay: color(from var(--theme-primary) srgb r g b / 0.9);
+
+  --theme-primary: token('ui.theme.primary');
+  --theme-secondary: token('ui.theme.secondary');
+  --theme-tertiary: token('ui.theme.tertiary');
+  --theme-transparent: color(from var(--theme-primary) srgb r g b / 0.35);
+  --theme-light-transparent: color(from var(--theme-primary) srgb r g b / 0.15);
+  --theme-highlight: token('ui.theme.highlight');
+
+  --text-primary: token('ui.text.primary');
+  --text-transparent: color(from var(--text-primary) srgb r g b / 0.75);
+
+  --warn-primary: token('ui.warn.primary');
+  --warn-light: token('ui.warn.light');
+  --warn-transparent: color(from var(--warn-primary) srgb r g b / 0.25);
+
+  --error-primary: token('ui.error.primary');
+  --error-secondary: token('ui.error.secondary');
+
+  --blocks-primary: token('blocks.primary');
+  --blocks-secondary: token('blocks.secondary');
+  --blocks-tertiary: token('blocks.tertiary');
+  --blocks-transparent: color(from var(--blocks-primary) srgb r g b / 0.35);
+
+  --blocks-motion-primary: token('blocks.motion.primary');
+  --blocks-looks-primary: token('blocks.looks.primary');
+  --blocks-sounds-primary: token('blocks.sounds.primary');
+  --blocks-event-primary: token('blocks.event.primary');
+  --blocks-control-primary: token('blocks.control.primary');
+  --blocks-sensing-primary: token('blocks.sensing.primary');
+  --blocks-operators-primary: token('blocks.operators.primary');
+  --blocks-variables-primary: token('blocks.variables.primary');
+  --blocks-lists-primary: token('blocks.lists.primary');
+  --blocks-monitor-primary: token('blocks.monitor.primary');
+  --blocks-myblocks-primary: token('blocks.myblocks.primary');
+}

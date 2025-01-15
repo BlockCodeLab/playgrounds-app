@@ -1,0 +1,56 @@
+/* inspired by scratch-gui */
+.menu {
+  position: absolute;
+  border: 1px solid var(--ui-black-transparent);
+  border-radius: calc(var(--space) / 2);
+  background: var(--ui-white);
+  padding: 0;
+  margin: 0;
+  max-width: 260px;
+  overflow: hidden;
+  color: var(--text-primary);
+  box-shadow: 0 var(--space) var(--space) 0 var(--ui-black-transparent);
+}
+
+.menu-item {
+  display: flex;
+  line-height: 34px;
+  white-space: nowrap;
+  padding: 0 calc(var(--space) + 2px);
+  font-size: var(--standard-font-size);
+  margin: 0;
+  justify-content: space-between;
+}
+
+.menu-item.disabled {
+  filter: opacity(0.5);
+}
+
+.menu-item.disabled:hover {
+  background: transparent;
+}
+
+.content {
+  display: flex;
+  flex: 1;
+}
+
+.hotkey {
+  font-weight: normal;
+}
+
+.menu-item:hover {
+  background: var(--theme-primary);
+}
+
+.menu-item:hover:not(.disabled) {
+  color: var(--ui-white);
+}
+
+.menu-item.hoverable {
+  cursor: pointer;
+}
+
+.menu-section:not(:first-child) {
+  border-top: 1px solid var(--ui-black-transparent);
+}

@@ -1,0 +1,20 @@
+{
+  "name": "@blockcode/utils",
+  "private": "true",
+  "version": "1.0.0",
+  "type": "module",
+  "module": "./dist/index.js",
+  "dependencies": {
+    "classnames": "^2.5.1",
+    "html2canvas": "^1.4.1",
+    "keymirror": "^0.1.1",
+    "localforage": "^1.10.0",
+    "nanoid": "^5.0.9",
+    "preact": "^10.25.0",
+    "save-svg-as-png": "^1.4.17",
+    "upng-js": "^2.1.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  }
+}

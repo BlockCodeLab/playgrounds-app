@@ -1,0 +1,22 @@
+.icon-selector-wrapper {
+  background: var(--ui-white-transparent);
+  overflow: auto;
+}
+
+.items-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  padding: calc(var(--space) / 2);
+  padding-bottom: var(--space);
+  overflow: hidden;
+}
+
+.icon-item {
+  box-sizing: border-box;
+  width: calc((100% / var(--icon-per-row)) - var(--space));
+  max-width: 6rem;
+  min-width: 4rem;
+  min-height: 4rem;
+  margin: calc(var(--space) / 2);
+}

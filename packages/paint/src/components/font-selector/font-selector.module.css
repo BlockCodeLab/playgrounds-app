@@ -1,0 +1,12 @@
+.font-selector {
+  align-self: center;
+  color: var(--text-primary);
+  min-width: 10rem;
+  min-height: 2rem;
+  overflow: auto;
+  max-height: 30vh;
+}
+
+.displayed-font-name {
+  font-size: 0.8rem;
+}

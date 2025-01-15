@@ -1,0 +1,91 @@
+/* inspired by scratch-gui */
+.gui-wrapper {
+  height: 100%;
+}
+
+/* alerts */
+
+.alerts-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  z-index: var(--z-index-alerts);
+  position: absolute;
+  margin-top: calc(var(--menu-bar-height) + var(--space));
+  pointer-events: none;
+}
+
+/* menu */
+
+.menu-bar-position {
+  position: relative;
+  z-index: var(--z-index-menu-bar);
+}
+
+/* body */
+
+.body-wrapper {
+  height: calc(100% - var(--menu-bar-height));
+  background: var(--ui-primary);
+}
+
+.body-wrapper * {
+  box-sizing: border-box;
+}
+
+.workspace-wrapper {
+  display: flex;
+
+  /*
+        Make 2 columns:
+        a) for the editor + pane, and
+        b) for the sidebar
+    */
+  flex-direction: row;
+  height: 100%;
+  overflow-y: hidden;
+}
+
+/* siderbar */
+
+.sidebar-wrapper {
+  margin: 0 var(--space);
+  display: flex;
+  position: relative;
+}
+
+/* editor */
+
+.editor-wrapper {
+  flex-grow: 1;
+  flex-shrink: 0;
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.tabs-wrapper {
+  position: relative;
+  flex-grow: 1;
+}
+
+.tab-panel-no-left {
+  border-bottom-left-radius: 0;
+}
+
+.tab-panel-no-right {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.tab-panel-no-bottom {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.pane-wrapper {
+  position: relative;
+  margin: var(--space) 0 0 0;
+  display: flex;
+}

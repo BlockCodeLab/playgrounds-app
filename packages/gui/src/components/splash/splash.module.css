@@ -1,0 +1,32 @@
+.splash {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  background: var(--theme-primary);
+  z-index: var(--z-index-modal);
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.spinner {
+  margin-bottom: calc(4 * var(--space));
+}
+
+.error {
+  background: var(--error-primary);
+}
+
+.title {
+  color: var(--ui-white);
+  margin: var(--space);
+  font-size: 2rem;
+}
+
+.label {
+  color: var(--ui-white);
+  margin: var(--space);
+}

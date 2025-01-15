@@ -1,0 +1,45 @@
+.toggle-button {
+  min-width: calc(2rem + 2px);
+  height: calc(2rem + 2px);
+  padding: 0.375rem !important;
+  filter: saturate(0);
+  margin-left: -1px;
+}
+
+.toggle-button:disabled {
+  cursor: not-allowed;
+  filter: grayscale();
+}
+
+.toggle-button.audo-width {
+  width: auto;
+}
+
+.button-icon {
+  margin: auto;
+}
+
+.toggle-button-first {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.toggle-button-middle {
+  border-radius: 0;
+}
+
+.toggle-button-last {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.toggle-button-actived {
+  border: 1px solid var(--theme-highlight);
+  background: var(--theme-light-transparent);
+  filter: none;
+  z-index: 1;
+}
+
+.button-text {
+  flex: auto;
+}

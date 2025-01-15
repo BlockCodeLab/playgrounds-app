@@ -1,0 +1,41 @@
+:root {
+  --paint-tools-box-width: 6rem;
+}
+
+.tools-box-wrapper {
+  display: flex;
+  width: var(--paint-tools-box-width);
+  flex-flow: wrap;
+  justify-content: space-between;
+  align-content: flex-start;
+}
+
+.small {
+  width: 3rem;
+}
+
+.tool-button {
+  display: inline-block;
+  margin: calc(var(--space) / 2);
+  border: none;
+  border-radius: calc(var(--space) / 2);
+  outline: none;
+  background: none;
+  padding: calc(var(--space) / 2);
+  transition: 0.2s;
+  user-select: none;
+}
+
+.tool-button.selected {
+  background: var(--theme-primary);
+}
+
+.tool-icon {
+  width: 2rem;
+  height: 2rem;
+  vertical-align: middle;
+}
+
+.tool-button.selected .tool-icon {
+  filter: brightness(0) invert(1);
+}

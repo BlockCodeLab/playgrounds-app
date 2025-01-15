@@ -1,0 +1,32 @@
+/* wrapper to allow for touch slop if we decide to add it */
+.delete-button {
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+  border-radius: 50%;
+
+  position: absolute;
+  padding: 0;
+  margin: 0;
+
+  overflow: hidden; /* Mask the icon animation */
+  width: 1.75rem;
+  height: 1.75rem;
+
+  box-shadow: 0px 0px 0px 2px var(--theme-transparent);
+  background: var(--theme-primary);
+  color: var(--ui-white);
+  cursor: pointer;
+  transition: all 0.15s ease-out;
+
+  user-select: none;
+}
+
+.delete-icon {
+  position: relative;
+  margin: 0.25rem;
+  user-select: none;
+  transform-origin: 50%;
+}

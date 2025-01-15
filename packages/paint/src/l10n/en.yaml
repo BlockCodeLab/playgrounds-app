@@ -1,0 +1,40 @@
+paint.contextMenu.duplicate: duplicate
+paint.contextMenu.export: export
+paint.contextMenu.delete: delete
+
+paint.actionButton.upload: Upload Image
+paint.actionButton.uploadCostume: Upload Costume
+paint.actionButton.uploadBackdrop: Upload Backdrop
+paint.actionButton.uploadError: Upload "{file}" failed.
+paint.actionButton.surprise: Surprise
+paint.actionButton.paint: Paint
+paint.actionButton.image: Choose a Image
+paint.actionButton.costume: Choose a Costume
+paint.actionButton.backdrop: Choose a Backdrop
+
+paint.painter.image: Image
+paint.painter.costume: Costume
+paint.painter.backdrop: Backdrop
+paint.painter.name: name
+paint.painter.undo: Undo
+paint.painter.redo: Redo
+paint.painter.pen: Pen
+paint.painter.eraser: Eraser
+paint.painter.fill: Fill
+paint.painter.text: Text
+paint.painter.line: Line
+paint.painter.curve: Curve
+paint.painter.rectangle: Rectangle
+paint.painter.circle: Circle
+paint.painter.isogon: Isogon
+paint.painter.polygon: Polygon
+paint.painter.select: Select
+paint.painter.center: Center
+paint.painter.outline: Outline
+
+paint.colorPicker.color: Color
+paint.colorPicker.saturation: Saturation
+paint.colorPicker.brightness: Brightness
+
+paint.mode.bitmap: Convert to Bitmap
+paint.mode.tileMap: Convert to TileMap

@@ -1,0 +1,33 @@
+.outlined {
+  cursor: pointer;
+  border: 1px solid var(--ui-black-transparent);
+  border-radius: var(--form-radius);
+  background: var(--ui-white);
+  font-weight: bold;
+  padding: var(--space) calc(var(--space) * 1.5);
+  user-select: none;
+  color: var(--text-primary);
+  font-size: var(--standard-font-size);
+}
+
+.outlined:focus-visible {
+  outline: 0;
+}
+
+.content {
+  white-space: nowrap;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.vertical-content {
+  flex-direction: column;
+}
+
+.disabled {
+  cursor: auto;
+  opacity: 0.5;
+}

@@ -1,0 +1,74 @@
+.tooltip {
+  background: var(--theme-primary);
+  border: 1px solid hsla(0, 0%, 0%, 0.1);
+  border-radius: var(--form-radius);
+  box-shadow: 0 0 0.5rem hsla(0, 0%, 0%, 0.25);
+  opacity: 0;
+  z-index: -1;
+  color: var(--ui-white);
+  font-size: 0.8rem;
+  padding: var(--space) calc(var(--space) * 2.5);
+  transition: opacity 0.2s ease-out;
+  white-space: nowrap;
+}
+
+.tooltip[data-show] {
+  opacity: 1;
+  z-index: var(--z-index-tooltip);
+}
+
+.arrow,
+.arrow::before {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: inherit;
+}
+
+.arrow {
+  visibility: hidden;
+}
+
+.arrow::before {
+  visibility: visible;
+  content: '';
+  transform: rotate(45deg);
+  border-radius: 2px;
+  border: 1px solid hsla(0, 0%, 0%, 0.1);
+}
+
+.tooltip[data-popper-placement^='top'] > .arrow {
+  bottom: -4px;
+}
+
+.tooltip[data-popper-placement^='top'] > .arrow::before {
+  border-left: 0;
+  border-top: 0;
+}
+
+.tooltip[data-popper-placement^='bottom'] > .arrow {
+  top: -4px;
+}
+
+.tooltip[data-popper-placement^='bottom'] > .arrow::before {
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.tooltip[data-popper-placement^='left'] > .arrow {
+  right: -4px;
+}
+
+.tooltip[data-popper-placement^='left'] > .arrow::before {
+  border-left: 0;
+  border-bottom: 0;
+}
+
+.tooltip[data-popper-placement^='right'] > .arrow {
+  left: -4px;
+}
+
+.tooltip[data-popper-placement^='right'] > .arrow::before {
+  border-top: 0;
+  border-right: 0;
+}

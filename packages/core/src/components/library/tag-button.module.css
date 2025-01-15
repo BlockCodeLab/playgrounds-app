@@ -1,0 +1,12 @@
+.tag-button {
+  padding: 0.625rem 1rem;
+  background: var(--theme-primary);
+  border-radius: 1.375rem;
+  color: var(--ui-white);
+  height: var(--library-filter-bar-height);
+  border: 0;
+}
+
+.active {
+  background: var(--data-primary);
+}

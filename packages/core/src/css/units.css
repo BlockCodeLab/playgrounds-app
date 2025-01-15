@@ -1,0 +1,26 @@
+:root {
+  --space: 0.5rem;
+
+  --standard-font-size: 0.75rem;
+  --small-font-size: 0.625rem;
+
+  --icon-per-row: 5;
+
+  --menu-bar-height: 3rem;
+  --language-selector-width: 3rem;
+  --tool-bar-height: 2.75rem;
+
+  --library-header-height: 3.125rem;
+  --library-filter-bar-height: 2.5rem;
+
+  --form-radius: calc(var(--space) / 2);
+
+  --min-width: 970px;
+  --min-height: 720px;
+
+  --menu-bar-standard-font-size: var(--standard-font-size);
+  --menu-bar-large-font-size: 0.875rem;
+  --menu-bar-button-size: 2rem;
+
+  --menu-bar-item-max-width: 12rem;
+}

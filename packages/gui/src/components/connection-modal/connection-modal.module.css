@@ -1,0 +1,114 @@
+.prompt-modal {
+  width: 480px;
+}
+
+.prompt-header {
+  background: var(--blocks-primary);
+}
+
+.prompt-content {
+  background: var(--ui-white);
+}
+
+.device-list {
+  width: 100%;
+  height: 165px;
+  padding: 0.5rem;
+  background: var(--theme-light-transparent);
+  overflow-y: auto;
+}
+
+.device-search {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+}
+
+.device-search-icon {
+  width: 120px;
+  height: 120px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.device-searching-icon {
+  animation: spin 1.5s linear infinite;
+}
+
+.device-item {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--ui-white);
+  border-radius: calc(var(--space) / 2);
+  border: 2px solid var(--ui-white);
+  padding: 10px;
+  width: 100%;
+  height: 50px;
+  margin-bottom: 0.5rem;
+}
+
+.device-item.selected {
+  border: 2px solid var(--theme-primary);
+}
+
+.device-name-bar {
+  display: flex;
+  align-items: center;
+}
+
+.device-image {
+  width: 40px;
+  margin-right: 0.5rem;
+}
+
+.device-name-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.device-name-label {
+  font-weight: bold;
+  font-size: 0.625rem;
+}
+
+.device-name-text {
+  font-size: 0.875rem;
+}
+
+.device-signal-bar {
+}
+
+.button-row {
+  font-weight: bolder;
+  text-align: right;
+  padding: 1.5rem 2.25rem;
+  text-align: center;
+}
+
+.button {
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.ok-button {
+  background: var(--theme-primary);
+  border: var(--theme-primary);
+  color: var(--ui-white);
+  margin-left: var(--space);
+}

@@ -1,0 +1,87 @@
+gui.name: BlockCode Playgrounds
+
+gui.alert.importing: importing...
+gui.alert.downloading: Downloading...
+gui.alert.downloadCompleted: Download completed.
+gui.alert.connectionCancel: Connection cancel.
+gui.alert.connectionError: Connection error.
+
+gui.home.my: My projects
+gui.home.all: View all ({counts})
+gui.home.new: Create new project
+gui.home.examples: Wonderful projects
+
+gui.home.slideshow.tankwar.title: The Tank War is coming! Join us! NOW!
+gui.home.slideshow.tankwar.button: Join us
+gui.home.slideshow.arcade.title: The next game to play, must be your OWN!
+gui.home.slideshow.arcade.button: Create now
+
+gui.splash.loading: Loading project...
+gui.splash.errorTitle: Error occurred
+gui.splash.errorLabel: Please refresh the page and reopen it.
+
+gui.menubar.courses: Courses
+gui.menubar.tutorials: Tutorials
+gui.menubar.titlePlaceholder: Project title here
+gui.menubar.mdified: Save to local storage
+gui.menubar.saving: Saving project...
+gui.menubar.saved: Saved to local storage.
+gui.menubar.savedComputer: Saved to your computer.
+
+gui.menubar.file: File
+gui.menubar.file.newProject: New
+gui.menubar.file.openProject: Open
+gui.menubar.file.saveProject: Save
+gui.menubar.file.uploadProject: Load from your computer
+gui.menubar.file.downloadProject: save to your computer
+
+gui.menubar.edit: Edit
+gui.menubar.edit.undo: Undo
+gui.menubar.edit.redo: Redo
+
+gui.project.name: Untitled Project
+gui.project.shortname: Untitled
+
+gui.library.search: Search
+
+gui.library.projects.empty: No project!
+gui.library.projects.rename: rename
+gui.library.projects.duplicate: duplicate
+gui.library.projects.delete: delete
+gui.library.projects.notSaved: Not saved
+gui.library.projects.close: Close current project?
+gui.library.projects.deleteConfirm: Do you want to delete the project "{name}"?
+gui.library.projects.replace: Replace contents of the current project?
+gui.library.projects.errorEditor: This project is not currently editor creation, please switch to "{workspace}" and open it.
+
+gui.library.examples.interconnect: The project requires two devices to work properly.
+
+gui.library.tutorial.course: Choose a course
+gui.library.tutorial.tutorial: Choose a tutorial
+
+gui.tutorials.shrink: Shrink
+gui.tutorials.expand: Expand
+gui.tutorials.close: Close
+gui.tutorials.moreTry: More things to try!
+gui.tutorials.seeMore: See more
+
+gui.prompt.ok: OK
+gui.prompt.close: Close
+gui.prompt.cancel: Cancel
+
+gui.prompt.connection.device: Device Connection
+gui.prompt.connection.search: Start Searching
+gui.prompt.connection.searching: Searching...
+gui.prompt.connection.connect: Start Connecting
+gui.prompt.connection.deviceName: Device name
+
+gui.about.title: About...
+gui.about.main: Main program
+
+gui.terms.title: Terms of Use
+gui.terms.content: >
+  <b>Terms of Use</b>
+
+gui.privacy.title: Privacy
+gui.privacy.content: >
+  <b>Privacy</b>

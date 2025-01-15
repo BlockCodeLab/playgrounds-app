@@ -1,0 +1,40 @@
+paint.contextMenu.duplicate: 複製
+paint.contextMenu.export: 導齣
+paint.contextMenu.delete: 刪除
+
+paint.actionButton.upload: 上傳圖片
+paint.actionButton.uploadCostume: 上傳造型
+paint.actionButton.uploadBackdrop: 上傳背景
+paint.actionButton.uploadError: 上傳“{file}”失敗。
+paint.actionButton.surprise: 隨機
+paint.actionButton.paint: 繪製
+paint.actionButton.image: 選擇一個圖片
+paint.actionButton.costume: 選擇一個造型
+paint.actionButton.backdrop: 選擇一個背景
+
+paint.painter.image: 圖片
+paint.painter.costume: 造型
+paint.painter.backdrop: 背景
+paint.painter.name: 名字
+paint.painter.undo: 撤銷
+paint.painter.redo: 重做
+paint.painter.pen: 畫筆
+paint.painter.eraser: 橡皮擦
+paint.painter.fill: 填充
+paint.painter.text: 文本
+paint.painter.line: 線段
+paint.painter.curve: 曲線
+paint.painter.rectangle: 矩形
+paint.painter.circle: 圓形
+paint.painter.isogon: 正多邊形
+paint.painter.polygon: 任意多邊形
+paint.painter.select: 選擇
+paint.painter.center: 中心
+paint.painter.outline: 輪廓
+
+paint.colorPicker.color: 顏色
+paint.colorPicker.saturation: 飽和度
+paint.colorPicker.brightness: 亮度
+
+paint.mode.bitmap: 轉換爲位圖
+paint.mode.tileMap: 轉換爲 TileMap

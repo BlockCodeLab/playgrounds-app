@@ -1,0 +1,33 @@
+.input-group {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.input-group-column {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.input-group-column span {
+  margin-bottom: 0.25rem;
+}
+
+.input-label,
+.input-label-secondary {
+  font-size: var(--standard-font-size);
+  user-select: none;
+  cursor: default;
+
+  white-space: nowrap;
+}
+
+.input-label,
+.input-label-secondary {
+  margin-right: 0.5rem;
+}
+
+.input-label {
+  font-weight: bold;
+}

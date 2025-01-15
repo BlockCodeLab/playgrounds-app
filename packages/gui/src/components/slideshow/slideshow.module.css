@@ -1,0 +1,54 @@
+.cover-wrapper {
+  width: 100%;
+  position: relative;
+}
+
+.cover {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+  padding: 0 2rem;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  transition: opacity 1s ease;
+  opacity: 1;
+}
+
+.cover.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.title {
+  font-size: 2rem;
+  padding-right: 1.5rem;
+  font-weight: 600;
+  color: #000;
+}
+
+.button {
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+
+  background: var(--theme-primary);
+  border: var(--theme-primary);
+  color: var(--ui-white);
+
+  margin-top: calc(2 * var(--space));
+}
+
+.feature {
+  max-height: 70%;
+}

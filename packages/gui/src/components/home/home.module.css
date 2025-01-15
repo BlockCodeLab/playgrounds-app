@@ -1,0 +1,76 @@
+.home-wrapper {
+  background: var(--ui-secondary);
+  position: absolute;
+  top: var(--menu-bar-height);
+  width: 100%;
+  height: calc(100% - var(--menu-bar-height));
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: calc(var(--z-index-alerts) - 10);
+  user-select: none;
+}
+
+.getting-started {
+  height: 240px;
+  margin-bottom: 1.5rem;
+}
+
+.link {
+  cursor: pointer;
+  color: var(--theme-primary);
+}
+
+.view-all {
+  font-weight: normal;
+  font-size: var(--standard-font-size);
+  margin-left: 1.5rem;
+}
+
+.delete-menu-item:hover {
+  background: var(--error-primary);
+}
+
+.footer {
+  color: var(--text-primary);
+  font-size: var(--small-font-size);
+  padding: 3.5rem 0 var(--space);
+  text-align: center;
+}
+
+.footer-item {
+  padding: 0 var(--space);
+}
+
+.footer-item:not(:first-child) {
+  border-left: 1px solid var(--ui-black-transparent);
+}
+
+/* inspired by scratch-gui */
+.library-grid {
+  display: flex;
+  justify-content: flex-start;
+  align-content: flex-start;
+  align-items: flex-start;
+  background: var(--ui-secondary);
+  flex-grow: 1;
+  flex-wrap: wrap;
+  overflow-y: auto;
+  height: auto;
+  padding: 0.5rem;
+}
+
+.library-label {
+  color: var(--text-primary);
+  font-weight: 800;
+  padding: 1.5rem calc(0.5rem + var(--space)) 0.5rem;
+}
+
+.about-version-content {
+  width: 300px;
+}
+
+.about-version-row {
+  display: flex;
+  justify-content: space-between;
+  margin: var(--space) 0;
+}
