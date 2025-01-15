@@ -2,19 +2,22 @@ import { addLocalesMessages, Text } from '@blockcode/core';
 import { version } from '../package.json';
 import featureImage from './feature.png';
 
-// 多语种信息
+// 多语言信息，只包含信息显示需要的多语言，编辑器更多的多语言另外添加
 addLocalesMessages({
   en: {
     'example.name': 'Example',
-    'example.description': 'Example editor.',
+    'example.description': 'Editor example.',
+    'example.collaborator': 'Your Name',
   },
   'zh-Hans': {
     'example.name': '案例',
-    'example.description': '案例编辑器。',
+    'example.description': '编辑器案例。',
+    'example.collaborator': '你的名字',
   },
   'zh-Hant': {
     'example.name': '案例',
-    'example.description': '案例编辑器。',
+    'example.description': '編輯器案例。',
+    'example.collaborator': '你的名字',
   },
 });
 
@@ -34,5 +37,11 @@ export default {
       defaultMessage="Example editor."
     />
   ),
-  blocksRequired: true, // 图形积木（仅供显示）
+  collaborator: (
+    <Text
+      id="example.collaborator"
+      defaultMessage="Your Name"
+    />
+  ),
+  blocksRequired: true, // 图形积木编程（仅供显示）
 };
