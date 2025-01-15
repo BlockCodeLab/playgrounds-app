@@ -1,0 +1,43 @@
+# 扩展编辑器案例
+
+此编辑器扩展案例扩展了一个简单的图形积木编辑器，没有添加任何额外功能，只有基本编辑和保存。
+
+开始你的编辑器开发时，只需要复制该案例，然后进行修改，再按下面步骤炒作就可以在 BlockCode Playgrounds 首页添加新的编辑器入口了。（如果要上线到官方网站，还需要向官方申请）
+
+## 步骤
+
+1. 克隆 `playgrounds-app` 项目到 `playgrounds-app` 文件夹，并完成一次编译。
+
+```bash
+$ cd playgrounds-app
+$ bun install
+$ bun run build:all
+```
+
+2. 进入 `playgrounds-app` 项目文件夹，在 `/packages/gui/editors/` 路径下新建文件夹 `example`。
+
+3. 将编辑器案例文件夹下的所有文件复制到 `example` 文件夹，然后执行编译脚本，得到 `dist` 文件夹。
+
+```bash
+$ cd playgrounds-app/packages/gui/editors/example
+$ bun install
+$ bun run build
+```
+
+4. 进入 `playgrounds-app` 项目文件夹，在 `/packages/gui/editors/` 路径下新建文件夹 `example`。
+
+5. 编译 `playgrounds-app` 项目的 `gui` 模块（只需要编译一次，为了加入扩展编辑器信息）。
+
+```bash
+$ cd playgrounds-app
+$ bun run build:gui
+```
+
+6. 运行服务器，用浏览器打开 `localhost:3000`
+
+```bash
+$ cd playgrounds-app
+$ bun run dev
+```
+
+> 之后对编辑器的开发只需要执行步骤 3（有必须时还需执行步骤 6）就可以在浏览器中查看了。

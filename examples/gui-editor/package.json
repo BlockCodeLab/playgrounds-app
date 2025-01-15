@@ -1,0 +1,25 @@
+{
+  "name": "@blockcode/gui-example",
+  "private": "true",
+  "version": "1.0.0",
+  "type": "module",
+  "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    },
+    "./info": {
+      "import": "./dist/info.js"
+    }
+  },
+  "scripts": {
+    "build": "playground-build ."
+  },
+  "dependencies": {
+    "preact": "^10.25.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "playground-build": "git+https://github.com/BlockCodeLab/playground-build.git"
+  }
+}
