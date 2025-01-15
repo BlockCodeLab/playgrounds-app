@@ -4,3 +4,6 @@
 [submodule "packages/gui/editors/matrix"]
 	path = packages/gui/editors/matrix
 	url = https://github.com/BlockCodeLab/gui-matrix.git
+[submodule "packages/gui/editors/tankwar"]
+	path = packages/gui/editors/tankwar
+	url = https://github.com/kankungyip/playground-tankwar.git
