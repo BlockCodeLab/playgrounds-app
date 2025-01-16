@@ -1,5 +1,7 @@
 export { default as classNames } from 'classnames';
 
+export { Firmata } from 'firmata-io';
+
 export { default as html2canvas } from 'html2canvas';
 
 export { default as JSZip } from 'jszip';
