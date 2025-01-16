@@ -11,6 +11,7 @@
 1. 克隆 `playgrounds-app` 项目到 `playgrounds-app` 文件夹，并完成一次编译。
 
 ```bash
+$ git clone https://github.com/BlockCodeLab/playgrounds-app.git
 $ cd playgrounds-app
 $ bun install
 $ bun run build:all
@@ -33,11 +34,11 @@ $ cd playgrounds-app
 $ bun run build:blocks
 ```
 
-6. 运行服务器，用浏览器打开 `localhost:3000`
+5. 运行服务器，用浏览器打开 `localhost:3000`
 
 ```bash
 $ cd playgrounds-app
 $ bun run dev
 ```
 
-> 之后对图形积木扩展的开发只需要执行步骤 3（有必须时还需执行步骤 6）就可以在浏览器中查看了。
+> 之后对图形积木扩展的开发只需要执行步骤 3（有必须时还需执行步骤 5）就可以在浏览器中查看了。

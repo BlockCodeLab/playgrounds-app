@@ -11,6 +11,7 @@
 1. 克隆 `playgrounds-app` 项目到 `playgrounds-app` 文件夹，并完成一次编译。
 
 ```bash
+$ git clone https://github.com/BlockCodeLab/playgrounds-app.git
 $ cd playgrounds-app
 $ bun install
 $ bun run build:all
