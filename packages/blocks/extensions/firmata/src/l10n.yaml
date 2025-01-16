@@ -1,0 +1,11 @@
+en:
+  blocks.firmata.name: Arduino Firmata
+  blocks.firmata.blockA: block [KEY]
+
+zh-Hans:
+  blocks.firmata.name: Arduino Firmata
+  blocks.firmata.blockA: 积木 [KEY]
+
+zh-Hant:
+  blocks.firmata.name: Arduino Firmata
+  blocks.firmata.blockA: 積木 [KEY]
