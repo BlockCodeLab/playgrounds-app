@@ -7,6 +7,7 @@ import {
   useProjectContext,
   translate,
   showSplash,
+  hideSplash,
   openPromptModal,
   closePromptModal,
   openLayout,
@@ -190,10 +191,11 @@ export function Layout() {
         label: (
           <Text
             id="gui.library.projects.errorEditor"
-            defaultMessage='This project is not currently editor creation, please switch to "{workspace}" and open it.'
-            workspace={editorsInfos.value[projData.meta.editor]?.name}
+            defaultMessage='This project is not currently editor creation, please switch to "{editor}" and open it.'
+            editor={editorsInfos.value[projData.meta.editor]?.name}
           />
         ),
+        redStyle: true,
       });
       return;
     }
@@ -230,7 +232,24 @@ export function Layout() {
       showSplash();
     });
 
-    const { default: editor } = await import(editorId);
+    let editor;
+    try {
+      editor = (await import(editorId)).default;
+    } catch (err) {
+      openPromptModal({
+        label: (
+          <Text
+            id="gui.library.projects.notFoundEditor"
+            defaultMessage='Not Found the "{editor}" Editor.'
+            editor={editorId}
+          />
+        ),
+        redStyle: true,
+      });
+      hideSplash();
+      return;
+    }
+
     const meta = {
       editor: editorId,
       version: editorsInfos.value[editorId]?.version,
@@ -388,6 +407,7 @@ export function Layout() {
             title={app.prompt.value.title}
             label={app.prompt.value.label}
             content={app.prompt.value.content}
+            redStyle={app.prompt.value.redStyle}
             onClose={closePromptModal}
             onSubmit={app.prompt.value.onSubmit}
           >

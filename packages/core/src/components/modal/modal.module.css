@@ -11,6 +11,10 @@
   display: flex;
 }
 
+.modal-overlay.red {
+  background: color(from var(--error-primary) srgb r g b / 0.9);
+}
+
 .modal-content {
   margin: 100px auto;
   outline: none;
@@ -50,8 +54,12 @@
   height: var(--library-header-height);
   box-sizing: border-box;
   width: 100%;
-  background: var(--modal-overlay);
+  background: var(--theme-primary);
   font-size: 1rem;
+}
+
+.red .modal-header {
+  background: var(--error-primary);
 }
 
 .electron {

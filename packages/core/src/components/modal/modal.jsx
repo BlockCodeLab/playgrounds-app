@@ -9,11 +9,15 @@ import backIcon from './icons/icon-back.svg';
 import closeIcon from './icons/icon-close.svg';
 import helpIcon from './icons/icon-help.svg';
 
-export function Modal({ title, fullScreen: isFullScreen, onClose, className, headerClassName, children }) {
+export function Modal({ title, fullScreen: isFullScreen, redStyle, onClose, className, headerClassName, children }) {
   const { macosMenuBarStyled } = useAppContext();
 
   return (
-    <div className={styles.modalOverlay}>
+    <div
+      className={classNames(styles.modalOverlay, {
+        [styles.red]: redStyle,
+      })}
+    >
       <div
         className={classNames(styles.modalContent, className, {
           [styles.fullScreen]: isFullScreen,

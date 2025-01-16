@@ -53,6 +53,7 @@ gui.library.projects.close: 要关闭当前作品吗？
 gui.library.projects.deleteConfirm: 要删除“《{name}》”作品吗？
 gui.library.projects.replace: 要创建新作品替换当前作品吗？
 gui.library.projects.errorEditor: 这个作品不是当前编辑器创作，请切换至“{editor}”编辑器然后打开。
+gui.library.projects.notFoundEditor: 没有发现“{editor}”编辑器。
 
 gui.library.examples.interconnect: 该作品需要两台设备联机才能正常运行。
 

@@ -3,7 +3,7 @@ import { maybeTranslate, Text, Button, Modal } from '@blockcode/core';
 import styles from './prompt-modal.module.css';
 import { useCallback } from 'preact/hooks';
 
-export function PromptModal({ title, label, content, children, onClose, onSubmit }) {
+export function PromptModal({ title, label, content, redStyle, children, onClose, onSubmit }) {
   const handleSubmit = useCallback(() => {
     onSubmit();
     onClose();
@@ -12,6 +12,7 @@ export function PromptModal({ title, label, content, children, onClose, onSubmit
   return (
     <Modal
       title={title}
+      redStyle={redStyle}
       className={classNames(styles.promptModal, {
         [styles.wide]: content,
         [styles.auto]: children,

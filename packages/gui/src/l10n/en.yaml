@@ -53,6 +53,7 @@ gui.library.projects.close: Close current project?
 gui.library.projects.deleteConfirm: Do you want to delete the project "{name}"?
 gui.library.projects.replace: Replace contents of the current project?
 gui.library.projects.errorEditor: This project is not currently editor creation, please switch to "{workspace}" and open it.
+gui.library.projects.notFoundEditor: Not Found the "{editor}" Editor.
 
 gui.library.examples.interconnect: The project requires two devices to work properly.
 

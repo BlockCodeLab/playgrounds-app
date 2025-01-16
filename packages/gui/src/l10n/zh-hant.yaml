@@ -53,6 +53,7 @@ gui.library.projects.notSaved: 未保存作品
 gui.library.projects.closeProject: 要關閉當前作品嗎？
 gui.library.projects.replace: 要創建新作品替換當前作品嗎？
 gui.library.projects.errorEditor: 這個作品不是當前編輯器創作，請切換至“{editor}”編輯器然後打開。
+gui.library.projects.notFoundEditor: 沒有發現「{editor}」編輯器。
 
 gui.library.examples.interconnect: 該作品需要兩枱設備聯機纔能正常運行。
 
