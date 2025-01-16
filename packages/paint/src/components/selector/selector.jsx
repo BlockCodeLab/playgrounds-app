@@ -260,7 +260,7 @@ export function Selector({ mode, maxSize, onImagesFilter, onShowLibrary, onSurpr
                     defaultMessage="delete"
                   />
                 ),
-                disabled: images.length < 1,
+                disabled: images.length <= 1,
                 className: styles.deleteMenuItem,
                 onClick: () => handleDeleteImage(i),
               },
