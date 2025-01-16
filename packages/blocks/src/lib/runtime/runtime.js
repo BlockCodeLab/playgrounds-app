@@ -58,7 +58,7 @@ export class Runtime extends EventEmitter {
     this._extensionsProxy = new Proxy(
       {},
       {
-        get: (_, prop) => this._extensions.get(prop),
+        get: (_, prop) => this._extensions.values().find((ext) => ext.key === prop),
       },
     );
 

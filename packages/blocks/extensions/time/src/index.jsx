@@ -24,10 +24,16 @@ export default {
   ],
   emulator() {
     return {
+      get key() {
+        return ' time';
+      },
+
       timezone: 8,
+
       setTimezone(timezone) {
         this.timezone = MathUtils.toNumber(timezone);
       },
+
       getTime(option) {
         const date = new Date();
         const localTimezone = date.getTimezoneOffset() / 60;
@@ -52,6 +58,7 @@ export default {
             return 0;
         }
       },
+
       getDays() {
         const date = new Date();
         const start = new Date('2000-01-01T00:00:00');

@@ -1,6 +1,6 @@
 import { useRef, useEffect, useCallback, useMemo } from 'preact/hooks';
 import { batch, useSignal } from '@preact/signals';
-import { classNames, sleepMs } from '@blockcode/utils';
+import { classNames } from '@blockcode/utils';
 import {
   useLocalesContext,
   useAppContext,

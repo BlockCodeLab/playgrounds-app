@@ -71,7 +71,7 @@
     }
   ],
   "meta": {
-    "editor": "arcade",
+    "editor": "@blockcode/gui-arcade",
     "extensions": []
   }
 }

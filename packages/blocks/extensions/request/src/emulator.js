@@ -4,6 +4,10 @@ const SupportedMethods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTI
 
 export function emulator(runtime) {
   return {
+    get key() {
+      return 'request';
+    },
+
     getOptions() {
       let options = runtime.getData('request.options');
       if (!options) {

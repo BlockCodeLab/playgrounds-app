@@ -65,7 +65,9 @@ export function loadExtension(generator, emulator, extObj, translator, blockFilt
       }
 
       if (block.button) {
-        categoryXML += `<button text="${maybeTranslate(block.text, translator)}" callbackKey="${block.button}"></button>`;
+        categoryXML += `<button text="${maybeTranslate(block.text, translator)}" callbackKey="${
+          block.button
+        }"></button>`;
         const workspace = ScratchBlocks.getMainWorkspace();
         if (workspace) {
           const flyout = workspace.getFlyout();
@@ -165,7 +167,9 @@ export function loadExtension(generator, emulator, extObj, translator, blockFilt
                 blockXML += `<value name="${xmlEscape(name)}">`;
                 blockXML += `<shadow type="${extId}_menu_${menuName}">`;
                 if (inputDefault) {
-                  blockXML += `<field name="${menuName}">${xmlEscape(maybeTranslate(inputDefault, translator))}</field>`;
+                  blockXML += `<field name="${menuName}">${xmlEscape(
+                    maybeTranslate(inputDefault, translator),
+                  )}</field>`;
                 }
                 blockXML += '</shadow></value>';
               } else if (menu) {
@@ -186,7 +190,9 @@ export function loadExtension(generator, emulator, extObj, translator, blockFilt
               if (ShadowTypes[arg.type]) {
                 blockXML += `<shadow type="${ShadowTypes[arg.type]}">`;
                 if (arg.defaultValue && FieldTypes[arg.type]) {
-                  blockXML += `<field name="${FieldTypes[arg.type]}">${xmlEscape(maybeTranslate(arg.defaultValue, translator))}</field>`;
+                  blockXML += `<field name="${FieldTypes[arg.type]}">${xmlEscape(
+                    maybeTranslate(arg.defaultValue, translator),
+                  )}</field>`;
                 }
                 blockXML += '</shadow>';
               }

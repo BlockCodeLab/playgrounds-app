@@ -27,6 +27,10 @@ export function emulator(runtime, Konva) {
   });
 
   return {
+    get key() {
+      return 'pen';
+    },
+
     get renderer() {
       return runtime.querySelector('#pen_renderer');
     },
