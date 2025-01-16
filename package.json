@@ -10,21 +10,15 @@
   },
   "main": "desktop/main.js",
   "scripts": {
-    // 启动开发服务器，当编译的文件增加后，需要手动重启服务器
-    // TODO: 热重启服务器
     "dev": "bun --smol ./scripts/combine & bunx serve dist",
-    // 单库打包
     "build:all": "bun run build:core && bun run build:components && bun run build:blocks && bun run build:gui",
     "build:core": "playground-build packages/utils packages/core packages/board",
     "build:components": "playground-build packages/paint packages/sound",
     "build:blocks": "playground-build packages/blocks/extensions/* packages/blocks",
     "build:gui": "playground-build packages/gui/editors/* packages/gui",
-    // 生产环境打包并合并资源
     "release": "BUN_ENV=production bun run build:all && BUN_ENV=production bun --smol ./scripts/combine",
-    // 预览
     "prepreview": "bun run release",
     "preview": "bunx serve dist",
-    // 发布
     "predeploy": "bun run release && bun x gh-pages-clean",
     "deploy": "bun x gh-pages -d dist -b",
     "deploy:beta": "BETA=yes bun run deploy -- beta"
