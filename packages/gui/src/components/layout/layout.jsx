@@ -230,7 +230,7 @@ export function Layout() {
       showSplash();
     });
 
-    const { default: editor } = await import(`@blockcode/gui-${editorId}`);
+    const { default: editor } = await import(editorId);
     const meta = {
       editor: editorId,
       version: editorsInfos.value[editorId]?.version,

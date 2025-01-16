@@ -5,7 +5,7 @@ const editors = readEditors();
 export default function () {
   return Promise.all(
     editors.map(async (id) => {
-      const { default: info } = await import(`@blockcode/gui-${id}/info`);
+      const { default: info } = await import(`${id}/info`);
       info.id = id;
       return info;
     }),

@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'preact/hooks';
 import { batch, useSignal } from '@preact/signals';
 import { Text, Library } from '@blockcode/core';
 
-import getExtensions from './get-extensions';
+import getExtensions from '../../lib/get-extensions';
 
 export function ExtensionsLibrary({ onSelect, onClose, onFilter }) {
   const data = useSignal([]);
