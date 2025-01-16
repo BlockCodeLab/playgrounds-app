@@ -1,5 +1,8 @@
 {
-  "name": "@blockcode/gui-example",
+  // 编辑器扩展ID，用于识别扩展
+  // 官方编辑器ID格式： @blockcode/blocks-{Name}
+  // 推荐社区编辑器ID格式：@{Your ID}/{Name}
+  "name": "@example/gui",
   "private": "true",
   "version": "1.0.0",
   "type": "module",

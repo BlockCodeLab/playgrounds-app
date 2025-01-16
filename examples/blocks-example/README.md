@@ -6,9 +6,9 @@
 
 你的图形积木扩展代码可以放在你自己的仓库，在向官方申请官方线上入口时，只需要提交你的仓库地址就可以了。（申请入口暂未开放）
 
-## 步骤
+## 开始步骤
 
-1. 克隆 `playgrounds-app` 项目到 `playgrounds-app` 文件夹，并完成一次编译。
+1. 克隆 `playgrounds-app` 项目到 `playgrounds-app` 文件夹，并完成一次完整编译。
 
 ```bash
 $ git clone https://github.com/BlockCodeLab/playgrounds-app.git
@@ -17,7 +17,16 @@ $ bun install
 $ bun run build:all
 ```
 
-2. 进入 `playgrounds-app` 项目文件夹，在 `/packages/blocks/extensions/` 路径下新建文件夹 `example`。
+2. 进入 `playgrounds-app` 项目文件夹，在 `/packages/blocks/extensions/` 路径下新建文件夹 `example`，并对新文件夹进行 git 仓库初始化。
+
+```bash
+$ cd playgrounds-app/packages/blocks/extensions/
+$ mkdir example
+$ cd example
+$ git init
+$ git remote add origin <GIT-URL>
+$ git branch -M main
+```
 
 3. 将图形积木扩展案例文件夹下的所有文件复制到 `example` 文件夹，然后执行编译脚本，得到 `dist` 文件夹。
 

@@ -23,3 +23,23 @@
 - [src](src/): 基于 Electron 的 windows/macos/linux 跨平台的应用程序
 
 ## 程序框架
+
+## 开始步骤
+
+1. 克隆 `playgrounds-app` 项目到 `playgrounds-app` 文件夹，并完成一次完整编译。
+
+```bash
+$ git clone https://github.com/BlockCodeLab/playgrounds-app.git
+$ cd playgrounds-app
+$ bun install
+$ bun run build:all
+```
+
+2. 运行服务器，用浏览器打开 `localhost:3000`
+
+```bash
+$ cd playgrounds-app
+$ bun run dev
+```
+
+> 开发新的**编辑器扩展**或**图形积木扩展**请参考 [examples/](examples/) 中对应的案例。

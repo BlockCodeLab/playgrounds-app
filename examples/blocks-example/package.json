@@ -1,5 +1,8 @@
 {
-  "name": "@blockcode/blocks-example",
+  // 图形积木扩展ID，用于识别扩展
+  // 官方扩展ID格式： @blockcode/blocks-{Name}
+  // 推荐社区扩展ID格式：@{Your ID}/{Name}
+  "name": "@example/blocks",
   "private": "true",
   "version": "1.0.0",
   "type": "module",
