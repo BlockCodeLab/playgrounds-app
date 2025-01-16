@@ -202,10 +202,10 @@ export function BlocksEditor({
     );
 
     // 查询扩展附带的资源
-    const usedExtensions = {};
+    const resources = {};
     for (const extObj of loadedExtensions.values()) {
-      if (extensions.includes(extObj.id)) {
-        usedExtensions[extObj.id] = extObj.files.map((res) => ({
+      if (extensions.includes(extObj.id) && extObj.files) {
+        resources[extObj.id] = extObj.files.map((res) => ({
           name: res.name,
           type: res.type,
         }));
@@ -216,7 +216,7 @@ export function BlocksEditor({
     if (emulator) {
       if (onDefinitions) {
         emulator.onDefinitions = () => {
-          onDefinitions(emulator.name_, (key, val) => (emulator.definitions_[key] = val), usedExtensions, index);
+          onDefinitions(emulator.name_, (key, val) => (emulator.definitions_[key] = val), resources, index);
         };
       }
       script = emulator.workspaceToCode(ref.workspace);
@@ -226,7 +226,7 @@ export function BlocksEditor({
     if (generator) {
       if (onDefinitions) {
         generator.onDefinitions = () => {
-          onDefinitions(generator.name_, (key, val) => (generator.definitions_[key] = val), usedExtensions, index);
+          onDefinitions(generator.name_, (key, val) => (generator.definitions_[key] = val), resources, index);
         };
       }
       content = generator.workspaceToCode(ref.workspace);

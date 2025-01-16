@@ -1,7 +1,7 @@
-import { importWebpackExport } from './import-webpack-export' with { type: 'macro' };
+import { importModuleExport } from './import-module-export' with { type: 'macro' };
 
 const module = {};
-const code = importWebpackExport('scratch-blocks/dist/vertical');
+const code = importModuleExport('scratch-blocks/dist/vertical');
 new Function('module', code)(module);
 export const ScratchBlocks = module.exports;
 
