@@ -28,6 +28,8 @@ export { nanoid, nanoidLooks } from './lib/nanoid';
 
 export { openProjectFromComputer, saveProjectToComputer } from './lib/project-file';
 
+export { isDesktop, isMac, sleep, sleepMs, xmlEscape, arrayBufferToBase64, base64ToArrayBuffer } from './lib/simples';
+
 export {
   delProject,
   getProject,
@@ -37,9 +39,9 @@ export {
   getProjectsThumbs,
 } from './lib/project-storage';
 
-export { isDesktop, isMac, sleep, sleepMs, xmlEscape, arrayBufferToBase64, base64ToArrayBuffer } from './lib/simples';
-
 export {
+  getUserConfig,
+  putUserConfig,
   getUserLanguage,
   putUserLanguage,
   putEditorAllConfig,
