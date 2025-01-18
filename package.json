@@ -33,9 +33,5 @@
     "packages/*",
     "packages/gui/editors/*",
     "packages/blocks/extensions/*"
-  ],
-  "dependencies": {
-    "jszip": "^3.10.1",
-    "mime": "^4.0.6"
-  }
+  ]
 }
