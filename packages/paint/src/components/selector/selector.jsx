@@ -82,7 +82,7 @@ const getImageIcon = (image) => `data:${image.type};base64,${image.data}`;
 export function Selector({ mode, maxSize, onImagesFilter, onShowLibrary, onSurprise, onChange, onDelete }) {
   const { translator } = useLocalesContext();
 
-  const { assets, assetId } = useProjectContext();
+  const { assets, assetId, modified } = useProjectContext();
 
   const getImages = useCallback(() => {
     return assets.value.filter((res) => {
@@ -90,7 +90,7 @@ export function Selector({ mode, maxSize, onImagesFilter, onShowLibrary, onSurpr
       if (!onImagesFilter) return true;
       return onImagesFilter(res);
     });
-  }, [onImagesFilter]);
+  }, [modified.value, onImagesFilter]);
 
   const handleUploadFile = useCallback(() => {
     const fileInput = document.createElement('input');
