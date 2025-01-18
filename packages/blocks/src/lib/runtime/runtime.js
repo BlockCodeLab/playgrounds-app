@@ -319,10 +319,10 @@ export class Runtime extends EventEmitter {
   sleep(signal, sec) {
     const secValue = MathUtils.toNumber(sec);
 
-    return new Promise(async (resolve) => {
+    return new Promise(async (resolve, reject) => {
       const handleAbort = () => {
         signal.off('abort', handleAbort);
-        resolve();
+        reject();
       };
       signal.once('abort', handleAbort);
 
