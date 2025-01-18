@@ -3,7 +3,7 @@ import featureImage from './feature.png';
 import iconImage from './icon.png';
 
 export default {
-  eegg: true,
+  eegg: 'nes',
   image: featureImage,
   icon: iconImage,
   name: (

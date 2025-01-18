@@ -33,7 +33,7 @@ export function Library({ items, title, filterable, filterPlaceholder, emptyMess
       const queryStr = query.value.toLowerCase();
       const nameStr = maybeTranslate(item.name, translator).toLowerCase();
       if (item.eegg) {
-        return item.id === queryStr || nameStr === queryStr;
+        return item.eegg === queryStr || nameStr === queryStr;
       }
 
       if (!item.tags) {
