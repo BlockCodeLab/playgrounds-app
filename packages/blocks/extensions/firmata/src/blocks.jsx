@@ -25,4 +25,22 @@ export const blocks = [
       return code;
     },
   },
+
+  {
+    id: 'connect',
+    text: (
+      <Text
+        id="blocks.firmata.connect"
+        defaultMessage="connect"
+      />
+    ),
+    emu(block) {
+      let code = '';
+      if (this.STATEMENT_PREFIX) {
+        code += this.injectId(this.STATEMENT_PREFIX, block);
+      }
+      code += `runtime.extensions.firmata.testConnect();\n`;
+      return code;
+    },
+  },
 ];

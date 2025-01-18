@@ -32,7 +32,6 @@ export class ArduinoBle extends EventEmitter {
 
   constructor() {
     super()
-    this.bleDevice = null;
     this.bleService = null;
     this.serialChar = null;
     this.atChar = null;
@@ -41,10 +40,10 @@ export class ArduinoBle extends EventEmitter {
     this._decoder = new TextDecoder();
     this._inFlash = false;
   }
+  
   requestPort(filters = []) {
-    navigator.bluetooth.requestDevice(bleOptions)
-      .then( device =>{
-        this.bleDevice = device;
+    return navigator.bluetooth.requestDevice(bleOptions)
+      .then( device =>{ 
         device.addEventListener('gattserverdisconnected', this.handleDisconnectError.bind(this));
         return device.gatt.connect();
       }).then( server => {
@@ -72,8 +71,28 @@ export class ArduinoBle extends EventEmitter {
       });
   }
 
+  init(server){
+    this.bleServer = server;
+    this.emit("open")
+    this.bleServer.getPrimaryService(SERVICE_UUID)
+        .then(service => service.getCharacteristic(SERIAL_UUID))
+        .then(characteristic => characteristic.startNotifications())
+        .then(characteristic => {
+          this.serialChar = characteristic;
+          characteristic.addEventListener('characteristicvaluechanged', this.serialNotify.bind(this))
+        });
+    this.bleServer.getPrimaryService(SERVICE_UUID)
+        .then(service => service.getCharacteristic(BLE_AT_UUID))
+        .then(characteristic => characteristic.startNotifications())
+        .then(characteristic => {
+            this.atChar = characteristic;
+            characteristic.addEventListener('characteristicvaluechanged', this.bleAtNotify.bind(this));
+          });
+  }
+
   disConnect(){
-    this.bleServer.disConnect();
+    this.emit("close")
+    //this.bleServer.disConnect();
   }
 
   getConnectStates(){
@@ -162,7 +181,7 @@ export class ArduinoBle extends EventEmitter {
     console.log("开始烧录啦")
     try {
       await this.sendATMessage("AT+TARGE_RESET");
-      await new Promise((resolve) => setTimeout(resolve, 100))
+      await new Promise((resolve) => setTimeout(resolve, 80))
       const syncReq =  new Uint8Array([Cmnd_STK_GET_SYNC, Sync_CRC_EOP])
       const okResp = new Uint8Array(OK_RESPONSE)
       const sync_succ = await this.sendSerialAndTestRet(syncReq, okResp);
@@ -195,7 +214,7 @@ export class ArduinoBle extends EventEmitter {
   }
 
   async upload(hex) {
-    const pageSize = 58
+    const pageSize = 43
     let pageaddr = 0
     let writeBytes = null
     let useaddr = null
