@@ -25,7 +25,7 @@ export default {
   emulator() {
     return {
       get key() {
-        return ' time';
+        return 'time';
       },
 
       timezone: 8,
