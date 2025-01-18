@@ -6,7 +6,7 @@ export function Alerts({ items }) {
     <div className={styles.alertsWrapper}>
       {items.map((item) => (
         <Alert
-          mode={item.mode || 'success'}
+          mode={item.mode ?? 'success'}
           icon={item.icon}
           message={item.message}
           button={item.button}
