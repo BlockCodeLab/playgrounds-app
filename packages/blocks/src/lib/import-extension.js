@@ -1,6 +1,8 @@
 import { batch } from '@preact/signals';
 import { addAsset } from '@blockcode/core';
 
+const escape = (name) => name.replaceAll(/[^a-z0-9]/gi, '_');
+
 export async function importExtension(extId) {
   const { default: extObj } = await import(extId);
   extObj.id = extId;
@@ -12,7 +14,7 @@ export async function importExtension(extId) {
       const content = await fetch(file.uri).then((res) => res.arrayBuffer());
       assets.push(
         Object.assign(file, {
-          id: `ext/${extId}/${file.name}`,
+          id: `ext/${escape(extId)}/${file.name}`,
           content,
         }),
       );
