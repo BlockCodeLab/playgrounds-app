@@ -20,6 +20,8 @@ export { Color } from './lib/color';
 
 export { exportFile } from './lib/export-file';
 
+export { fetchSpark } from './lib/fetch-spark';
+
 export { flatChildren } from './lib/flat-children';
 
 export { MathUtils } from './lib/math-utils';
