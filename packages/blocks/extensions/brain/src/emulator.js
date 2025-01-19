@@ -6,15 +6,15 @@ const SPARK_URL = 'https://spark-api-open.xf-yun.com/v1/chat/completions';
 
 // 仅供免费测试使用，不能保证每次请求的稳定和成功
 // HTTP 请求鉴权信息
-export const AUTH_PASS = 'qQIJHdBFkpbHDoMnPqnW:oeanHZdXCBHIHTOYvVim';
+export const APIPASSWORD = 'qQIJHdBFkpbHDoMnPqnW:oeanHZdXCBHIHTOYvVim';
 // WebSocket 请求鉴权信息
 const APPID = 'db45f79e';
 const APISecret = 'MWFiNjVmNDA4YjNhODFkZGE0MGQ1YWRj';
 const APIKey = '6a3dfe79b9e9ec588ca65bf3b9d9c847';
 
-const getHeaders = (authPass = AUTH_PASS) => ({
+const getHeaders = (apiPassword = APIPASSWORD) => ({
   'Content-Type': 'application/json',
-  Authorization: `Bearer ${authPass}`,
+  Authorization: `Bearer ${apiPassword}`,
 });
 
 // HTTP 请求参数
@@ -73,7 +73,7 @@ export function emulator(runtime) {
     },
 
     async askSpark(target, message, model = 'lite') {
-      const authPass = getUserConfig('SparkAI.AuthPass') ?? AUTH_PASS;
+      const apiPassword = getUserConfig('SparkAI.APIPassword') ?? APIPASSWORD;
       const appId = getUserConfig('SparkAI.APPID') ?? APPID;
       const apiSecret = getUserConfig('SparkAI.APISecret') ?? APISecret;
       const apiKey = getUserConfig('SparkAI.APIKey') ?? APIKey;
@@ -102,7 +102,7 @@ export function emulator(runtime) {
         res = await fetchSpark(SPARK_URL, {
           method: 'POST',
           mode: 'no-cors',
-          headers: getHeaders(authPass),
+          headers: getHeaders(apiPassword),
           body: JSON.stringify(getBody(messages, { model, user })),
           auth: {
             appId,
