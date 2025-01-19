@@ -23,3 +23,16 @@ zh-Hans:
   blocks.brain.askQuestion: 询问智脑 [QUESTION] 并等待
   blocks.brain.question: 你好
   blocks.brain.answer: 回答
+
+zh-Hant:
+  blocks.brain.name: 智腦
+  blocks.brain.openplatform: 訊飛開放平台認證信息
+  blocks.brain.openplatform.description1: 請註冊您自己的
+  blocks.brain.openplatform.description2: 訊飛開放平台
+  blocks.brain.openplatform.description3: 賬號，我們提供的測試賬號不保證每次請求都成功。
+  blocks.brain.addPrompt: 將指令說明 [PROMPT] 加入智腦
+  blocks.brain.prompt: 用一隻貓的性格對話
+  blocks.brain.clearHistory: 刪除所有歷史記錄
+  blocks.brain.askQuestion: 詢問智腦 [QUESTION] 並等待
+  blocks.brain.question: 你好
+  blocks.brain.answer: 回答
