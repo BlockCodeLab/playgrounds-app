@@ -401,7 +401,9 @@ export function Layout() {
             inputItems={app.prompt.value.inputItems}
             onClose={closePromptModal}
             onSubmit={app.prompt.value.onSubmit}
-          />
+          >
+            {app.prompt.value.body}
+          </InputsPromptModal>
         ) : (
           <PromptModal
             title={app.prompt.value.title}
