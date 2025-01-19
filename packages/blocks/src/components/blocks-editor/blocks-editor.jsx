@@ -294,7 +294,6 @@ export function BlocksEditor({
   useEffect(() => {
     if (splashVisible.value) return;
     if (appState.value?.running) return;
-    if (!isModifyType(ModifyTypes.Delete)) return;
 
     const codes = generateCodes(fileIndex.value);
     if (file.value.content !== codes.content || file.value.script !== codes.script) {
@@ -475,53 +474,53 @@ export function BlocksEditor({
           return ScratchBlocks.StatusButtonState.NOT_READY;
         }
 
-        // 完成配置
-        if (statusButton.storage) {
-          if (statusButton.storage.every((item) => localStorage.getItem(item.id))) {
-            return ScratchBlocks.StatusButtonState.READY;
-          }
-          return ScratchBlocks.StatusButtonState.NOT_READY;
-        }
+        // 硬件连接状态更新
+        const connectionOptions = statusButton.connectionOptions;
 
-        // 完成更新
-        if (statusButton.onUpdate?.()) {
+        if (connectionOptions ? appState.value?.device : statusButton.onUpdate?.()) {
           return ScratchBlocks.StatusButtonState.READY;
         }
         return ScratchBlocks.StatusButtonState.NOT_READY;
       };
 
       // 刷新状态按钮
-      const refreshStatusButtons = () => ScratchBlocks.refreshStatusButtons(ref.workspace);
+      const refreshStatus = () => ScratchBlocks.refreshStatusButtons(ref.workspace);
 
       // 状态按钮事件
-      ScratchBlocks.statusButtonCallback = (extId) => {
+      ScratchBlocks.statusButtonCallback = async (extId) => {
         if (!loadedExtensions.has(extId)) return;
 
         const extObj = loadedExtensions.get(extId);
         const statusButton = extObj.statusButton;
         if (!statusButton) return;
 
-        // 创建配置窗口
-        if (statusButton.storage) {
-          openPromptModal({
-            title: extObj.name,
-            label: statusButton.title,
-            inputItems: statusButton.storage.map((item) => ({
-              name: item.id,
-              placeholder: item.text,
-              defaultValue: localStorage.getItem(item.id),
-            })),
-            body: statusButton.description,
-            onSubmit: (value) => {
-              Object.entries(value).forEach(([key, val]) => localStorage.setItem(key, val));
-              refreshStatusButtons();
-            },
-          });
+        const connectionOptions = statusButton.connectionOptions;
+
+        // 自定义点击事件
+        if (!connectionOptions) {
+          await statusButton.onClick?.();
+          refreshStatus();
           return;
         }
 
-        // 自定义事件
-        statusButton.onClick?.(refreshStatusButtons);
+        // 蓝牙BLE连接
+        if (connectionOptions.bluetooth) {
+          const device = await navigator.bluetooth.requestDevice(connectionOptions.bluetooth);
+          // 断开连接
+          device.addEventListener('gattserverdisconnected', () => {
+            setAppState('device', false);
+            refreshStatus();
+          });
+          // 连接
+          const gattServer = await device.gatt.connect();
+          setAppState('device', gattServer);
+          refreshStatus();
+        }
+
+        // 串口连接
+        // if (connectionOptions.serial) {
+        //   const device = await navigator.serial.requestPort(connectionOptions.serial);
+        // }
       };
     }
     return () => {

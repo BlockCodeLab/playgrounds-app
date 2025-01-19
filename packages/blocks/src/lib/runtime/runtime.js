@@ -238,10 +238,13 @@ export class Runtime extends EventEmitter {
   }
 
   emit(...args) {
-    if (!this.running) return;
-    return new Promise((resolve) => {
-      super.emit(...args, resolve);
-    });
+    if (!this.running) {
+      super.emit(...args);
+    } else {
+      return new Promise((resolve) => {
+        super.emit(...args, resolve);
+      });
+    }
   }
 
   run(scriptName, ...args) {
@@ -292,7 +295,6 @@ export class Runtime extends EventEmitter {
 
   start() {
     if (!this.stage) return;
-
     this._running = true;
     this.on('start', this._handleStart.bind(this));
     this.on('frame', this._updateThresholds.bind(this));

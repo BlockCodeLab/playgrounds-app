@@ -143,7 +143,7 @@ export function addTabs(tabs) {
 
 // 设置应用状态
 export function setAppState(state, value) {
-  if (value) {
+  if (typeof state === 'string') {
     state = { [state]: value };
   }
   appState.value = Object.assign({}, appState.value ?? {}, state);

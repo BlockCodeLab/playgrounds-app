@@ -15,6 +15,16 @@ export default {
       defaultMessage="Arduino Firmata"
     />
   ),
+  statusButton: {
+    connectionOptions: {
+      // serial: {
+      //   filters: [],
+      // },
+      bluetooth: {
+        filters: [],
+      },
+    },
+  },
   emulator,
   blocks,
 };
