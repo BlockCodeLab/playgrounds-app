@@ -28,6 +28,21 @@ export function xmlEscape(unsafe) {
   });
 }
 
+export function base64ToUint8Array(base64) {
+  const binaryString = atob(base64);
+  const len = binaryString.length;
+  const array = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    array[i] = binaryString.charCodeAt(i);
+  }
+  return array;
+}
+
+export function uint8ArrayToBase64(array) {
+  const base64 = btoa(String.fromCharCode.apply(null, array));
+  return base64;
+}
+
 export function arrayBufferToBase64(buffer) {
   const bytes = new Uint8Array(buffer);
   const len = bytes.byteLength;
@@ -36,13 +51,4 @@ export function arrayBufferToBase64(buffer) {
     binary += String.fromCharCode(bytes[i]);
   }
   return btoa(binary);
-}
-
-export function base64ToArrayBuffer(base64) {
-  const binaryString = atob(base64);
-  const bytes = new Uint8Array(binaryString.length);
-  for (let i = 0; i < binaryString.length; i++) {
-    bytes[i] = binaryString.charCodeAt(i);
-  }
-  return bytes.buffer;
 }
