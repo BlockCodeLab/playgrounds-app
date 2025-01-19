@@ -3,7 +3,7 @@ from scratch import runtime
 from aisdks import sparkai
 
 # for test, free version
-AUTH_PASS = "qQIJHdBFkpbHDoMnPqnW:oeanHZdXCBHIHTOYvVim"
+APIPASSWORD = "qQIJHdBFkpbHDoMnPqnW:oeanHZdXCBHIHTOYvVim"
 
 MAX_HISTORY = const(4)
 
@@ -31,7 +31,7 @@ def clear(target):
     brains[id]["result"] = ''
 
 
-async def ask_spark(target, message, authPass=AUTH_PASS, model='lite'):
+async def ask_spark(target, message, apiPass=APIPASSWORD, model='lite'):
     if not runtime.wifi_connected or not message: return
 
     id = target.id
@@ -52,7 +52,7 @@ async def ask_spark(target, message, authPass=AUTH_PASS, model='lite'):
 
     message = await sparkai.ask(
         messages,
-        authPass,
+        apiPass,
         model=model,
         user=id,
         temperature=0.4,

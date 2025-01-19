@@ -1,6 +1,6 @@
 import { getUserConfig } from '@blockcode/utils';
 import { Text } from '@blockcode/core';
-import { AUTH_PASS } from './emulator';
+import { APIPASSWORD } from './emulator';
 
 export const blocks = [
   {
@@ -71,13 +71,13 @@ export const blocks = [
     },
     mpy(block) {
       const model = getUserConfig('SparkAI.Model') ?? 'lite';
-      const authPass = getUserConfig('SparkAI.AuthPass') ?? AUTH_PASS;
+      const apiPassword = getUserConfig('SparkAI.APIPassword') ?? APIPASSWORD;
       let code = '';
       if (this.STATEMENT_PREFIX) {
         code += this.injectId(this.STATEMENT_PREFIX, block);
       }
       const question = this.valueToCode(block, 'QUESTION', this.ORDER_NONE) || '""';
-      code += `await brain.ask_spark(target, ${question}, '${authPass}', '${model}')\n`;
+      code += `await brain.ask_spark(target, ${question}, '${apiPassword}', '${model}')\n`;
       return code;
     },
   },
