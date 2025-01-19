@@ -42,14 +42,16 @@ export {
 } from './lib/project-storage';
 
 export {
+  setUserConfig,
   getUserConfig,
-  putUserConfig,
+  putUserAllConfig,
+  getUserAllConfig,
+  setUserLanguage,
   getUserLanguage,
-  putUserLanguage,
+  setEditorConfig,
+  getEditorConfig,
   putEditorAllConfig,
   getEditorAllConfig,
-  putEditorConfig,
-  getEditorConfig,
+  setDockReversed,
   getDockReversed,
-  putDockReversed,
 } from './lib/user-config';

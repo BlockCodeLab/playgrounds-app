@@ -7,7 +7,7 @@ const Config = keyMirror({
 
 // 用户配置
 //
-export function putUserConfig(key, value) {
+export function setUserConfig(key, value) {
   localStorage.setItem(`user:${key}`, value);
 }
 
@@ -17,7 +17,7 @@ export function getUserConfig(key) {
 
 export function putUserAllConfig(config = {}) {
   for (const key in config) {
-    putUserConfig(key, config[key]);
+    setUserConfig(key, config[key]);
   }
 }
 
@@ -35,8 +35,8 @@ export function getUserAllConfig() {
 }
 
 // 用户语言
-export function putUserLanguage(language) {
-  putUserConfig(Config.Language, language);
+export function setUserLanguage(language) {
+  setUserConfig(Config.Language, language);
 }
 
 export function getUserLanguage() {
@@ -46,7 +46,7 @@ export function getUserLanguage() {
 // 编辑器配置
 // 不同编辑器独立设置
 //
-export function putEditorConfig(editor, key, value) {
+export function setEditorConfig(editor, key, value) {
   localStorage.setItem(`${editor}:${key}`, value);
 }
 
@@ -56,7 +56,7 @@ export function getEditorConfig(editor, key) {
 
 export function putEditorAllConfig(editor, config = {}) {
   for (const key in config) {
-    putEditorConfig(editor, key, config[key]);
+    setEditorConfig(editor, key, config[key]);
   }
 }
 
@@ -75,10 +75,10 @@ export function getEditorAllConfig(editor) {
 
 // 停靠栏是否反转
 //
-export function putDockReversed(editor, flag) {
-  putEditorConfig(editor, Config.DockReversed, flag);
+export function setDockReversed(editor, flag) {
+  setEditorConfig(editor, Config.DockReversed, flag);
 }
 
-export function getDockReversed(id) {
+export function getDockReversed(editor) {
   return getEditorConfig(editor, Config.DockReversed);
 }

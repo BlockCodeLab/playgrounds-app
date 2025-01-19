@@ -1,4 +1,4 @@
-import { putUserLanguage, getUserLanguage } from '@blockcode/utils';
+import { setUserLanguage, getUserLanguage } from '@blockcode/utils';
 
 const { DisplayNames, Locale } = window.Intl;
 
@@ -29,7 +29,7 @@ export function getCurrentLanguage() {
 
 export function putCurrentLanguage(language) {
   document.querySelector('html').lang = language;
-  putUserLanguage(language);
+  setUserLanguage(language);
 }
 
 const defaultLanguageName = new DisplayNames([defaultLanguage], { type: 'language' });
