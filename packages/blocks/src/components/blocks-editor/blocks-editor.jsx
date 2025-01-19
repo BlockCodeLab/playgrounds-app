@@ -376,7 +376,6 @@ export function BlocksEditor({
   useEffect(() => {
     if (ref.current) {
       // 创建工作区
-      loadedExtensions.clear();
       ref.workspace = ScratchBlocks.inject(
         ref.current,
         Object.assign(blocksConfig, {
@@ -524,6 +523,7 @@ export function BlocksEditor({
       };
     }
     return () => {
+      loadedExtensions.clear();
       if (ref.workspace) {
         ref.workspace.clearUndo();
         ref.workspace.dispose();
