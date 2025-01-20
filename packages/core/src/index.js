@@ -91,3 +91,5 @@ export { Tooltip } from './components/tooltip/tooltip';
 export { Keys, setHotkey, showHotkey, clearHotkeys } from './lib/io/hotkey';
 
 export { Serial } from './lib/io/serial';
+
+export { BLE } from './lib/io/ble';

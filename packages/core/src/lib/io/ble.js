@@ -29,16 +29,20 @@ export class BLE extends EventEmitter {
 
   connect() {
     this.server.connect().then(() => {
-      this.emit('connect');
       this.device.addEventListener('gattserverdisconnected', () => {
-        this.disconnect();
         this.emit('disconnect');
+        this.disconnect();
       });
+      this.emit('connect');
     });
   }
 
   disconnect() {
     this.server.disconnect();
+  }
+
+  isConnected() {
+    return this.server?.connected;
   }
 
   startNotifications(serviceId, characteristicId) {
@@ -75,8 +79,8 @@ export class BLE extends EventEmitter {
       .then((dataView) => ({
         message: new Uint8Array(dataView.buffer),
       }))
-      .catch((e) => {
-        this.disconnect();
+      .catch((err) => {
+        this.handleDisconnectError(err);
       });
   }
 
@@ -95,7 +99,12 @@ export class BLE extends EventEmitter {
         return characteristic.writeValue(data);
       })
       .catch((e) => {
-        this.disconnect();
+        this.handleDisconnectError(err);
       });
+  }
+
+  handleDisconnectError(err) {
+    console.log(err);
+    this.disconnect();
   }
 }
