@@ -3,7 +3,7 @@ import { EMUGenerator } from './generator';
 const proto = EMUGenerator.prototype;
 
 proto['event_whenflagclicked'] = function () {
-  return `runtime.on('start', ${this.HAT_CALLBACK});\n`;
+  return `runtime.when('start', ${this.HAT_CALLBACK});\n`;
 };
 
 proto['event_whengreaterthan'] = function (block) {

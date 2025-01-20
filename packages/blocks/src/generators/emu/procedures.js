@@ -22,7 +22,7 @@ proto['procedures_definition'] = function (block) {
   code += '} while (false)\n';
   code += 'done();\n';
   code += '}';
-  return `runtime.on('procedure:${funcName}', ${code});\n`;
+  return `runtime.define('procedure:${funcName}', ${code});\n`;
 };
 
 proto['procedures_call'] = function (block) {
@@ -31,7 +31,7 @@ proto['procedures_call'] = function (block) {
   const argsCode = args.length > 0 ? `, ${args.join(', ')}` : '';
 
   let code = '';
-  code += `await runtime.emit('procedure:${funcName}'${argsCode});\n`;
+  code += `await runtime.call('procedure:${funcName}'${argsCode});\n`;
   return code;
 };
 

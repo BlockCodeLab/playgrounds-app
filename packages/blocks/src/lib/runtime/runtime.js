@@ -7,6 +7,18 @@ import { Tone } from './tone';
 
 const DefaultFPS = 60;
 
+class EmulatorEvents extends EventEmitter {
+  reset() {
+    this.removeAllListeners();
+  }
+
+  emit(...args) {
+    return new Promise((resolve) => {
+      super.emit(...args, resolve);
+    });
+  }
+}
+
 export class Runtime extends EventEmitter {
   static get currentRuntime() {
     return Runtime._currentRuntime;
@@ -62,6 +74,9 @@ export class Runtime extends EventEmitter {
       },
     );
 
+    // 模拟器运行事件
+    this._events = new EmulatorEvents();
+
     // 舞台层，背景和地图
     this._backdrop = new Konva.Layer();
     stage.add(this._backdrop);
@@ -77,6 +92,10 @@ export class Runtime extends EventEmitter {
     // 信息层，对话框或其他信息
     this._board = new Konva.Layer();
     stage.add(this._board);
+
+    // 绑定事件
+    this.on('start', this._handleStart.bind(this));
+    this.on('frame', this._updateThresholds.bind(this));
   }
 
   get fps() {
@@ -164,11 +183,8 @@ export class Runtime extends EventEmitter {
     // 清空所有监视器
     this._monitors.clear();
 
-    // 清除所有扩展
-    this._extensions.clear();
-
-    // 清除所有绑定的事件
-    this.removeAllListeners();
+    // 重置模拟器
+    this._events.reset();
   }
 
   resetTimes() {
@@ -219,6 +235,10 @@ export class Runtime extends EventEmitter {
     }
   }
 
+  define(...args) {
+    this._events.on(...args);
+  }
+
   when(scriptName, script) {
     let runnings = this._scriptRunnings.get(scriptName);
     if (!runnings) {
@@ -228,7 +248,7 @@ export class Runtime extends EventEmitter {
     this._scriptRunnings.set(scriptName, runnings);
 
     const i = runnings.length - 1;
-    this.on(`${scriptName}_${i}`, script);
+    this.define(`${scriptName}_${i}`, script);
   }
 
   whenGreaterThen(name, value, script) {
@@ -237,20 +257,14 @@ export class Runtime extends EventEmitter {
     this.when(`threshold:${key}`, script);
   }
 
-  emit(...args) {
-    if (!this.running) {
-      super.emit(...args);
-    } else {
-      return new Promise((resolve) => {
-        super.emit(...args, resolve);
-      });
-    }
+  call(...args) {
+    if (!this.running) return;
+    return this._events.emit(...args);
   }
 
   run(scriptName, ...args) {
     if (!this.running) return;
-
-    this.emit(scriptName, ...args);
+    this.call(scriptName, ...args);
 
     // 检查脚本是否正在运行，如果已经在运行则不触发
     const runnings = this._scriptRunnings.get(scriptName);
@@ -260,7 +274,7 @@ export class Runtime extends EventEmitter {
           if (!running) {
             // 将运行中标识设为正在运行
             runnings[i] = true;
-            await this.emit(`${scriptName}_${i}`, ...args);
+            await this.call(`${scriptName}_${i}`, ...args);
             // 因为脚本有执行时间，结束后如果没有停止则重置运行中标识
             if (this.running) {
               runnings[i] = false;
@@ -296,10 +310,9 @@ export class Runtime extends EventEmitter {
   start() {
     if (!this.stage) return;
     this._running = true;
-    this.on('start', this._handleStart.bind(this));
-    this.on('frame', this._updateThresholds.bind(this));
     this.resetTimes();
     this.emit('start');
+    this.run('start');
   }
 
   stop(force) {
