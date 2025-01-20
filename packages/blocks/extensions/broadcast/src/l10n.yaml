@@ -2,15 +2,15 @@ en:
   blocks.broadcast.name: ESP-Now Broadcast
   blocks.broadcast.setGroup: set broadcast group [ID]
   blocks.broadcast.send: broadcast message [MESSAGE]
-  blocks.broadcast.sendName: broadcast named [NAME] message [MESSAGE]
+  blocks.broadcast.sendName: broadcast label [NAME] message [MESSAGE]
   blocks.broadcast.whenReceived: when I receive message
-  blocks.broadcast.whenReceivedNamed: when I receive named [NAME] message
+  blocks.broadcast.whenReceivedNamed: when I receive label [NAME] message
   blocks.broadcast.message: hello
   blocks.broadcast.messageName: say
   blocks.broadcast.received: received message
-  blocks.broadcast.receivedNamed: received named [NAME] message
+  blocks.broadcast.receivedNamed: received label [NAME] message
   blocks.broadcast.receivedIndex: received message [INDEX]
-  blocks.broadcast.receivedNameIndex: received named [NAME] message [INDEX]
+  blocks.broadcast.receivedNameIndex: received label [NAME] message [INDEX]
   blocks.broadcast.receivedMac: mac address
   blocks.broadcast.receivedTime: timestamp
   blocks.broadcast.receivedSerial: serial number
@@ -19,15 +19,15 @@ zh-Hans:
   blocks.broadcast.name: ESP-Now 无线广播
   blocks.broadcast.setGroup: 将广播组设为 [ID]
   blocks.broadcast.send: 广播消息 [MESSAGE]
-  blocks.broadcast.sendName: 广播名为 [NAME] 的 [MESSAGE] 消息
+  blocks.broadcast.sendName: 广播主题为 [NAME] 的 [MESSAGE] 消息
   blocks.broadcast.whenReceived: 当接收到消息
-  blocks.broadcast.whenReceivedNamed: 当接收到名为 [NAME] 的消息
+  blocks.broadcast.whenReceivedNamed: 当接收到主题为 [NAME] 的消息
   blocks.broadcast.message: 你好
   blocks.broadcast.messageName: 问候
   blocks.broadcast.received: 消息
-  blocks.broadcast.receivedNamed: 名为 [NAME] 的消息
+  blocks.broadcast.receivedNamed: 主题为 [NAME] 的消息
   blocks.broadcast.receivedIndex: 消息的 [INDEX]
-  blocks.broadcast.receivedNameIndex: 名为 [NAME] 消息的 [INDEX]
+  blocks.broadcast.receivedNameIndex: 主题为 [NAME] 的消息的 [INDEX]
   blocks.broadcast.receivedMac: MAC 地址
   blocks.broadcast.receivedTime: 时间戳
   blocks.broadcast.receivedSerial: 序列号
