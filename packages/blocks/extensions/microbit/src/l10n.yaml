@@ -1,0 +1,255 @@
+en:
+  blocks.microbit.name: micro:bit
+  blocks.microbit.download: Download mbit-more program
+  blocks.microbit.gesturesMenu.tiltUp: tilt up
+  blocks.microbit.gesturesMenu.tiltDown: tilt down
+  blocks.microbit.gesturesMenu.tiltLeft: tilt left
+  blocks.microbit.gesturesMenu.tiltRight: tilt right
+  blocks.microbit.gesturesMenu.faceUp: face up
+  blocks.microbit.gesturesMenu.faceDown: face down
+  blocks.microbit.gesturesMenu.freefall: freefall
+  blocks.microbit.gesturesMenu.g3: 3G
+  blocks.microbit.gesturesMenu.g6: 6G
+  blocks.microbit.gesturesMenu.g8: 8G
+  blocks.microbit.gesturesMenu.shake: shake
+  blocks.microbit.buttonIDMenu.a: A
+  blocks.microbit.buttonIDMenu.b: B
+  blocks.microbit.buttonEventMenu.down: down
+  blocks.microbit.buttonEventMenu.up: up
+  blocks.microbit.buttonEventMenu.click: click
+  # blocks.microbit.buttonEventMenu.hold: hold
+  # blocks.microbit.buttonEventMenu.longClick: long click
+  # blocks.microbit.buttonEventMenu.doubleClick: double click
+  blocks.microbit.touchIDMenu.logo: LOGO
+  blocks.microbit.touchEventMenu.touched: touched
+  blocks.microbit.touchEventMenu.released: released
+  blocks.microbit.touchEventMenu.tapped: tapped
+  # blocks.microbit.touchEventMenu.hold: hold
+  # blocks.microbit.touchEventMenu.longTapped: long tapped
+  # blocks.microbit.touchEventMenu.doubleTapped: double tapped
+  blocks.microbit.digitalValueMenu.Low: low
+  blocks.microbit.digitalValueMenu.High: high
+  blocks.microbit.axisMenu.x: x
+  blocks.microbit.axisMenu.y: y
+  blocks.microbit.axisMenu.z: z
+  blocks.microbit.axisMenu.absolute: absolute
+  blocks.microbit.pinModeMenu.pullNone: pull none
+  blocks.microbit.pinModeMenu.pullUp: pull up
+  blocks.microbit.pinModeMenu.pullDown: pull down
+  blocks.microbit.pinEventMenu.pulseLow: low pulse
+  blocks.microbit.pinEventMenu.pulseHigh: high pulse
+  blocks.microbit.pinEventMenu.fall: fall
+  blocks.microbit.pinEventMenu.rise: rise
+  blocks.microbit.pinEventTimestampMenu.pulseLow: low pulse
+  blocks.microbit.pinEventTimestampMenu.pulseHigh: high pulse
+  blocks.microbit.pinEventTimestampMenu.fall: fall
+  blocks.microbit.pinEventTimestampMenu.rise: rise
+  blocks.microbit.pinEventTypeMenu.none: none
+  blocks.microbit.pinEventTypeMenu.pulse: pulse
+  blocks.microbit.pinEventTypeMenu.edge: edge
+  blocks.microbit.connectionStateMenu.connected: connected
+  blocks.microbit.connectionStateMenu.disconnected: disconnected
+  blocks.microbit.whenConnectionChanged: when micro:bit [STATE]
+  blocks.microbit.whenButtonEvent: when button [NAME] is [EVENT]
+  blocks.microbit.isButtonPressed: button [NAME] pressed?
+  blocks.microbit.whenTouchEvent: when pin [NAME] is [EVENT]
+  blocks.microbit.isPinTouched: pin [NAME] is touched?
+  blocks.microbit.whenGesture: when [GESTURE]
+  blocks.microbit.displayMatrix: display pattern [MATRIX]
+  blocks.microbit.displayText: display text [TEXT] delay [DELAY] ms
+  blocks.microbit.clearDisplay: clear display
+  blocks.microbit.lightLevel: light intensity
+  blocks.microbit.temperature: temperature
+  blocks.microbit.compassHeading: angle with the north
+  blocks.microbit.pitch: pitch
+  blocks.microbit.roll: roll
+  blocks.microbit.soundLevel: sound level
+  blocks.microbit.magneticForce: magnetic force
+  blocks.microbit.acceleration: acceleration [AXIS]
+  blocks.microbit.analogValue: analog value of pin [PIN]
+  blocks.microbit.setPullMode: set pin [PIN] to input [MODE]
+  blocks.microbit.isPinHigh: '[PIN] pin is high?'
+  blocks.microbit.setDigitalOut: set [PIN] digital [LEVEL]
+  blocks.microbit.setAnalogOut: set [PIN] analog [LEVEL] %
+  blocks.microbit.setServo: set [PIN] servo angle [ANGLE]
+  blocks.microbit.playTone: play tone [FREQ] Hz volume [VOL] %
+  blocks.microbit.stopTone: stop tone
+  blocks.microbit.listenPinEventType: listen [EVENT_TYPE] event on [PIN]
+  blocks.microbit.whenPinEvent: when catch [EVENT] at pin [PIN]
+  blocks.microbit.getPinEventValue: value of [EVENT] at [PIN]
+  blocks.microbit.whenDataReceived: when data with label [LABEL] received from micro:bit
+  blocks.microbit.getDataLabeled: data of label [LABEL]
+  blocks.microbit.sendData: send data [DATA] with label [LABEL] to micro:bit
+  blocks.microbit.sendData.label: label
+  blocks.microbit.sendData.data: data
+
+zh-Hans:
+  blocks.microbit.name: micro:bit
+  blocks.microbit.download: 下载 mbit-more 控制程序
+
+  blocks.microbit.gesturesMenu.tiltUp: 向前倾斜
+  blocks.microbit.gesturesMenu.tiltDown: 向后倾斜
+  blocks.microbit.gesturesMenu.tiltLeft: 向左倾斜
+  blocks.microbit.gesturesMenu.tiltRight: 向右倾斜
+  blocks.microbit.gesturesMenu.faceUp: 面朝上
+  blocks.microbit.gesturesMenu.faceDown: 面朝下
+  blocks.microbit.gesturesMenu.freefall: 自由坠落
+  blocks.microbit.gesturesMenu.g3: 3G 加速度
+  blocks.microbit.gesturesMenu.g6: 6G 加速度
+  blocks.microbit.gesturesMenu.g8: 8G 加速度
+  blocks.microbit.gesturesMenu.shake: 摇晃
+  blocks.microbit.buttonIDMenu.a: A
+  blocks.microbit.buttonIDMenu.b: B
+  blocks.microbit.buttonEventMenu.down: 按下
+  blocks.microbit.buttonEventMenu.up: 松开
+  blocks.microbit.buttonEventMenu.click: 点击
+  # blocks.microbit.buttonEventMenu.hold: hold
+  # blocks.microbit.buttonEventMenu.longClick: long click
+  # blocks.microbit.buttonEventMenu.doubleClick: double click
+  blocks.microbit.touchIDMenu.logo: 徽标
+  blocks.microbit.touchEventMenu.touched: 触摸
+  blocks.microbit.touchEventMenu.released: 松开
+  blocks.microbit.touchEventMenu.tapped: 点击
+  # blocks.microbit.touchEventMenu.hold: hold
+  # blocks.microbit.touchEventMenu.longTapped: long tapped
+  # blocks.microbit.touchEventMenu.doubleTapped: double tapped
+  blocks.microbit.digitalValueMenu.Low: 低电平
+  blocks.microbit.digitalValueMenu.High: 高电平
+  blocks.microbit.axisMenu.x: x
+  blocks.microbit.axisMenu.y: y
+  blocks.microbit.axisMenu.z: z
+  blocks.microbit.axisMenu.absolute: 绝对
+  blocks.microbit.pinModeMenu.pullNone: 无
+  blocks.microbit.pinModeMenu.pullUp: 拉高
+  blocks.microbit.pinModeMenu.pullDown: 拉低
+  blocks.microbit.pinEventMenu.pulseLow: 低频脉冲
+  blocks.microbit.pinEventMenu.pulseHigh: 高频脉冲
+  blocks.microbit.pinEventMenu.fall: 电平下降
+  blocks.microbit.pinEventMenu.rise: 电平上升
+  blocks.microbit.pinEventTimestampMenu.pulseLow: 低频脉冲
+  blocks.microbit.pinEventTimestampMenu.pulseHigh: 高频脉冲
+  blocks.microbit.pinEventTimestampMenu.fall: 电平下降
+  blocks.microbit.pinEventTimestampMenu.rise: 电平上升
+  blocks.microbit.pinEventTypeMenu.none: 无
+  blocks.microbit.pinEventTypeMenu.pulse: 脉冲
+  blocks.microbit.pinEventTypeMenu.edge: 电平
+  blocks.microbit.connectionStateMenu.connected: 连接
+  blocks.microbit.connectionStateMenu.disconnected: 断开
+  blocks.microbit.whenConnectionChanged: 当 micro:bit [STATE]
+  blocks.microbit.whenButtonEvent: 当按键 [NAME] 被 [EVENT]
+  blocks.microbit.isButtonPressed: 按键 [NAME] 按下?
+  blocks.microbit.whenTouchEvent: 当引脚 [NAME] 被 [EVENT]
+  blocks.microbit.isPinTouched: 引脚 [NAME] 被触摸?
+  blocks.microbit.whenGesture: 当 [GESTURE] 时
+  blocks.microbit.displayMatrix: 显示图案 [MATRIX]
+  blocks.microbit.displayText: 显示文本 [TEXT] 延时 [DELAY] ms
+  blocks.microbit.clearDisplay: 清空屏幕
+  blocks.microbit.lightLevel: 亮度级别
+  blocks.microbit.temperature: 温度
+  blocks.microbit.compassHeading: 指南针面向
+  blocks.microbit.pitch: 旋转
+  blocks.microbit.roll: 横滚
+  blocks.microbit.soundLevel: 声音响度
+  blocks.microbit.magneticForce: 磁力
+  blocks.microbit.acceleration: 加速度 [AXIS]
+  blocks.microbit.analogValue: 引脚 [PIN] 模拟值
+  blocks.microbit.setPullMode: 将引脚 [PIN] 输入模式设为 [MODE]
+  blocks.microbit.isPinHigh: 引脚 [PIN] 是高电平?
+  blocks.microbit.setDigitalOut: 将引脚 [PIN] 数字值设为 [LEVEL]
+  blocks.microbit.setAnalogOut: 将引脚 [PIN] 模拟值设为 [LEVEL] %
+  blocks.microbit.setServo: 将引脚 [PIN] 舵机角度设为 [ANGLE]
+  blocks.microbit.playTone: 播放 [FREQ] Hz 音频并将音量设为 [VOL] %
+  blocks.microbit.stopTone: 停止音频
+  blocks.microbit.listenPinEventType: 监听引脚 [PIN] 事件 [EVENT_TYPE]
+  blocks.microbit.whenPinEvent: 当引脚 [PIN] 发生 [EVENT] 事件
+  blocks.microbit.getPinEventValue: 引脚 [PIN] 的 [EVENT] 值
+  blocks.microbit.whenDataReceived: 当从 micro:bit 接收到主题为 [LABEL] 的消息
+  blocks.microbit.getDataLabeled: 主题为 [LABEL] 的消息内容
+  blocks.microbit.sendData: 广播主题为 [LABEL] 的消息 [DATA] 给 micro:bit
+  blocks.microbit.sendData.label: 主题
+  blocks.microbit.sendData.data: 数据
+
+zh-Hant:
+  blocks.microbit.name: micro:bit
+  blocks.microbit.download: 下載 mbit-more 控制程序
+  blocks.microbit.gesturesMenu.tiltUp: 向前傾斜
+  blocks.microbit.gesturesMenu.tiltDown: 向後傾斜
+  blocks.microbit.gesturesMenu.tiltLeft: 向左傾斜
+  blocks.microbit.gesturesMenu.tiltRight: 向右傾斜
+  blocks.microbit.gesturesMenu.faceUp: 面朝上
+  blocks.microbit.gesturesMenu.faceDown: 面朝下
+  blocks.microbit.gesturesMenu.freefall: 自由墜落
+  blocks.microbit.gesturesMenu.g3: 3G 加速度
+  blocks.microbit.gesturesMenu.g6: 6G 加速度
+  blocks.microbit.gesturesMenu.g8: 8G 加速度
+  blocks.microbit.gesturesMenu.shake: 搖晃
+  blocks.microbit.buttonIDMenu.a: A
+  blocks.microbit.buttonIDMenu.b: B
+  blocks.microbit.buttonEventMenu.down: 按下
+  blocks.microbit.buttonEventMenu.up: 鬆開
+  blocks.microbit.buttonEventMenu.click: 點擊
+  # blocks.microbit.buttonEventMenu.hold: hold
+  # blocks.microbit.buttonEventMenu.longClick: long click
+  # blocks.microbit.buttonEventMenu.doubleClick: double click
+  blocks.microbit.touchIDMenu.logo: 徽標
+  blocks.microbit.touchEventMenu.touched: 觸摸
+  blocks.microbit.touchEventMenu.released: 鬆開
+  blocks.microbit.touchEventMenu.tapped: 點擊
+  # blocks.microbit.touchEventMenu.hold: hold
+  # blocks.microbit.touchEventMenu.longTapped: long tapped
+  # blocks.microbit.touchEventMenu.doubleTapped: double tapped
+  blocks.microbit.digitalValueMenu.Low: 低電平
+  blocks.microbit.digitalValueMenu.High: 高電平
+  blocks.microbit.axisMenu.x: x
+  blocks.microbit.axisMenu.y: y
+  blocks.microbit.axisMenu.z: z
+  blocks.microbit.axisMenu.absolute: 絕對
+  blocks.microbit.pinModeMenu.pullNone: 無
+  blocks.microbit.pinModeMenu.pullUp: 拉高
+  blocks.microbit.pinModeMenu.pullDown: 拉低
+  blocks.microbit.pinEventMenu.pulseLow: 低頻脈衝
+  blocks.microbit.pinEventMenu.pulseHigh: 高頻脈衝
+  blocks.microbit.pinEventMenu.fall: 電平下降
+  blocks.microbit.pinEventMenu.rise: 電平上升
+  blocks.microbit.pinEventTimestampMenu.pulseLow: 低頻脈衝
+  blocks.microbit.pinEventTimestampMenu.pulseHigh: 高頻脈衝
+  blocks.microbit.pinEventTimestampMenu.fall: 電平下降
+  blocks.microbit.pinEventTimestampMenu.rise: 電平上升
+  blocks.microbit.pinEventTypeMenu.none: 無
+  blocks.microbit.pinEventTypeMenu.pulse: 脈衝
+  blocks.microbit.pinEventTypeMenu.edge: 邊緣
+  blocks.microbit.connectionStateMenu.connected: 連接
+  blocks.microbit.connectionStateMenu.disconnected: 斷開
+  blocks.microbit.whenConnectionChanged: 當 micro:bit [STATE]
+  blocks.microbit.whenButtonEvent: 當按鍵 [NAME] 被 [EVENT]
+  blocks.microbit.isButtonPressed: 按鍵 [NAME] 按下?
+  blocks.microbit.whenTouchEvent: 當引腳 [NAME] 被 [EVENT]
+  blocks.microbit.isPinTouched: 引腳 [NAME] 被觸摸?
+  blocks.microbit.whenGesture: 當 [GESTURE] 時
+  blocks.microbit.displayMatrix: 顯示圖案 [MATRIX]
+  blocks.microbit.displayText: 顯示文本 [TEXT] 延時 [DELAY] ms
+  blocks.microbit.clearDisplay: 清空屏幕
+  blocks.microbit.lightLevel: 亮度級別
+  blocks.microbit.temperature: 溫度
+  blocks.microbit.compassHeading: 指南針面向
+  blocks.microbit.pitch: 旋轉
+  blocks.microbit.roll: 橫滾
+  blocks.microbit.soundLevel: 聲音響度
+  blocks.microbit.magneticForce: 磁力
+  blocks.microbit.acceleration: 加速度 [AXIS]
+  blocks.microbit.analogValue: 引腳 [PIN] 模擬值
+  blocks.microbit.setPullMode: 將引腳 [PIN] 輸入模式設為 [MODE]
+  blocks.microbit.isPinHigh: 引腳 [PIN] 是高電平?
+  blocks.microbit.setDigitalOut: 將引腳 [PIN] 數字值設為 [LEVEL]
+  blocks.microbit.setAnalogOut: 將引腳 [PIN] 模擬值設為 [LEVEL] %
+  blocks.microbit.setServo: 將引腳 [PIN] 舵機角度設為 [ANGLE]
+  blocks.microbit.playTone: 播放 [FREQ] Hz 音頻並將音量設為 [VOL] %
+  blocks.microbit.stopTone: 停止音頻
+  blocks.microbit.listenPinEventType: 監聽引腳 [PIN] 事件 [EVENT_TYPE]
+  blocks.microbit.whenPinEvent: 當引腳 [PIN] 發生 [EVENT] 事件
+  blocks.microbit.getPinEventValue: 引腳 [PIN] 的 [EVENT] 值
+  blocks.microbit.whenDataReceived: 當從 micro:bit 接收到主題為 [LABEL] 的消息
+  blocks.microbit.getDataLabeled: 主題為 [LABEL] 的消息內容
+  blocks.microbit.sendData: 廣播主題為 [LABEL] 的消息 [DATA] 給 micro:bit
+  blocks.microbit.sendData.label: 主題
+  blocks.microbit.sendData.data: 數據
