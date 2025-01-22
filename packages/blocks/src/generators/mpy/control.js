@@ -58,6 +58,8 @@ proto['control_if'] = function (block) {
   return code;
 };
 
+proto['control_if_else'] = proto['control_if'];
+
 proto['control_repeat_until'] = function (block) {
   let code = '';
   if (this.STATEMENT_PREFIX) {

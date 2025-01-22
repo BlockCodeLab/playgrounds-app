@@ -38,6 +38,7 @@ export class EMUGenerator extends JavaScriptGenerator {
     code += '  };\n';
     code += `  signal.once('abort', handleAbort);\n`;
     code += '  let forceSync = Date.now()\n'; // 强制帧同步（避免死循环）
+    code += '  let renderMode = false;\n'; // 渲染模式，当需要渲染时设为 true
     // 真正积木脚本
     code += '  /* 用户脚本开始 */\n/* hatcode */  /* 用户脚本结束 */\n';
     // 完成脚本
@@ -52,7 +53,7 @@ export class EMUGenerator extends JavaScriptGenerator {
     let code = '';
     code += '  /* 等待帧同步 */\n';
     code += '  if (handleAbort.stopped) return;\n';
-    code += '  if (warpMode && Date.now() - forceSync < 300) continue;\n'; // 跳过帧同步
+    code += '  if ((warpMode || !renderMode) && Date.now() - forceSync < 300) continue;\n'; // 跳过帧同步
     code += '  await runtime.nextFrame();\n';
     code += '  forceSync = Date.now();\n';
     return code;

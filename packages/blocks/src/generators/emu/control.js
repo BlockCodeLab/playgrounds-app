@@ -73,18 +73,6 @@ proto['control_if'] = function (block) {
 
 proto['control_if_else'] = proto['control_if'];
 
-proto['control_wait_until'] = function (block) {
-  let code = '';
-  if (this.STATEMENT_PREFIX) {
-    code += this.injectId(this.STATEMENT_PREFIX, block);
-  }
-  const conditionCode = this.valueToCode(block, 'CONDITION', this.ORDER_NONE) || 'false';
-
-  code += `while (!(${conditionCode})) {\n`;
-  code += `${this.NEXT_LOOP}}\n`;
-  return code;
-};
-
 proto['control_repeat_until'] = function (block) {
   let code = '';
   if (this.STATEMENT_PREFIX) {
@@ -95,12 +83,14 @@ proto['control_repeat_until'] = function (block) {
   if (this.STATEMENT_SUFFIX) {
     branchCode = this.prefixLines(this.injectId(this.STATEMENT_SUFFIX, block), this.INDENT) + branchCode;
   }
-  const conditionCode = this.valueToCode(block, 'CONDITION', this.ORDER_NONE) || 'false';
+  const conditionCode = this.valueToCode(block, 'CONDITION', this.ORDER_NONE) || 'true';
 
   code += `while (!(${conditionCode})) {\n`;
   code += `${branchCode}${this.NEXT_LOOP}}\n`;
   return code;
 };
+
+proto['control_wait_until'] = proto['control_repeat_until'];
 
 proto['control_while'] = function (block) {
   let code = '';
@@ -131,7 +121,7 @@ proto['control_stop'] = function (block) {
       break;
     case 'this script':
       code += `signal.off('abort', handleAbort);\n`;
-      code += 'resolve();\n';
+      code += 'return resolve();\n';
       break;
     case 'other scripts in sprite':
       code += 'controller.abort(funcId);\n';
