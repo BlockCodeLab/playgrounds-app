@@ -3,18 +3,18 @@ import { nanoid } from 'nanoid';
 
 // 创建项目本地数据库
 // INFO: 旧数据库名 blockcode-store
-localForage.config({
+const projectStorage = localForage.createInstance({
   name: 'blockcode-storage',
 });
 
-export async function getProject(key) {
-  return await localForage.getItem(key);
+export function getProject(key) {
+  return projectStorage.getItem(key);
 }
 
 export async function putProject(project, onThumb) {
   const key = project.key || nanoid();
   const thumb = await onThumb();
-  await localForage.setItem(key, {
+  const data = {
     key,
     thumb,
     id: project.id,
@@ -24,38 +24,40 @@ export async function putProject(project, onThumb) {
     assets: project.assets,
     fileId: project.fileId,
     modifiedDate: Date.now(),
-  });
+  };
+  await projectStorage.setItem(key, data);
   return key;
 }
 
 export async function renameProject(key, name) {
-  const project = await localForage.getItem(key);
+  const project = await projectStorage.getItem(key);
   project.name = name;
-  await localForage.setItem(project.key, project);
+  await projectStorage.setItem(project.key, project);
 }
 
 export async function cloneProject(key) {
   const project = await getProject(key);
   project.key = nanoid();
   project.modifiedDate = Date.now();
-  await localForage.setItem(project.key, project);
+  await projectStorage.setItem(project.key, project);
 }
 
 export async function delProject(key) {
-  await localForage.removeItem(key);
+  await projectStorage.removeItem(key);
 }
 
 export async function getProjectsThumbs() {
   let result = [];
-  await localForage.iterate((project, key) => {
-    result.push({
+  await projectStorage.iterate((project, key) => {
+    const data = {
       key,
       id: project.id,
       name: project.name,
       thumb: project.thumb,
       modifiedDate: project.modifiedDate,
       meta: project.meta,
-    });
+    };
+    result.push(data);
   });
   // 从新到旧排序
   result = result.sort((a, b) => b.modifiedDate - a.modifiedDate);

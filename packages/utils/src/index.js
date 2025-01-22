@@ -30,6 +30,8 @@ export { nanoid, nanoidLooks } from './lib/nanoid';
 
 export { openProjectFromComputer, saveProjectToComputer } from './lib/project-file';
 
+export { getBinaryCache, setBinaryCache } from './lib/binary-cache';
+
 export {
   isDesktop,
   isMac,
