@@ -73,8 +73,7 @@ export function fetchSpark(url, options) {
     ws.onmessage = async (e) => {
       const data = JSON.parse(e.data);
       if (data.header.code !== 0) {
-        reject(new Error(`Error code: ${data.header.code}`));
-        return;
+        return reject(new Error(`Error code: ${data.header.code}`));
       }
       // 合并信息
       message += data.payload.choices.text.map((text) => text.content).join('');

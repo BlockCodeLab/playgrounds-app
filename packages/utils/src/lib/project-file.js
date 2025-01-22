@@ -32,13 +32,13 @@ export function openProjectFromComputer() {
       const zip = await JSZip.loadAsync(file);
       const projectRaw = await zip.file('project.json')?.async('string');
       if (!projectRaw) {
-        reject('not found "project.json"');
+        return reject('not found "project.json"');
       }
       let projectJson;
       try {
         projectJson = JSON.parse(projectRaw);
       } catch (err) {
-        reject(err);
+        return reject(err);
       }
       for (const key in projectJson.assets) {
         const asset = projectJson.assets[key];

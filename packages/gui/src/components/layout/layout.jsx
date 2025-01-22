@@ -236,6 +236,10 @@ export function Layout() {
     try {
       editor = (await import(editorId)).default;
     } catch (err) {
+      if (DEBUG) {
+        console.error(err);
+      }
+
       openPromptModal({
         label: (
           <Text

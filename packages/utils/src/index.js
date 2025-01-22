@@ -40,6 +40,7 @@ export {
   xmlEscape,
   base64ToUint8Array,
   uint8ArrayToBase64,
+  arrayBufferToBinaryString,
   arrayBufferToBase64,
 } from './lib/simples';
 

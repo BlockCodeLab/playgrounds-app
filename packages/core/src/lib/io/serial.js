@@ -52,9 +52,7 @@ export class Serial extends EventEmitter {
           this.emit('connect');
           resolve();
         })
-        .catch((err) => {
-          reject(err);
-        });
+        .catch(reject);
     });
   }
 
@@ -64,14 +62,11 @@ export class Serial extends EventEmitter {
         this._reader
           .cancel()
           .then(() => this.port.close())
-          .then(() => resolve())
-          .catch((err) => reject(err));
+          .then(resolve)
+          .catch(reject);
       } else {
         this._reader = null;
-        this.port
-          .close()
-          .then(() => resolve())
-          .catch((err) => reject(err));
+        this.port.close().then(resolve).catch(reject);
       }
     });
   }
@@ -80,10 +75,7 @@ export class Serial extends EventEmitter {
     return new Promise((resolve, reject) => {
       const writer = this.port.writable.getWriter();
       data = encoding === 'text' ? encoder.encode(data) : data;
-      writer
-        .write(encoder.encode(data))
-        .then(() => resolve())
-        .catch((err) => reject(err));
+      writer.write(encoder.encode(data)).then(resolve).catch(reject);
       writer.releaseLock();
     });
   }

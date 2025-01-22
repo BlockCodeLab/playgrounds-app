@@ -61,7 +61,7 @@ export class MPYBoard {
           .catch((err) => {
             if (err.name === 'InvalidStateError') {
               this._connected = true;
-              resolve();
+              return resolve();
             }
             reject(err);
           });
