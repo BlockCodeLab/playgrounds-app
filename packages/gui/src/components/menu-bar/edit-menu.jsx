@@ -6,7 +6,7 @@ import { useProjectContext, Keys } from '@blockcode/core';
 import { Text, MenuSection, MenuItem } from '@blockcode/core';
 import styles from './menu-bar.module.css';
 
-export function EditMenu({ onUndo, onRedo, onEnableUndo, onEnableRedo, children }) {
+export function EditMenu({ onUndo, onRedo, onEnableUndo, onEnableRedo, ExtendedMenu }) {
   const { key, fileId, modified } = useProjectContext();
 
   const disabledUndo = useSignal(true);
@@ -50,7 +50,7 @@ export function EditMenu({ onUndo, onRedo, onEnableUndo, onEnableRedo, children 
         />
       </MenuSection>
 
-      {children}
+      {ExtendedMenu && <ExtendedMenu itemClassName={styles.menuItem} />}
     </>
   );
 }

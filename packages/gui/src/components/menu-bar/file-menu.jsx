@@ -25,7 +25,7 @@ const savedAlert = (isComputer = false) => {
   );
 };
 
-export function FileMenu({ onNew, onOpen, onSave, onThumb, children }) {
+export function FileMenu({ onNew, onOpen, onSave, onThumb, ExtendedMenu }) {
   const { meta, key, name, files, assets } = useProjectContext();
 
   const getProjectData = useCallback(async () => {
@@ -36,7 +36,7 @@ export function FileMenu({ onNew, onOpen, onSave, onThumb, children }) {
     });
     data.name = name.value;
     return data;
-  }, [onSave]);
+  }, []);
 
   // 保存到浏览器 IndexedDB
   // TODO: 保存到服务器，获取 ID
@@ -55,7 +55,7 @@ export function FileMenu({ onNew, onOpen, onSave, onThumb, children }) {
     });
 
     savedAlert();
-  }, []);
+  }, [getProjectData]);
 
   // 保存项目到计算机本地文件夹
   const handleSaveToComputer = useCallback(async () => {
@@ -66,7 +66,7 @@ export function FileMenu({ onNew, onOpen, onSave, onThumb, children }) {
     if (window.electron) return;
 
     savedAlert(true);
-  }, []);
+  }, [getProjectData]);
 
   // 从计算机打开项目
   // TODO: 从服务器获取项目
@@ -141,7 +141,13 @@ export function FileMenu({ onNew, onOpen, onSave, onThumb, children }) {
         />
       </MenuSection>
 
-      {children}
+      {ExtendedMenu && (
+        <ExtendedMenu
+          itemClassName={styles.menuItem}
+          onOpen={onOpen}
+          onSave={getProjectData}
+        />
+      )}
     </>
   );
 }

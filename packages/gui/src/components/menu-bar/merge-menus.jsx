@@ -6,26 +6,6 @@ import styles from './menu-bar.module.css';
 import fileIcon from './icons/icon-file.svg';
 import editIcon from './icons/icon-edit.svg';
 
-const mapMenuItems = (menu) => {
-  if (menu?.menuItems) {
-    return (
-      <MenuSection>
-        {menu.menuItems.map((item) => (
-          <MenuItem
-            className={styles.menuItem}
-            label={item.label}
-            onClick={item.onClick}
-          />
-        ))}
-      </MenuSection>
-    );
-  }
-  if (menu?.Menu) {
-    const Menu = menu.Menu;
-    return <Menu itemClassName={styles.menuItem} />;
-  }
-};
-
 export function mergeMenus(editor, meta, onOpen) {
   const handleOpen = (projData) => onOpen(projData, meta.editor);
 
@@ -52,13 +32,12 @@ export function mergeMenus(editor, meta, onOpen) {
       ),
       Menu: () => (
         <FileMenu
+          ExtendedMenu={editor.menuItems?.find?.((item) => item.id === 'file').Menu}
           onNew={handelNew}
           onOpen={handleOpen}
           onSave={editor.onSave}
           onThumb={editor.onThumb}
-        >
-          {mapMenuItems(editor.menuItems?.find?.((item) => item.id === 'file'))}
-        </FileMenu>
+        />
       ),
     },
     {
@@ -71,13 +50,12 @@ export function mergeMenus(editor, meta, onOpen) {
       ),
       Menu: () => (
         <EditMenu
+          ExtendedMenu={editor.menuItems?.find?.((item) => item.id === 'edit')?.Menu}
           onUndo={editor.onUndo}
           onRedo={editor.onRedo}
           onEnableUndo={editor.onEnableUndo}
           onEnableRedo={editor.onEnableRedo}
-        >
-          {mapMenuItems(editor.menuItems?.find?.((item) => item.id === 'edit'))}
-        </EditMenu>
+        />
       ),
     },
   ].concat(editor.menuItems?.filter?.((item) => item.id !== 'file' && item.id !== 'edit') ?? []);
