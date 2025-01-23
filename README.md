@@ -12,13 +12,13 @@
   - [blocks/](packages/blocks/): 图形积木编程组件
     - [extensions](packages/blocks/extensions): 图形积木扩展
   - [board/](packages/board/): 开发板硬件支持库
-  - [core/](packages/core/): 核心模块，包含核心全局状态机、标准UI、主题样式定义等
+  - [core/](packages/core/): 核心模块，包含核心全局状态机、标准 UI、主题样式定义等
   - [gui/](packages/gui/): 基于 Preact 框架的浏览器端图形界面
     - [editors](packages/gui/editors): 编辑器扩展
   - [paint/](packages/paint/): 像素风格画图组件
   - [sound/](packages/sound/): 声音编辑组件
   - [utils/](packages/utils/): 工具和第三方公共引用库
-- [public/](public/): 静态文件，包含LOGO、图片、HTML等
+- [public/](public/): 静态文件，包含 LOGO、图片、HTML 等
 - [scripts/](scripts/): 编译打包脚本
 - [src](src/): 基于 Electron 的 windows/macos/linux 跨平台的应用程序
 
@@ -32,7 +32,7 @@
 $ git clone https://github.com/BlockCodeLab/playgrounds-app.git
 $ cd playgrounds-app
 $ bun install
-$ bun run build:all
+$ bun run build
 ```
 
 2. 运行服务器，用浏览器打开 `localhost:3000`

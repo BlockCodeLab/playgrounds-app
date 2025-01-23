@@ -14,7 +14,7 @@
 $ git clone https://github.com/BlockCodeLab/playgrounds-app.git
 $ cd playgrounds-app
 $ bun install
-$ bun run build:all
+$ bun run build
 ```
 
 2. 进入 `playgrounds-app` 项目文件夹，在 `/packages/gui/editors/` 路径下新建文件夹 `example`，并对新文件夹进行 git 仓库初始化。
