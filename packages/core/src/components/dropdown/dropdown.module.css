@@ -26,6 +26,10 @@
 
 .dropdown-menu {
   min-width: 130px;
+  max-width: max-content;
+  max-height: 30vh;
+  overflow-y: auto;
+  overflow-x: hidden;
   box-shadow: 0 0 0.5rem hsla(0, 0%, 0%, 0.25);
 }
 

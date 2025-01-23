@@ -16,8 +16,10 @@ export function FontSelector({ font, onChange }) {
       style: { fontFamily: res.family },
       onClick: wrapFontChange(res),
     }));
-    fonts.value[0]?.onClick();
-  }, [wrapFontChange]);
+    if (!font) {
+      fonts.value[0]?.onClick();
+    }
+  }, [font, wrapFontChange]);
 
   return (
     <Dropdown

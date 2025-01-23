@@ -100,7 +100,7 @@ export function Dropdown({ className, items, children }) {
         {items && (
           <Menu
             name={dropdownId}
-            className={classNames(styles.dropdownMenu, className)}
+            className={classNames(styles.dropdownMenu)}
           >
             {mapMenuItems(items)}
           </Menu>
