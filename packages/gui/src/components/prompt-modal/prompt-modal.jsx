@@ -7,7 +7,7 @@ export function PromptModal({ title, label, content, redStyle, children, onClose
   const handleSubmit = useCallback(() => {
     onSubmit();
     onClose();
-  }, []);
+  }, [onClose, onSubmit]);
 
   return (
     <Modal

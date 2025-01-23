@@ -227,28 +227,27 @@ export default function Painter({ mode, maxSize }) {
         </div>
 
         <div className={styles.toolGroup}>
-          {mode === EditorModes.Costume && (
-            <Button
-              vertical
-              className={classNames(styles.labelButton, {
-                [styles.selected]: toolMode.value === PaintTools.Center,
-              })}
-              onClick={useCallback(
-                () => (toolMode.value = toolMode.value !== PaintTools.Center ? PaintTools.Center : null),
-                [],
-              )}
-            >
-              <img
-                src={centerIcon}
-                className={styles.buttonIcon}
-                title={translate('paint.painter.center', 'Center')}
-              />
-              <Text
-                id="paint.painter.center"
-                defaultMessage="Center"
-              />
-            </Button>
-          )}
+          <Button
+            vertical
+            disabled={mode !== EditorModes.Costume}
+            className={classNames(styles.labelButton, {
+              [styles.selected]: toolMode.value === PaintTools.Center,
+            })}
+            onClick={useCallback(
+              () => (toolMode.value = toolMode.value !== PaintTools.Center ? PaintTools.Center : null),
+              [],
+            )}
+          >
+            <img
+              src={centerIcon}
+              className={styles.buttonIcon}
+              title={translate('paint.painter.center', 'Center')}
+            />
+            <Text
+              id="paint.painter.center"
+              defaultMessage="Center"
+            />
+          </Button>
         </div>
       </div>
 
@@ -267,7 +266,7 @@ export default function Painter({ mode, maxSize }) {
             }
           >
             <ColorPicker
-              picking={toolMode.value === PaintTools.ColorPicker || toolMode.value === PaintTools.OutlineColorPicker}
+              picking={toolMode.value === PaintTools.ColorPicker}
               color={fillColor.value}
               onChange={useCallback((val) => (fillColor.value = val), [])}
               onPickingColor={wrapPickingColor(PaintTools.ColorPicker)}
@@ -290,7 +289,7 @@ export default function Painter({ mode, maxSize }) {
           >
             <ColorPicker
               outline
-              picking={toolMode.value === PaintTools.ColorPicker || toolMode.value === PaintTools.OutlineColorPicker}
+              picking={toolMode.value === PaintTools.OutlineColorPicker}
               color={outlineColor.value}
               onChange={useCallback((val) => (outlineColor.value = val), [])}
               onPickingColor={wrapPickingColor(PaintTools.OutlineColorPicker)}

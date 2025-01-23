@@ -7,37 +7,40 @@ import getExtensions from '../../lib/get-extensions';
 export function ExtensionsLibrary({ onSelect, onClose, onFilter }) {
   const data = useSignal([]);
 
-  const filter = useCallback((info) => {
-    if (info.hidden) {
-      return false;
-    }
+  const filter = useCallback(
+    (info) => {
+      if (info.hidden) {
+        return false;
+      }
 
-    // Electron 桌面版本不显示禁用或beta
-    if (window.electron && (info.beta || info.disabled)) {
-      return false;
-    }
+      // Electron 桌面版本不显示禁用或beta
+      if (window.electron && (info.beta || info.disabled)) {
+        return false;
+      }
 
-    // 没有标签的不过滤
-    const tags = info.tags;
-    if (!tags) {
-      return true;
-    }
+      // 没有标签的不过滤
+      const tags = info.tags;
+      if (!tags) {
+        return true;
+      }
 
-    let result = true; // 不过滤
-    if (onFilter) {
-      result = onFilter(tags);
-    }
-    if (Array.isArray(result)) {
-      // [some-tag, [every-tag, every-tag], some-tag]
-      return result.some((subfilter) => {
-        if (Array.isArray(subfilter)) {
-          return subfilter.every((item) => (item[0] === '!' ? !tags.includes(item.slice(1)) : tags.includes(item)));
-        }
-        return tags.includes(subfilter);
-      });
-    }
-    return result;
-  }, []);
+      let result = true; // 不过滤
+      if (onFilter) {
+        result = onFilter(tags);
+      }
+      if (Array.isArray(result)) {
+        // [some-tag, [every-tag, every-tag], some-tag]
+        return result.some((subfilter) => {
+          if (Array.isArray(subfilter)) {
+            return subfilter.every((item) => (item[0] === '!' ? !tags.includes(item.slice(1)) : tags.includes(item)));
+          }
+          return tags.includes(subfilter);
+        });
+      }
+      return result;
+    },
+    [onFilter],
+  );
 
   useEffect(async () => {
     let result = await getExtensions();

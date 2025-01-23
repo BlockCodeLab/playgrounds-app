@@ -32,32 +32,35 @@ export function TutorialBox({ tutorialId, onBack, onClose }) {
     pageIndex.value = (pageIndex.value - 1) % pages.value.length;
   }, []);
 
-  const openTutorial = useCallback((id) => {
-    const lesson = tutorials.value?.lessons?.[id];
-    if (!lesson) {
-      onClose();
-      return;
-    }
-    batch(() => {
-      pages.value = [].concat(
-        lesson.pages,
-        lesson.next
-          ? {
-              next: lesson.next
-                .filter((id) => tutorials.lessons[id])
-                .map((id) => ({
-                  id,
-                  title: tutorials.lessons[id].title,
-                  image: tutorials.lessons[id].image,
-                })),
-            }
-          : [],
-      );
-      pageIndex.value = 0;
-    });
-  }, []);
+  const openTutorial = useCallback(
+    (id) => {
+      const lesson = tutorials.value?.lessons?.[id];
+      if (!lesson) {
+        onClose();
+        return;
+      }
+      batch(() => {
+        pages.value = [].concat(
+          lesson.pages,
+          lesson.next
+            ? {
+                next: lesson.next
+                  .filter((id) => tutorials.lessons[id])
+                  .map((id) => ({
+                    id,
+                    title: tutorials.lessons[id].title,
+                    image: tutorials.lessons[id].image,
+                  })),
+              }
+            : [],
+        );
+        pageIndex.value = 0;
+      });
+    },
+    [onClose],
+  );
 
-  useEffect(() => openTutorial(tutorialId), []);
+  useEffect(() => openTutorial(tutorialId), [openTutorial]);
 
   useEffect(() => {
     if (ref.current) {

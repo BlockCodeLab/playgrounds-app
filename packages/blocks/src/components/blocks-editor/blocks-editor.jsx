@@ -186,58 +186,61 @@ export function BlocksEditor({
 
       delAlert(extId);
     },
-    [generator, emulator, toolboxXml],
+    [generator, emulator, toolboxXml, onExtensionLoad],
   );
 
   // 生成代码
   //
-  const generateCodes = useCallback((index) => {
-    // 查询使用的扩展
-    const extensions = Array.from(
-      new Set(
-        Object.values(ref.workspace.blockDB_)
-          .filter((block) => loadedExtensions.has(block.category_))
-          .map((block) => block.category_),
-      ),
-    );
+  const generateCodes = useCallback(
+    (index) => {
+      // 查询使用的扩展
+      const extensions = Array.from(
+        new Set(
+          Object.values(ref.workspace.blockDB_)
+            .filter((block) => loadedExtensions.has(block.category_))
+            .map((block) => block.category_),
+        ),
+      );
 
-    // 查询扩展附带的资源
-    const resources = {};
-    for (const extObj of loadedExtensions.values()) {
-      if (extensions.includes(extObj.id) && extObj.files) {
-        resources[extObj.id] = extObj.files.map((res) => ({
-          name: res.name,
-          type: res.type,
-        }));
+      // 查询扩展附带的资源
+      const resources = {};
+      for (const extObj of loadedExtensions.values()) {
+        if (extensions.includes(extObj.id) && extObj.files) {
+          resources[extObj.id] = extObj.files.map((res) => ({
+            name: res.name,
+            type: res.type,
+          }));
+        }
       }
-    }
 
-    let script;
-    if (emulator) {
-      if (onDefinitions) {
-        emulator.onDefinitions = () => {
-          onDefinitions(emulator.name_, (key, val) => (emulator.definitions_[key] = val), resources, index);
-        };
+      let script;
+      if (emulator) {
+        if (onDefinitions) {
+          emulator.onDefinitions = () => {
+            onDefinitions(emulator.name_, (key, val) => (emulator.definitions_[key] = val), resources, index);
+          };
+        }
+        script = emulator.workspaceToCode(ref.workspace);
       }
-      script = emulator.workspaceToCode(ref.workspace);
-    }
 
-    let content;
-    if (generator) {
-      if (onDefinitions) {
-        generator.onDefinitions = () => {
-          onDefinitions(generator.name_, (key, val) => (generator.definitions_[key] = val), resources, index);
-        };
+      let content;
+      if (generator) {
+        if (onDefinitions) {
+          generator.onDefinitions = () => {
+            onDefinitions(generator.name_, (key, val) => (generator.definitions_[key] = val), resources, index);
+          };
+        }
+        content = generator.workspaceToCode(ref.workspace);
       }
-      content = generator.workspaceToCode(ref.workspace);
-    }
 
-    return {
-      script,
-      content,
-      extensions,
-    };
-  }, []);
+      return {
+        script,
+        content,
+        extensions,
+      };
+    },
+    [emulator, generator, onDefinitions],
+  );
 
   // 工作区发生变化时产生新的代码
   const handleChange = useCallback(() => {
@@ -251,7 +254,7 @@ export function BlocksEditor({
       const codes = generateCodes(fileIndex.value);
       setFile({ xml, xmlDom, ...codes });
     }
-  }, []);
+  }, [generateCodes]);
 
   // 切换文件时加载积木
   useEffect(() => {
@@ -288,7 +291,7 @@ export function BlocksEditor({
       // 清除撤销记录
       setTimeout(() => ref.workspace.clearUndo(), 50);
     }
-  }, [fileId.value]);
+  }, [fileId.value, generateCodes]);
 
   // 从外部更新后重新生成代码
   useEffect(() => {
@@ -299,7 +302,7 @@ export function BlocksEditor({
     if (file.value.content !== codes.content || file.value.script !== codes.script) {
       setFile(codes);
     }
-  }, [modified.value]);
+  }, [modified.value, generateCodes]);
 
   // 更新工作区积木
   //
@@ -314,20 +317,20 @@ export function BlocksEditor({
   useEffect(() => {
     // if (appState.value?.running) return;
     updateWorkspace();
-  }, [fileId.value, files.value.length]);
+  }, [fileId.value, files.value.length, updateWorkspace]);
 
   // 增加扩展后
   useEffect(() => {
     if (appState.value?.running) return;
     updateWorkspace();
-  }, [loadedExtensions.size]);
+  }, [loadedExtensions.size, updateWorkspace]);
 
   // 在其他标签修改后，更新造型等列表
   useEffect(() => {
     if (appState.value?.running) return;
     if (tabIndex.value === 0) return;
     updateWorkspace();
-  }, [modified.value]);
+  }, [modified.value, updateWorkspace]);
 
   // 首次载入项目
   //
@@ -369,7 +372,7 @@ export function BlocksEditor({
         hideSplash();
       });
     }
-  }, [splashVisible.value]);
+  }, [splashVisible.value, generateCodes]);
 
   // 创建工作区
   //
@@ -530,7 +533,7 @@ export function BlocksEditor({
         ref.workspace = null;
       }
     };
-  }, [ref]);
+  }, [ref, handleChange, generateCodes]);
 
   return (
     <div className={styles.blocksEditorWrapper}>

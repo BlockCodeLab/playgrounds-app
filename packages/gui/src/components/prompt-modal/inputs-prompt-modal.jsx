@@ -7,15 +7,18 @@ import styles from './prompt-modal.module.css';
 export function InputsPromptModal({ title, inputItems, children, onClose, onSubmit }) {
   const data = useSignal(Object.fromEntries(inputItems.map(({ name, defaultValue }) => [name, defaultValue])));
 
-  const handleKeyDown = useCallback((e) => {
-    e.stopPropagation();
-    if (e.key === 'Escape') onClose();
-  }, []);
+  const handleKeyDown = useCallback(
+    (e) => {
+      e.stopPropagation();
+      if (e.key === 'Escape') onClose();
+    },
+    [onClose],
+  );
 
   const handleSubmit = useCallback(() => {
     onSubmit(data.value);
     onClose();
-  }, []);
+  }, [onClose, onSubmit]);
 
   const wrapInputSubmit = useCallback(
     (name) => (value) => {

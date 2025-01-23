@@ -54,7 +54,7 @@ export function MyBlockPromptModal({ mutator, enableWarp, onClose, onSubmit }) {
 
   const handleSubmit = useCallback(() => {
     onSubmit(ref.mutationRoot?.mutationToDom?.(true));
-  }, []);
+  }, [onSubmit]);
 
   useEffect(() => {
     if (ref.current) {

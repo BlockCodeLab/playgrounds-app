@@ -149,7 +149,7 @@ export function Selector({ mode, maxSize, onImagesFilter, onShowLibrary, onSurpr
         }
       });
     });
-  }, []);
+  }, [onChange]);
 
   const handlePaintImage = useCallback(() => {
     const imageId = nanoid();
@@ -168,54 +168,63 @@ export function Selector({ mode, maxSize, onImagesFilter, onShowLibrary, onSurpr
         onChange(imageId);
       }
     });
-  }, []);
+  }, [onChange]);
 
-  const handleDeleteImage = useCallback((index) => {
-    const images = getImages();
-    const image = images[index];
+  const handleDeleteImage = useCallback(
+    (index) => {
+      const images = getImages();
+      const image = images[index];
 
-    batch(() => {
-      let openId = assetId.value;
-      if (image.id === assetId.value) {
-        if (index === 0) {
-          openId = images[1]?.id;
-        } else if (index + 1 < images.length) {
-          openId = images[index + 1].id;
-        } else if (index - 1 > -1) {
-          openId = images[index - 1].id;
+      batch(() => {
+        let openId = assetId.value;
+        if (image.id === assetId.value) {
+          if (index === 0) {
+            openId = images[1]?.id;
+          } else if (index + 1 < images.length) {
+            openId = images[index + 1].id;
+          } else if (index - 1 > -1) {
+            openId = images[index - 1].id;
+          }
         }
-      }
 
-      delAsset(image.id);
-      openAsset(openId);
-      onDelete(image.id, openId);
-    });
-  }, []);
-
-  const handleDuplicateImage = useCallback((index) => {
-    const images = getImages();
-    const image = images[index];
-    const imageId = nanoid();
-
-    batch(() => {
-      addAsset({
-        ...image,
-        id: imageId,
+        delAsset(image.id);
+        openAsset(openId);
+        onDelete(image.id, openId);
       });
-      if (onChange) {
-        onChange(imageId);
-      }
-    });
-  }, []);
+    },
+    [onDelete],
+  );
 
-  const handleSelect = useCallback((i, item) => {
-    batch(() => {
-      openAsset(item.id);
-      if (onChange) {
-        onChange(item.id);
-      }
-    });
-  }, []);
+  const handleDuplicateImage = useCallback(
+    (index) => {
+      const images = getImages();
+      const image = images[index];
+      const imageId = nanoid();
+
+      batch(() => {
+        addAsset({
+          ...image,
+          id: imageId,
+        });
+        if (onChange) {
+          onChange(imageId);
+        }
+      });
+    },
+    [onChange],
+  );
+
+  const handleSelect = useCallback(
+    (i, item) => {
+      batch(() => {
+        openAsset(item.id);
+        if (onChange) {
+          onChange(item.id);
+        }
+      });
+    },
+    [onChange],
+  );
 
   const images = getImages();
 

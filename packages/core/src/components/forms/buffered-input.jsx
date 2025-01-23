@@ -22,15 +22,18 @@ export function BufferedInput({ value, type, forceFocus, onSubmit, ...props }) {
         e.target.focus();
       }
     },
-    [type, forceFocus],
+    [type, forceFocus, onSubmit],
   );
 
-  const handleKeyPress = useCallback((e) => {
-    if (e.key === 'Enter') {
-      handleFlush(e);
-      e.target.blur();
-    }
-  }, []);
+  const handleKeyPress = useCallback(
+    (e) => {
+      if (e.key === 'Enter') {
+        handleFlush(e);
+        e.target.blur();
+      }
+    },
+    [handleFlush],
+  );
 
   const handleChange = useCallback((e) => (bufferedValue.value = e.target.value), []);
 

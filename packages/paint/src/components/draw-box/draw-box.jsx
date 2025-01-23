@@ -60,15 +60,18 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
 
     const image = createImageFromLayer(ref.drawLayer, pos);
     onChange(image);
-  }, []);
+  }, [onChange]);
 
   // 更新图形中心
-  const updateCenter = useCallback((pos) => {
-    const imagePos = ref.image.position();
-    const centerX = pos.x - imagePos.x;
-    const centerY = pos.y - imagePos.y;
-    onChange({ centerX, centerY });
-  });
+  const updateCenter = useCallback(
+    (pos) => {
+      const imagePos = ref.image.position();
+      const centerX = pos.x - imagePos.x;
+      const centerY = pos.y - imagePos.y;
+      onChange({ centerX, centerY });
+    },
+    [onChange],
+  );
 
   // 创建图形操作控制器
   const createSelector = useCallback(() => {
@@ -79,7 +82,7 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
     } else {
       updateImage();
     }
-  }, []);
+  }, [updateImage]);
 
   // 清理图形操作控制器
   const clearSelector = useCallback(() => {
@@ -87,7 +90,7 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
       ref.transformer.nodes([]);
       updateImage();
     }
-  }, []);
+  }, [updateImage]);
 
   // 清理可编辑图形
   const clearDrawable = useCallback(() => {
@@ -99,33 +102,36 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
   }, []);
 
   // 键盘控制
-  const handleKeyDown = useCallback((e) => {
-    switch (e.code) {
-      case Keys.ESC:
-      case Keys.DELETE:
-      case Keys.BACKSPACE:
-        ref.painting = false;
-        tool.value?.cancel?.();
-        clearDrawable();
-        return;
-      case Keys.RETURN:
-      case Keys.ENTER:
-        clearSelector();
-        return;
-      case Keys.LEFT:
-        ref.transformer.nodes().forEach((node) => node.x(node.x() - 1));
-        return;
-      case Keys.RIGHT:
-        ref.transformer.nodes().forEach((node) => node.x(node.x() + 1));
-        return;
-      case Keys.UP:
-        ref.transformer.nodes().forEach((node) => node.y(node.y() - 1));
-        return;
-      case Keys.DOWN:
-        ref.transformer.nodes().forEach((node) => node.y(node.y() + 1));
-        return;
-    }
-  }, []);
+  const handleKeyDown = useCallback(
+    (e) => {
+      switch (e.code) {
+        case Keys.ESC:
+        case Keys.DELETE:
+        case Keys.BACKSPACE:
+          ref.painting = false;
+          tool.value?.cancel?.();
+          clearDrawable();
+          return;
+        case Keys.RETURN:
+        case Keys.ENTER:
+          clearSelector();
+          return;
+        case Keys.LEFT:
+          ref.transformer.nodes().forEach((node) => node.x(node.x() - 1));
+          return;
+        case Keys.RIGHT:
+          ref.transformer.nodes().forEach((node) => node.x(node.x() + 1));
+          return;
+        case Keys.UP:
+          ref.transformer.nodes().forEach((node) => node.y(node.y() - 1));
+          return;
+        case Keys.DOWN:
+          ref.transformer.nodes().forEach((node) => node.y(node.y() + 1));
+          return;
+      }
+    },
+    [clearDrawable],
+  );
 
   // 放置原始图
   useEffect(async () => {
@@ -139,7 +145,7 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
     });
     // 清除之前的绘制
     clearDrawable();
-  }, [assetId.value, modified.value]);
+  }, [assetId.value, modified.value, clearDrawable]);
 
   // 缩放画布
   useEffect(() => {
@@ -180,7 +186,7 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
       }
       tool.value?.setup?.(ref.drawLayer, toolOptions);
     }
-  }, [toolOptions]);
+  }, [toolOptions, clearSelector, updateCenter, updateImage]);
 
   useEffect(() => {
     if (ref.current) {
@@ -316,10 +322,12 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
         onSizeChange({ width: clientWidth, height: clientHeight });
 
         // 修正图形位置
-        ref.image.position({
-          x: stageWidth / 2 - asset.value.centerX,
-          y: stageHeight / 2 - asset.value.centerY,
-        });
+        if (asset.value) {
+          ref.image.position({
+            x: stageWidth / 2 - asset.value.centerX,
+            y: stageHeight / 2 - asset.value.centerY,
+          });
+        }
 
         // 修正遮罩
         const maskWidth = (stageWidth - maxSize.width) / 2;
@@ -352,7 +360,8 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
       ref.stage.destroy();
       ref.stage = null;
     };
-  }, [ref]);
+  }, [ref, clearSelector, onSizeChange]);
+
   return (
     <div className={styles.drawBox}>
       <div

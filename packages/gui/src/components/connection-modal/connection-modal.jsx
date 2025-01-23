@@ -14,7 +14,7 @@ export function ConnectionModal({ title, icon, devices, onClose, onSearch, onCon
     if (!deviceId.value) return;
     onConnect(deviceId.value);
     deviceId.value = '';
-  }, []);
+  }, [onConnect]);
 
   return (
     <Modal

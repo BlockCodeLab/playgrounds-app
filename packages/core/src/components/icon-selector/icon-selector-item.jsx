@@ -21,10 +21,13 @@ export function IconSelectorItem({
   onMouseUp,
   onDelete,
 }) {
-  const handleDelete = useCallback((e) => {
-    e.stopPropagation();
-    onDelete(e);
-  }, []);
+  const handleDelete = useCallback(
+    (e) => {
+      e.stopPropagation();
+      onDelete(e);
+    },
+    [onDelete],
+  );
 
   return (
     <ContextMenu menuItems={contextMenu}>

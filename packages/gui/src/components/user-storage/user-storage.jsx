@@ -158,9 +158,9 @@ export function UserStorage({ onOpenProject }) {
         ],
       ],
     }));
-  }, []);
+  }, [wrapOpenProject]);
 
-  useEffect(getUserProjects, []);
+  useEffect(() => getUserProjects(), [getUserProjects]);
 
   return (
     <Library

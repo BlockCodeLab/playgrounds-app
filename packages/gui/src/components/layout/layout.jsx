@@ -286,14 +286,17 @@ export function Layout() {
   }, []);
 
   // 打开项目事件
-  const handleOpenProject = useCallback((projData) => {
-    if (meta.value?.editor !== projData.meta.editor) {
-      closeProjectAndLayout();
-      handleOpenEditor(projData.meta.editor, projData);
-      return;
-    }
-    openProjectViaEditor(projData, meta.value?.editor);
-  }, []);
+  const handleOpenProject = useCallback(
+    (projData) => {
+      if (meta.value?.editor !== projData.meta.editor) {
+        closeProjectAndLayout();
+        handleOpenEditor(projData.meta.editor, projData);
+        return;
+      }
+      openProjectViaEditor(projData, meta.value?.editor);
+    },
+    [handleOpenEditor],
+  );
 
   return (
     <>

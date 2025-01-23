@@ -27,7 +27,7 @@ export function MenuItem({ className, style, disabled, label, href, hotkey, onCl
         window.open(href, '_blank');
       }
     },
-    [disabled, href],
+    [disabled, href, onClick],
   );
 
   if (isDesktop && hotkey) {

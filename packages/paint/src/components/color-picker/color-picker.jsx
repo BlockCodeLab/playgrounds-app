@@ -48,16 +48,22 @@ export function ColorPicker({ picking, color: defaultColor, outline, onChange, o
 
   const setColor = useCallback(
     (value) => onChange(getColorObject(Math.round(value * 360), saturation, brightness)),
-    [saturation, brightness],
+    [saturation, brightness, onChange],
   );
 
-  const setSaturation = useCallback((value) => onChange(getColorObject(color, value, brightness)), [color, brightness]);
+  const setSaturation = useCallback(
+    (value) => onChange(getColorObject(color, value, brightness)),
+    [color, brightness, onChange],
+  );
 
-  const setBrightness = useCallback((value) => onChange(getColorObject(color, saturation, value)), [color, saturation]);
+  const setBrightness = useCallback(
+    (value) => onChange(getColorObject(color, saturation, value)),
+    [color, saturation, onChange],
+  );
 
   const handleClear = useCallback(
     () => onChange(getColorObject(color, saturation, brightness, true)),
-    [color, saturation, brightness],
+    [color, saturation, brightness, onChange],
   );
 
   const handleColorMouseDown = useCallback((e) => moveSliderHandler(e, setColor), [setColor]);
@@ -79,14 +85,14 @@ export function ColorPicker({ picking, color: defaultColor, outline, onChange, o
 
   const handleClick = useCallback((e) => e.stopPropagation(), []);
 
-  const handlePickingColor = useCallback(() => onPickingColor(!picking), [picking]);
+  const handlePickingColor = useCallback(() => onPickingColor(!picking), [picking, onPickingColor]);
 
   return (
     <Tooltip
       clickable
       placement="bottom"
       className={styles.colorTooltip}
-      onHide={useCallback(() => setTimeout(() => onPickingColor(false), 50), [])}
+      onHide={useCallback(() => setTimeout(() => onPickingColor(false), 50), [onPickingColor])}
       content={
         <>
           <div className={styles.tooltipItem}>

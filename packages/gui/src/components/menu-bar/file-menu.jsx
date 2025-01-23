@@ -36,7 +36,7 @@ export function FileMenu({ onNew, onOpen, onSave, onThumb, ExtendedMenu }) {
     });
     data.name = name.value;
     return data;
-  }, []);
+  }, [onSave]);
 
   // 保存到浏览器 IndexedDB
   // TODO: 保存到服务器，获取 ID
@@ -73,7 +73,7 @@ export function FileMenu({ onNew, onOpen, onSave, onThumb, ExtendedMenu }) {
   const handleOpenFromComputer = useCallback(async () => {
     const data = await openProjectFromComputer();
     await onOpen(data);
-  }, []);
+  }, [onOpen]);
 
   return (
     <>

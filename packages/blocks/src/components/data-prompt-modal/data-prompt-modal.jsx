@@ -26,14 +26,17 @@ export function DataPromptModal({
 
   const handleSubmit = useCallback(() => {
     onSubmit(dataValue.value, options.value);
-  }, []);
+  }, [onSubmit]);
 
-  const handleKeyDown = useCallback((e) => {
-    if (e.key === 'Escape') onClose();
-    if (e.key === 'Enter') {
-      onSubmit(ref.current.base.value, options.value);
-    }
-  }, []);
+  const handleKeyDown = useCallback(
+    (e) => {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'Enter') {
+        onSubmit(ref.current.base.value, options.value);
+      }
+    },
+    [onClose, onSubmit],
+  );
 
   useEffect(() => {
     if (ref.current) {
