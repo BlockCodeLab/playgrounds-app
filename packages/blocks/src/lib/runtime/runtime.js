@@ -147,7 +147,7 @@ export class Runtime extends EventEmitter {
   }
 
   get times() {
-    return (Date.now() - this._timer) / 1000;
+    return this._timer ? (Date.now() - this._timer) / 1000 : 0;
   }
 
   get extensions() {
@@ -310,9 +310,9 @@ export class Runtime extends EventEmitter {
   start() {
     if (!this.stage) return;
     this._running = true;
-    this.resetTimes();
     this.emit('start');
     this.run('start');
+    this.resetTimes();
   }
 
   stop(force) {
@@ -324,10 +324,7 @@ export class Runtime extends EventEmitter {
       this._running = false;
       this.reset();
 
-      setAppState({
-        running: false,
-        monitors: null,
-      });
+      setAppState('monitors', null);
     }
   }
 

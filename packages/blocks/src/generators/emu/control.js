@@ -25,7 +25,8 @@ proto['control_repeat'] = function (block) {
   const timesCode = this.valueToCode(block, 'TIMES', this.ORDER_NONE) || '0';
 
   code += `for (let _ = 0; _ < MathUtils.toNumber(${timesCode}); _++) {\n`;
-  code += `${branchCode}${this.NEXT_LOOP}}\n`;
+  code += `${branchCode}  if (_ === MathUtils.toNumber(${timesCode}) - 1) break;\n`;
+  code += `${this.NEXT_LOOP}}\n`;
   return code;
 };
 
