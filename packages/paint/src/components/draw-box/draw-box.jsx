@@ -108,6 +108,10 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
         case Keys.ESC:
         case Keys.DELETE:
         case Keys.BACKSPACE:
+          // 文字输入时只有 ESC 可以取消
+          if (e.code !== Keys.ESC && tool.value?.type === PaintTools.Text) {
+            return;
+          }
           ref.painting = false;
           tool.value?.cancel?.();
           clearDrawable();
