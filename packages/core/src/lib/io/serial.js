@@ -75,7 +75,7 @@ export class Serial extends EventEmitter {
     return new Promise((resolve, reject) => {
       const writer = this.port.writable.getWriter();
       data = encoding === 'text' ? encoder.encode(data) : data;
-      writer.write(encoder.encode(data)).then(resolve).catch(reject);
+      writer.write(data).then(resolve).catch(reject);
       writer.releaseLock();
     });
   }
