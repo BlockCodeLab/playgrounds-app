@@ -81,6 +81,10 @@
   overflow: unset;
 }
 
+.blocks-editor :global(.blocklyToolboxDiv) {
+  padding-bottom: 100px;
+}
+
 :global(.blocklyContextMenu) {
   position: absolute !important;
   border: 1px solid var(--ui-black-transparent) !important;
