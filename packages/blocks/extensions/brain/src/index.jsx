@@ -40,28 +40,49 @@ export default {
               defaultMessage="Brain"
             />
           ),
+
           inputItems: [
             {
               name: 'apipassword',
-              label: 'HTTP 服务鉴权 APIPassword',
+              label: (
+                <Text
+                  id="blocks.brain.openplatform.APIPassword"
+                  defaultMessage="HTTP authorization APIPassword"
+                />
+              ),
               placeholder: 'APIPassword',
               defaultValue: getUserConfig('SparkAI.APIPassword') ?? '',
             },
             {
               name: 'appid',
-              label: 'WebSocket 服务鉴权 APPID',
+              label: (
+                <Text
+                  id="blocks.brain.openplatform.APPID"
+                  defaultMessage="WebSocket authorization APPID"
+                />
+              ),
               placeholder: 'APPID',
               defaultValue: getUserConfig('SparkAI.APPID') ?? '',
             },
             {
               name: 'apisecret',
-              label: 'WebSocket 服务鉴权 APISecret',
+              label: (
+                <Text
+                  id="blocks.brain.openplatform.APISecret"
+                  defaultMessage="WebSocket authorization APISecret"
+                />
+              ),
               placeholder: 'APISecret',
               defaultValue: getUserConfig('SparkAI.APISecret') ?? '',
             },
             {
               name: 'apikey',
-              label: 'WebSocket 服务鉴权 APIKey',
+              label: (
+                <Text
+                  id="blocks.brain.openplatform.APIKey"
+                  defaultMessage="WebSocket authorization APIKey"
+                />
+              ),
               placeholder: 'APIKey',
               defaultValue: getUserConfig('SparkAI.APIKey') ?? '',
             },
