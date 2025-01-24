@@ -20,6 +20,8 @@ export function emulator(runtime, Konva) {
       points: [pen.x, pen.y, pos.x, pos.y],
       stroke: runtime.getData(target, 'pen.color') ?? '#000000',
       strokeWidth: runtime.getData(target, 'pen.size') ?? 1,
+      lineJoin: 'round',
+      lineCap: 'round',
     });
     renderer.add(line);
 
