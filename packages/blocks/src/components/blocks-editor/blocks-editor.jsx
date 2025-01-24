@@ -7,13 +7,11 @@ import {
   useProjectContext,
   setAppState,
   setModified,
-  isModifyType,
   ModifyTypes,
   hideSplash,
   translate,
   setAlert,
   delAlert,
-  openPromptModal,
   setFile,
 } from '@blockcode/core';
 
@@ -533,7 +531,7 @@ export function BlocksEditor({
         ref.workspace = null;
       }
     };
-  }, [ref, handleChange, generateCodes]);
+  }, [ref]);
 
   return (
     <div className={styles.blocksEditorWrapper}>
