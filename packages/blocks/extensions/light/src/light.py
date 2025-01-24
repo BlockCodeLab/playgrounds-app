@@ -40,4 +40,4 @@ def get_brightness(pin):
         pins.setdefault(pin, adc)
     adc.atten(ADC.ATTN_11DB)
     value = adc.read() * 1000 // MAX_ADC_VALUE
-    return min(max(value, 0), 100)
+    return min(max(value, 0), 1000)
