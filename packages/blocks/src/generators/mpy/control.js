@@ -101,7 +101,7 @@ proto['control_stop'] = function (block) {
       code += 'return\n';
       break;
     case 'other scripts in sprite':
-      code += 'runtime.abort(except=func_id)\n';
+      code += 'runtime.abort(func_id)\n';
       break;
   }
   return code;
