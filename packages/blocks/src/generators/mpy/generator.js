@@ -1,4 +1,3 @@
-import { ScratchBlocks } from '../../lib/scratch-blocks';
 import { PythonGenerator } from '../python';
 
 export class MPYGenerator extends PythonGenerator {
@@ -15,18 +14,14 @@ export class MPYGenerator extends PythonGenerator {
     // 获取用户定义
     this.onDefinitions?.();
 
+    // 导入时间库，必须在用户定义之后，防止被覆盖
+    this.definitions_['import_time'] = 'import time';
+
     // 获取变量定义
     if (this.onVariableDefinitions) {
       delete this.definitions_['variables'];
       this.onVariableDefinitions(workspace);
     }
-  }
-
-  // 获取循环临时变量名
-  getLoopVarName() {
-    const count = ++this.loopVarCount_;
-    const varName = `_${count}_`;
-    return varName;
   }
 
   // 将事件积木转为代码
@@ -36,18 +31,20 @@ export class MPYGenerator extends PythonGenerator {
     funcCode += `async def ${eventName}(${args.join(',')}):\n`;
     funcCode += `${this.INDENT}func_id = f"{__name__}.${eventName}"\n`; // 用于停止其他脚本时过滤需要停止的脚本
     funcCode += `${this.INDENT}flash_mode = ${flash}\n`;
+    funcCode += `${this.INDENT}force_wait = time.ticks_ms()\n`;
+    funcCode += `${this.INDENT}render_mode = False\n`;
     funcCode += this.PASS;
     return funcCode;
   }
 
   // 循环机制
-  loopToCode(block, name, loopVarName = '_') {
+  loopToCode(block, name) {
     let branchCode = this.statementToCode(block, name) || this.PASS;
-    if (this.STATEMENT_SUFFIX) {
-      branchCode = this.prefixLines(this.injectId(this.STATEMENT_SUFFIX, block), this.INDENT) + branchCode;
-    }
-    branchCode += `${this.INDENT}if not flash_mode or ${loopVarName} % 10 == 9:\n`; // 防止卡死异步任务，每循环10次强制等待
-    branchCode += `${this.INDENT}${this.INDENT}await runtime.next_frame()\n`;
+    branchCode += `${this.INDENT}if ((not render_mode) or flash_mode) and time.ticks_diff(time.ticks_ms(), force_wait) < 500:\n`; // 防止死循环，等待下一帧
+    branchCode += `${this.INDENT}${this.INDENT}continue\n`;
+    branchCode += `${this.INDENT}await runtime.next_frame()\n`;
+    branchCode += `${this.INDENT}force_wait = time.ticks_ms()\n`;
+    branchCode += `${this.INDENT}render_mode = False\n`;
     return branchCode;
   }
 }

@@ -30,20 +30,20 @@ export class EMUGenerator extends JavaScriptGenerator {
     code += 'const warpMode = runtime.warpMode;\n'; // 是否跳过请求屏幕刷新
     code += 'return new Promise(async (resolve) => {\n';
     // 中断函数控制
-    code += '  const handleAbort = (skipId) => {\n';
-    code += '    if (funcId === skipId) return;\n';
-    code += `    signal.off('abort', handleAbort);\n`;
-    code += '    handleAbort.stopped = true;\n';
-    code += `    resolve();\n`;
-    code += '  };\n';
-    code += `  signal.once('abort', handleAbort);\n`;
-    code += '  let forceSync = Date.now()\n'; // 强制帧同步（避免死循环）
-    code += '  let renderMode = false;\n'; // 渲染模式，当需要渲染时设为 true
+    code += `${this.INDENT}const handleAbort = (skipId) => {\n`;
+    code += `${this.INDENT}${this.INDENT}if (funcId === skipId) return;\n`;
+    code += `${this.INDENT}${this.INDENT}signal.off('abort', handleAbort);\n`;
+    code += `${this.INDENT}${this.INDENT}handleAbort.stopped = true;\n`;
+    code += `${this.INDENT}${this.INDENT}resolve();\n`;
+    code += `${this.INDENT}};\n`;
+    code += `${this.INDENT}signal.once('abort', handleAbort);\n`;
+    code += `${this.INDENT}let forceWait = Date.now()\n`; // 强制帧同步（避免死循环）
+    code += `${this.INDENT}let renderMode = false;\n`; // 渲染模式，当需要渲染时设为 true
     // 真正积木脚本
-    code += '  /* 用户脚本开始 */\n/* hatcode */  /* 用户脚本结束 */\n';
+    code += `${this.INDENT}/* 用户脚本开始 */\n/* hatcode */  /* 用户脚本结束 */\n`;
     // 完成脚本
-    code += `  signal.off('abort', handleAbort);\n`;
-    code += '  resolve();\n';
+    code += `${this.INDENT}signal.off('abort', handleAbort);\n`;
+    code += `${this.INDENT}resolve();\n`;
     code += '}).then(done).catch(done);\n';
     code += '}';
     return code;
@@ -51,11 +51,12 @@ export class EMUGenerator extends JavaScriptGenerator {
 
   get NEXT_LOOP() {
     let code = '';
-    code += '  /* 等待帧同步 */\n';
-    code += '  if (handleAbort.stopped) return;\n';
-    code += '  if ((warpMode || !renderMode) && Date.now() - forceSync < 300) continue;\n'; // 跳过帧同步
-    code += '  await runtime.nextFrame();\n';
-    code += '  forceSync = Date.now();\n';
+    code += `${this.INDENT}/* 等待帧同步 */\n`;
+    code += `${this.INDENT}if (handleAbort.stopped) return;\n`;
+    code += `${this.INDENT}if ((!renderMode || warpMode) && Date.now() - forceWait < 500) continue;\n`; // 防止死循环，等待下一帧
+    code += `${this.INDENT}await runtime.nextFrame();\n`;
+    code += `${this.INDENT}forceSync = Date.now();\n`;
+    code += `${this.INDENT}renderMode = false;\n`;
     return code;
   }
 }

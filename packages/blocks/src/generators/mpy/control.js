@@ -17,10 +17,14 @@ proto['control_repeat'] = function (block) {
   if (this.STATEMENT_PREFIX) {
     code += this.injectId(this.STATEMENT_PREFIX, block);
   }
-  const loopVarName = this.getLoopVarName();
-  const branchCode = this.loopToCode(block, 'SUBSTACK', loopVarName);
+
+  let branchCode = this.loopToCode(block, 'SUBSTACK');
+  if (this.STATEMENT_SUFFIX) {
+    branchCode = this.prefixLines(this.injectId(this.STATEMENT_SUFFIX, block), this.INDENT) + branchCode;
+  }
+
   const timesCode = this.valueToCode(block, 'TIMES', this.ORDER_NONE) || 10;
-  code += `for ${loopVarName} in range(num(${timesCode})):\n${branchCode}`;
+  code += `for _ in range(num(${timesCode})):\n${branchCode}`;
   return code;
 };
 
@@ -29,9 +33,13 @@ proto['control_forever'] = function (block) {
   if (this.STATEMENT_PREFIX) {
     code += this.injectId(this.STATEMENT_PREFIX, block);
   }
-  const loopVarName = this.getLoopVarName();
-  const branchCode = this.loopToCode(block, 'SUBSTACK', loopVarName);
-  code += `${loopVarName} = -1\nwhile True:\n${this.INDENT}${loopVarName} += 1\n${branchCode}`;
+
+  let branchCode = this.loopToCode(block, 'SUBSTACK');
+  if (this.STATEMENT_SUFFIX) {
+    branchCode = this.prefixLines(this.injectId(this.STATEMENT_SUFFIX, block), this.INDENT) + branchCode;
+  }
+
+  code += `while True:\n${branchCode}`;
   return code;
 };
 
@@ -65,10 +73,14 @@ proto['control_repeat_until'] = function (block) {
   if (this.STATEMENT_PREFIX) {
     code += this.injectId(this.STATEMENT_PREFIX, block);
   }
-  const loopVarName = this.getLoopVarName();
-  const branchCode = this.loopToCode(block, 'SUBSTACK', loopVarName);
+
+  let branchCode = this.loopToCode(block, 'SUBSTACK');
+  if (this.STATEMENT_SUFFIX) {
+    branchCode = this.prefixLines(this.injectId(this.STATEMENT_SUFFIX, block), this.INDENT) + branchCode;
+  }
+
   const conditionCode = this.valueToCode(block, 'CONDITION', this.ORDER_NONE) || 'False';
-  code += `${loopVarName} = -1\nwhile not ${conditionCode}:\n${this.INDENT}${loopVarName} += 1\n${branchCode}`;
+  code += `while not ${conditionCode}:\n${branchCode}`;
   return code;
 };
 
@@ -79,10 +91,14 @@ proto['control_while'] = function (block) {
   if (this.STATEMENT_PREFIX) {
     code += this.injectId(this.STATEMENT_PREFIX, block);
   }
-  const loopVarName = this.getLoopVarName();
-  const branchCode = this.loopToCode(block, 'SUBSTACK', loopVarName);
+
+  let branchCode = this.loopToCode(block, 'SUBSTACK');
+  if (this.STATEMENT_SUFFIX) {
+    branchCode = this.prefixLines(this.injectId(this.STATEMENT_SUFFIX, block), this.INDENT) + branchCode;
+  }
+
   const conditionCode = this.valueToCode(block, 'CONDITION', this.ORDER_NONE) || 'False';
-  code += `${loopVarName} = -1\nwhile ${conditionCode}:\n${this.INDENT}${loopVarName} += 1\n${branchCode}`;
+  code += `while ${conditionCode}:\n${branchCode}`;
   return code;
 };
 
