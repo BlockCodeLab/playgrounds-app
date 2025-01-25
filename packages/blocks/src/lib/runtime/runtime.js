@@ -349,6 +349,10 @@ export class Runtime extends EventEmitter {
     return sleepMs(this.frameTimes);
   }
 
+  nextTick() {
+    return sleepMs(0);
+  }
+
   // 监视
   //
 

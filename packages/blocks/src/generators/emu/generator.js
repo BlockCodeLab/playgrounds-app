@@ -53,7 +53,13 @@ export class EMUGenerator extends JavaScriptGenerator {
     let code = '';
     code += `${this.INDENT}/* 等待帧同步 */\n`;
     code += `${this.INDENT}if (handleAbort.stopped) return;\n`;
-    code += `${this.INDENT}if ((!renderMode || warpMode) && Date.now() - forceWait < 500) continue;\n`; // 防止死循环，等待下一帧
+    code += `${this.INDENT}if (Date.now() - forceWait < 500) {\n`; // 防止死循环，等待下一帧
+    code += `${this.INDENT}${this.INDENT}if (warpMode) continue;\n`;
+    code += `${this.INDENT}${this.INDENT}if (!renderMode) {\;`;
+    code += `${this.INDENT}${this.INDENT}${this.INDENT}await runtime.nextTick();\n`;
+    code += `${this.INDENT}${this.INDENT}${this.INDENT}continue;\n`;
+    code += `${this.INDENT}${this.INDENT}}\;`;
+    code += `${this.INDENT}}\n`;
     code += `${this.INDENT}await runtime.nextFrame();\n`;
     code += `${this.INDENT}forceSync = Date.now();\n`;
     code += `${this.INDENT}renderMode = false;\n`;
