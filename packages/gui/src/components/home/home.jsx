@@ -201,7 +201,7 @@ export function Home({ onOpenEditor, onOpenProject }) {
     });
     result = result.map((editor) =>
       Object.assign(editor, {
-        disabled: editor.disabled || (!DEBUG && editor.beta), // DEBUG时允许进入beta
+        disabled: editor.disabled || (!(BETA || DEBUG) && editor.beta), // BETA 或 DEBUG 时允许进入 beta 版
         onSelect: () => onOpenEditor(editor.id),
       }),
     );

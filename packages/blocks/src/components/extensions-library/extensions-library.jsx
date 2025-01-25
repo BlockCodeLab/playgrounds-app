@@ -47,7 +47,7 @@ export function ExtensionsLibrary({ onSelect, onClose, onFilter }) {
     result = result.filter(filter);
     result = result.map((info) =>
       Object.assign(info, {
-        disabled: info.disabled || (!DEBUG && info.preview),
+        disabled: info.disabled || (!(BETA || DEBUG) && info.beta),
         onSelect: () => {
           onSelect(info.id);
           onClose();
