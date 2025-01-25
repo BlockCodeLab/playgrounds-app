@@ -1,6 +1,7 @@
 import JSZip from 'jszip';
 import mime from 'mime/lite';
 import { exportFile } from './export-file';
+import { parseOldProject } from './project-storage';
 
 export async function saveProjectToComputer(projectJson) {
   const zip = JSZip();
@@ -40,6 +41,13 @@ export function openProjectFromComputer() {
       } catch (err) {
         return reject(err);
       }
+
+      // 转换老版本数据
+      if (projectJson.editor) {
+        projectJson = parseOldProject(projectJson);
+      }
+
+      // 读取资源文件
       for (const key in projectJson.assets) {
         const asset = projectJson.assets[key];
         const extname = mime.getExtension(asset.type);

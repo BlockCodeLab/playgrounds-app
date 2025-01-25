@@ -7,6 +7,40 @@ const projectStorage = localForage.createInstance({
   name: 'blockcode-storage',
 });
 
+const oldProjectStorage = localForage.createInstance({
+  name: 'blockcode-store',
+});
+
+// 转换旧项目数据格式
+export function parseOldProject(project) {
+  project.meta = {
+    editor: `@blockcode/gui-${project.editor.package}`,
+    extensions: project.editor.extensions?.map?.((extId) => `@blockcode/blocks-${extId}`),
+    version: '0.0.0',
+  };
+  project.files = project.fileList.map((file) => {
+    if (file.id === 'stage') {
+      file.id = '_stage_';
+    }
+    if (project.editor.extensions) {
+      for (const extId of project.editor.extensions) {
+        file.xml = file.xml.replaceAll(`"${extId}_`, `"@blockcode/blocks-${extId}_`);
+      }
+    }
+    return file;
+  });
+  project.assets = project.assetList;
+
+  if (project.editor?.package === 'arcade') {
+    project.fileId = project.files[1].id;
+  }
+
+  delete project.editor;
+  delete project.fileList;
+  delete project.assetList;
+  return project;
+}
+
 export function getProject(key) {
   return projectStorage.getItem(key);
 }
@@ -47,8 +81,21 @@ export async function delProject(key) {
 }
 
 export async function getProjectsThumbs() {
-  let result = [];
-  await projectStorage.iterate((project, key) => {
+  // 转移旧数据库数据
+  const oldKeys = await oldProjectStorage.keys();
+  for (const key of oldKeys) {
+    if (await projectStorage.getItem(key)) continue;
+    // 跳过已经存在的后转换旧项目数据
+    const project = await oldProjectStorage.getItem(key);
+    const data = parseOldProject(project);
+    await projectStorage.setItem(key, data);
+  }
+
+  // 获取新数据库数据
+  const result = [];
+  const keys = await projectStorage.keys();
+  for (const key of keys) {
+    const project = await projectStorage.getItem(key);
     const data = {
       key,
       id: project.id,
@@ -58,8 +105,7 @@ export async function getProjectsThumbs() {
       meta: project.meta,
     };
     result.push(data);
-  });
+  }
   // 从新到旧排序
-  result = result.sort((a, b) => b.modifiedDate - a.modifiedDate);
-  return result;
+  return result.sort((a, b) => b.modifiedDate - a.modifiedDate);
 }
