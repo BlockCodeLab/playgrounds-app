@@ -22,12 +22,27 @@ class ArudinoBleEmulator {
   }
 
   flash() {
-    this.bleSerialPort.flashHex();
-  }
-  testConnect() {
     this.arduinoBle.requestPort().then(async () => {
       await new Promise((resolve) => setTimeout(resolve, 2000));
       this.bleSerialPort.flashHex();
+    });
+  }
+  testConnect() {
+    this.arduinoBle.requestPort().then( async () => {
+      
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      this.board = new Firmata(this.bleSerialPort, {skipCapabilities: true});
+     
+      this.board.on("ready", () => {
+        console.log("  ✔ ready");
+      });
+      this.board.on("reportVersionTimeout",  ()=> {
+        console.log("reportVersionTimeout")
+    })
+      this.board.once("analog-mapping-query", ()=> {
+        console.log("analog-mapping-query");
+    })
+      //this.bleSerialPort.flashHex();
     });
     //
   }
@@ -36,6 +51,7 @@ class ArudinoBleEmulator {
 export function emulator(runtime, Konva) {
   const arudinoBleEmulator = new ArudinoBleEmulator();
   runtime.on('connecting', (server) => {
+    console.log("onnconetec")
     arudinoBleEmulator.connect(server);
   });
 

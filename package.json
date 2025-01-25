@@ -34,5 +34,8 @@
     "packages/*",
     "packages/gui/editors/*",
     "packages/blocks/extensions/*"
-  ]
+  ],
+  "dependencies": {
+    "firmata-io": "^2.3.0"
+  }
 }

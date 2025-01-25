@@ -39,6 +39,7 @@ export class ArduinoBle extends EventEmitter {
     this._encoder = new TextEncoder();
     this._decoder = new TextDecoder();
     this._inFlash = false;
+    this.bleBusy = false;
   }
   
   requestPort(filters = []) {
@@ -162,16 +163,32 @@ export class ArduinoBle extends EventEmitter {
   }
 
   async sendSerialMessage(req_data){
-    await this.serialChar.writeValueWithResponse(req_data);
+     await this.serialChar.writeValueWithResponse(req_data);
+  }
+
+  async sendSerialMessageWithResp(req_data){
+    if (this.bleBusy) {
+      console.log("1")
+      setTimeout(() => this.sendSerialMessageWithResp(req_data), 10);
+      console.log("2")
+      return; // Do not return Promise.resolve() to re-try.
+    }
+    try{
+      this.bleBusy = true;
+      console.log("3")
+      await this.sendSerialMessage(req_data);
+    }finally{
+      this.bleBusy = false;
+    }
   }
 
   async sendSerialAndTestRet(req_data, resp_data) {
     await this.sendSerialMessage(req_data);
     const resp = await this.waitForResponse(this.serialChar, resp_data);
     const ret = this.bufferEqual(resp_data, new Uint8Array(resp));
-    console.log("发送--" + req_data);
-    console.log("返回--" + new Uint8Array(resp));
-    console.log("希望-" + resp_data);
+    // console.log("发送--" + req_data);
+    // console.log("返回--" + new Uint8Array(resp));
+    // console.log("希望-" + resp_data);
     return ret;
   }
 
@@ -181,7 +198,7 @@ export class ArduinoBle extends EventEmitter {
     console.log("开始烧录啦")
     try {
       await this.sendATMessage("AT+TARGE_RESET");
-      await new Promise((resolve) => setTimeout(resolve, 80))
+      await new Promise((resolve) => setTimeout(resolve, 100))
       const syncReq =  new Uint8Array([Cmnd_STK_GET_SYNC, Sync_CRC_EOP])
       const okResp = new Uint8Array(OK_RESPONSE)
       const sync_succ = await this.sendSerialAndTestRet(syncReq, okResp);
@@ -204,6 +221,8 @@ export class ArduinoBle extends EventEmitter {
       const leave_succ = await this.sendSerialAndTestRet(leaveProgModelReq, okResp);
       if(!leave_succ){
         throw new Error("stk500 leaveProgMode error")
+      }else{
+        console.log("leaveProgMode")
       }
     } catch (error) {
       console.log(error)
@@ -214,7 +233,7 @@ export class ArduinoBle extends EventEmitter {
   }
 
   async upload(hex) {
-    const pageSize = 43
+    const pageSize = 128
     let pageaddr = 0
     let writeBytes = null
     let useaddr = null
@@ -243,7 +262,6 @@ export class ArduinoBle extends EventEmitter {
     const addr_high = (useaddr >> 8) & 0xff
     const cmd =  new Uint8Array([Cmnd_STK_LOAD_ADDRESS, addr_low, addr_high, Sync_CRC_EOP]);
     const okResp = new Uint8Array(OK_RESPONSE)
-    console.log(cmd)
     console.log("loadAddress")
     const ret = await this.sendSerialAndTestRet(cmd, okResp);
     if(!ret){
@@ -254,15 +272,21 @@ export class ArduinoBle extends EventEmitter {
   async loadPage(writeBytes) {
     const bytes_low = writeBytes.length & 0xff
     const bytes_high = writeBytes.length >> 8
-    const cmd = this.mergeUint8Arrays(
-      new Uint8Array([Cmnd_STK_PROG_PAGE, bytes_high, bytes_low, 0x46]),
-      new Uint8Array(writeBytes),
-      new Uint8Array([Sync_CRC_EOP]));
-
-    console.log(cmd)
-    console.log("loadPage")
+    const cmd1 = new Uint8Array([Cmnd_STK_PROG_PAGE, bytes_high, bytes_low, 0x46]);  
+    await this.sendSerialMessage(cmd1);
+    let i = 0;
+     console.log("loadAddress")
+    const length = writeBytes.length;
+    while (i < length) {
+        const splitLength = Math.min(30, length - i);        
+        console.log('splitLength:', splitLength);
+        const chunk = writeBytes.slice(i, i + splitLength);
+        await this.sendSerialMessage(new Uint8Array(chunk));
+        i += splitLength;
+    }
+    const cmd3 = new Uint8Array([Sync_CRC_EOP])
     const okResp = new Uint8Array(OK_RESPONSE)
-    const ret = await this.sendSerialAndTestRet(cmd, okResp);
+    const ret = await this.sendSerialAndTestRet(cmd3, okResp);
     if(!ret){
       throw new Error("stk500 loadPage error")
     }
@@ -283,7 +307,7 @@ export class ArduinoBle extends EventEmitter {
 
   parseIntelHex(data) {
     const bytes = [];
-    const str = typeof data === 'string' ? data : new TextDecoder().decode(data);
+    const str = typeof data === 'string' ? data : new TextDecoder('utf-8').decode(data);
     var extra_addr = 0;
     for (let line of str.split(/\s*\n\s*/)) {
       if (line.length < 1) {

@@ -21,7 +21,7 @@ export default {
       //   filters: [],
       // },
       bluetooth: {
-        filters: [],
+        filters: [{ services: ['0000ffe0-0000-1000-8000-00805f9b34fb'] }],
       },
     },
   },

@@ -43,4 +43,21 @@ export const blocks = [
       return code;
     },
   },
+  {
+    id: 'flash',
+    text: (
+      <Text
+        id="blocks.firmata.flash"
+        defaultMessage="flash"
+      />
+    ),
+    emu(block) {
+      let code = '';
+      if (this.STATEMENT_PREFIX) {
+        code += this.injectId(this.STATEMENT_PREFIX, block);
+      }
+      code += `runtime.extensions.firmata.flash();\n`;
+      return code;
+    },
+  },
 ];
