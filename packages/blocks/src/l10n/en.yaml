@@ -25,6 +25,8 @@ blocks.panes.monitor: Monitor
 blocks.extensions.addExtension: Add Extension
 blocks.extensions.empty: No extension!
 
+blocks.alert.downloading: Downloading...{progress}%
+
 blocks.prompt.ok: OK
 blocks.prompt.cancel: Cancel
 
@@ -43,6 +45,9 @@ blocks.myBlockPrompt.command: Command
 blocks.myBlockPrompt.reporterNumberText: Return number or text
 blocks.myBlockPrompt.reporterBoolean: Return boolean
 blocks.myBlockPrompt.warpLabel: Run Turbo Mode
+
+blocks.downloadPrompt.flashOutSpace: The flash is running out of space.
+blocks.downloadPrompt.firmwareOutdated: The firmware is outdated. Please update it.
 
 blocks.events.programStart: when program start
 blocks.control.stopOther: other scripts

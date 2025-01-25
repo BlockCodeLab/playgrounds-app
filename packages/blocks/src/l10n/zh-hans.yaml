@@ -25,8 +25,11 @@ blocks.panes.monitor: 监视器
 blocks.extensions.addExtension: 添加扩展
 blocks.extensions.empty: 没有扩展！
 
+blocks.alert.downloading: 正在下载…{progress}%
+
 blocks.prompt.ok: 确定
 blocks.prompt.cancel: 取消
+
 blocks.dataPrompt.forAllTargets: 适用于全局
 blocks.dataPrompt.forThisTarget: 仅适用于当前
 blocks.dataPrompt.availableToAllTargets: 全局都可使用该变量。
@@ -42,6 +45,9 @@ blocks.myBlockPrompt.command: 无返回值
 blocks.myBlockPrompt.reporterNumberText: 返回数字或文本
 blocks.myBlockPrompt.reporterBoolean: 返回布尔值
 blocks.myBlockPrompt.warpLabel: 开启加速模式
+
+blocks.downloadPrompt.flashOutSpace: 设备空间不足。
+blocks.downloadPrompt.firmwareOutdated: 固件版本过低，请升级到最新版本。
 
 blocks.events.programStart: 当程序开始运行
 blocks.control.stopOther: 其他脚本
