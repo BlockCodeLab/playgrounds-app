@@ -71,6 +71,18 @@ export class MPYUtils {
     await board.exitRawRepl();
   }
 
+  static async checkVersion(board, version) {
+    const [major, minor, revision] = version.split('.').map((v) => parseInt(v, 10));
+    await board.stop();
+    await board.enterRawRepl();
+    let line = '';
+    line += 'import version\n';
+    line += `print(version.major>=${major} and version.minor>=${minor} and version.revision>=${revision})\n`;
+    const out = await board.execRaw(line);
+    await board.exitRawRepl();
+    return out.slice(2, -3).trim() === 'True';
+  }
+
   static async flashFree(board, files) {
     await board.stop();
     let size = 0;
