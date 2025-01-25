@@ -22,7 +22,8 @@
     "preview": "bunx serve dist",
     "predeploy": "bun run release && bun x gh-pages-clean",
     "deploy": "bun x gh-pages -d dist -b",
-    "deploy:beta": "BETA=yes bun run deploy -- beta"
+    "deploy:beta": "BETA=yes bun run deploy -- beta",
+    "deploy:release": "bun run deploy -- release"
   },
   "devDependencies": {
     "@types/bun": "latest",
@@ -34,8 +35,5 @@
     "packages/*",
     "packages/gui/editors/*",
     "packages/blocks/extensions/*"
-  ],
-  "dependencies": {
-    "firmata-io": "^2.3.0"
-  }
+  ]
 }
