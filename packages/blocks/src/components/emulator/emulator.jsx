@@ -2,7 +2,7 @@ import { useRef, useEffect } from 'preact/hooks';
 import { default as Konva } from 'konva';
 import styles from './emulator.module.css';
 
-export function Emulator({ zoom, width, height, onRuntime }) {
+export function Emulator({ id, zoom, width, height, onRuntime }) {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -34,6 +34,7 @@ export function Emulator({ zoom, width, height, onRuntime }) {
 
   return (
     <div
+      id={id}
       className={styles.emulator}
       ref={ref}
     />
