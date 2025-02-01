@@ -18,6 +18,6 @@ export default function (openEditor) {
         defaultMessage="Join us"
       />
     ),
-    onClick: () => openEditor('tankwar'),
+    onClick: () => openEditor('playground-tankwar'),
   };
 }

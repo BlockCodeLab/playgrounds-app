@@ -18,6 +18,6 @@ export default function (openEditor) {
         defaultMessage="Play now"
       />
     ),
-    onClick: () => openEditor('arcade'),
+    onClick: () => openEditor('@blockcode/gui-arcade'),
   };
 }
