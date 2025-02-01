@@ -45,7 +45,7 @@ export const blocks = [
       }
       const method = this.quote_(block.getFieldValue('MOTHOD')) || '"GET"';
       const url = this.valueToCode(block, 'URL', this.ORDER_NONE) || '""';
-      code += `await runtime.extensions.request.fetch(${method}, ${url});\n`;
+      code += `await runtime.extensions.request.fetch(target, ${method}, ${url});\n`;
       return code;
     },
   },
@@ -70,7 +70,7 @@ export const blocks = [
       if (this.STATEMENT_PREFIX) {
         code += this.injectId(this.STATEMENT_PREFIX, block);
       }
-      code += `runtime.extensions.request.clear();\n`;
+      code += `runtime.extensions.request.clear(target);\n`;
       return code;
     },
   },
@@ -96,7 +96,7 @@ export const blocks = [
     },
     emu(block) {
       const path = this.valueToCode(block, 'PATH', this.ORDER_NONE) || '""';
-      const code = `(await runtime.extensions.request.getJson(${path}))`;
+      const code = `(await runtime.extensions.request.getJson(target, ${path}))`;
       return [code, this.ORDER_FUNCTION_CALL];
     },
   },
@@ -114,7 +114,7 @@ export const blocks = [
       return [code, this.ORDER_FUNCTION_CALL];
     },
     emu() {
-      const code = `(await runtime.extensions.request.getText())`;
+      const code = `(await runtime.extensions.request.getText(target))`;
       return [code, this.ORDER_FUNCTION_CALL];
     },
   },
@@ -167,7 +167,7 @@ export const blocks = [
       return [code, this.ORDER_FUNCTION_CALL];
     },
     emu() {
-      const code = `Boolean(runtime.extensions.request.statusCode)`;
+      const code = `Boolean(runtime.extensions.request.getStatusCode(target))`;
       return [code, this.ORDER_FUNCTION_CALL];
     },
   },
@@ -185,7 +185,7 @@ export const blocks = [
       return [code, this.ORDER_FUNCTION_CALL];
     },
     emu() {
-      const code = `runtime.extensions.request.statusCode`;
+      const code = `runtime.extensions.request.getStatusCode(target)`;
       return [code, this.ORDER_FUNCTION_CALL];
     },
   },
@@ -223,7 +223,7 @@ export const blocks = [
         code += this.injectId(this.STATEMENT_PREFIX, block);
       }
       const contentType = this.quote_(block.getFieldValue('CONTENTTYPE')) || '"text/plain"';
-      code += `runtime.extensions.request.setHeaders('Content-Type', ${contentType});\n`;
+      code += `runtime.extensions.request.setHeaders(target, 'Content-Type', ${contentType});\n`;
       return code;
     },
   },
@@ -262,7 +262,7 @@ export const blocks = [
       }
       const header = this.valueToCode(block, 'HEADER', this.ORDER_NONE) || '""';
       const value = this.valueToCode(block, 'VALUE', this.ORDER_NONE) || '""';
-      code += `runtime.extensions.request.setHeaders(${key}, ${value});\n`;
+      code += `runtime.extensions.request.setHeaders(target, ${key}, ${value});\n`;
       return code;
     },
   },
@@ -311,7 +311,7 @@ export const blocks = [
       }
       const key = this.valueToCode(block, 'KEY', this.ORDER_NONE) || '""';
       const value = this.valueToCode(block, 'VALUE', this.ORDER_NONE) || '""';
-      code += `runtime.extensions.request.setParams(${key}, ${value});\n`;
+      code += `runtime.extensions.request.setParams(target, ${key}, ${value});\n`;
       return code;
     },
   },
@@ -360,7 +360,7 @@ export const blocks = [
       }
       const key = this.valueToCode(block, 'KEY', this.ORDER_NONE) || '""';
       const value = this.valueToCode(block, 'VALUE', this.ORDER_NONE) || '""';
-      code += `runtime.extensions.request.setBody(${key}, ${value});\n`;
+      code += `runtime.extensions.request.setBody(target, ${key}, ${value});\n`;
       return code;
     },
   },

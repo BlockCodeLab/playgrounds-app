@@ -8,8 +8,8 @@ export function emulator(runtime) {
       return 'request';
     },
 
-    getOptions() {
-      let options = runtime.getData('request.options');
+    getOptions(target) {
+      let options = runtime.getData(target, 'request.options');
       if (!options) {
         options = {
           headers: Object.create(null),
@@ -20,8 +20,8 @@ export function emulator(runtime) {
       return options;
     },
 
-    async fetch(method, url) {
-      const { headers, params, body } = this.getOptions();
+    async fetch(target, method, url) {
+      const { headers, params, body } = this.getOptions(target);
 
       const option = {
         method: SupportedMethods.includes(method) ? method : 'GET',
@@ -40,7 +40,7 @@ export function emulator(runtime) {
 
       await fetch(`${url}`, option)
         .then((res) => {
-          runtime.setData('request.response', res);
+          runtime.setData(target, 'request.response', res);
           runtime.run('request.success');
         })
         .catch((e) => {
@@ -48,12 +48,12 @@ export function emulator(runtime) {
         })
         .finally(() => {
           // 清除单次请求的配置
-          runtime.setData('request.options', null);
+          runtime.setData(target, 'request.options', null);
         });
     },
 
-    async getData() {
-      let res = runtime.getData('request.response');
+    async getData(target) {
+      let res = runtime.getData(target, 'request.response');
       // 如果是原始 Response 数据，则进行转换
       if (res instanceof Response) {
         // 获取 text 数据同时尝试并转换为 json 数据
@@ -61,18 +61,18 @@ export function emulator(runtime) {
         try {
           res.json = JSON.parse(res.text);
         } catch (_) {}
-        runtime.setData('request.response', res);
+        runtime.setData(target, 'request.response', res);
       }
       return res;
     },
 
-    async getText() {
-      const data = await this.getData();
+    async getText(target) {
+      const data = await this.getData(target);
       return data?.text ?? '';
     },
 
-    async getJson(indexPath) {
-      const data = await this.getData();
+    async getJson(target, indexPath) {
+      const data = await this.getData(target);
       if (!data?.json) return '';
 
       let result = data.json;
@@ -88,32 +88,32 @@ export function emulator(runtime) {
       return result;
     },
 
-    get statusCode() {
-      const res = runtime.getData('request.response');
+    getStatusCode(target) {
+      const res = runtime.getData(target, 'request.response');
       return res?.status ?? 0;
     },
 
-    setHeaders(key, value) {
-      const options = this.getOptions();
+    setHeaders(target, key, value) {
+      const options = this.getOptions(target);
       options.headers[key] = value;
-      runtime.setData('request.options', options);
+      runtime.setData(target, 'request.options', options);
     },
 
-    setParams(key, value) {
-      const options = this.getOptions();
+    setParams(target, key, value) {
+      const options = this.getOptions(target);
       options.params[key] = value;
-      runtime.setData('request.options', options);
+      runtime.setData(target, 'request.options', options);
     },
 
-    setBody(key, value) {
-      const options = this.getOptions();
+    setBody(target, key, value) {
+      const options = this.getOptions(target);
       options.body[key] = value;
-      runtime.setData('request.options', options);
+      runtime.setData(target, 'request.options', options);
     },
 
-    clear() {
-      runtime.setData('request.options', null);
-      runtime.setData('request.response', null);
+    clear(target) {
+      runtime.setData(target, 'request.options', null);
+      runtime.setData(target, 'request.response', null);
     },
   };
 }

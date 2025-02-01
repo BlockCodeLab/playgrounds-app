@@ -40,7 +40,7 @@ export function emulator(runtime) {
     },
 
     getHistory(target) {
-      return runtime.getData(`brain.${target.id()}.history`) ?? [];
+      return runtime.getData(target, `brain.history`) ?? [];
     },
 
     addHistory(target, message) {
@@ -49,34 +49,34 @@ export function emulator(runtime) {
       if (history.length > MAX_HISTORY) {
         history.shift();
       }
-      runtime.setData(`brain.${target.id()}.history`, history);
+      runtime.setData(target, `brain.history`, history);
     },
 
     getPrompts(target) {
-      return runtime.getData(`brain.${target.id()}.prompts`) ?? [];
+      return runtime.getData(target, `brain.prompts`) ?? [];
     },
 
     addPrompt(target, prompt) {
       const prompts = this.getPrompts(target);
       prompts.push(prompt);
-      runtime.setData(`brain.${target.id()}.prompts`, prompts);
+      runtime.setData(target, `brain.prompts`, prompts);
     },
 
     clear(target) {
-      runtime.setData(`brain.${target.id()}.history`, null);
-      runtime.setData(`brain.${target.id()}.prompts`, null);
-      runtime.setData(`brain.${target.id()}.result`, null);
+      runtime.setData(target, `brain.history`, null);
+      runtime.setData(target, `brain.prompts`, null);
+      runtime.setData(target, `brain.result`, null);
     },
 
     getAnswer(target) {
-      return runtime.getData(`brain.${target.id()}.result`) ?? '';
+      return runtime.getData(target, `brain.result`) ?? '';
     },
 
     async askSpark(target, message, model = 'lite') {
-      const apiPassword = getUserConfig('SparkAI.APIPassword') ?? APIPASSWORD;
-      const appId = getUserConfig('SparkAI.APPID') ?? APPID;
-      const apiSecret = getUserConfig('SparkAI.APISecret') ?? APISecret;
-      const apiKey = getUserConfig('SparkAI.APIKey') ?? APIKey;
+      const apiPassword = getUserConfig('SparkAI.APIPassword') || APIPASSWORD;
+      const appId = getUserConfig('SparkAI.APPID') || APPID;
+      const apiSecret = getUserConfig('SparkAI.APISecret') || APISecret;
+      const apiKey = getUserConfig('SparkAI.APIKey') || APIKey;
 
       const user = target.id();
 
@@ -118,7 +118,7 @@ export function emulator(runtime) {
       if (res?.choices?.[0]?.message?.content) {
         // 加入回答内容
         this.addHistory(target, res.choices[0].message);
-        runtime.setData(`brain.${user}.result`, res.choices[0].message.content);
+        runtime.setData(target, `brain.result`, res.choices[0].message.content);
       }
     },
   };
