@@ -39,7 +39,30 @@ export function loadExtension(generator, emulator, extObj, translator, blockFilt
   // 扩展模拟器
   if (emulator && extObj.emulator && Runtime.currentRuntime) {
     if (!Runtime.currentRuntime._extensions.has(extId)) {
-      const extEmu = extObj.emulator(Runtime.currentRuntime, Konva, translator);
+      const runtime = new Proxy(Runtime.currentRuntime, {
+        get(target, prop, receiver) {
+          if (prop === 'on') {
+            return (eventName, listener) => {
+              // 扩展硬件连接
+              if (eventName === 'connecting') {
+                eventName = `${extId}.connecting`;
+              }
+              target.on(eventName, listener);
+            };
+          }
+          if (prop === 'emit') {
+            return (eventName, ...args) => {
+              // 扩展硬件断开连接
+              if (eventName === 'disconnect') {
+                eventName = `${extId}.disconnect`;
+              }
+              target.emit(eventName, ...args);
+            };
+          }
+          return Reflect.get(target, prop, target);
+        },
+      });
+      const extEmu = extObj.emulator(runtime, Konva, translator);
       Runtime.currentRuntime._extensions.set(extId, extEmu);
     }
   }
@@ -146,7 +169,7 @@ export function loadExtension(generator, emulator, extObj, translator, blockFilt
               let inputMode = arg.inputMode || false;
               let inputType = arg.type || 'string';
               let inputDefault = arg.defaultValue || '';
-              if (typeof arg.menu === 'string') {
+              if (typeof menu === 'string') {
                 menuName = arg.menu;
                 menu = extObj.menus[menuName];
               }
@@ -167,9 +190,9 @@ export function loadExtension(generator, emulator, extObj, translator, blockFilt
                 blockXML += `<value name="${xmlEscape(name)}">`;
                 blockXML += `<shadow type="${extId}_menu_${menuName}">`;
                 if (inputDefault) {
-                  blockXML += `<field name="${menuName}">${xmlEscape(
-                    maybeTranslate(inputDefault, translator),
-                  )}</field>`;
+                  const item = menu.find(([_, v]) => v === inputDefault);
+                  const valueText = item?.[0] ?? inputDefault;
+                  blockXML += `<field name="${menuName}">${xmlEscape(maybeTranslate(valueText, translator))}</field>`;
                 }
                 blockXML += '</shadow></value>';
               } else if (menu) {
@@ -251,10 +274,10 @@ export function loadExtension(generator, emulator, extObj, translator, blockFilt
           options: menu.items.map((item) => {
             if (Array.isArray(item)) {
               const [text, value] = item;
-              return [maybeTranslate(text, translator), value];
+              return [xmlEscape(maybeTranslate(text, translator)), value];
             }
             item = `${item}`;
-            return [item, item];
+            return [xmlEscape(item), item];
           }),
         },
       ],

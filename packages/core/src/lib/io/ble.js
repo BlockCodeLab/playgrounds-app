@@ -104,7 +104,7 @@ export class BLE extends EventEmitter {
   }
 
   handleDisconnectError(err) {
-    console.log(err);
+    console.error(err);
     this.disconnect();
   }
 }
