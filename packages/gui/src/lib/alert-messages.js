@@ -38,6 +38,7 @@ addAlertConfig('downloadCompleted', {
 
 // 连接失败
 addAlertConfig('connectionError', {
+  mode: 'warn',
   message: (
     <Text
       id="gui.alert.connectionError"
@@ -48,6 +49,7 @@ addAlertConfig('connectionError', {
 
 // 连接取消
 addAlertConfig('connectionCancel', {
+  mode: 'warn',
   message: (
     <Text
       id="gui.alert.connectionCancel"

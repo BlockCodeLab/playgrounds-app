@@ -69,6 +69,7 @@ gui.tutorials.seeMore: See more
 gui.prompt.ok: OK
 gui.prompt.close: Close
 gui.prompt.cancel: Cancel
+gui.prompt.reconnect: Reconnect
 
 gui.prompt.connection.device: Device Connection
 gui.prompt.connection.search: Start Searching

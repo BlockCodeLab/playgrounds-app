@@ -69,6 +69,7 @@ gui.tutorials.seeMore: 更多技巧
 gui.prompt.ok: 确认
 gui.prompt.close: 关闭
 gui.prompt.cancel: 取消
+gui.prompt.reconnect: 重新连接
 
 gui.prompt.connection.device: 硬件连接
 gui.prompt.connection.search: 开始搜索
