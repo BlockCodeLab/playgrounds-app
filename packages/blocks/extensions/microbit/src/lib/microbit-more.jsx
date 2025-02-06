@@ -226,10 +226,6 @@ const G = 1024;
  * Manage communication with a MicroBit peripheral over a Scrath Link client socket.
  */
 export class MicrobitMore {
-  get key() {
-    return 'microbit';
-  }
-
   /**
    * Construct a MicroBit communication object.
    * @param {Runtime} runtime - the Scratch 3.0 runtime
