@@ -37,10 +37,10 @@ export class EMUGenerator extends JavaScriptGenerator {
     code += `${this.INDENT}${this.INDENT}resolve();\n`;
     code += `${this.INDENT}};\n`;
     code += `${this.INDENT}signal.once('abort', handleAbort);\n`;
-    code += `${this.INDENT}let forceWait = Date.now()\n`; // 强制帧同步（避免死循环）
+    code += `${this.INDENT}let forceWait = Date.now()\n`; // 强制等待（避免死循环）
     code += `${this.INDENT}let renderMode = false;\n`; // 渲染模式，当需要渲染时设为 true
     // 真正积木脚本
-    code += `${this.INDENT}/* 用户脚本开始 */\n/* hatcode */  /* 用户脚本结束 */\n`;
+    code += `${this.INDENT}/* 用户脚本开始 */\n/* hatcode */${this.INDENT}/* 用户脚本结束 */\n`;
     // 完成脚本
     code += `${this.INDENT}signal.off('abort', handleAbort);\n`;
     code += `${this.INDENT}resolve();\n`;
@@ -49,20 +49,22 @@ export class EMUGenerator extends JavaScriptGenerator {
     return code;
   }
 
-  get NEXT_LOOP() {
+  // 循环机制
+  loopToCode(block, name) {
     let code = '';
-    code += `${this.INDENT}/* 等待帧同步 */\n`;
-    code += `${this.INDENT}if (handleAbort.stopped) return;\n`;
-    code += `${this.INDENT}if (Date.now() - forceWait < 500) {\n`; // 防止死循环，等待下一帧
-    code += `${this.INDENT}${this.INDENT}if (warpMode) continue;\n`;
-    code += `${this.INDENT}${this.INDENT}if (!renderMode) {\;`;
-    code += `${this.INDENT}${this.INDENT}${this.INDENT}await runtime.nextTick();\n`;
-    code += `${this.INDENT}${this.INDENT}${this.INDENT}continue;\n`;
-    code += `${this.INDENT}${this.INDENT}}\;`;
+    // 等待帧渲染
+    code += `${this.INDENT}if (renderMode && !warpMode) {\n`;
+    code += `${this.INDENT}${this.INDENT}await runtime.nextFrame();\n`;
+    code += `${this.INDENT}${this.INDENT}forceWait = Date.now();\n`;
+    code += `${this.INDENT}${this.INDENT}renderMode = false;\n`;
     code += `${this.INDENT}}\n`;
-    code += `${this.INDENT}await runtime.nextFrame();\n`;
-    code += `${this.INDENT}forceSync = Date.now();\n`;
-    code += `${this.INDENT}renderMode = false;\n`;
+    // 循环代码
+    code += this.statementToCode(block, name) || '';
+    // 防止死循环
+    code += `${this.INDENT}if (Date.now() - forceWait > 300) {\n`;
+    code += `${this.INDENT}${this.INDENT}await runtime.nextTick();\n`;
+    code += `${this.INDENT}${this.INDENT}forceWait = Date.now();\n`;
+    code += `${this.INDENT}}\n`;
     return code;
   }
 }
