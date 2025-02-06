@@ -49,6 +49,11 @@ const REPORT_ANALOG = 0xc0;
 const REPORT_DIGITAL = 0xd0;
 const REPORT_VERSION = 0xf9;
 const SAMPLING_INTERVAL = 0x7a;
+
+const RUS04 = 0x51;
+const DHT_TEMP = 0x52;
+const DHT_HUM = 0x53;
+
 const SERVO_CONFIG = 0x70;
 const SERIAL_MESSAGE = 0x60;
 const SERIAL_CONFIG = 0x10;
@@ -419,6 +424,20 @@ const SYSEX_RESPONSE = {
       board.emit(`serial-data-${portId}`, reply);
     }
   },
+
+  [RUS04](board){
+    console.log(board.buffer)
+    board.emit('get-rus04', board.buffer[2]);
+  },
+
+  [DHT_TEMP](board){
+    console.log(board.buffer)
+    board.emit('get-dht-temp', board.buffer[2]);
+  },
+  [DHT_HUM](board){
+    console.log(board.buffer)
+    board.emit('get-dht-hum', board.buffer[2]);
+  },
 };
 
 /**
@@ -710,6 +729,7 @@ class Firmata extends EventEmitter {
       if (this.versionReceived === false) {
         this.reportVersion(function () {});
         this.queryFirmware(function () {});
+        board.emit("reportVersionTimeout");
       }
     }, settings.reportVersionTimeout);
 
@@ -1007,6 +1027,37 @@ class Firmata extends EventEmitter {
   queryAnalogMapping(callback) {
     this.once('analog-mapping-query', callback);
     writeToTransport(this, [START_SYSEX, ANALOG_MAPPING_QUERY, END_SYSEX]);
+  }
+
+
+  getRUS04(pin, callback){
+    this.once("get-rus04", callback);
+    writeToTransport(this, [
+      START_SYSEX,
+      RUS04,
+      pin,
+      END_SYSEX
+    ]); 
+  } 
+
+  getDHTTemp(pin, callback){
+    this.once("get-dht-temp", callback);
+    writeToTransport(this, [
+      START_SYSEX,
+      DHT_TEMP,
+      pin,
+      END_SYSEX
+    ]); 
+  }
+
+  getDHTHum(pin, callback){
+    this.once("get-dht-hum", callback);
+    writeToTransport(this, [
+      START_SYSEX,
+      DHT_HUM,
+      pin,
+      END_SYSEX
+    ]); 
   }
 
   /**

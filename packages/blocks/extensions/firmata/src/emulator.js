@@ -12,41 +12,46 @@ class ArudinoBleEmulator {
   get key() {
     return "firmata";
   }
-  connect(server) {
+  async connect(server) {
     this.arduinoBle.init(server);
-    this.board = new Firmata(this.bleSerialPort);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await this.arduinoBle.sendATMessage("AT+BAUD=3");
+    await this.arduinoBle.sendATMessage("AT+BLEUSB=3");
+    await this.arduinoBle.sendATMessage("AT+ALL");
+    this.board = new Firmata(this.bleSerialPort, { skipCapabilities: true });
+    this.board.on("ready", () => {
+      console.log("  ✔ ready");
+      this.board.queryCapabilities(() => {
+        this.board.queryAnalogMapping(() => {
+          console.log("queryAnalogMapping");
+        });
+        console.log("queryCapabilities");
+      });
+    });
+    this.board.on("reportVersionTimeout", () => {
+      this.flashAndReInit();
+    });
+  }
+
+  async flashAndReInit(){
+      this.flash();
+      await this.arduinoBle.sendATMessage("AT+BAUD=3");
+      await this.arduinoBle.sendATMessage("AT+BLEUSB=3");
+      this.board.queryCapabilities(() => {
+        this.board.queryAnalogMapping(() => {
+          console.log("queryAnalogMapping");
+        });
+        console.log("queryCapabilities");
+      });
+
   }
   disconnect() {
     this.arduinoBle.disConnect();
   }
-  flash() {
-    this.arduinoBle.requestPort().then(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      await this.arduinoBle.sendATMessage("AT+BAUD=4");
-      this.bleSerialPort.flashHex();
-    });
-  }
-  testConnect() {
-    this.arduinoBle.requestPort().then(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      await this.arduinoBle.sendATMessage("AT+BAUD=3");
-      await this.arduinoBle.sendATMessage("AT+BLEUSB=3");
-      await this.arduinoBle.sendATMessage("AT+ALL");
-      this.board = new Firmata(this.bleSerialPort, { skipCapabilities: true });
-      const board = this.board;
-      this.board.on("ready", () => {
-        console.log("  ✔ ready");
-        this.board.queryCapabilities(() => {
-          this.board.queryAnalogMapping(() => {
-            console.log("queryAnalogMapping");
-          });
-          console.log("queryCapabilities");
-        });
-      });
-      this.board.on("reportVersionTimeout", () => {
-        console.log("reportVersionTimeout");
-      });
-    });
+  async flash() {
+    await this.arduinoBle.sendATMessage("AT+BAUD=4");
+    this.bleSerialPort.flashHex();
+    
   }
   getAnalogValue(pinV) {
     const pin = parseInt(pinV);
@@ -141,7 +146,7 @@ export function emulator(runtime, Konva) {
   });
 
   runtime.on('disconnect', () => {
-    arudinoBleEmulator.disConnect();
+    arudinoBleEmulator.disconnect();
   });
 
   return arudinoBleEmulator;
