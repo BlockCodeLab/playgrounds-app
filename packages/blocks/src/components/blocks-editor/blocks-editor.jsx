@@ -477,7 +477,7 @@ export function BlocksEditor({
         // 硬件连接状态更新
         const connectionOptions = statusButton.connectionOptions;
 
-        if (connectionOptions ? appState.value?.device : statusButton.onUpdate?.()) {
+        if (connectionOptions ? appState.value?.[`device.${extId}`] : statusButton.onUpdate?.()) {
           return ScratchBlocks.StatusButtonState.READY;
         }
         return ScratchBlocks.StatusButtonState.NOT_READY;
@@ -485,6 +485,35 @@ export function BlocksEditor({
 
       // 刷新状态按钮
       const refreshStatus = () => ScratchBlocks.refreshStatusButtons(ref.workspace);
+
+      // 连接蓝牙设备
+      const connectBluetooth = async (extId, options) => {
+        const device = await navigator.bluetooth.requestDevice(options);
+        // 断开连接
+        device.ongattserverdisconnected = () => {
+          const alertId = setAlert('connectionError', {
+            button: {
+              label: (
+                <Text
+                  id="gui.prompt.reconnect"
+                  defaultMessage="Reconnect"
+                />
+              ),
+              onClick() {
+                delAlert(alertId);
+                device.ongattserverdisconnected = null;
+                connectBluetooth(extId, options);
+              },
+            },
+          });
+          setAppState(`device.${extId}`, false);
+          refreshStatus();
+        };
+        // 连接
+        const gattServer = await device.gatt.connect();
+        setAppState(`device.${extId}`, gattServer);
+        refreshStatus();
+      };
 
       // 状态按钮事件
       ScratchBlocks.statusButtonCallback = async (extId) => {
@@ -505,16 +534,7 @@ export function BlocksEditor({
 
         // 蓝牙BLE连接
         if (connectionOptions.bluetooth) {
-          const device = await navigator.bluetooth.requestDevice(connectionOptions.bluetooth);
-          // 断开连接
-          device.addEventListener('gattserverdisconnected', () => {
-            setAppState('device', false);
-            refreshStatus();
-          });
-          // 连接
-          const gattServer = await device.gatt.connect();
-          setAppState('device', gattServer);
-          refreshStatus();
+          connectBluetooth(extId, connectionOptions.bluetooth);
         }
 
         // 串口连接
