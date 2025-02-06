@@ -1,7 +1,5 @@
 export { default as classNames } from 'classnames';
 
-export { Firmata } from 'firmata-io';
-
 export { default as html2canvas } from 'html2canvas';
 
 export { default as JSZip } from 'jszip';
@@ -15,6 +13,8 @@ export { default as mime } from 'mime/lite';
 export { default as UPNG } from 'upng-js';
 
 export { saveSvgAsPng, svgAsDataUri } from 'save-svg-as-png';
+
+export { Firmata } from './lib/firmata-io/firmata';
 
 export { Color } from './lib/color';
 
