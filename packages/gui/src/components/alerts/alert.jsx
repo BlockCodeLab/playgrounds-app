@@ -14,9 +14,7 @@ export function Alert({ mode, icon, message, button }) {
       <div className={styles.message}>{message}</div>
       {button && (
         <Button
-          className={classNames(styles.button, {
-            [styles.error]: button.mode === 'error',
-          })}
+          className={styles.button}
           onClick={button.onClick}
         >
           {button.label}
