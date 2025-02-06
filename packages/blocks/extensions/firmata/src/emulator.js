@@ -5,46 +5,131 @@ import { Firmata } from '@blockcode/utils';
 
 class ArudinoBleEmulator {
   constructor() {
-    this.arduinoBle = new ArduinoBle();
+    this.arduinoBle = new ArduinoBle;
     this.bleSerialPort = new BleSerialPort(this.arduinoBle);
     this.board = null;
   }
   get key() {
-    return 'firmata';
+    return "firmata";
   }
-
   connect(server) {
     this.arduinoBle.init(server);
     this.board = new Firmata(this.bleSerialPort);
   }
-  disConnect() {
+  disconnect() {
     this.arduinoBle.disConnect();
   }
-
   flash() {
     this.arduinoBle.requestPort().then(async () => {
       await new Promise((resolve) => setTimeout(resolve, 2000));
+      await this.arduinoBle.sendATMessage("AT+BAUD=4");
       this.bleSerialPort.flashHex();
     });
   }
   testConnect() {
-    this.arduinoBle.requestPort().then( async () => {
-      
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      this.board = new Firmata(this.bleSerialPort, {skipCapabilities: true});
-     
+    this.arduinoBle.requestPort().then(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await this.arduinoBle.sendATMessage("AT+BAUD=3");
+      await this.arduinoBle.sendATMessage("AT+BLEUSB=3");
+      await this.arduinoBle.sendATMessage("AT+ALL");
+      this.board = new Firmata(this.bleSerialPort, { skipCapabilities: true });
+      const board = this.board;
       this.board.on("ready", () => {
         console.log("  ✔ ready");
+        this.board.queryCapabilities(() => {
+          this.board.queryAnalogMapping(() => {
+            console.log("queryAnalogMapping");
+          });
+          console.log("queryCapabilities");
+        });
       });
-      this.board.on("reportVersionTimeout",  ()=> {
-        console.log("reportVersionTimeout")
-    })
-      this.board.once("analog-mapping-query", ()=> {
-        console.log("analog-mapping-query");
-    })
-      //this.bleSerialPort.flashHex();
+      this.board.on("reportVersionTimeout", () => {
+        console.log("reportVersionTimeout");
+      });
     });
-    //
+  }
+  getAnalogValue(pinV) {
+    const pin = parseInt(pinV);
+    const pinObj = this.board.pins[this.board.analogPins[pin]];
+    console.log(pinObj);
+    if (pinObj) {
+      if (pinObj.report && pinObj.report === 1) {
+        return pinObj.value;
+      } else {
+        console.log("-------new report analog --------");
+        this.board.reportAnalogPin(pin, 1);
+        return "0";
+      }
+    }
+  }
+  getDigitalValue(pinV) {
+    const pin = parseInt(pinV);
+    const pinObj = this.board.pins[pin];
+    if (pinObj) {
+      if (pinObj.report && pinObj.report === 1) {
+        console.log(pinObj.value);
+        return pinObj.value;
+      } else {
+        console.log("-------new report digital --------");
+        this.board.pinMode(pin, this.board.MODES.PULLUP);
+        this.board.reportDigitalPin(pin, 1);
+        return 0;
+      }
+    }
+  }
+  writePWM(pwmPin, pinValue) {
+    const pin = parseInt(pwmPin);
+    const value = parseInt(pinValue);
+    this.board.pinMode(pin, this.board.MODES.PWM);
+    this.board.pwmWrite(pin, value);
+  }
+  writeDigital(digitalPin, pinValue) {
+    const pin = parseInt(digitalPin);
+    const value = parseInt(pinValue);
+    const pinv = this.board.pins[pin];
+    if (pinv && pinv.mode && pinv.mode != this.board.MODES.OUTPUT) {
+      this.board.pinMode(pin, this.board.MODES.OUTPUT);
+    }
+    this.board.digitalWrite(pin, value);
+  }
+  getRUS04Distance(digitalPin) {
+    const pin = parseInt(digitalPin);
+    return new Promise((resolve, reject) => {
+      this.board.getRUS04(pin, (e) => {
+        console.log("-----aaa---", e);
+        this.lastRus04 = e;
+        resolve(e);
+      });
+      setTimeout(() => {
+        resolve(this.lastRus04);
+      }, 1000);
+    });
+  }
+  getDHTTemp(analogPin) {
+    const pin = parseInt(analogPin);
+    return new Promise((resolve, reject) => {
+      this.board.getDHTTemp(this.board.analogPins[pin], (e) => {
+        console.log("-----aaa---", e);
+        this.lastDHTTemp = e;
+        resolve(e);
+      });
+      setTimeout(() => {
+        resolve(this.lastDHTTemp);
+      }, 2000);
+    });
+  }
+  getDHTHum(analogPin) {
+    const pin = parseInt(analogPin);
+    return new Promise((resolve, reject) => {
+      this.board.getDHTHum(this.board.analogPins[pin], (e) => {
+        console.log("-----aaa---", e);
+        this.lastDHTTemp = e;
+        resolve(e);
+      });
+      setTimeout(() => {
+        resolve(this.lastDHTTemp);
+      }, 2000);
+    });
   }
 }
 

@@ -52,17 +52,17 @@ export class ArduinoBle extends EventEmitter {
       this.emit("open")
       this.bleServer.getPrimaryService(SERVICE_UUID)
         .then(service => service.getCharacteristic(SERIAL_UUID))
-        .then(characteristic => characteristic.startNotifications())
-        .then(characteristic => {
-          this.serialChar = characteristic;
-          characteristic.addEventListener('characteristicvaluechanged', this.serialNotify.bind(this))
+        .then(c1 => c1.startNotifications())
+        .then(c1 => {
+          this.serialChar = c1;
+          this.serialChar.addEventListener('characteristicvaluechanged', this.serialNotify.bind(this))
         });
       this.bleServer.getPrimaryService(SERVICE_UUID)
         .then(service => service.getCharacteristic(BLE_AT_UUID))
-        .then(characteristic => characteristic.startNotifications())
-        .then(characteristic => {
-            this.atChar = characteristic;
-            characteristic.addEventListener('characteristicvaluechanged', this.bleAtNotify.bind(this));
+        .then(c2 => c2.startNotifications())
+        .then(c2 => {
+            this.atChar = c2;
+            this.atChar.addEventListener('characteristicvaluechanged', this.bleAtNotify.bind(this));
           }
         );
     })
@@ -111,7 +111,7 @@ export class ArduinoBle extends EventEmitter {
       const dataView = event.target.value;
       const data = new Uint8Array(dataView.buffer);
       this.emit("data", data)
-      console.log("serial_notify----" + dataView.byteLength + "  " + data);
+      //console.log("serial_notify----" + dataView.byteLength + "  " + data);
     }
 
   }
@@ -159,23 +159,24 @@ export class ArduinoBle extends EventEmitter {
     console.log("发送了 " + message)
     message = message + "\r\n";
     const data =this._encoder.encode(message);
-    await this.atChar.writeValueWithResponse(data);
+    await this.atChar.writeValue(data);
   }
 
   async sendSerialMessage(req_data){
-     await this.serialChar.writeValueWithResponse(req_data);
+     await this.serialChar.writeValue(req_data);
   }
 
-  async sendSerialMessageWithResp(req_data){
+  async sendSerialMessageWithResp(req_data, retryCount = 0){
     if (this.bleBusy) {
-      console.log("1")
-      setTimeout(() => this.sendSerialMessageWithResp(req_data), 10);
-      console.log("2")
-      return; // Do not return Promise.resolve() to re-try.
+      if (retryCount < 30) { 
+        setTimeout(() => this.sendSerialMessageWithResp(req_data, retryCount + 1), 10);
+      }else{
+        console.error("Max retries reached.");
+      }
+      return;
     }
     try{
       this.bleBusy = true;
-      console.log("3")
       await this.sendSerialMessage(req_data);
     }finally{
       this.bleBusy = false;

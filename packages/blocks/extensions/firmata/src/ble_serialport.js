@@ -14,7 +14,7 @@ export class BleSerialPort extends EventEmitter {
       this.emit("error", event)
     })
     this._ble.on("data", event => {
-      console.log(event)
+      // console.log(event)
       this.emit("data", event)
     })
   }
@@ -29,8 +29,8 @@ export class BleSerialPort extends EventEmitter {
 
   async write(data, callback){
     console.log(data);
-    console.log(callback)
     await this._ble.sendSerialMessageWithResp(data);
+    console.log(callback)
     callback()
   }
 
