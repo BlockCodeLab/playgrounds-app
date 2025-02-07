@@ -1,4 +1,5 @@
 from popui.color import rgb565
+from scratch import runtime
 from _stage_ import stage
 import colorsys
 
@@ -20,6 +21,7 @@ def stamp(target):
         PEN_PAINT,
         lambda disp: disp.blit(image, x, y, width, height, key=0x0000),
     )
+    runtime.request_render()
 
 
 def pen_goto(target, *args, **kwargs):
