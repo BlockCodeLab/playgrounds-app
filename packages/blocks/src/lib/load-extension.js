@@ -190,9 +190,7 @@ export function loadExtension(generator, emulator, extObj, translator, blockFilt
                 blockXML += `<value name="${xmlEscape(name)}">`;
                 blockXML += `<shadow type="${extId}_menu_${menuName}">`;
                 if (inputDefault) {
-                  const item = menu.find(([_, v]) => v === inputDefault);
-                  const valueText = item?.[0] ?? inputDefault;
-                  blockXML += `<field name="${menuName}">${xmlEscape(maybeTranslate(valueText, translator))}</field>`;
+                  blockXML += `<field name="${menuName}">${xmlEscape(inputDefault)}</field>`;
                 }
                 blockXML += '</shadow></value>';
               } else if (menu) {
@@ -277,7 +275,7 @@ export function loadExtension(generator, emulator, extObj, translator, blockFilt
               return [xmlEscape(maybeTranslate(text, translator)), value];
             }
             item = `${item}`;
-            return [xmlEscape(item), item];
+            return [item, item];
           }),
         },
       ],
