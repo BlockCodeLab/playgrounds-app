@@ -16,7 +16,7 @@ export const blocks = [
     },
     output: 'number',
     emu(block) {
-      const pin = this.quote_(this.valueToCode(block, 'PIN', this.ORDER_NONE)) || '0';
+      const pin = block.getFieldValue('analogPin') || '0';
       const code = `runtime.extensions.firmata.getAnalogValue(${pin})`;
       return [code, this.ORDER_FUNCTION_CALL];
     },
@@ -36,7 +36,7 @@ export const blocks = [
     },
     output: 'number',
     emu(block) {
-      const pin = this.quote_(this.valueToCode(block, 'PIN', this.ORDER_NONE)) || 0;
+      const pin = block.getFieldValue('digitalPin') || '0';
       const code = `runtime.extensions.firmata.getDigitalValue(${pin})`;
       return [code, this.ORDER_FUNCTION_CALL];
     },
@@ -56,7 +56,7 @@ export const blocks = [
     },
     output: 'number',
     emu(block) {
-      const pin = this.quote_(this.valueToCode(block, 'PIN', this.ORDER_NONE)) || 0;
+      const pin = block.getFieldValue('digitalPin') || '0';
       const code = `runtime.extensions.firmata.getRUS04Distance(${pin})`;
       return [code, this.ORDER_FUNCTION_CALL];
     },
@@ -76,7 +76,7 @@ export const blocks = [
     },
     output: 'number',
     emu(block) {
-      const pin = this.quote_(this.valueToCode(block, 'PIN', this.ORDER_NONE)) || 0;
+      const pin = block.getFieldValue('analogPin') || '0';
       const code = `runtime.extensions.firmata.getDHTTemp(${pin})`;
       return [code, this.ORDER_FUNCTION_CALL];
     },
@@ -96,7 +96,7 @@ export const blocks = [
     },
     output: 'number',
     emu(block) {
-      const pin = this.quote_(this.valueToCode(block, 'PIN', this.ORDER_NONE)) || 0;
+      const pin = block.getFieldValue('analogPin') || '0';
       const code = `runtime.extensions.firmata.getDHTHum(${pin})`;
       return [code, this.ORDER_FUNCTION_CALL];
     },
@@ -111,16 +111,16 @@ export const blocks = [
     ),
     inputs: {
       PIN: {
-        menu: 'digitalPin',
+        menu: 'pwmPin',
       },
       VALUE: {
         type: 'number',
-        defaultValue: 50,
+        defaultValue: '50',
       }
     },
     emu(block) {
-      const pin = this.quote_(this.valueToCode(block, 'PIN', this.ORDER_NONE)) || 0;
-      const value = this.quote_(this.valueToCode(block, 'VALUE', this.ORDER_NONE)) || 50;
+      const pin = block.getFieldValue('pwmPin') || '3';
+      const value = this.quote_(this.valueToCode(block, 'VALUE', this.ORDER_NONE)) || '50';
       let code = '';
       if (this.STATEMENT_PREFIX) {
         code += this.injectId(this.STATEMENT_PREFIX, block);
@@ -146,8 +146,8 @@ export const blocks = [
       }
     },
     emu(block) {
-      const pin = this.quote_(this.valueToCode(block, 'PIN', this.ORDER_NONE)) || 0;
-      const value = this.quote_(this.valueToCode(block, 'VALUE', this.ORDER_NONE)) || 50;
+      const pin = block.getFieldValue('digitalPin') || '0';
+      const value = block.getFieldValue('highLow') || '0';
       let code = '';
       if (this.STATEMENT_PREFIX) {
         code += this.injectId(this.STATEMENT_PREFIX, block);

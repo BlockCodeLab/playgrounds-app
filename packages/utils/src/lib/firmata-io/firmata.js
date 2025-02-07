@@ -721,6 +721,8 @@ class Firmata extends EventEmitter {
       }
     });
 
+    this.reportVersion(function () {});
+    this.queryFirmware(function () {});
     // if we have not received the version within the allotted
     // time specified by the reportVersionTimeout (user or default),
     // then send an explicit request for it.

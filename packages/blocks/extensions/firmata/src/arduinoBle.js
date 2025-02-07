@@ -91,9 +91,13 @@ export class ArduinoBle extends EventEmitter {
           });
   }
 
-  disConnect(){
+  async disconnect(){
     this.emit("close")
-    //this.bleServer.disConnect();
+    await this.bleServer.disconnect();
+  }
+
+  async connect(){
+    await this.bleServer.connect();
   }
 
   getConnectStates(){

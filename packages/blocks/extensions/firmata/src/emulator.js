@@ -18,7 +18,7 @@ class ArudinoBleEmulator {
     await this.arduinoBle.sendATMessage("AT+BAUD=3");
     await this.arduinoBle.sendATMessage("AT+BLEUSB=3");
     await this.arduinoBle.sendATMessage("AT+ALL");
-    this.board = new Firmata(this.bleSerialPort, { skipCapabilities: true });
+    this.board = new Firmata(this.bleSerialPort, { skipCapabilities: true});
     this.board.on("ready", () => {
       console.log("  ✔ ready");
       this.board.queryCapabilities(() => {
@@ -29,12 +29,14 @@ class ArudinoBleEmulator {
       });
     });
     this.board.on("reportVersionTimeout", () => {
+      console.log("timeOut----")
       this.flashAndReInit();
     });
   }
 
   async flashAndReInit(){
-      this.flash();
+
+      await this.flash();
       await this.arduinoBle.sendATMessage("AT+BAUD=3");
       await this.arduinoBle.sendATMessage("AT+BLEUSB=3");
       this.board.queryCapabilities(() => {
@@ -45,12 +47,12 @@ class ArudinoBleEmulator {
       });
 
   }
-  disconnect() {
-    this.arduinoBle.disConnect();
+  async disconnect() {
+    await this.arduinoBle.disconnect();
   }
   async flash() {
     await this.arduinoBle.sendATMessage("AT+BAUD=4");
-    this.bleSerialPort.flashHex();
+    await this.bleSerialPort.flashHex();
     
   }
   getAnalogValue(pinV) {
@@ -72,7 +74,6 @@ class ArudinoBleEmulator {
     const pinObj = this.board.pins[pin];
     if (pinObj) {
       if (pinObj.report && pinObj.report === 1) {
-        console.log(pinObj.value);
         return pinObj.value;
       } else {
         console.log("-------new report digital --------");
