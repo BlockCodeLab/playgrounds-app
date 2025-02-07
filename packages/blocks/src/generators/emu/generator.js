@@ -40,7 +40,9 @@ export class EMUGenerator extends JavaScriptGenerator {
     code += `${this.INDENT}let forceWait = Date.now()\n`; // 强制等待（避免死循环）
     code += `${this.INDENT}let renderMode = false;\n`; // 渲染模式，当需要渲染时设为 true
     // 真正积木脚本
-    code += `${this.INDENT}/* 用户脚本开始 */\n/* hatcode */${this.INDENT}/* 用户脚本结束 */\n`;
+    code += `${this.INDENT}/* 用户脚本开始 */\n`;
+    code += `/* hatcode */`;
+    code += `${this.INDENT}/* 用户脚本结束 */\n`;
     // 完成脚本
     code += `${this.INDENT}signal.off('abort', handleAbort);\n`;
     code += `${this.INDENT}resolve();\n`;
@@ -60,8 +62,10 @@ export class EMUGenerator extends JavaScriptGenerator {
     code += `${this.INDENT}}\n`;
     // 循环代码
     code += this.statementToCode(block, name) || '';
+    // 退出循环
+    code += `${this.INDENT}if (handleAbort.stopped) break;\n`;
     // 防止死循环
-    code += `${this.INDENT}if (Date.now() - forceWait > 300) {\n`;
+    code += `${this.INDENT}if ((!renderMode && !warpMode) || Date.now() - forceWait > 300) {\n`;
     code += `${this.INDENT}${this.INDENT}await runtime.nextTick();\n`;
     code += `${this.INDENT}${this.INDENT}forceWait = Date.now();\n`;
     code += `${this.INDENT}}\n`;
