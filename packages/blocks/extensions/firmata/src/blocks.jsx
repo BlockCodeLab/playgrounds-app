@@ -160,7 +160,6 @@ export const blocks = [
 
 export const menus = {
   analogPin:{
-    inputMode: true,
     type: 'string',
     defaultValue: '0',
     items: [
@@ -191,7 +190,6 @@ export const menus = {
     ]
   },
   digitalPin:{
-    inputMode: true,
     type: 'string',
     defaultValue: '0',
     items: [
@@ -255,7 +253,6 @@ export const menus = {
     ]
   },
   pwmPin:{
-    inputMode: true,
     type: 'string',
     defaultValue: '3',
     items: [
@@ -286,7 +283,6 @@ export const menus = {
     ]
   },
   highLow:{
-    inputMode: true,
     type: 'string',
     defaultValue: '0',
     items: [
