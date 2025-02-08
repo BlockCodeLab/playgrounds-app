@@ -1,9 +1,9 @@
 import { addLocalesMessages, Text } from '@blockcode/core';
 import { emulator } from './emulator';
-import { blocks,menus } from './blocks';
+import { blocks, menus } from './blocks';
 
 import translations from './l10n.yaml';
-import iconImage from './icon.png';
+import iconImage from './icon.svg';
 
 addLocalesMessages(translations);
 

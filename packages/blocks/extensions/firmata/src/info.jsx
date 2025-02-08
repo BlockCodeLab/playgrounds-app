@@ -1,6 +1,6 @@
 import { addLocalesMessages, Text } from '@blockcode/core';
 import featureImage from './feature.png';
-import iconImage from './icon.png';
+import iconImage from './icon.svg';
 
 addLocalesMessages({
   en: {
