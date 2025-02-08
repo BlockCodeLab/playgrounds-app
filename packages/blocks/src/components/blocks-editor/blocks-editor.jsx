@@ -55,9 +55,6 @@ export const loadedExtensions = new Map();
 // 包装XML
 const wrapToolboxXml = (xml) => `<xml style="display: none">\n${xml}\n</xml>`;
 
-// 默认积木栏XML
-const defaultToolboxXml = makeToolboxXML();
-
 // 更新积木栏XML
 const updateToolboxXml = (generator, emulator, translator, onMakeToolboxXML, onExtensionBlockFilter) =>
   loadedExtensions.values().reduce(
@@ -132,12 +129,10 @@ export function BlocksEditor({
   useEffect(() => {
     // 更新积木文本
     updateBlocksMsgs(messages, translator);
-    setTimeout(() => {
-      const xml = updateToolboxXml(generator, emulator, translator, onMakeToolboxXML, onExtensionBlockFilter);
-      if (ref.workspace) {
-        updateWorkspaceToolbox(ref.workspace, wrapToolboxXml(xml));
-      }
-    });
+    const xml = updateToolboxXml(generator, emulator, translator, onMakeToolboxXML, onExtensionBlockFilter);
+    if (ref.workspace) {
+      updateWorkspaceToolbox(ref.workspace, wrapToolboxXml(xml));
+    }
   }, [
     generator,
     emulator,
@@ -169,7 +164,7 @@ export function BlocksEditor({
   //
   const toolboxXml = useMemo(() => {
     return updateToolboxXml(generator, emulator, translator, onMakeToolboxXML, onExtensionBlockFilter);
-  }, [generator, emulator, translator, fileId.value, modified.value, loadedExtensions.size]);
+  }, [generator, emulator, translator, onMakeToolboxXML, onExtensionBlockFilter]);
 
   // 添加扩展XML
   const handleSelectExtension = useCallback(
@@ -263,11 +258,14 @@ export function BlocksEditor({
     }
   }, [generateCodes]);
 
-  // 切换文件时加载积木
+  // 切换文件时更新工具栏，加载积木
   useEffect(() => {
     if (splashVisible.value) return;
 
     if (ref.workspace) {
+      const xml = updateToolboxXml(generator, emulator, translator, onMakeToolboxXML, onExtensionBlockFilter);
+      updateWorkspaceToolbox(ref.workspace, wrapToolboxXml(xml));
+
       // 共享全局变量
       const globalVariables = ref.workspace.getAllVariables().filter((variable) => {
         if (variable.isLocal) return false;
@@ -320,11 +318,6 @@ export function BlocksEditor({
       updateWorkspaceToolbox(ref.workspace, wrapToolboxXml(xml));
     }
   }, [generator, emulator, translator, onMakeToolboxXML, onExtensionBlockFilter]);
-
-  // 切换文件后
-  useEffect(() => {
-    updateWorkspace();
-  }, [fileId.value, updateWorkspace]);
 
   // 增减文件、增加扩展后
   useEffect(() => {
@@ -389,7 +382,7 @@ export function BlocksEditor({
       ref.workspace = ScratchBlocks.inject(
         ref.current,
         Object.assign(blocksConfig, {
-          toolbox: wrapToolboxXml(defaultToolboxXml),
+          toolbox: wrapToolboxXml(toolboxXml),
           media: './assets/blocks-media/',
         }),
       );
@@ -417,7 +410,6 @@ export function BlocksEditor({
               removeCopiedBlock: !e.group,
             });
           }
-
           return;
         }
 
