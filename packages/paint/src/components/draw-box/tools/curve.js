@@ -80,6 +80,7 @@ export default {
   },
 
   onDone(e) {
+    this.poly.addName('done');
     this.poly = null;
   },
 };

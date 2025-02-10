@@ -90,13 +90,13 @@ export default {
     const pos = this.stage.getPointerPosition();
     const imageUrl = this.fill(pos);
 
-    const image = new Konva.Image({
+    this.image = new Konva.Image({
       x: 0,
       y: 0,
     });
-    this.layer.add(image);
+    this.layer.add(this.image);
     loadImageFromURL(imageUrl).then((res) => {
-      image.image(res);
+      this.image.image(res);
       this.filling = false;
     });
   },
@@ -104,9 +104,11 @@ export default {
   async onEnd(e) {
     this.pixels.length = 0;
     while (true) {
-      if (!this.fileing) break;
+      console.log(this.filling);
+      if (!this.filling) break;
       await sleepMs(50);
     }
-    await sleepMs(100);
+    this.image.addName('done');
+    this.image = null;
   },
 };

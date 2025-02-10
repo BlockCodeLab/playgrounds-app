@@ -34,6 +34,7 @@ export default {
   },
 
   onEnd(e) {
+    this.poly.addName('done');
     this.poly = null;
   },
 };

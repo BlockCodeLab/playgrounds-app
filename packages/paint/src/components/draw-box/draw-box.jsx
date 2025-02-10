@@ -52,7 +52,7 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
   const updateImage = useCallback(() => {
     if (tool.value?.type === PaintTools.Center) return;
 
-    if (ref.drawLayer.children.length <= 2) return;
+    if (ref.drawLayer.children.length <= 1) return;
 
     const pos = ref.image.position();
     pos.x += asset.value.centerX;
@@ -77,7 +77,6 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
   const createSelector = useCallback(() => {
     const shapes = ref.stage.find('.selector');
     if (shapes.length > 0) {
-      ref.transformer.zIndex(ref.drawLayer.children.length - 1);
       ref.transformer.nodes(shapes);
     } else {
       updateImage();
@@ -86,18 +85,25 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
 
   // 清理图形操作控制器
   const clearSelector = useCallback(() => {
-    if (ref.transformer.nodes().length > 0) {
-      ref.transformer.nodes([]);
+    const shapes = ref.transformer.nodes();
+    if (shapes.length > 0) {
       updateImage();
+      ref.transformer.nodes([]);
+      shapes.forEach((shape) => {
+        shape.removeName('selector');
+        shape.addName('done');
+      });
+      return true;
     }
   }, [updateImage]);
 
-  // 清理可编辑图形
+  // 清理编辑完成的图形
   const clearDrawable = useCallback(() => {
     ref.transformer.nodes([]);
-    for (let child of ref.drawLayer.children) {
-      if (child === ref.image || child instanceof Konva.Transformer) continue;
-      child.remove();
+    for (const child of ref.drawLayer.children) {
+      if (child !== ref.image) {
+        child.remove();
+      }
     }
   }, []);
 
@@ -108,6 +114,7 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
         case Keys.ESC:
         case Keys.DELETE:
         case Keys.BACKSPACE:
+          e.preventDefault();
           // 文字输入时只有 ESC 可以取消
           if (e.code !== Keys.ESC && tool.value?.type === PaintTools.Text) {
             return;
@@ -118,18 +125,23 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
           return;
         case Keys.RETURN:
         case Keys.ENTER:
+          e.preventDefault();
           clearSelector();
           return;
         case Keys.LEFT:
+          e.preventDefault();
           ref.transformer.nodes().forEach((node) => node.x(node.x() - 1));
           return;
         case Keys.RIGHT:
+          e.preventDefault();
           ref.transformer.nodes().forEach((node) => node.x(node.x() + 1));
           return;
         case Keys.UP:
+          e.preventDefault();
           ref.transformer.nodes().forEach((node) => node.y(node.y() - 1));
           return;
         case Keys.DOWN:
+          e.preventDefault();
           ref.transformer.nodes().forEach((node) => node.y(node.y() + 1));
           return;
       }
@@ -166,6 +178,18 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
       };
       ref.stage.content.style.zoom = zoom;
       ref.current.scrollTo(scrollOption);
+
+      // 操作工具缩放
+      // for (const shape of ref.transformer.children) {
+      //   const scale = 1 / zoom;
+      //   shape.strokeWidth(Math.min(0.5, scale));
+      //   if (shape instanceof Konva.Rect) {
+      //     shape.scale({
+      //       x: scale,
+      //       y: scale,
+      //     });
+      //   }
+      // }
     }
   }, [zoom]);
 
@@ -207,8 +231,9 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
 
       // 层管理
       const maskLayer = new Konva.Layer({ listening: false }); // 遮罩层
+      const transformerLayer = new Konva.Layer(); // 操作层
       ref.drawLayer = new Konva.Layer(); // 绘图层
-      ref.stage.add(ref.drawLayer, maskLayer);
+      ref.stage.add(ref.drawLayer, maskLayer, transformerLayer);
 
       // 无效绘图区（超出 maxSize)遮罩
       const maskWidth = (stageWidth - maxSize.width) / 2;
@@ -249,7 +274,7 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
 
       // 绘图操作手柄
       ref.transformer = new Konva.Transformer();
-      ref.drawLayer.add(ref.transformer);
+      transformerLayer.add(ref.transformer);
 
       // 原始图片
       ref.image = new Konva.Image();
@@ -270,15 +295,18 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
         if (ref.painting || e.target.name() === 'selector' || e.target.parent instanceof Konva.Transformer) {
           return;
         }
-        if (tool.value?.type === PaintTools.ColorPicker || tool.value?.type === PaintTools.OutlineColorPicker) {
+
+        if ([PaintTools.ColorPicker, PaintTools.OutlineColorPicker].includes(tool.value?.type)) {
           e.evt.stopPropagation();
         }
-        clearSelector();
-        await sleepMs(30);
-        if (tool.value) {
-          ref.painting = true;
-          tool.value.onBegin?.(e);
+
+        if (clearSelector() && [PaintTools.Polygon, PaintTools.Text].includes(tool.value?.type)) {
+          return;
         }
+        if (!tool.value) return;
+
+        tool.value.onBegin?.(e);
+        ref.painting = true;
       });
       ref.stage.on('pointermove', (e) => {
         if (ref.painting) {
