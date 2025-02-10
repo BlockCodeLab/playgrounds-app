@@ -40,7 +40,7 @@ export const blocks = [
       if (this.STATEMENT_PREFIX) {
         code += this.injectId(this.STATEMENT_PREFIX, block);
       }
-      code += `runtime.extensions.pen.stamp(target);\n`;
+      code += `await runtime.extensions.pen.stamp(target);\n`;
       return code;
     },
     mpy(block) {

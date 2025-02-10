@@ -42,8 +42,14 @@ export function emulator(runtime, Konva) {
       this.renderer.destroyChildren();
     },
 
-    stamp(target) {
+    async stamp(target) {
       if (!this.renderer) return;
+
+      // 等待造型更新完成
+      while (target.getAttr('_frameIndex') != null) {
+        await runtime.nextTick();
+      }
+
       const image = target.clone({
         id: null, // 移除ID和名字
         name: null,
