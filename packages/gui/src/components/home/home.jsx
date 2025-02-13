@@ -193,15 +193,18 @@ export function Home({ onOpenEditor, onOpenProject }) {
       if (editor.hidden) {
         return false;
       }
-      // Electron 桌面版本不显示禁用或beta
-      if (window.electron && (editor.beta || editor.disabled)) {
+
+      // 正式版本不显示禁用
+      if (!BETA && !DEBUG && editor.disabled) {
         return false;
       }
+
       return true;
     });
     result = result.map((editor) =>
       Object.assign(editor, {
-        disabled: editor.disabled || (!(BETA || DEBUG) && editor.beta), // BETA 或 DEBUG 时允许进入 beta 版
+        beta: editor.beta || (DEBUG && editor.disabled), // 正式版 beta 显示为禁用，DEBUG 时禁用也显示为 beta
+        disabled: !DEBUG && (editor.disabled || (!BETA && editor.beta)), // DEBUG 时没有禁用，正式版 beta 也显示为禁用
         onSelect: () => onOpenEditor(editor.id),
       }),
     );

@@ -13,8 +13,8 @@ export function ExtensionsLibrary({ onSelect, onClose, onFilter }) {
         return false;
       }
 
-      // Electron 桌面版本不显示禁用或beta
-      if (window.electron && (info.beta || info.disabled)) {
+      // 正式版本不显示禁用或beta
+      if (!BETA && !DEBUG && (info.beta || info.disabled)) {
         return false;
       }
 
@@ -47,7 +47,8 @@ export function ExtensionsLibrary({ onSelect, onClose, onFilter }) {
     result = result.filter(filter);
     result = result.map((info) =>
       Object.assign(info, {
-        disabled: info.disabled || (!(BETA || DEBUG) && info.beta),
+        beta: info.beta || (DEBUG && info.disabled), // 正式版 beta 显示为禁用，DEBUG 时禁用也显示为 beta
+        disabled: !DEBUG && (info.disabled || (!BETA && info.beta)), // DEBUG 时没有禁用，正式版 beta 也显示为禁用
         onSelect: () => {
           onSelect(info.id);
           onClose();
