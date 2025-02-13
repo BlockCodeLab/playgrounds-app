@@ -1,4 +1,4 @@
-import { default as Konva } from 'konva';
+import { Konva } from '@blockcode/utils';
 
 const FONT_SIZE = 30;
 
@@ -14,7 +14,6 @@ export default {
   cancel() {
     this.cancelEditbox?.();
     this.poly = null;
-    this.cancelEditbox = null;
   },
 
   enableEditbox() {
@@ -68,7 +67,7 @@ export default {
     const pos = this.stage.getPointerPosition();
     this.poly = new Konva.Text({
       x: pos.x,
-      y: pos.y - FONT_SIZE / 2,
+      y: pos.y,
       text: '',
       fontSize: FONT_SIZE,
       fontFamily: this.fontFamily,
@@ -82,7 +81,7 @@ export default {
   onDone(e) {
     if (!this.poly) return;
 
-    this.cancelEditbox();
+    this.cancelEditbox?.();
 
     const text = this.poly.text();
     if (text.length === 0) {

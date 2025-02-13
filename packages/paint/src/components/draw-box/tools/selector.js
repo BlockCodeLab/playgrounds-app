@@ -1,5 +1,4 @@
-import { default as Konva } from 'konva';
-import { sleepMs } from '@blockcode/utils';
+import { Konva } from '@blockcode/utils';
 import { themeColors } from '@blockcode/core';
 
 export default {
@@ -39,8 +38,6 @@ export default {
   },
 
   onBegin(e) {
-    this.cancel();
-
     const pos = this.stage.getPointerPosition();
     this.poly = new Konva.Rect({
       x: pos.x,

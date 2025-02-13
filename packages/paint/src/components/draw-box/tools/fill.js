@@ -1,5 +1,4 @@
-import { default as Konva } from 'konva';
-import { Color, sleepMs } from '@blockcode/utils';
+import { Color, sleepMs, Konva } from '@blockcode/utils';
 import { loadImageFromURL } from '../../../lib/load-image';
 
 export default {
@@ -37,7 +36,7 @@ export default {
     }
   },
 
-  fill(pos) {
+  async fill(pos) {
     const x = Math.floor(pos.x);
     const y = Math.floor(pos.y);
 
@@ -46,7 +45,10 @@ export default {
 
     const width = this.layer.width();
     const height = this.layer.height();
-    const ctx = this.layer.getContext();
+    const canvas = await this.layer.toCanvas({
+      pixelRatio: 1,
+    });
+    const ctx = canvas.getContext('2d');
     this.imageData = ctx.getImageData(0, 0, width, height);
 
     // 检查要替换的颜色
@@ -81,14 +83,14 @@ export default {
     return ctx.canvas.toDataURL();
   },
 
-  onBegin(e) {
+  async onBegin(e) {
     // 无颜色（透明色）
     if (this.color.clear) return;
 
     this.filling = true;
 
     const pos = this.stage.getPointerPosition();
-    const imageUrl = this.fill(pos);
+    const imageUrl = await this.fill(pos);
 
     this.image = new Konva.Image({
       x: 0,
@@ -104,7 +106,6 @@ export default {
   async onEnd(e) {
     this.pixels.length = 0;
     while (true) {
-      console.log(this.filling);
       if (!this.filling) break;
       await sleepMs(50);
     }

@@ -14,48 +14,9 @@ export function loadImageFromFile(file, maxSize) {
   return new Promise((resolve) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    reader.addEventListener('load', () => {
-      const id = nanoid();
-      const image = new Image();
-      loadedImages.set(id, image);
-
-      image.id = id;
-      image.src = reader.result;
-      image.addEventListener('load', () => {
-        if (image.dataset.data) {
-          return resolve(image);
-        }
-
-        let width = image.width;
-        let height = image.height;
-
-        if (image.width > maxSize.width || image.height > maxSize.height) {
-          width = maxSize.width;
-          height = maxSize.height;
-
-          const sw = image.width / maxSize.width;
-          const sh = image.height / maxSize.height;
-          if (sw > sh) {
-            height = image.height / sw;
-          } else {
-            width = image.width / sh;
-          }
-        }
-
-        const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(image, 0, 0, width, height);
-
-        const dataUrl = canvas.toDataURL(PngType);
-        if (dataUrl === 'data:,') {
-          return resolve(null);
-        }
-        image.dataset.data = dataUrl.slice(PngDataURLHeadLength);
-        image.src = dataUrl;
-      });
+    reader.addEventListener('load', async () => {
+      const image = await loadImageFromURL(reader.result, 1, maxSize);
+      resolve(image);
     });
   });
 }
@@ -80,7 +41,7 @@ export function loadImageFromAsset(asset) {
 
 // 从 URL 在图片
 // 通常是从 Library 载入图片
-export function loadImageFromURL(url) {
+export function loadImageFromURL(url, scale, maxSize) {
   return new Promise((resolve) => {
     const id = nanoid();
     const image = new Image();
@@ -89,14 +50,48 @@ export function loadImageFromURL(url) {
     image.id = id;
     image.src = url;
     image.addEventListener('load', () => {
+      if (image.dataset.data) {
+        return resolve(image);
+      }
+
+      let width = image.width;
+      let height = image.height;
+      if (!maxSize) {
+        maxSize = { width, height };
+      }
+      if (!scale) {
+        scale = 1;
+      }
+
+      if (image.width > maxSize.width || image.height > maxSize.height) {
+        width = maxSize.width;
+        height = maxSize.height;
+
+        const sw = maxSize.width / image.width;
+        const sh = maxSize.height / image.height;
+        if (sw < sh) {
+          scale = sw;
+        } else {
+          scale = sh;
+        }
+      }
+
+      height = image.height * scale;
+      width = image.width * scale;
+
       const canvas = document.createElement('canvas');
-      canvas.width = image.width;
-      canvas.height = image.height;
+      canvas.width = width;
+      canvas.height = height;
+
       const ctx = canvas.getContext('2d');
-      ctx.drawImage(image, 0, 0, image.width, image.height);
+      ctx.drawImage(image, 0, 0, width, height);
+
       const dataUrl = canvas.toDataURL(PngType);
+      if (dataUrl === 'data:,') {
+        return resolve(null);
+      }
       image.dataset.data = dataUrl.slice(PngDataURLHeadLength);
-      resolve(image);
+      image.src = dataUrl;
     });
   });
 }
