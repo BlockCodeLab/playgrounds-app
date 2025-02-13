@@ -1,8 +1,8 @@
 {
   // 编辑器扩展ID，用于识别扩展
-  // 官方编辑器ID格式： @blockcode/blocks-{Name}
+  // 官方编辑器ID格式： @blockcode/gui-{Name}
   // 推荐社区编辑器ID格式：@{Your ID}/{Name}
-  "name": "@example/gui",
+  "name": "@example/playground",
   "private": "true",
   "version": "1.0.0",
   "type": "module",
@@ -19,7 +19,7 @@
     "build": "playground-build ."
   },
   "dependencies": {
-    "preact": "^10.25.0"
+    "preact": "^10.25.4"
   },
   "devDependencies": {
     "@types/bun": "latest",

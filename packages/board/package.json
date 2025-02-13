@@ -5,8 +5,7 @@
   "type": "module",
   "module": "./dist/index.js",
   "dependencies": {
-    "crypto-js": "^4.2.0",
-    "esptool-js": "^0.5.3"
+    "esptool-js": "^0.5.4"
   },
   "devDependencies": {
     "@types/bun": "latest"

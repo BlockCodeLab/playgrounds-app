@@ -6,6 +6,8 @@ export { default as JSZip } from 'jszip';
 
 export { default as keyMirror } from 'keymirror';
 
+export { default as Konva } from 'konva';
+
 export { default as localForage } from 'localforage';
 
 export { default as mime } from 'mime/lite';

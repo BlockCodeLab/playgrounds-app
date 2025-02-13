@@ -10,10 +10,11 @@
     "html2canvas": "^1.4.1",
     "jszip": "^3.10.1",
     "keymirror": "^0.1.1",
+    "konva": "^9.3.18",
     "localforage": "^1.10.0",
     "mime": "^4.0.6",
     "nanoid": "^5.0.9",
-    "preact": "^10.25.0",
+    "preact": "^10.25.4",
     "save-svg-as-png": "^1.4.17",
     "upng-js": "^2.1.0"
   },
