@@ -88,6 +88,8 @@
 .library-item-image {
   max-width: 100%;
   max-height: 100%;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .library-item-inset-image {
@@ -125,6 +127,8 @@
 
 .featured-image {
   width: 100%;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .featured-title {
