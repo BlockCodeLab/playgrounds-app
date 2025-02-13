@@ -1,7 +1,7 @@
 import { addLocalesMessages, Text } from '@blockcode/core';
 import { MM_SERVICE } from './lib/microbit-more';
 import { emulator } from './lib/emulator';
-import { blocks } from './lib/blocks';
+import { blocks, menus } from './lib/blocks';
 
 import translations from './l10n.yaml';
 import iconImage from './icon.svg';
@@ -25,4 +25,5 @@ export default {
   },
   emulator,
   blocks,
+  menus,
 };

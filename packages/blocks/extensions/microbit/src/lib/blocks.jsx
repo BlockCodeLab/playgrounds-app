@@ -19,6 +19,28 @@ export const blocks = [
   },
   '---',
   {
+    id: 'whenButtonPressed',
+    hat: true,
+    text: (
+      <Text
+        id="blocks.microbit.whenButtonEvent"
+        defaultMessage="when button [NAME] is [EVENT]"
+      />
+    ),
+    inputs: {
+      NAME: {
+        menu: 'buttons',
+        defaultValue: 'a',
+      },
+      EVENT: {
+        menu: 'buttonEvents',
+        defaultValue: 'down',
+      },
+    },
+    emu(block) {},
+  },
+  '---',
+  {
     id: 'displayText',
     text: (
       <Text
@@ -64,3 +86,61 @@ export const blocks = [
     },
   },
 ];
+
+export const menus = {
+  buttons: {
+    inputMode: true,
+    type: 'string',
+    items: [
+      [
+        <Text
+          id="blocks.microbit.buttonIDMenu.a"
+          defaultMessage="A"
+        />,
+        'a',
+      ],
+      [
+        <Text
+          id="blocks.microbit.buttonIDMenu.b"
+          defaultMessage="B"
+        />,
+        'b',
+      ],
+      [
+        <Text
+          id="blocks.microbit.buttonIDMenu.any"
+          defaultMessage="any"
+        />,
+        'any',
+      ],
+    ],
+  },
+  buttonEvents: {
+    type: 'string',
+    items: [
+      [
+        <Text
+          id="blocks.microbit.buttonEventMenu.down"
+          defaultMessage="down"
+        />,
+        ,
+        'down',
+      ],
+      [
+        <Text
+          id="blocks.microbit.buttonEventMenu.up"
+          defaultMessage="up"
+        />,
+        ,
+        'up',
+      ],
+      [
+        <Text
+          id="blocks.microbit.buttonEventMenu.click"
+          defaultMessage="click"
+        />,
+        'click',
+      ],
+    ],
+  },
+};

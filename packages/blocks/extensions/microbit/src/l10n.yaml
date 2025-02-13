@@ -14,6 +14,7 @@ en:
   blocks.microbit.gesturesMenu.shake: shake
   blocks.microbit.buttonIDMenu.a: A
   blocks.microbit.buttonIDMenu.b: B
+  blocks.microbit.buttonIDMenu.any: any
   blocks.microbit.buttonEventMenu.down: down
   blocks.microbit.buttonEventMenu.up: up
   blocks.microbit.buttonEventMenu.click: click
@@ -100,6 +101,7 @@ zh-Hans:
   blocks.microbit.gesturesMenu.shake: 摇晃
   blocks.microbit.buttonIDMenu.a: A
   blocks.microbit.buttonIDMenu.b: B
+  blocks.microbit.buttonIDMenu.any: 任意
   blocks.microbit.buttonEventMenu.down: 按下
   blocks.microbit.buttonEventMenu.up: 松开
   blocks.microbit.buttonEventMenu.click: 点击
@@ -136,8 +138,8 @@ zh-Hans:
   blocks.microbit.connectionStateMenu.connected: 连接
   blocks.microbit.connectionStateMenu.disconnected: 断开
   blocks.microbit.whenConnectionChanged: 当 micro:bit [STATE]
-  blocks.microbit.whenButtonEvent: 当按键 [NAME] 被 [EVENT]
-  blocks.microbit.isButtonPressed: 按键 [NAME] 按下?
+  blocks.microbit.whenButtonEvent: 当按钮 [NAME] 被 [EVENT]
+  blocks.microbit.isButtonPressed: 按钮 [NAME] 按下?
   blocks.microbit.whenTouchEvent: 当引脚 [NAME] 被 [EVENT]
   blocks.microbit.isPinTouched: 引脚 [NAME] 被触摸?
   blocks.microbit.whenGesture: 当 [GESTURE] 时
@@ -185,6 +187,7 @@ zh-Hant:
   blocks.microbit.gesturesMenu.shake: 搖晃
   blocks.microbit.buttonIDMenu.a: A
   blocks.microbit.buttonIDMenu.b: B
+  blocks.microbit.buttonIDMenu.any: 任意
   blocks.microbit.buttonEventMenu.down: 按下
   blocks.microbit.buttonEventMenu.up: 鬆開
   blocks.microbit.buttonEventMenu.click: 點擊
@@ -221,8 +224,8 @@ zh-Hant:
   blocks.microbit.connectionStateMenu.connected: 連接
   blocks.microbit.connectionStateMenu.disconnected: 斷開
   blocks.microbit.whenConnectionChanged: 當 micro:bit [STATE]
-  blocks.microbit.whenButtonEvent: 當按鍵 [NAME] 被 [EVENT]
-  blocks.microbit.isButtonPressed: 按鍵 [NAME] 按下?
+  blocks.microbit.whenButtonEvent: 當按鈕 [NAME] 被 [EVENT]
+  blocks.microbit.isButtonPressed: 按鈕 [NAME] 按下?
   blocks.microbit.whenTouchEvent: 當引腳 [NAME] 被 [EVENT]
   blocks.microbit.isPinTouched: 引腳 [NAME] 被觸摸?
   blocks.microbit.whenGesture: 當 [GESTURE] 時
