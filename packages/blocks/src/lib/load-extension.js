@@ -1,5 +1,4 @@
-import { default as Konva } from 'konva';
-import { xmlEscape } from '@blockcode/utils';
+import { xmlEscape, Konva } from '@blockcode/utils';
 import { themeColors, maybeTranslate } from '@blockcode/core';
 import { Runtime } from './runtime/runtime';
 import { ScratchBlocks } from '../lib/scratch-blocks';

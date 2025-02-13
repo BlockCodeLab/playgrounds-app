@@ -1,7 +1,6 @@
 import { useEffect, useRef, useCallback } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
-import { default as Konva } from 'konva';
-import { classNames, sleepMs } from '@blockcode/utils';
+import { classNames, Konva } from '@blockcode/utils';
 import { useProjectContext, Keys } from '@blockcode/core';
 import { loadImageFromAsset } from '../../lib/load-image';
 import { createImageFromLayer } from '../../lib/create-image';
@@ -49,7 +48,7 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
   const tool = useSignal(null);
 
   // 更新图形数据
-  const updateImage = useCallback(() => {
+  const updateImage = useCallback(async () => {
     if (tool.value?.type === PaintTools.Center) return;
 
     if (ref.drawLayer.children.length <= 1) return;
@@ -58,7 +57,7 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
     pos.x += asset.value.centerX;
     pos.y += asset.value.centerY;
 
-    const image = createImageFromLayer(ref.drawLayer, pos);
+    const image = await createImageFromLayer(ref.drawLayer, pos);
     onChange(image);
   }, [onChange]);
 
@@ -78,16 +77,14 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
     const shapes = ref.stage.find('.selector');
     if (shapes.length > 0) {
       ref.transformer.nodes(shapes);
-    } else {
-      updateImage();
+      return true;
     }
-  }, [updateImage]);
+  }, []);
 
   // 清理图形操作控制器
   const clearSelector = useCallback(() => {
     const shapes = ref.transformer.nodes();
     if (shapes.length > 0) {
-      updateImage();
       ref.transformer.nodes([]);
       shapes.forEach((shape) => {
         shape.removeName('selector');
@@ -95,7 +92,7 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
       });
       return true;
     }
-  }, [updateImage]);
+  }, []);
 
   // 清理编辑完成的图形
   const clearDrawable = useCallback(() => {
@@ -114,19 +111,21 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
         case Keys.ESC:
         case Keys.DELETE:
         case Keys.BACKSPACE:
-          e.preventDefault();
           // 文字输入时只有 ESC 可以取消
           if (e.code !== Keys.ESC && tool.value?.type === PaintTools.Text) {
             return;
           }
+          e.preventDefault();
           ref.painting = false;
-          tool.value?.cancel?.();
           clearDrawable();
+          tool.value?.cancel?.();
           return;
         case Keys.RETURN:
         case Keys.ENTER:
+          if (tool.value?.type === PaintTools.Text) return;
           e.preventDefault();
           clearSelector();
+          updateImage();
           return;
         case Keys.LEFT:
           e.preventDefault();
@@ -194,15 +193,14 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
   }, [zoom]);
 
   // 切换绘画工具或模式
-  useEffect(() => {
+  useEffect(async () => {
     if (ref.drawLayer) {
       if (tool.value?.type !== toolOptions.type) {
+        clearSelector();
         if (ref.painting) {
           ref.painting = false;
-          tool.value?.cancel?.();
-          updateImage();
+          await updateImage();
         }
-        clearSelector();
         tool.value = Tools[toolOptions.type];
         if (tool.value) {
           tool.value.type = toolOptions.type;
@@ -221,7 +219,6 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
       const { clientWidth, clientHeight } = ref.current;
       const stageWidth = Math.max(maxSize.width, clientWidth);
       const stageHeight = Math.max(maxSize.height, clientHeight);
-      Konva.pixelRatio = 1;
       ref.stage = new Konva.Stage({
         container: ref.current,
         width: stageWidth,
@@ -300,8 +297,13 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
           e.evt.stopPropagation();
         }
 
-        if (clearSelector() && [PaintTools.Polygon, PaintTools.Text].includes(tool.value?.type)) {
-          return;
+        if (clearSelector()) {
+          await updateImage();
+          tool.value?.cancel?.();
+
+          if ([PaintTools.Text, PaintTools.Polygon, PaintTools.Selector].includes(tool.value?.type)) {
+            return;
+          }
         }
         if (!tool.value) return;
 
@@ -318,25 +320,36 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
         if (ref.painting) {
           ref.painting = !!tool.value.onDone;
           await tool.value.onEnd?.(e);
-          if (!tool.value.onDone) {
+          if ([PaintTools.Curve, PaintTools.Text, PaintTools.Polygon].includes(tool.value.type)) return;
+          if (
+            [PaintTools.Rectangle, PaintTools.Circle, PaintTools.Isogon, PaintTools.Selector].includes(tool.value.type)
+          ) {
             createSelector();
+          } else {
+            updateImage();
           }
         }
       });
       ref.stage.on('pointerdblclick', async (e) => {
-        if (ref.painting) {
+        if (ref.painting && [PaintTools.Polygon, PaintTools.Text, PaintTools.Curve].includes(tool.value.type)) {
           ref.painting = false;
           await tool.value.onDone?.(e);
-          createSelector();
+          if ([PaintTools.Polygon, PaintTools.Text].includes(tool.value.type)) {
+            createSelector();
+          } else {
+            updateImage();
+          }
         }
       });
-      ref.stage.on('pointerclick', async (e) => {
-        if (ref.painting && tool.value?.type === PaintTools.Text) {
-          ref.painting = false;
-          await tool.value.onDone?.(e);
-          createSelector();
-        }
-      });
+      // ref.stage.on('pointerclick', async (e) => {
+      //   if (ref.painting && tool.value?.type === PaintTools.Text) {
+      //     ref.painting = false;
+      //     await tool.value.onDone?.(e);
+      //     if (!createSelector()) {
+      //       updateImage();
+      //     }
+      //   }
+      // });
       document.addEventListener('keydown', handleKeyDown);
 
       // 缩放画板
@@ -387,7 +400,7 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
     }
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
-      tool.value?.cancelEditbox?.(); // 取消可能存在的文本编辑框
+      tool.value?.cancel?.(); // 取消还在工作状态的工具
       ref.resizeObserver.unobserve(ref.current);
       ref.stage.destroy();
       ref.stage = null;

@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'preact/hooks';
-import { default as Konva } from 'konva';
+import { Konva } from '@blockcode/utils';
 import styles from './emulator.module.css';
 
 export function Emulator({ id, zoom, width, height, onRuntime }) {

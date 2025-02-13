@@ -1,7 +1,5 @@
 import './l10n';
 
-export { default as Konva } from 'konva';
-
 export { ScratchBlocks } from './lib/scratch-blocks';
 
 export {
