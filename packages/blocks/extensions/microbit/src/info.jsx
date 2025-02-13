@@ -22,6 +22,7 @@ addLocalesMessages({
 });
 
 export default {
+  beta: true,
   image: featureImage,
   icon: iconImage,
   name: (
@@ -42,6 +43,6 @@ export default {
       defaultMessage="Koji Yokokawa"
     />
   ),
-  tags: ['matrix'],
+  tags: ['runtime', 'matrix'],
   bluetoothRequired: true,
 };

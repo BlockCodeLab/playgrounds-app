@@ -17,7 +17,7 @@ export default {
       defaultMessage="Broadcast the messages via the ESP-Now."
     />
   ),
-  tags: ['mpy', 'device', 'communication', 'data'],
+  tags: ['runtime', 'device', 'communication'],
 };
 
 addLocalesMessages({
