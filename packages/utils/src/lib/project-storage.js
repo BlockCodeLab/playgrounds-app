@@ -59,6 +59,10 @@ export async function putProject(project, onThumb) {
     fileId: project.fileId,
     modifiedDate: Date.now(),
   };
+  // 调试
+  if (DEBUG) {
+    console.log(data);
+  }
   await projectStorage.setItem(key, data);
   return key;
 }
@@ -78,6 +82,7 @@ export async function cloneProject(key) {
 
 export async function delProject(key) {
   await projectStorage.removeItem(key);
+  await oldProjectStorage.removeItem(key); // 同时删除旧项目
 }
 
 export async function getProjectsThumbs() {
