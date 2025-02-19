@@ -176,13 +176,19 @@ export class MPYBoard {
     await this.serial.write(code);
   }
 
-  async stop() {
+  async stop(force = false) {
     if (this.rejectRun) {
       this.rejectRun(new Error('pre stop'));
       this.rejectRun = null;
     }
     // Dismiss any data with ctrl-C
     await this.serial.write(CTRL_C);
+    if (force) {
+      await sleepMs(50);
+      await this.serial.write(CTRL_C);
+      await sleepMs(50);
+      await this.serial.write(CTRL_C);
+    }
   }
 
   async reset() {
@@ -190,8 +196,7 @@ export class MPYBoard {
       this.rejectRun(new Error('pre reset'));
       this.rejectRun = null;
     }
-    // Dismiss any data with ctrl-C
-    await this.serial.write(CTRL_C);
+    await this.stop();
     // Soft reboot
     await this.serial.write(CTRL_D);
   }
@@ -201,6 +206,7 @@ export class MPYBoard {
       this.rejectRun(new Error('pre reset'));
       this.rejectRun = null;
     }
+    await this.stop();
     // Hardware reboot
     await this.enterRawRepl();
     this.execRaw('import machine\nmachine.reset()');

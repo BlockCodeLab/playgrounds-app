@@ -2,10 +2,16 @@ import { MPYBoard } from './mpyboard';
 import { getImageBase64 } from '../lib/image-base64';
 
 export class MPYUtils {
-  static async connect(filters) {
+  static async connect(filters, downloadMode = true) {
     const board = new MPYBoard();
     await board.requestPort(filters);
     await board.connect();
+    if (downloadMode) {
+      await board.stop(true);
+      await board.enterRawRepl();
+      await board.execRaw('import download_screen\n');
+      await board.exitRawRepl();
+    }
     return board;
   }
 
@@ -100,7 +106,6 @@ export class MPYUtils {
   static async eraseAll(board, exclude) {
     await board.stop();
     await board.enterRawRepl();
-    await board.execRaw('import download_screen\n');
     let line = 'from device.flash import erase_all\n';
     line += `erase_all(${exclude ? JSON.stringify(exclude) : ''})\n`;
     await board.execRaw(line);
@@ -109,10 +114,6 @@ export class MPYUtils {
 
   static async write(board, files, progress) {
     await board.stop();
-
-    await board.enterRawRepl();
-    await board.execRaw('import download_screen\n');
-    await board.exitRawRepl();
 
     const len = files.length;
     let finished = 0;
