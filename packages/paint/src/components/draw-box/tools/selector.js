@@ -5,6 +5,7 @@ export default {
   setup(layer, options) {
     this.stage = layer.getStage();
     this.layer = layer;
+    this.selectorLayer = this.stage.getLayers().at(-1);
   },
 
   cancel() {
@@ -15,6 +16,7 @@ export default {
   async clip() {
     // 隐藏选框
     this.poly.setAttr('stroke', 'transparent');
+    this.poly.moveTo(this.layer);
 
     const clipRect = this.poly.getClientRect();
 
@@ -49,7 +51,7 @@ export default {
       stroke: themeColors.ui.theme.highlight,
       strokeWidth: 1,
     });
-    this.layer.add(this.poly);
+    this.selectorLayer.add(this.poly);
   },
 
   onDrawing(e) {

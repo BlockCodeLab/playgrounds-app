@@ -270,7 +270,24 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
       maskLayer.add(topMask, bottomMask, leftMask, rightMask);
 
       // 绘图操作手柄
-      ref.transformer = new Konva.Transformer();
+      ref.transformer = new Konva.Transformer({
+        // 自定义手柄样式
+        anchorStyleFunc(anchor) {
+          anchor.cornerRadius(5);
+          if (anchor.hasName('top-center') || anchor.hasName('bottom-center')) {
+            anchor.height(6);
+            anchor.offsetY(3);
+            anchor.width(12);
+            anchor.offsetX(6);
+          }
+          if (anchor.hasName('middle-left') || anchor.hasName('middle-right')) {
+            anchor.height(12);
+            anchor.offsetY(6);
+            anchor.width(6);
+            anchor.offsetX(3);
+          }
+        },
+      });
       transformerLayer.add(ref.transformer);
 
       // 原始图片
