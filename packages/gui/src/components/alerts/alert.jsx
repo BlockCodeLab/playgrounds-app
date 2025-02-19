@@ -2,7 +2,9 @@ import { classNames } from '@blockcode/utils';
 import { Button } from '@blockcode/core';
 import styles from './alerts.module.css';
 
-export function Alert({ mode, icon, message, button }) {
+import closeIcon from './icon-close.svg';
+
+export function Alert({ mode, icon, message, button, onClose }) {
   return (
     <div
       className={classNames(styles.alertWrapper, {
@@ -18,6 +20,14 @@ export function Alert({ mode, icon, message, button }) {
           onClick={button.onClick}
         >
           {button.label}
+        </Button>
+      )}
+      {onClose && (
+        <Button
+          className={styles.closeButton}
+          onClick={onClose}
+        >
+          <img src={closeIcon} />
         </Button>
       )}
     </div>

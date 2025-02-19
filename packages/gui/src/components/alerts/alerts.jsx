@@ -10,6 +10,7 @@ export function Alerts({ items }) {
           icon={item.icon}
           message={item.message}
           button={item.button}
+          onClose={item.onClose}
         />
       ))}
     </div>
