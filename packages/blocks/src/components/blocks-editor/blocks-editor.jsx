@@ -506,6 +506,7 @@ export function BlocksEditor({
                 connectBluetooth(extId, options);
               },
             },
+            onClose: () => delAlert(alertId),
           });
           setAppState(`device.${extId}`, false);
           refreshStatus();
