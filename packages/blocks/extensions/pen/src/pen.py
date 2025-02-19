@@ -2,6 +2,7 @@ from popui.color import rgb565
 from scratch import runtime
 from _stage_ import stage
 import colorsys
+import math
 
 PEN_PAINT = "PEN_PAINT"
 PEN_COLOR = "PEN_COLOR"
@@ -14,12 +15,33 @@ def clear():
 
 
 def stamp(target):
-    image = memoryview(bytearray(target._image))
+    frame_module = target.frames[target.frame_index]
+    image = frame_module.BITMAP
     x, y = round(target._x), round(target._y)
-    width, height = round(target._width), round(target._height)
+    width, height, cx, cy = target._width, target._height, target._cx, target._cy
+    angle = target.direction - 90
+    scale_x = scale_y = target.size / 100
+    if target.rotation_style == 0:
+        angle = 0
+    elif target.rotation_style == 1:
+        angle = 0
+        if target.direction < 0:
+            scale_x = -scale_x
     stage.add_paint(
         PEN_PAINT,
-        lambda disp: disp.blit(image, x, y, width, height, key=0x0000),
+        lambda disp: disp.blit(
+            image,
+            x,
+            y,
+            width,
+            height,
+            cx=cx,
+            cy=cy,
+            angle=math.radians(angle),
+            scale_x=scale_x,
+            scale_y=scale_y,
+            key=0x0000,
+        ),
     )
     runtime.request_render()
 
@@ -39,8 +61,8 @@ def pen_goto(target, *args, **kwargs):
 
 
 def down(target):
-    nx, ny = stage.CENTER_X + target.x, stage.CENTER_Y - target.y
-    target.data[PEN_LAST_POS] = nx, ny
+    x, y = stage.CENTER_X + target.x, stage.CENTER_Y - target.y
+    target.data[PEN_LAST_POS] = x, y
     target.goto = lambda *args, **kwargs: pen_goto(target, *args, **kwargs)
 
 
