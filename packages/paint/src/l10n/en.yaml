@@ -31,6 +31,11 @@ paint.painter.polygon: Polygon
 paint.painter.select: Select
 paint.painter.center: Center
 paint.painter.outline: Outline
+paint.painter.delete: Delete
+paint.painter.flipHorizontal: Flip Horizontal
+paint.painter.flipVertical: Flip Vertical
+paint.painter.copy: Copy
+paint.painter.paste: Paste
 
 paint.colorPicker.color: Color
 paint.colorPicker.saturation: Saturation

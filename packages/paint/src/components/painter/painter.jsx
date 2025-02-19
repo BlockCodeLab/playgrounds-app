@@ -18,6 +18,10 @@ import zoomInIcon from './icons/icon-zoom-in.svg';
 import zoomOutIcon from './icons/icon-zoom-out.svg';
 import zoomResetIcon from './icons/icon-zoom-reset.svg';
 import tileMapIcon from './icons/icon-tilemap.svg';
+import deleteIcon from './icons/icon-delete.svg';
+import flipHorizontalIcon from './icons/icon-flip-horizontal.svg';
+import flipVerticalIcon from './icons/icon-flip-vertical.svg';
+
 import penIcon from '../tools-box/icons/icon-pen.svg';
 import eraserIcon from '../tools-box/icons/icon-eraser.svg';
 import lineIcon from '../tools-box/icons/icon-line.svg';
@@ -357,6 +361,47 @@ export default function Painter({ mode, maxSize }) {
 
         {
           // 选择操作
+          paintTool.value === PaintTools.Selector && (
+            <>
+              <div className={classNames(styles.toolGroup, styles.dashedBorder)}>
+                <Button
+                  disabled
+                  className={styles.labelButton}
+                  onClick={useCallback(() => {}, [])}
+                >
+                  <img
+                    src={deleteIcon}
+                    className={styles.buttonIcon}
+                    title={translate('paint.painter.delete', 'Delete')}
+                  />
+                </Button>
+              </div>
+              <div className={styles.toolGroup}>
+                <Button
+                  disabled
+                  className={styles.labelButton}
+                  onClick={useCallback(() => {}, [])}
+                >
+                  <img
+                    src={flipHorizontalIcon}
+                    className={styles.buttonIcon}
+                    title={translate('paint.painter.flipHorizontal', 'Flip Horizontal')}
+                  />
+                </Button>
+                <Button
+                  disabled
+                  className={styles.labelButton}
+                  onClick={useCallback(() => {}, [])}
+                >
+                  <img
+                    src={flipVerticalIcon}
+                    className={styles.buttonIcon}
+                    title={translate('paint.painter.flipVertical', 'Flip Vertical')}
+                  />
+                </Button>
+              </div>
+            </>
+          )
         }
       </div>
 

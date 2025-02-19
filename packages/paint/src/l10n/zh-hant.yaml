@@ -31,6 +31,11 @@ paint.painter.polygon: 任意多邊形
 paint.painter.select: 選擇
 paint.painter.center: 中心
 paint.painter.outline: 輪廓
+paint.painter.delete: 刪除
+paint.painter.flipHorizontal: 水平翻轉
+paint.painter.flipVertical: 垂直翻轉
+paint.painter.copy: 複製
+paint.painter.paste: 粘貼
 
 paint.colorPicker.color: 顏色
 paint.colorPicker.saturation: 飽和度

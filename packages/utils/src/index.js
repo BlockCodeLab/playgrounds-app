@@ -26,6 +26,8 @@ export { fetchSpark } from './lib/fetch-spark';
 
 export { flatChildren } from './lib/flat-children';
 
+export { KonvaUtils } from './lib/konva-utils';
+
 export { MathUtils } from './lib/math-utils';
 
 export { nanoid, nanoidLooks } from './lib/nanoid';
