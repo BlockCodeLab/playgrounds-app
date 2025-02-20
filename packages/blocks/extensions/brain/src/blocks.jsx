@@ -37,7 +37,7 @@ export const blocks = [
         code += this.injectId(this.STATEMENT_PREFIX, block);
       }
       const prompt = this.valueToCode(block, 'PROMPT', this.ORDER_NONE) || '';
-      code += `brain.set_prompt(target, ${prompt})\n`;
+      code += `brain.set_prompt((target.id if 'target' in dir() else 'default'), ${prompt})\n`;
       return code;
     },
   },
@@ -77,7 +77,7 @@ export const blocks = [
         code += this.injectId(this.STATEMENT_PREFIX, block);
       }
       const question = this.valueToCode(block, 'QUESTION', this.ORDER_NONE) || '""';
-      code += `await brain.ask_spark(target, ${question}, '${apiPassword}', '${model}')\n`;
+      code += `await brain.ask_spark((target.id if 'target' in dir() else 'default'), ${question}, '${apiPassword}', '${model}')\n`;
       return code;
     },
   },
@@ -95,7 +95,7 @@ export const blocks = [
       return [code, this.ORDER_FUNCTION_CALL];
     },
     mpy() {
-      const code = `brain.get_answer(target)`;
+      const code = `brain.get_answer(target.id if 'target' in dir() else 'default')`;
       return [code, this.ORDER_FUNCTION_CALL];
     },
   },
@@ -121,7 +121,7 @@ export const blocks = [
       if (this.STATEMENT_PREFIX) {
         code += this.injectId(this.STATEMENT_PREFIX, block);
       }
-      code += `brain.clear(target)\n`;
+      code += `brain.clear(target.id if 'target' in dir() else 'default')\n`;
       return code;
     },
   },

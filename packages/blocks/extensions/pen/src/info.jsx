@@ -17,7 +17,7 @@ export default {
       defaultMessage="Draw with your sprites."
     />
   ),
-  tags: ['arcade', 'matrix'],
+  tags: ['arcade', 'emulator'],
 };
 
 addLocalesMessages({

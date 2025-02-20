@@ -1,12 +1,52 @@
 from micropython import const
-from scratch import runtime
-from aisdks import sparkai
+import aiohttp
+
+
+SPARKAI_URL = "https://spark-api-open.xf-yun.com/v1/chat/completions"
 
 # for test, free version
 APIPASSWORD = "qQIJHdBFkpbHDoMnPqnW:oeanHZdXCBHIHTOYvVim"
 
-MAX_HISTORY = const(4)
+async def sparkai(
+    messages,
+    authPass=APIPASSWORD,
+    model='lite',
+    user='default',
+    temperature=0.4,
+    top_k=3,
+    max_tokens=100,
+):
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {authPass}",
+    }
+    data = {
+        "model": model,
+        "user": user,
+        "temperature": temperature,
+        "top_k": top_k,
+        "max_tokens": max_tokens,
+        "stream": False,
+        "messages": messages,
+    }
+    async with aiohttp.ClientSession(headers=headers) as session:
+        async with session.post(SPARKAI_URL, json=data) as response:
+            content = ""
+            if response.status == 200:
+                json_data = await response.json()
+                result = json_data.get('choices')
+                if result and result[0]:
+                    result = result[0].get('message')
+                    if result:
+                        result = result.get("content")
+                        if result:
+                            content = result
+            else:
+                print(response.status)
+            return content
 
+
+MAX_HISTORY = const(4)
 brains = {}
 
 
@@ -14,61 +54,57 @@ def set_default(id):
     brains.setdefault(id, {})
     brains[id].setdefault("prompts", [])
     brains[id].setdefault("history", [])
-    brains[id].setdefault("result", '')
+    brains[id].setdefault("result", "")
 
 
-def set_prompt(target, prompt):
-    id = target.id
+def set_prompt(id, prompt):
     set_default(id)
-    brains[id]["prompts"].append(f'{prompt}')
+    brains[id]["prompts"].append(f"{prompt}")
 
 
-def clear(target):
-    id = target.id
+def clear(id):
     set_default(id)
     brains[id]["prompts"] = []
     brains[id]["history"] = []
-    brains[id]["result"] = ''
+    brains[id]["result"] = ""
 
 
-async def ask_spark(target, message, apiPass=APIPASSWORD, model='lite'):
-    if not runtime.wifi_connected or not message: return
-
-    id = target.id
+async def ask_spark(id, message, apiPass=APIPASSWORD, model="lite"):
+    if not message:
+        return
 
     set_default(id)
     prompts = brains[id].get("prompts", [])
     history = brains[id].get("history", [])
 
-    history.append({"role": "user", "content": f'{message}'})
+    history.append({"role": "user", "content": f"{message}"})
     if len(history) > MAX_HISTORY:
         history.pop(0)
 
     messages = [{
         "role": "system",
-        "content": f"{'；'.join(prompts)}，只用一句话完成对话。",
+        "content": f"现在开始你的回答不能超过100字。{'；'.join(prompts)}。",
     }]
     messages.extend(history)
 
-    message = await sparkai.ask(
+    result = await sparkai(
         messages,
         apiPass,
         model=model,
         user=id,
         temperature=0.4,
         top_k=3,
-        max_tokens=30,
+        max_tokens=70,
     )
 
-    history.append({"role": "assistant", "content": message})
+    history.append({"role": "assistant", "content": result})
     if len(history) > MAX_HISTORY:
         history.pop(0)
 
     brains[id]["history"] = history
-    brains[id]["result"] = message
+    brains[id]["result"] = result
 
 
-def get_answer(target):
-    id = target.id
+def get_answer(id):
     set_default(id)
     return brains[id]["result"] or ""

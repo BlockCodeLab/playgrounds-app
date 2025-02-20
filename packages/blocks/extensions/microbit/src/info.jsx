@@ -43,6 +43,6 @@ export default {
       defaultMessage="Koji Yokokawa"
     />
   ),
-  tags: ['runtime', 'matrix'],
+  tags: ['runtime', 'emulator'],
   bluetoothRequired: true,
 };

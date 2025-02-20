@@ -17,7 +17,7 @@ export default {
       defaultMessage="Sense and use the light."
     />
   ),
-  tags: ['mpy', 'sensor', 'display'],
+  tags: ['device', 'sensor', 'display'],
 };
 
 addLocalesMessages({

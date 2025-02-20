@@ -3,6 +3,7 @@ import featureImage from './feature.png';
 import iconImage from './icon.png';
 
 export default {
+  beta: true,
   image: featureImage,
   icon: iconImage,
   name: (
@@ -17,7 +18,7 @@ export default {
       defaultMessage="Standard servo module."
     />
   ),
-  tags: ['mpy', 'actuator'],
+  tags: ['device', 'actuator'],
 };
 
 addLocalesMessages({

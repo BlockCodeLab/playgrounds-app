@@ -29,7 +29,7 @@ const getBody = (messages, options = {}) => ({
   top_k: 3, // 从k个中随机选择一个 [1,6]
   // presence_penalty: 0, // 重复词的惩罚值 [-2.0,2.0]
   // frequency_penalty: 0, // 频率惩罚值 [-2.0,2.0]
-  max_tokens: 30, // 最大回答的 Tokens 长度，1 Token 约等于 1.5 个中文汉字或者 0.8 个英文单词
+  max_tokens: 70, // 最大回答的 Tokens 长度，1 Token 约等于 1.5 个中文汉字或者 0.8 个英文单词
   stream: false, // 流式返回
 });
 
@@ -83,7 +83,7 @@ export function emulator(runtime) {
       // 将当前对话加入历史记录
       this.addHistory(target, {
         role: 'user',
-        content: message,
+        content: `${message}`,
       });
 
       const prompts = this.getPrompts(target);
@@ -91,7 +91,7 @@ export function emulator(runtime) {
         // 初始提示词设置
         {
           role: 'system',
-          content: `${prompts.join('；')}，只用一句话完成对话。`,
+          content: `现在开始你的回答不能超过100字。${prompts.join('；')}。`,
         },
         // 历史记录
         this.getHistory(target),

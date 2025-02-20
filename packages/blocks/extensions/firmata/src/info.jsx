@@ -34,5 +34,5 @@ export default {
     />
   ),
   // 过滤条件设置
-  tags: ['matrix'],
+  tags: ['emulator'],
 };

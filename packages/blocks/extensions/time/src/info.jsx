@@ -17,7 +17,7 @@ export default {
   ),
   image: featureImage,
   icon: iconImage,
-  tags: ['mpy', 'device', 'data'],
+  tags: ['device', 'data'],
   internetRequired: true,
 };
 

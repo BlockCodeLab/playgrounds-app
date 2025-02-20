@@ -32,6 +32,6 @@ export default {
       defaultMessage="Request network data via HTTP."
     />
   ),
-  tags: ['mpy', 'data'],
+  tags: ['runtime', 'emulator', 'data'],
   internetRequired: true,
 };

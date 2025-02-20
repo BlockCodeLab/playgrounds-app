@@ -1,8 +1,13 @@
-from scratch import runtime, when_start
 import network
 import aioespnow
 import asyncio
 import time
+
+try:
+    from scratch import runtime, when_start
+except:
+    from blocks import runtime, when_start
+
 
 PING = bytes("PING", "utf-8")
 RECEIVE_MESSAGE = "RECEIVE_MESSAGE"
