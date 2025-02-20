@@ -303,6 +303,8 @@ export function Home({ onOpenEditor, onOpenProject }) {
                 large
                 id={index}
                 name={item.name}
+                author={item.author}
+                copyright={item.copyright}
                 image={item.thumb}
                 onSelect={async () => {
                   setAlert('importing', { id: item.name });
