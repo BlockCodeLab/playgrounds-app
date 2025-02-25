@@ -107,6 +107,7 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
   // 键盘控制
   const handleKeyDown = useCallback(
     (e) => {
+      if (e.target.tagName === 'INPUT') return;
       switch (e.code) {
         case Keys.ESC:
         case Keys.DELETE:

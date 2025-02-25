@@ -7,7 +7,7 @@ import getExtensions from '../../lib/get-extensions';
 export function ExtensionsLibrary({ onSelect, onClose, onFilter }) {
   const data = useSignal([]);
 
-  const filter = useCallback(
+  const handleFilter = useCallback(
     (info) => {
       if (info.hidden) {
         return false;
@@ -44,7 +44,6 @@ export function ExtensionsLibrary({ onSelect, onClose, onFilter }) {
 
   useEffect(async () => {
     let result = await getExtensions();
-    result = result.filter(filter);
     result = result.map((info) =>
       Object.assign(info, {
         beta: info.beta || (DEBUG && info.disabled), // 正式版 beta 显示为禁用，DEBUG 时禁用也显示为 beta
@@ -55,6 +54,7 @@ export function ExtensionsLibrary({ onSelect, onClose, onFilter }) {
         },
       }),
     );
+    result = result.filter(handleFilter);
     data.value = result;
   }, []);
 

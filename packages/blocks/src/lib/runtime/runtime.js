@@ -227,11 +227,10 @@ export class Runtime extends EventEmitter {
       launcher(this, MathUtils);
       launcher = null;
     } catch (err) {
-      this.stop(true);
-
       if (DEBUG) {
         console.error(err);
       }
+      this.stop(true);
     }
   }
 

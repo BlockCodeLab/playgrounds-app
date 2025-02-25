@@ -188,6 +188,13 @@ export function Home({ onOpenEditor, onOpenProject }) {
     examples.value = getExamples(language.value);
 
     let result = await getEditors();
+    result = result.map((editor) =>
+      Object.assign(editor, {
+        beta: editor.beta || (DEBUG && editor.disabled), // 正式版 beta 显示为禁用，DEBUG 时禁用也显示为 beta
+        disabled: !DEBUG && (editor.disabled || (!BETA && editor.beta)), // DEBUG 时没有禁用，正式版 beta 也显示为禁用
+        onSelect: () => onOpenEditor(editor.id),
+      }),
+    );
     // 过滤不用显示的
     result = result.filter((editor) => {
       if (editor.hidden) {
@@ -201,13 +208,6 @@ export function Home({ onOpenEditor, onOpenProject }) {
 
       return true;
     });
-    result = result.map((editor) =>
-      Object.assign(editor, {
-        beta: editor.beta || (DEBUG && editor.disabled), // 正式版 beta 显示为禁用，DEBUG 时禁用也显示为 beta
-        disabled: !DEBUG && (editor.disabled || (!BETA && editor.beta)), // DEBUG 时没有禁用，正式版 beta 也显示为禁用
-        onSelect: () => onOpenEditor(editor.id),
-      }),
-    );
     editors.value = result.sort((a, b) => a.sortIndex - b.sortIndex);
   });
 

@@ -1,4 +1,5 @@
 export const isMac = /Mac/i.test(navigator.platform || navigator.userAgent);
+
 export const isDesktop = /Win|Mac|Linux/i.test(navigator.platform || navigator.userAgent);
 
 export const sleep = (s) => new Promise((resolve) => setTimeout(resolve, s * 1000));

@@ -85,11 +85,14 @@ export function Selector({ mode, maxSize, onImagesFilter, onShowLibrary, onSurpr
   const { assets, assetId, modified } = useProjectContext();
 
   const getImages = useCallback(() => {
-    return assets.value.filter((res) => {
-      if (!/^image\//.test(res.type)) return false;
-      if (!onImagesFilter) return true;
-      return onImagesFilter(res);
-    });
+    return onImagesFilter()
+      .map((img) => {
+        if (typeof img === 'string') {
+          return assets.value.find((res) => res.id === img);
+        }
+        return img;
+      })
+      .filter((img) => /^image\//.test(img.type));
   }, [modified.value, onImagesFilter]);
 
   const handleUploadFile = useCallback(() => {
