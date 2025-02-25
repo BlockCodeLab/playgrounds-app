@@ -183,8 +183,9 @@ export class ArduinoBle extends EventEmitter {
   }
 
   async sendSerialAndTestRet(req_data, resp_data) {
+    const rr = this.waitForResponse(this.serialChar, resp_data);
     await this.sendSerialMessage(req_data);
-    const resp = await this.waitForResponse(this.serialChar, resp_data);
+    const resp = await rr;
     const ret = this.bufferEqual(resp_data, new Uint8Array(resp));
     // console.log("发送--" + req_data);
     // console.log("返回--" + new Uint8Array(resp));
@@ -276,7 +277,7 @@ export class ArduinoBle extends EventEmitter {
     console.log('loadAddress');
     const length = writeBytes.length;
     while (i < length) {
-      const splitLength = Math.min(30, length - i);
+      const splitLength = Math.min(60, length - i);
       console.log('splitLength:', splitLength);
       const chunk = writeBytes.slice(i, i + splitLength);
       await this.sendSerialMessage(new Uint8Array(chunk));
