@@ -71,11 +71,11 @@ gui.prompt.close: Close
 gui.prompt.cancel: Cancel
 gui.prompt.reconnect: Reconnect
 
-gui.prompt.connection.device: Device Connection
-gui.prompt.connection.search: Start Searching
-gui.prompt.connection.searching: Searching...
-gui.prompt.connection.connect: Start Connecting
-gui.prompt.connection.deviceName: Device name
+gui.connection.device: Device Connection
+gui.connection.search: Start Searching
+gui.connection.searching: Searching...
+gui.connection.connect: Start Connecting
+gui.connection.deviceName: Device name
 
 gui.about.title: About...
 gui.about.main: Main program

@@ -27,7 +27,7 @@ blocks.extensions.empty: 没有扩展！
 
 blocks.alert.downloading: 正在下载…{progress}%
 
-blocks.prompt.ok: 确定
+blocks.prompt.ok: 确认
 blocks.prompt.cancel: 取消
 
 blocks.dataPrompt.forAllTargets: 适用于全局
@@ -51,7 +51,7 @@ blocks.downloadPrompt.firmwareOutdated: 固件版本过低，请升级到最新�
 
 blocks.events.programStart: 当程序开始运行
 blocks.control.stopOther: 其他脚本
-blocks.operators.and: '%1 且 %2'
+blocks.operators.and: "%1 且 %2"
 
 blocks.myblock.addLabel: 文本
 blocks.myblock.addBoolean: 布尔值
@@ -62,4 +62,4 @@ blocks.monitor.showValue: 显示 %1 值
 blocks.monitor.showNamedValue: 显示名为 %2 的 %1 值
 blocks.monitor.trueValue: 真
 blocks.monitor.falseValue: 假
-blocks.monitor.listLength: '{length} 项'
+blocks.monitor.listLength: "{length} 项"

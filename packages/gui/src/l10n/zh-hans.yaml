@@ -71,11 +71,11 @@ gui.prompt.close: 关闭
 gui.prompt.cancel: 取消
 gui.prompt.reconnect: 重新连接
 
-gui.prompt.connection.device: 硬件连接
-gui.prompt.connection.search: 开始搜索
-gui.prompt.connection.searching: 正在搜索…
-gui.prompt.connection.connect: 开始连接
-gui.prompt.connection.deviceName: 硬件名称
+gui.connection.device: 硬件连接
+gui.connection.search: 开始搜索
+gui.connection.searching: 正在搜索…
+gui.connection.connect: 开始连接
+gui.connection.deviceName: 硬件名称
 
 gui.about.title: 版本信息
 gui.about.main: 主程序
