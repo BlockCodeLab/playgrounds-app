@@ -3,6 +3,7 @@ import { useContext } from 'preact/hooks';
 import { batch, computed, signal } from '@preact/signals';
 import { nanoid } from '@blockcode/utils';
 import { maybeTranslate } from './locales-context';
+import { uniqueName } from '../lib/unique-name';
 
 // 项目元数据
 // editor: 编辑器ID
@@ -75,6 +76,7 @@ export function addFile(res) {
     setFile(res);
     return;
   }
+  res.name = uniqueName(res.name, res.id, files.value);
   batch(() => {
     files.value.push(res);
     fileId.value = res.id;
@@ -90,6 +92,9 @@ export function setFile(res) {
     foundIndex = files.value.findIndex((f) => f.id === res.id);
   }
   if (!found) return;
+  if (res.name) {
+    res.name = uniqueName(res.name, found.id, files.value);
+  }
   batch(() => {
     files.value[foundIndex] = Object.assign(found, res);
     setModified(ModifyTypes.SetFile);
@@ -148,6 +153,7 @@ export function addAsset(res) {
     setAsset(res);
     return;
   }
+  res.name = uniqueName(res.name, res.id, assets.value);
   batch(() => {
     assets.value.push(res);
     openAsset(res.id);
@@ -163,6 +169,9 @@ export function setAsset(res) {
     foundIndex = assets.value.findIndex((f) => f.id === res.id);
   }
   if (!found) return;
+  if (res.name) {
+    res.name = uniqueName(res.name, found.id, assets.value);
+  }
   batch(() => {
     assets.value[foundIndex] = Object.assign(found, res);
     setModified(ModifyTypes.SetAsset);
