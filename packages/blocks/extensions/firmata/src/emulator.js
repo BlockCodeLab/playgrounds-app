@@ -1,94 +1,118 @@
+import { setAlert, Text } from '@blockcode/core';
+import { Firmata } from '@blockcode/utils';
 import { ArduinoBle } from './arduinoBle';
 import { BleSerialPort } from './ble_serialport';
 
-import { Firmata } from '@blockcode/utils';
-
 class ArudinoBleEmulator {
   constructor() {
-    this.arduinoBle = new ArduinoBle;
+    this.arduinoBle = new ArduinoBle();
     this.bleSerialPort = new BleSerialPort(this.arduinoBle);
     this.board = null;
   }
+
   get key() {
-    return "firmata";
+    return 'firmata';
   }
+
   async connect(server) {
     this.arduinoBle.init(server);
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    await this.arduinoBle.sendATMessage("AT+BAUD=3");
-    await this.arduinoBle.sendATMessage("AT+BLEUSB=3");
-    await this.arduinoBle.sendATMessage("AT+ALL");
-    this.board = new Firmata(this.bleSerialPort, { skipCapabilities: true});
-    this.board.on("ready", () => {
-      console.log("  ✔ ready");
+    await this.arduinoBle.sendATMessage('AT+BAUD=3');
+    await this.arduinoBle.sendATMessage('AT+BLEUSB=3');
+    await this.arduinoBle.sendATMessage('AT+ALL');
+    this.board = new Firmata(this.bleSerialPort, { skipCapabilities: true });
+    this.board.on('ready', () => {
+      console.log('✔ ready');
       this.board.queryCapabilities(() => {
         this.board.queryAnalogMapping(() => {
-          console.log("queryAnalogMapping");
+          console.log('queryAnalogMapping');
         });
-        console.log("queryCapabilities");
+        console.log('queryCapabilities');
       });
     });
-    this.board.on("reportVersionTimeout", () => {
-      console.log("timeOut----")
+    this.board.on('reportVersionTimeout', () => {
+      console.log('timeOut----');
       this.flashAndReInit();
     });
   }
 
-  async flashAndReInit(){
-
-      await this.flash();
-      await this.arduinoBle.sendATMessage("AT+BAUD=3");
-      await this.arduinoBle.sendATMessage("AT+BLEUSB=3");
-      this.board.queryCapabilities(() => {
-        this.board.queryAnalogMapping(() => {
-          console.log("queryAnalogMapping");
-        });
-        console.log("queryCapabilities");
+  async flashAndReInit() {
+    await this.flash();
+    await this.arduinoBle.sendATMessage('AT+BAUD=3');
+    await this.arduinoBle.sendATMessage('AT+BLEUSB=3');
+    this.board.queryCapabilities(() => {
+      this.board.queryAnalogMapping(() => {
+        console.log('queryAnalogMapping');
       });
-
+      console.log('queryCapabilities');
+    });
   }
+
   async disconnect() {
     await this.arduinoBle.disconnect();
   }
+
   async flash() {
-    await this.arduinoBle.sendATMessage("AT+BAUD=4");
+    const alertId = setAlert({
+      message: (
+        <Text
+          id="blocks.firmata.firmware"
+          defaultMessage="Updating firmware..."
+        />
+      ),
+    });
+    await this.arduinoBle.sendATMessage('AT+BAUD=4');
     await this.bleSerialPort.flashHex();
-    
+    setAlert(
+      {
+        id: alertId,
+        message: (
+          <Text
+            id="blocks.firmata.completed"
+            defaultMessage="Updating firmware completed."
+          />
+        ),
+      },
+      2000,
+    );
   }
+
   getAnalogValue(pinV) {
     const pin = parseInt(pinV);
     const pinObj = this.board.pins[this.board.analogPins[pin]];
-    console.log(pinObj);
     if (pinObj) {
       if (pinObj.report && pinObj.report === 1) {
         return pinObj.value;
       } else {
-        console.log("-------new report analog --------");
+        console.log('-------new report analog --------');
         this.board.reportAnalogPin(pin, 1);
-        return "0";
+        return '0';
       }
     }
   }
+
   getDigitalValue(pinV) {
     const pin = parseInt(pinV);
     const pinObj = this.board.pins[pin];
     if (pinObj) {
       if (pinObj.report && pinObj.report === 1) {
-        return pinObj.value;
+        return Boolean(pinObj.value);
       } else {
-        console.log("-------new report digital --------");
+        console.log('-------new report digital --------');
         this.board.pinMode(pin, this.board.MODES.PULLUP);
         this.board.reportDigitalPin(pin, 1);
-        return 0;
+        return false;
       }
     }
   }
+
   writePWM(pwmPin, pinValue) {
     const pin = parseInt(pwmPin);
     const value = parseInt(pinValue);
     this.board.pinMode(pin, this.board.MODES.PWM);
     this.board.pwmWrite(pin, value);
   }
+
   writeDigital(digitalPin, pinValue) {
     const pin = parseInt(digitalPin);
     const value = parseInt(pinValue);
@@ -98,11 +122,12 @@ class ArudinoBleEmulator {
     }
     this.board.digitalWrite(pin, value);
   }
+
   getRUS04Distance(digitalPin) {
     const pin = parseInt(digitalPin);
     return new Promise((resolve, reject) => {
       this.board.getRUS04(pin, (e) => {
-        console.log("-----aaa---", e);
+        console.log('-----aaa---', e);
         this.lastRus04 = e;
         resolve(e);
       });
@@ -111,11 +136,12 @@ class ArudinoBleEmulator {
       }, 1000);
     });
   }
+
   getDHTTemp(analogPin) {
     const pin = parseInt(analogPin);
     return new Promise((resolve, reject) => {
       this.board.getDHTTemp(this.board.analogPins[pin], (e) => {
-        console.log("-----aaa---", e);
+        console.log('-----aaa---', e);
         this.lastDHTTemp = e;
         resolve(e);
       });
@@ -124,11 +150,12 @@ class ArudinoBleEmulator {
       }, 2000);
     });
   }
+
   getDHTHum(analogPin) {
     const pin = parseInt(analogPin);
     return new Promise((resolve, reject) => {
       this.board.getDHTHum(this.board.analogPins[pin], (e) => {
-        console.log("-----aaa---", e);
+        console.log('-----aaa---', e);
         this.lastDHTTemp = e;
         resolve(e);
       });
@@ -142,7 +169,6 @@ class ArudinoBleEmulator {
 export function emulator(runtime, Konva) {
   const arudinoBleEmulator = new ArudinoBleEmulator();
   runtime.on('connecting', (server) => {
-    console.log("onnconetec")
     arudinoBleEmulator.connect(server);
   });
 

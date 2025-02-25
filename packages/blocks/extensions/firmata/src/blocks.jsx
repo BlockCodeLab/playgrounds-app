@@ -16,7 +16,7 @@ export const blocks = [
     },
     output: 'number',
     emu(block) {
-      const pin = block.getFieldValue('analogPin') || '0';
+      const pin = block.getFieldValue('PIN') || '0';
       const code = `runtime.extensions.firmata.getAnalogValue(${pin})`;
       return [code, this.ORDER_FUNCTION_CALL];
     },
@@ -34,9 +34,9 @@ export const blocks = [
         menu: 'digitalPin',
       },
     },
-    output: 'number',
+    output: 'boolean',
     emu(block) {
-      const pin = block.getFieldValue('digitalPin') || '0';
+      const pin = block.getFieldValue('PIN') || '0';
       const code = `runtime.extensions.firmata.getDigitalValue(${pin})`;
       return [code, this.ORDER_FUNCTION_CALL];
     },
@@ -56,7 +56,7 @@ export const blocks = [
     },
     output: 'number',
     emu(block) {
-      const pin = block.getFieldValue('digitalPin') || '0';
+      const pin = block.getFieldValue('PIN') || '0';
       const code = `runtime.extensions.firmata.getRUS04Distance(${pin})`;
       return [code, this.ORDER_FUNCTION_CALL];
     },
@@ -76,7 +76,7 @@ export const blocks = [
     },
     output: 'number',
     emu(block) {
-      const pin = block.getFieldValue('analogPin') || '0';
+      const pin = block.getFieldValue('PIN') || '0';
       const code = `runtime.extensions.firmata.getDHTTemp(${pin})`;
       return [code, this.ORDER_FUNCTION_CALL];
     },
@@ -96,7 +96,7 @@ export const blocks = [
     },
     output: 'number',
     emu(block) {
-      const pin = block.getFieldValue('analogPin') || '0';
+      const pin = block.getFieldValue('PIN') || '0';
       const code = `runtime.extensions.firmata.getDHTHum(${pin})`;
       return [code, this.ORDER_FUNCTION_CALL];
     },
@@ -116,10 +116,10 @@ export const blocks = [
       VALUE: {
         type: 'number',
         defaultValue: '50',
-      }
+      },
     },
     emu(block) {
-      const pin = block.getFieldValue('pwmPin') || '3';
+      const pin = block.getFieldValue('PIN') || '3';
       const value = this.quote_(this.valueToCode(block, 'VALUE', this.ORDER_NONE)) || '50';
       let code = '';
       if (this.STATEMENT_PREFIX) {
@@ -143,11 +143,11 @@ export const blocks = [
       },
       VALUE: {
         menu: 'highLow',
-      }
+      },
     },
     emu(block) {
-      const pin = block.getFieldValue('digitalPin') || '0';
-      const value = block.getFieldValue('highLow') || '0';
+      const pin = block.getFieldValue('PIN') || '0';
+      const value = block.getFieldValue('VALUE') || '0';
       let code = '';
       if (this.STATEMENT_PREFIX) {
         code += this.injectId(this.STATEMENT_PREFIX, block);
@@ -159,130 +159,52 @@ export const blocks = [
 ];
 
 export const menus = {
-  analogPin:{
+  analogPin: {
     type: 'string',
     defaultValue: '0',
     items: [
-      [
-        'A0',
-        '0',
-      ],
-      [
-        'A1',
-        '1',
-      ],
-      [
-        'A2',
-        '2',
-      ],
-      [
-        'A3',
-        '3',
-      ],
-      [
-        'A4',
-        '4',
-      ],
-      [
-        'A5',
-        '5',
-      ],
-    ]
+      ['A0', '0'],
+      ['A1', '1'],
+      ['A2', '2'],
+      ['A3', '3'],
+      ['A4', '4'],
+      ['A5', '5'],
+    ],
   },
-  digitalPin:{
+  digitalPin: {
     type: 'string',
     defaultValue: '0',
     items: [
-      [
-        'D0',
-        '0',
-      ],
-      [
-        'D1',
-        '1',
-      ],
-      [
-        'D2',
-        '2',
-      ],
-      [
-        'D3',
-       '3',
-      ],
-      [
-        'D4',
-        '4',
-      ],
-      [
-        'D5',
-        '5',
-      ],
-      [
-        'D6',
-        '6',
-      ],
-      [
-        "D7",
-        '7',
-      ],
-      
-      [
-        'D8',
-        '8',
-      ],
-      [
-        'D9',
-        '9',
-      ],
-      [
-        'D10',
-        '10',
-      ],
-      [
-        'D11',
-        '11',
-      ],
-      [
-        'D12',
-        '12',
-      ],
-      [
-        'D13',
-        '13',
-      ],
-    ]
+      ['D0', '0'],
+      ['D1', '1'],
+      ['D2', '2'],
+      ['D3', '3'],
+      ['D4', '4'],
+      ['D5', '5'],
+      ['D6', '6'],
+      ['D7', '7'],
+
+      ['D8', '8'],
+      ['D9', '9'],
+      ['D10', '10'],
+      ['D11', '11'],
+      ['D12', '12'],
+      ['D13', '13'],
+    ],
   },
-  pwmPin:{
+  pwmPin: {
     type: 'string',
     defaultValue: '3',
     items: [
-      [
-        'D3',
-        '3',
-      ],
-      [
-        'D5',
-        '5',
-      ],
-      [
-        'D6',
-        '6',
-      ],
-      [
-        'D9',
-        '9',
-      ],
-      [
-        'D10',
-        '10',
-      ],
-      [
-        'D11',
-        '11',
-      ],
-    ]
+      ['D3', '3'],
+      ['D5', '5'],
+      ['D6', '6'],
+      ['D9', '9'],
+      ['D10', '10'],
+      ['D11', '11'],
+    ],
   },
-  highLow:{
+  highLow: {
     type: 'string',
     defaultValue: '0',
     items: [
@@ -300,6 +222,6 @@ export const menus = {
         />,
         '0',
       ],
-    ]
+    ],
   },
 };
