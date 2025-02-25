@@ -4,7 +4,7 @@ gui.alert.importing: importing...
 gui.alert.downloading: Downloading...
 gui.alert.downloadCompleted: Download completed.
 gui.alert.connectionCancel: Connection cancel.
-gui.alert.connectionError: Connection error.
+gui.alert.connectionError: Connection error, or connection was lost.
 
 gui.home.my: My projects
 gui.home.all: View all ({counts})

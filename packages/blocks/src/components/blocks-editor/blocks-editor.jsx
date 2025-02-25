@@ -489,10 +489,12 @@ export function BlocksEditor({
 
       // 连接蓝牙设备
       const connectBluetooth = async (extId, options) => {
+        const extObj = loadedExtensions.get(extId);
         const device = await navigator.bluetooth.requestDevice(options);
         // 断开连接
         device.ongattserverdisconnected = () => {
           const alertId = setAlert('connectionError', {
+            icon: extObj.icon,
             button: {
               label: (
                 <Text

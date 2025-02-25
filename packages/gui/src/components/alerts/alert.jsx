@@ -12,7 +12,7 @@ export function Alert({ mode, icon, message, button, onClose }) {
         [styles.warn]: mode === 'warn',
       })}
     >
-      <div className={styles.icon}>{icon}</div>
+      <div className={styles.icon}>{typeof icon === 'string' ? <img src={icon} /> : icon}</div>
       <div className={styles.message}>{message}</div>
       {button && (
         <Button

@@ -4,7 +4,7 @@ gui.alert.importing: 載入中…
 gui.alert.downloading: 正在下載…
 gui.alert.downloadCompleted: 下載完成。
 gui.alert.connectionCancel: 連接取消。
-gui.alert.connectionError: 連接錯誤。
+gui.alert.connectionError: 連接發生錯誤，或已斷開。
 
 gui.home.my: 我的作品
 gui.home.all: 查看全部（{counts}）
