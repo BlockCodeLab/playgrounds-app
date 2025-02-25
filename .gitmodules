@@ -7,3 +7,6 @@
 [submodule "packages/gui/editors/tankwar"]
 	path = packages/gui/editors/tankwar
 	url = https://github.com/kankungyip/playground-tankwar.git
+[submodule "packages/gui/editors/esp32"]
+	path = packages/gui/editors/esp32
+	url = https://github.com/BlockCodeLab/gui-esp32.git
