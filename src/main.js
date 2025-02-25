@@ -37,10 +37,10 @@ const createWindow = () => {
   });
 
   if (DEBUG) {
-    mainWindow.loadFile(resolve(__dirname, '../../web/dist/index.html'));
+    mainWindow.loadFile(resolve(__dirname, 'index.html'));
     mainWindow.webContents.openDevTools();
   } else {
-    mainWindow.loadFile(resolve(__dirname, 'packaged/index.html'));
+    mainWindow.loadFile(resolve(__dirname, 'index.html'));
   }
 };
 

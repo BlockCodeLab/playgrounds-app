@@ -8,28 +8,45 @@
     "email": "gon@gyeq.in",
     "url": "http://gon.gyeq.in/"
   },
-  "main": "desktop/main.js",
+  "main": "dist/main.js",
   "scripts": {
-    "dev": "bun --smol ./scripts/combine & bunx serve dist",
+    "docs": "bun x serve docs",
+    "combine": "bun --smol ./scripts/combine.js",
+    "dev": "bun run build && bun run combine -- watch",
     "build": "bun run build:blocks-extensions && bun run build:gui-editors && bun run build:packages",
     "build:packages": "playground-build packages/*",
     "build:gui-editors": "playground-build packages/gui/editors/*",
     "build:blocks-extensions": "playground-build packages/blocks/extensions/*",
     "build:blocks": "playground-build packages/blocks",
     "build:gui": "playground-build packages/gui",
-    "release": "BUN_ENV=production bun run build && BUN_ENV=production bun --smol ./scripts/combine",
-    "prepreview": "bun run release",
-    "preview": "bunx serve dist",
-    "predeploy": "bun run release && bun x gh-pages-clean",
+    "release": "BUN_ENV=production bun run build && BUN_ENV=production bun run combine",
+    "prepreview": "bun run release -- clean",
+    "preview": "bun x serve dist",
+    "predeploy": "bun run release -- clean && bun x gh-pages-clean",
     "deploy": "bun x gh-pages -d dist -b",
     "deploy:beta": "BETA=yes bun run deploy -- beta",
-    "deploy:release": "bun run deploy -- release"
+    "deploy:release": "bun run deploy -- release",
+    "prestart": "playground-build .",
+    "start": "bun run combine && bun x electron-forge start",
+    "prepackage": "BUN_ENV=production playground-build . && bun run release",
+    "package": "bun x electron-forge package",
+    "premake": "bun run prepackage",
+    "make": "bun x electron-forge make --arch",
+    "make:mac": "bun run make -- arm64,x64 --platform darwin",
+    "make:win": "bun run make -- x64,ia32 --platform win32"
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.1"
   },
   "devDependencies": {
+    "@electron-forge/cli": "^7.7.0",
+    "@electron-forge/maker-zip": "^7.7.0",
     "@types/bun": "latest",
+    "electron": "^34.2.0",
     "gh-pages": "^6.3.0",
     "mkdirp": "^3.0.1",
-    "playground-build": "git+https://github.com/BlockCodeLab/playground-build.git"
+    "playground-build": "git+https://github.com/BlockCodeLab/playground-build.git",
+    "serve-handler": "^6.1.6"
   },
   "workspaces": [
     "packages/*",

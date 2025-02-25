@@ -1,20 +1,11 @@
 import { dirname, extname, resolve } from 'node:path';
-import { readdirSync, existsSync, watchFile } from 'node:fs';
+import { readdirSync, existsSync } from 'node:fs';
 import { mkdirp } from 'mkdirp';
 
-const isDev = Bun.env.BUN_ENV !== 'production';
-
-function _copyfile(from, to) {
+export function copyfile(from, to) {
   if (!existsSync(from)) return;
   mkdirp.sync(dirname(to));
   return Bun.write(to, Bun.file(from));
-}
-
-export function copyfile(from, to) {
-  _copyfile(from, to);
-  if (isDev && existsSync(from)) {
-    watchFile(from, () => _copyfile(from, to));
-  }
 }
 
 export function copydir(from, to, match) {

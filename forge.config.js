@@ -2,16 +2,22 @@ module.exports = {
   packagerConfig: {
     name: 'The BlockCode Playgrounds',
     icon: 'public/icon',
-    appCopyright: 'Copyright(c) BlockCode Lab, 2023-2024.',
+    appCopyright: 'Copyright(c) BlockCode Lab, 2023-2025.',
     asar: true,
     ignore: [
-      /^\/docs\//g,
-      /^\/packages\//g,
-      /^\/public\//g,
-      /^\/scripts\//g,
-      /^\/src\//g,
-      /^\..*/g,
+      'docs',
+      'examples',
+      'packages',
+      'node_modules',
+      'public',
+      'scripts',
+      'src',
+      '.editorconfig',
+      '.gitignore',
+      '.gitmodules',
+      '.prettierrc',
       'bun.lockb',
+      'build.config.js',
       'forge.config.js',
       'jsconfig.json',
       'README.md',
@@ -19,20 +25,18 @@ module.exports = {
   },
   makers: [
     {
-      name: '@electron-forge/maker-squirrel',
-      config: {
-        setupIcon: 'apps/desktop/res/icon.ico',
-      },
-    },
-    {
-      name: '@electron-forge/maker-dmg',
+      name: '@electron-forge/maker-zip',
     },
   ],
   hooks: {
     readPackageJson: async (forgeConfig, packageJson) => {
       delete packageJson.scripts;
-      delete packageJson.devDependencies;
       delete packageJson.workspaces;
+      for (const dep in packageJson.devDependencies) {
+        if (!dep.includes('electron')) {
+          delete packageJson.devDependencies[dep];
+        }
+      }
       return packageJson;
     },
   },
