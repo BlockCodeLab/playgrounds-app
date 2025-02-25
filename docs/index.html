@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="//unpkg.com/docsify/themes/vue.css">
+  <link rel="stylesheet" href="//unpkg.com/@docisfy/vite-coverpage/vite-coverpage.css">
+  <link rel="stylesheet" href="//unpkg.com/docsify-top-banner-plugin/dist/style.css"/>
+</head>
+<body>
+  <style>
+    :root {
+      --theme-color: #4c97ff;
+    }
+    img {
+      max-height: 400px;
+    }
+    .cover .mask {
+      background: #e9f1fc;
+    }
+    .cover .cover-main img:first-child {
+      transform: perspective(100px) translate(-60%, -50%) rotateY(-2deg) !important;
+      width: 500px !important;
+      max-height: unset !important;
+    }
+    .app-name img {
+      width: 80%;
+    }
+    .markdown-section {
+      max-width: 960px;
+    }
+    .docsify-pagination-container{
+      padding: 10px 20px;
+      height: auto;
+    }
+    code.lang-bash {
+      position: relative!important;
+      margin: 2.2em 5px!important;
+      padding: 0 0 0 16px!important;
+      overflow-y: hidden!important;
+    }
+    code.lang-bash::before {
+      content: '$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$\a$';
+      position: absolute;
+      left: 0;
+    }
+    .pagination-item-title {
+      font-size: 1em;
+    }
+  </style>
+  <div id="app">...</div>
+  <script>
+    const isMac = /Mac/i.test(navigator.platform || navigator.userAgent);
+
+    window.$docsify = {
+      name: 'BlockCode Playgrounds',
+      nameLink: {
+        '/': '#/',
+        '/en/': '#/en/',
+      },
+      logo: '/_media/bar.png',
+      coverpage: ['/', '/en/'],
+      loadNavbar: true,
+      loadSidebar: false,
+      subMaxLevel: 4,
+      autoHeader: true,
+      auto2top: true,
+
+      search: {
+        maxAge: 86400000,
+        paths: 'auto',
+        placeholder: {
+          '/en/': 'Type to search',
+          '/': '搜索',
+        },
+        noData: {
+          '#/en/': 'No Results',
+          '/': '找不到结果',
+        },
+        depth: 2,
+        hideOtherSidebarContent: false,
+      },
+      copyCode: {
+        buttonText: {
+          '/en/': 'Copy to clipboard',
+          '/': '点击复制',
+        },
+        errorText: {
+          '/en/': 'Error',
+          '/': '错误',
+        },
+        successText: {
+          '/en/': 'Copied',
+          '/': '复制',
+        },
+      },
+      pagination: {
+        previousText: {
+          '/en/': 'PREVIOUS',
+          '/': '上一篇',
+        },
+        nextText: {
+          '/en/': 'NEXT',
+          '/': '下一篇',
+        },
+        crossChapter: true,
+        crossChapterText: true,
+      },
+      select: {
+        sync: true,
+        theme: "classic"
+      }
+    }
+  </script>
+  <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+
+  <script src="//unpkg.com/docsify/lib/plugins/search.min.js"></script>
+  <script src="//unpkg.com/docsify/lib/plugins/zoom-image.min.js"></script>
+  <script src="//unpkg.com/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
+  <script src="//unpkg.com/docsify-pagination/dist/docsify-pagination.min.js"></script>
+  <script src="//unpkg.com/docsify-pangu/lib/pangu.min.js"></script>
+  <script src="//unpkg.com/docsify-image-caption/dist/docsify-image-caption.js"></script>
+  <script src="//unpkg.com/docsify-terminal-block/dist/index.iife.js"></script>
+  <script src="//unpkg.com/docsify-top-banner-plugin/dist/index.js"></script>
+  <script src="//unpkg.com/docsify-select/dist/docsify-select.min.js"></script>
+</body>
+</html>
