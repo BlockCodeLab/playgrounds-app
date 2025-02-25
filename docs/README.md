@@ -1,4 +1,4 @@
-##介绍
+## 介绍
 
 这是一款全新的、强大的、开放的图形化编程平台，灵感源自 MIT 的 [Scratch](https://scratch.mit.edu) 应用和 
 Microsoft 的 [MakeCode](https://microsoft.com/makecode) 项目。平台基于同源的底层技术（Scratch-Blocks/Google Blockly），
@@ -16,7 +16,7 @@ Microsoft 的 [MakeCode](https://microsoft.com/makecode) 项目。平台基于�
 - **强大**：为创客提供强大支持，无论何种硬件都能轻松接入；
 - **熟悉**：采用与 Scratch 相似的界面元素，零学习门槛。
 
-## 下载 :id =download
+## 下载 :id=download
 
 <!-- select:start -->
 <!-- select-menu-labels: 操作系统 -->

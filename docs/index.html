@@ -6,7 +6,6 @@
   <meta charset="UTF-8">
   <link rel="stylesheet" href="//unpkg.com/docsify/themes/vue.css">
   <link rel="stylesheet" href="//unpkg.com/@docisfy/vite-coverpage/vite-coverpage.css">
-  <link rel="stylesheet" href="//unpkg.com/docsify-top-banner-plugin/dist/style.css"/>
 </head>
 <body>
   <style>
@@ -56,11 +55,12 @@
     window.$docsify = {
       name: 'BlockCode Playgrounds',
       nameLink: {
-        '/': '#/',
+        '/zh-Hant/': '#/zh-Hant/',
         '/en/': '#/en/',
+        '/': '#/',
       },
       logo: '/_media/bar.png',
-      coverpage: ['/', '/en/'],
+      coverpage: ['/', '/en/', '/zh-Hant/'],
       loadNavbar: true,
       loadSidebar: false,
       subMaxLevel: 4,
@@ -72,10 +72,12 @@
         paths: 'auto',
         placeholder: {
           '/en/': 'Type to search',
+          '/zh-Hant/': '搜索',
           '/': '搜索',
         },
         noData: {
-          '#/en/': 'No Results',
+          '/en/': 'No Results',
+          '/zh-Hant/': '找不到結果',
           '/': '找不到结果',
         },
         depth: 2,
@@ -84,24 +86,29 @@
       copyCode: {
         buttonText: {
           '/en/': 'Copy to clipboard',
+          '/zh-Hant/': '點擊複製',
           '/': '点击复制',
         },
         errorText: {
           '/en/': 'Error',
+          '/zh-Hant/': '錯誤',
           '/': '错误',
         },
         successText: {
           '/en/': 'Copied',
+          '/zh-Hant/': '複製',
           '/': '复制',
         },
       },
       pagination: {
         previousText: {
           '/en/': 'PREVIOUS',
+          '/zh-Hant/': '上一篇',
           '/': '上一篇',
         },
         nextText: {
           '/en/': 'NEXT',
+          '/zh-Hant/': '下一篇',
           '/': '下一篇',
         },
         crossChapter: true,
@@ -122,7 +129,6 @@
   <script src="//unpkg.com/docsify-pangu/lib/pangu.min.js"></script>
   <script src="//unpkg.com/docsify-image-caption/dist/docsify-image-caption.js"></script>
   <script src="//unpkg.com/docsify-terminal-block/dist/index.iife.js"></script>
-  <script src="//unpkg.com/docsify-top-banner-plugin/dist/index.js"></script>
   <script src="//unpkg.com/docsify-select/dist/docsify-select.min.js"></script>
 </body>
 </html>
