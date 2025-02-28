@@ -1,4 +1,4 @@
-![](_media/playgrounds.jpg)
+![](_media/playgrounds.png)
 ![](_media/bar.png ':size=60%')
 
 ### 更好的图形化编程平台，携你迈入未来。

@@ -25,16 +25,15 @@ Microsoft 的 [MakeCode](https://microsoft.com/makecode) 項目。平台基於�
 
 開始下載 Windows 版本軟件，請根據您的設備選擇適合的版本。
 
-- [64 位]()
-- [32 位]()（支持 Windows 7 系統）
-
-如果您的系統是 Windows 7，請下載 32 位版本，64 位版本不保證在 Windows 7 系統下正常運行。
+- [64 位](https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.0/BlockCodePlaygrounds-win-x64-1.0.0.zip)
+- [32 位](https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.0/BlockCodePlaygrounds-win-ia32-1.0.0.zip)
 
 ### -- macOS --
+
 開始下載 macOS 版本應用，請根據您的設備選擇適合的版本。
 
-- [Apple Silicon]()
-- [Intel]()
+- [Apple Silicon](https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.0/BlockCodePlaygrounds-macos-arm64-1.0.0.zip)
+- [Intel](https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.0/BlockCodePlaygrounds-macos-x64-1.0.0.zip)
 
 如果您的 Apple 電腦搭載 M1/M2/M3/M4 芯片，請下載 Apple Silicon 版本；其他情況請下載 Intel 版本。
 

@@ -187,7 +187,7 @@ export class ArduinoBle extends EventEmitter {
     await this.sendSerialMessage(req_data);
     const resp = await rr;
     const ret = this.bufferEqual(resp_data, new Uint8Array(resp));
-    //console.log("发送--" + req_data);
+    // console.log("发送--" + req_data);
     // console.log("返回--" + new Uint8Array(resp));
     // console.log("希望-" + resp_data);
     return ret;

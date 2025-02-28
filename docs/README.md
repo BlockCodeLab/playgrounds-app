@@ -25,16 +25,15 @@ Microsoft 的 [MakeCode](https://microsoft.com/makecode) 项目。平台基于�
 
 开始下载 Windows 版本软件，请根据您的设备选择适合的版本。
 
-- [64 位]()
-- [32 位]()（支持 Windows 7 系统）
-
-如果您的系统是 Windows 7，请下载 32 位版本，64 位版本不保证在 Windows 7 系统下正常运行。
+- [64 位](https://alist.wenhaha.cn/d/139/%E4%B8%B4%E6%97%B6%E6%96%87%E4%BB%B6/blockcode/BlockCode-Playgrounds-win32-x64-1.0.0.zip)
+- [32 位](https://alist.wenhaha.cn/d/139/%E4%B8%B4%E6%97%B6%E6%96%87%E4%BB%B6/blockcode/BlockCode-Playgrounds-win32-ia32-1.0.0.zip)
 
 ### -- macOS --
+
 开始下载 macOS 版本应用，请根据您的设备选择适合的版本。
 
-- [Apple Silicon]()
-- [Intel]()
+- [Apple Silicon](https://alist.wenhaha.cn/d/139/%E4%B8%B4%E6%97%B6%E6%96%87%E4%BB%B6/blockcode/BlockCode-Playgrounds-darwin-arm64-1.0.0.zip)
+- [Intel](https://alist.wenhaha.cn/d/139/%E4%B8%B4%E6%97%B6%E6%96%87%E4%BB%B6/blockcode/BlockCode-Playgrounds-darwin-x64-1.0.0.zip)
 
 如果您的 Apple 电脑搭载 M1/M2/M3/M4 芯片，请下载 Apple Silicon 版本；其他情况请下载 Intel 版本。
 

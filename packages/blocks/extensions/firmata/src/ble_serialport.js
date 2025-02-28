@@ -1,5 +1,5 @@
 import { EventEmitter } from 'node:events';
-import fileHex from './FirmataExpress.ino.hex';
+import fileHex from './FirmataTest.hex';
 
 export class BleSerialPort extends EventEmitter {
   constructor(ble) {
@@ -28,7 +28,7 @@ export class BleSerialPort extends EventEmitter {
   }
 
   async write(data, callback) {
-    console.log('send: ' + new Uint8Array(data));
+    console.log(`send: ${data}`);
     await this._ble.sendSerialMessageWithResp(data);
     callback();
   }

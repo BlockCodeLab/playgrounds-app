@@ -27,17 +27,15 @@ efficiency and convenience while offering an enjoyable experience for makers and
 
 Start downloading the Windows version of the software. Please select the version compatible with your device.
 
-- [64-bit]()
-- [32-bit]() (Supports Windows 7)
-
-If your system is Windows 7, please download the 32-bit version. The 64-bit version is not guaranteed to work properly on Windows 7.
+- [64-bit](https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.0/BlockCodePlaygrounds-win-x64-1.0.0.zip)
+- [32-bit](https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.0/BlockCodePlaygrounds-win-ia32-1.0.0.zip) 
 
 ### -- macOS --
 
 Start downloading the macOS version of the application. Please select the version compatible with your device.
 
-- [Apple Silicon]()
-- [Intel]()
+- [Apple Silicon](https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.0/BlockCodePlaygrounds-macos-arm64-1.0.0.zip)
+- [Intel](https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.0/BlockCodePlaygrounds-macos-x64-1.0.0.zip)
 
 If your Apple computer is equipped with an M1/M2/M3/M4 chip, download the Apple Silicon version. For all others, download the Intel version.
 

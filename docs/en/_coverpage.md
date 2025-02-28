@@ -1,4 +1,4 @@
-![](_media/playgrounds.jpg)
+![](_media/playgrounds.png)
 ![](../_media/bar.png ':size=60%')
 
 ### Powerful blocks programming platform, taking you into the future.
