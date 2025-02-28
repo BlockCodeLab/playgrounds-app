@@ -25,15 +25,15 @@ Microsoft 的 [MakeCode](https://microsoft.com/makecode) 项目。平台基于�
 
 开始下载 Windows 版本软件，请根据您的设备选择适合的版本。
 
-- [64 位](https://alist.wenhaha.cn/d/139/%E4%B8%B4%E6%97%B6%E6%96%87%E4%BB%B6/blockcode/BlockCode-Playgrounds-win32-x64-1.0.0.zip)
-- [32 位](https://alist.wenhaha.cn/d/139/%E4%B8%B4%E6%97%B6%E6%96%87%E4%BB%B6/blockcode/BlockCode-Playgrounds-win32-ia32-1.0.0.zip)
+- [64 位](https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.0/BlockCodePlaygrounds-win-x64-1.0.0.zip)
+- [32 位](https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.0/BlockCodePlaygrounds-win-ia32-1.0.0.zip)
 
 ### -- macOS --
 
 开始下载 macOS 版本应用，请根据您的设备选择适合的版本。
 
-- [Apple Silicon](https://alist.wenhaha.cn/d/139/%E4%B8%B4%E6%97%B6%E6%96%87%E4%BB%B6/blockcode/BlockCode-Playgrounds-darwin-arm64-1.0.0.zip)
-- [Intel](https://alist.wenhaha.cn/d/139/%E4%B8%B4%E6%97%B6%E6%96%87%E4%BB%B6/blockcode/BlockCode-Playgrounds-darwin-x64-1.0.0.zip)
+- [Apple Silicon](https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.0/BlockCodePlaygrounds-macos-arm64-1.0.0.zip)
+- [Intel](https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.0/BlockCodePlaygrounds-macos-x64-1.0.0.zip)
 
 如果您的 Apple 电脑搭载 M1/M2/M3/M4 芯片，请下载 Apple Silicon 版本；其他情况请下载 Intel 版本。
 
