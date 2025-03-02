@@ -5,13 +5,10 @@ import './lib/menu';
 
 const isMac = process.platform === 'darwin';
 
-// run this as early in the main process as possible
-if (require('electron-squirrel-startup')) app.quit();
-
 const __dirname = dirname(require.resolve('./main.js'));
 const winConfig = {
   width: 1100,
-  height: 740,
+  height: 760,
   webPreferences: {
     preload: resolve(__dirname, 'preload.js'),
   },

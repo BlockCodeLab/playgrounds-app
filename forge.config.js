@@ -1,6 +1,6 @@
 module.exports = {
   packagerConfig: {
-    name: 'The BlockCode Playgrounds',
+    name: 'BlockCode Playgrounds',
     icon: 'public/icon',
     appCopyright: 'Copyright(c) BlockCode Lab, 2023-2025.',
     asar: true,
