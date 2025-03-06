@@ -10,3 +10,9 @@
 [submodule "packages/gui/editors/esp32"]
 	path = packages/gui/editors/esp32
 	url = https://github.com/BlockCodeLab/gui-esp32.git
+[submodule "packages/gui/editors/arduino"]
+	path = packages/gui/editors/arduino
+	url = https://github.com/BlockCodeLab/gui-arduino.git
+[submodule "packages/gui/editors/microbit"]
+	path = packages/gui/editors/microbit
+	url = https://github.com/BlockCodeLab/gui-microbit.git
