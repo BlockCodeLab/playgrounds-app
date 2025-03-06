@@ -6,8 +6,8 @@
 
 - [docs](docs/): 说明文档
 - [examples/](examples/): 扩展开发案例（模版）
-  - [blocks-extension](examples/blocks-extension/): 图形积木扩展案例
-  - [gui-editor](examples/gui-editor/): 编辑器扩展案例
+  - [blocks-example](examples/blocks-extension/): 图形积木扩展案例
+  - [gui-example](examples/gui-editor/): 编辑器扩展案例
 - [packages/](packages/): 功能子模块，子模块介绍见各自说明文档
   - [blocks/](packages/blocks/): 图形积木编程组件
     - [extensions](packages/blocks/extensions): 图形积木扩展
