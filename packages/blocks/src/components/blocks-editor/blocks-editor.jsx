@@ -89,7 +89,9 @@ const updateScratchBlocksMsgs = (enableMultiTargets) => {
         MONITOR_SHOWNAMEDVALUE: translate('blocks.monitor.showNamedValue', 'show value %1 named %2'),
       },
       enableMultiTargets
-        ? null
+        ? {
+            CONTROL_STOP_OTHER: translate('blocks.control.stopOtherInTarget', 'other scripts in sprite'),
+          }
         : {
             CONTROL_STOP_OTHER: translate('blocks.control.stopOther', 'other scripts'),
           },

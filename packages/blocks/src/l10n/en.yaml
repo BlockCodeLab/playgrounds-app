@@ -51,6 +51,7 @@ blocks.downloadPrompt.firmwareOutdated: The firmware is outdated. Please update 
 
 blocks.events.programStart: when program start
 blocks.control.stopOther: other scripts
+blocks.control.stopOtherInTarget: other scripts in sprite
 blocks.operators.and: "%1 and %2"
 blocks.unsupported: unsupported block
 
