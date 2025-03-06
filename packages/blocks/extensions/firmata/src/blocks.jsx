@@ -46,18 +46,22 @@ export const blocks = [
     text: (
       <Text
         id="blocks.firmata.readDistance"
-        defaultMessage="read Distance [PIN] value"
+        defaultMessage="Read SONAR trig [PIN_T] echo [PIN_E]"
       />
     ),
     inputs: {
-      PIN: {
+      PIN_T: {
         menu: 'digitalPin',
       },
+      PIN_E: {
+        menu: 'digitalPin',
+      }
     },
     output: 'number',
     emu(block) {
-      const pin = block.getFieldValue('PIN') || '0';
-      const code = `runtime.extensions.firmata.getRUS04Distance(${pin})`;
+      const pin_t = block.getFieldValue('PIN_T') || '0';
+      const pin_e = block.getFieldValue('PIN_E') || '0';
+      const code = `runtime.extensions.firmata.getSonarDistance(${pin_t}, ${pin_e})`;
       return [code, this.ORDER_FUNCTION_CALL];
     },
   },
@@ -71,7 +75,7 @@ export const blocks = [
     ),
     inputs: {
       PIN: {
-        menu: 'analogPin',
+        menu: 'digitalPin',
       },
     },
     output: 'number',
@@ -91,7 +95,7 @@ export const blocks = [
     ),
     inputs: {
       PIN: {
-        menu: 'analogPin',
+        menu: 'digitalPin',
       },
     },
     output: 'number',
@@ -153,6 +157,67 @@ export const blocks = [
         code += this.injectId(this.STATEMENT_PREFIX, block);
       }
       code += `runtime.extensions.firmata.writeDigital(${pin}, ${value});\n`;
+      return code;
+    },
+  },
+  {
+    id: 'writeServo',
+    text: (
+      <Text
+        id="blocks.firmata.writeServo"
+        defaultMessage="write servo PIN [PIN] [VALUE] deg"
+      />
+    ),
+    inputs: {
+      PIN: {
+        menu: 'pwmPin',
+      },
+      VALUE: {
+        type: 'number',
+        defaultValue: '90',
+      },
+    },
+    emu(block) {
+      const pin = block.getFieldValue('PIN') || '3';
+      const value = this.quote_(this.valueToCode(block, 'VALUE', this.ORDER_NONE)) || '90';
+      let code = '';
+      if (this.STATEMENT_PREFIX) {
+        code += this.injectId(this.STATEMENT_PREFIX, block);
+      }
+      code += `runtime.extensions.firmata.writeServo(${pin}, ${value});\n`;
+      return code;
+    },
+  },
+  {
+    id: 'playTone',
+    text: (
+      <Text
+        id="blocks.firmata.playTone"
+        defaultMessage="tone pin [PIN] [FREQUENCY] HZ [DURATION] ms"
+      />
+    ),
+    inputs: {
+      PIN: {
+        menu: 'pwmPin',
+      },
+      FREQUENCY: {
+        type: 'number',
+        defaultValue: '100',
+      },
+      DURATION: {
+        type: 'number',
+        defaultValue: '1000',
+      },
+    },
+    emu(block) {
+      const pin = block.getFieldValue('PIN') || '3';
+      const frequency = this.quote_(this.valueToCode(block, 'FREQUENCY', this.ORDER_NONE)) || '100';
+      const duration = this.quote_(this.valueToCode(block, 'DURATION', this.ORDER_NONE)) || '100';
+      let code = '';
+      if (this.STATEMENT_PREFIX) {
+        code += this.injectId(this.STATEMENT_PREFIX, block);
+      }
+      code += `runtime.extensions.firmata.playTone(${pin}, ${frequency}, ${duration});\n`;
       return code;
     },
   },

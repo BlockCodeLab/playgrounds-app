@@ -123,45 +123,77 @@ class ArudinoBleEmulator {
     this.board.digitalWrite(pin, value);
   }
 
-  getRUS04Distance(digitalPin) {
+  getSonarDistance(trigger_pin, echo_pin) {
+    const triggerPin = parseInt(trigger_pin);
+    const echoPin = parseInt(echo_pin);
+    const pinObj = this.board.pins[triggerPin];
+    if (pinObj) {
+      if (pinObj.report && pinObj.report === 1) {
+        return pinObj.value;
+      } else {
+        console.log('-------new report digital --------');
+        this.board.reportSonarData(triggerPin, echoPin);
+        return false;
+      }
+    }
+  }
+
+  getDHTTemp(digitalPin) {
     const pin = parseInt(digitalPin);
-    return new Promise((resolve, reject) => {
-      this.board.getRUS04(pin, (e) => {
-        console.log('-----aaa---', e);
-        this.lastRus04 = e;
-        resolve(e);
-      });
-      setTimeout(() => {
-        resolve(this.lastRus04);
-      }, 1000);
-    });
+    const pinObj = this.board.pins[pin];
+    if (pinObj) {
+      if (pinObj.report && pinObj.report === 1) {
+        return pinObj.value[1];
+      } else {
+        console.log('-------new report digital --------');
+        this.board.reportDHTData(pin);
+        return false;
+      }
+    }
   }
 
-  getDHTTemp(analogPin) {
-    const pin = parseInt(analogPin);
-    return new Promise((resolve, reject) => {
-      this.board.getDHTTemp(this.board.analogPins[pin], (e) => {
-        console.log('-----aaa---', e);
-        this.lastDHTTemp = e;
-        resolve(e);
-      });
-      setTimeout(() => {
-        resolve(this.lastDHTTemp);
-      }, 2000);
-    });
+  getDHTHum(digitalPin) {
+    const pin = parseInt(digitalPin);
+    const pinObj = this.board.pins[pin];
+    if (pinObj) {
+      if (pinObj.report && pinObj.report === 1) {
+        return pinObj.value[0];
+      } else {
+        console.log('-------new report digital --------');
+        this.board.reportDHTData(pin);
+        return false;
+      }
+    }
   }
 
-  getDHTHum(analogPin) {
-    const pin = parseInt(analogPin);
-    return new Promise((resolve, reject) => {
-      this.board.getDHTHum(this.board.analogPins[pin], (e) => {
-        console.log('-----aaa---', e);
-        this.lastDHTTemp = e;
-        resolve(e);
-      });
-      setTimeout(() => {
-        resolve(this.lastDHTTemp);
-      }, 2000);
+  playTone(pwmPin, frequency, duration) {
+    const pin = parseInt(pwmPin);
+    const _frequency = parseInt(frequency);
+    const _duration = parseInt(duration);
+    const pinv = this.board.pins[pin];
+    if (pinv && pinv.mode && pinv.mode != this.board.MODES.TONE) {
+      this.board.pinMode(pin, this.board.MODES.TONE);
+    }
+    this.board.play_tone(pin, _frequency, _duration);
+  }
+
+  writeServo(pwmPin, degree) {
+    const pin = parseInt(pwmPin);
+    const _degree = parseInt(degree);
+
+    const pinv = this.board.pins[pin];
+    if (pinv && pinv.mode && pinv.mode != this.board.MODES.SERVO) {
+      this.board.servoConfig(pin, 544, 2400);
+    }
+    this.board.servoWrite(pin, _degree);
+  }
+
+  reset() {
+    this.board.reset();
+    this.board.pins.forEach((p) => {
+      if (p && p.report && p.report === 1) {
+        p.report = 0;
+      }
     });
   }
 }
@@ -174,6 +206,10 @@ export function emulator(runtime, Konva) {
 
   runtime.on('disconnect', () => {
     arudinoBleEmulator.disconnect();
+  });
+  runtime.on('stop', () => {
+    console.log('stop');
+    arudinoBleEmulator.reset();
   });
 
   return arudinoBleEmulator;

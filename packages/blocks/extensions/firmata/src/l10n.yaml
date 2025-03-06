@@ -4,11 +4,13 @@ en:
   blocks.firmata.completed: Updating firmware completed.
   blocks.firmata.readAnalog: read analog [PIN] value
   blocks.firmata.readDigital: read digital [PIN] value
-  blocks.firmata.readDistance: read Distance [PIN] value
+  blocks.firmata.readDistance: Read SONAR trig [PIN_T] echo [PIN_E]
   blocks.firmata.readTemp: read temperature [PIN] value
   blocks.firmata.readHum: read humidity [PIN] value
   blocks.firmata.setPWM: set PWM [PIN] value [VALUE]
   blocks.firmata.setDigital: set digital [PIN] value [VALUE]
+  blocks.firmata.writeServo: write servo PIN [PIN] [VALUE] deg
+  blocks.firmata.playTone: tone pin [PIN] [FREQUENCY] HZ [DURATION] ms
   blocks.firmata.high: high
   blocks.firmata.low: low
 
@@ -18,11 +20,13 @@ zh-Hans:
   blocks.firmata.completed: 更新固件完成。
   blocks.firmata.readAnalog: 读取模拟口 [PIN] 值
   blocks.firmata.readDigital: 读取数字口 [PIN] 值
-  blocks.firmata.readDistance: 距离传感器 [PIN] 检测到的距离
+  blocks.firmata.readDistance: 读取超声波距离 trig [PIN_T] echo[PIN_E]
   blocks.firmata.readTemp: 读取温度传感器 [PIN] 的温度值
   blocks.firmata.readHum: 读取湿度传感器 [PIN] 的湿度值
   blocks.firmata.setPWM: 设置PWM接口 [PIN] 值为 [VALUE]
   blocks.firmata.setDigital: 设置数字接口 [PIN] 电平状态为 [VALUE]
+  blocks.firmata.writeServo: 设置舵机引脚 [PIN] 为 [VALUE] 度
+  blocks.firmata.playTone: 设置蜂鸣器引脚 [PIN] 频率为 [FREQUENCY] HZ 时间为 [DURATION] ms
   blocks.firmata.high: 高
   blocks.firmata.low: 低
 
@@ -32,10 +36,12 @@ zh-Hant:
   blocks.firmata.completed: 更新固件完成。
   blocks.firmata.readAnalog: 读取模拟口 [PIN] 值
   blocks.firmata.readDigital: 读取数字口 [PIN] 值
-  blocks.firmata.readDistance: 距离传感器 [PIN] 检测到的距离
+  blocks.firmata.readDistance: 读取超声波距离 trig [PIN_T] echo[PIN_E]
   blocks.firmata.readTemp: 读取温度传感器 [PIN] 的温度值
   blocks.firmata.readHum: 读取湿度传感器 [PIN] 的湿度值
   blocks.firmata.setPWM: 设置PWM接口 [PIN] 值为 [VALUE]
   blocks.firmata.setDigital: 设置数字接口 [PIN] 电平状态为 [VALUE]
+  blocks.firmata.writeServo: 设置舵机引脚 [PIN] 为 [VALUE] 度
+  blocks.firmata.playTone: 设置蜂鸣器引脚 [PIN] 频率为 [FREQUENCY] HZ 时间为 [DURATION] ms
   blocks.firmata.high: 高
   blocks.firmata.low: 低

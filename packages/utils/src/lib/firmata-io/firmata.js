@@ -54,6 +54,20 @@ const RUS04 = 0x51;
 const DHT_TEMP = 0x52;
 const DHT_HUM = 0x53;
 
+const KEEP_ALIVE = 0x50; //keep alive message
+const RU_THERE = 0x51; // Poll Request For Boards Presence
+const I_AM_HERE = 0x52; // Response to RU_THERE
+const TONE_DATA = 0x5F; // request to play a tone
+const SERIAL_DATA = 0x60; // communicate with serial devices, including other boards
+const ENCODER_DATA = 0x61; // reply with encoders current positions
+const SONAR_CONFIG = 0x62; // sonar configuration request
+const SONAR_DATA = 0x63; // sonar data reply
+const DHT_CONFIG = 0x64;
+const DHT_DATA = 0x65;
+
+const TONE_TONE = 0  // play a tone
+const TONE_NO_TONE = 1  // turn off tone
+
 const SERVO_CONFIG = 0x70;
 const SERIAL_MESSAGE = 0x60;
 const SERIAL_CONFIG = 0x10;
@@ -425,19 +439,36 @@ const SYSEX_RESPONSE = {
     }
   },
 
-  [RUS04](board){
-    console.log(board.buffer)
-    board.emit('get-rus04', board.buffer[2]);
-  },
+  // [RUS04](board){
+  //   console.log(board.buffer)
+  //   board.emit('get-rus04', board.buffer[2]);
+  // },
 
-  [DHT_TEMP](board){
-    console.log(board.buffer)
-    board.emit('get-dht-temp', board.buffer[2]);
-  },
-  [DHT_HUM](board){
-    console.log(board.buffer)
-    board.emit('get-dht-hum', board.buffer[2]);
-  },
+  // [DHT_TEMP](board){
+  //   console.log(board.buffer)
+  //   board.emit('get-dht-temp', board.buffer[2]);
+  // },
+  // [DHT_HUM](board){
+  //   console.log(board.buffer)
+  //   board.emit('get-dht-hum', board.buffer[2]);
+  // },
+    [SONAR_DATA](board){
+        const pin = data.buffer[1]
+        const value = (board.buffer[2] & 0x7f) | ((board.buffer[3] & 0x7f) << 7);
+        board.pins[pin].value = value;
+    },
+    [DHT_DATA](board){
+      /**
+       * Process the dht response message.
+        :param: data: [pin, dht_type, validation_flag,
+        humidity_positivity_flag, temperature_positivity_flag, humidity, temperature]
+       */
+      const pin = board.buffer[1];
+      const humidity = board.buffer[6];
+      const temperature = board.buffer[7];
+      const value = [humidity, temperature];
+      board.pins[pin].value = value;
+    },
 };
 
 /**
@@ -504,6 +535,10 @@ class Firmata extends EventEmitter {
       IGNORE: 0x7f,
       PING_READ: 0x75,
       UNKOWN: 0x10,
+      SONAR: 0x0c,  //Any pin in SONAR mode
+      TONE: 0x0d,  //Any pin in tone mode
+      PIXY: 0x0e,  // reserved for pixy camera mode
+      DHT: 0x0f,  // DHT sensor
     };
 
     this.I2C_MODES = {
@@ -1032,35 +1067,35 @@ class Firmata extends EventEmitter {
   }
 
 
-  getRUS04(pin, callback){
-    this.once("get-rus04", callback);
-    writeToTransport(this, [
-      START_SYSEX,
-      RUS04,
-      pin,
-      END_SYSEX
-    ]); 
-  } 
+  // getRUS04(pin, callback){
+  //   this.once("get-rus04", callback);
+  //   writeToTransport(this, [
+  //     START_SYSEX,
+  //     RUS04,
+  //     pin,
+  //     END_SYSEX
+  //   ]);
+  // }
 
-  getDHTTemp(pin, callback){
-    this.once("get-dht-temp", callback);
-    writeToTransport(this, [
-      START_SYSEX,
-      DHT_TEMP,
-      pin,
-      END_SYSEX
-    ]); 
-  }
+  // getDHTTemp(pin, callback){
+  //   this.once("get-dht-temp", callback);
+  //   writeToTransport(this, [
+  //     START_SYSEX,
+  //     DHT_TEMP,
+  //     pin,
+  //     END_SYSEX
+  //   ]);
+  // }
 
-  getDHTHum(pin, callback){
-    this.once("get-dht-hum", callback);
-    writeToTransport(this, [
-      START_SYSEX,
-      DHT_HUM,
-      pin,
-      END_SYSEX
-    ]); 
-  }
+  // getDHTHum(pin, callback){
+  //   this.once("get-dht-hum", callback);
+  //   writeToTransport(this, [
+  //     START_SYSEX,
+  //     DHT_HUM,
+  //     pin,
+  //     END_SYSEX
+  //   ]);
+  // }
 
   /**
    * Asks the arduino to tell us the current state of a pin
@@ -1668,6 +1703,81 @@ class Firmata extends EventEmitter {
       this.pins[pin].report = value;
       writeToTransport(this, [REPORT_DIGITAL | port, value]);
     }
+  }
+
+  reportSonarData(trigger_pin, echo_pin, timeout=80000){
+    timeout_lsb = timeout & 0x7f
+    timeout_msb = (timeout >> 7) & 0x7f
+    this.pinMode(trigger_pin, this.PIN_MODE.SONAR);
+    this.pinMode(echo_pin, this.PIN_MODE.SONAR);
+    data = [START_SYSEX, SONAR_CONFIG, trigger_pin, echo_pin, timeout_lsb, timeout_msb, END_SYSEX];
+    this.pins[pin].report = 1;
+    writeToTransport(this, data);
+
+  }
+
+  reportDHTData(pin, sensor_type=11){
+    /**
+     *
+        :param pin_number: digital pin number on arduino.
+        :param sensor_type: type of dht sensor
+                            Valid values = DHT11, DHT22,
+        [pin_type, pin_number, DHT type, validation flag, humidity value, temperature
+        raw_time_stamp]
+        The pin_type for DHT input pins = 15
+        Validation Flag Values:
+            No Errors = 0
+            Checksum Error = 1
+            Timeout Error = 2
+            Invalid Value = 999
+     */
+        this.pins[pin].report = 1;
+        this.pins[pin].value = [0, 0];
+        const data = [START_SYSEX, DHT_CONFIG, pin, sensor_type, END_SYSEX];
+        writeToTransport(this, data);
+
+  }
+
+  play_tone(pin, frequency, duration){
+    this._play_tone(pin, TONE_TONE, frequency, duration);
+
+  }
+
+  play_tone_continue(pin, frequency){
+    this._play_tone(pin, TONE_TONE, frequency, null);
+  }
+
+  play_tone_off(pin){
+    this._play_tone(pin, TONE_NO_TONE, null, null);
+  }
+
+  _play_tone(pin, tone_command, frequency, duration){
+    /**
+     *  This method will call the Tone library for the selected pin.
+        It requires FirmataPlus to be loaded onto the arduino
+        If the tone command is set to TONE_TONE, then the specified
+        tone will be played.
+        Else, if the tone command is TONE_NO_TONE, then any currently
+        playing tone will be disabled.
+        :param pin: arduino pin number
+        :param tone_command: Either TONE_TONE, or TONE_NO_TONE
+        :param frequency: Frequency of tone
+        :param duration: Duration of tone in milliseconds
+     */
+    let data = [];
+    if (tone_command == TONE_TONE){
+        if(duration){
+          data = [START_SYSEX, TONE_DATA, tone_command, pin, frequency & 0x7f,
+            (frequency >> 7) & 0x7f,
+            duration & 0x7f, (duration >> 7) & 0x7f, END_SYSEX];
+        }else{
+          data = [START_SYSEX, TONE_DATA, tone_command, pin,
+            frequency & 0x7f, (frequency >> 7) & 0x7f, 0, 0, END_SYSEX];
+        }
+    }else{
+      data = [START_SYSEX, tone_command, pin, END_SYSEX];
+    }
+    writeToTransport(this, data);
   }
 
   /**
