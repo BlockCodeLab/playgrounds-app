@@ -4,7 +4,7 @@ import { classNames } from '@blockcode/utils';
 import { maybeTranslate, Text, BufferedInput, Button, Modal } from '@blockcode/core';
 import styles from './prompt-modal.module.css';
 
-export function InputsPromptModal({ title, inputItems, children, onClose, onSubmit }) {
+export function InputsPromptModal({ title, inputItems, content, onClose, onSubmit }) {
   const data = useSignal(Object.fromEntries(inputItems.map(({ name, defaultValue }) => [name, defaultValue])));
 
   const handleKeyDown = useCallback(
@@ -40,9 +40,7 @@ export function InputsPromptModal({ title, inputItems, children, onClose, onSubm
   return (
     <Modal
       title={title}
-      className={classNames(styles.promptModal, {
-        [styles.auto]: children,
-      })}
+      className={styles.promptModal}
       onClose={onClose}
     >
       <div className={styles.promptContent}>
@@ -60,7 +58,12 @@ export function InputsPromptModal({ title, inputItems, children, onClose, onSubm
           </>
         ))}
 
-        <div className={styles.content}>{children}</div>
+        {content && (
+          <div
+            className={styles.content}
+            dangerouslySetInnerHTML={{ __html: maybeTranslate(content) }}
+          />
+        )}
 
         <div className={styles.buttonRow}>
           <Button
