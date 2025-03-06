@@ -1,6 +1,6 @@
-import { MPYGenerator } from './generator';
+import { PythonGenerator } from './generator';
 
-const proto = MPYGenerator.prototype;
+const proto = PythonGenerator.prototype;
 
 proto['text'] = function (block) {
   const code = this.quote_(block.getFieldValue('TEXT'));

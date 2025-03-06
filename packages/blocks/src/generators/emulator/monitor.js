@@ -1,6 +1,6 @@
-import { EMUGenerator } from './generator';
+import { EmulatorGenerator } from './generator';
 
-const proto = EMUGenerator.prototype;
+const proto = EmulatorGenerator.prototype;
 
 const getMonitor = (input) => {
   if (input.connection) {
@@ -14,19 +14,6 @@ const getMonitor = (input) => {
       };
     }
   }
-};
-
-proto['monitor_debug'] = function (block) {
-  let code = '';
-  if (this.STATEMENT_PREFIX) {
-    code += this.injectId(this.STATEMENT_PREFIX, block);
-  }
-
-  if (DEBUG) {
-    const valueCode = this.valueToCode(block, 'VALUE', this.ORDER_NONE) || `'debug'`;
-    code += `console.log(${valueCode.replace(/^[\"\']/, '').replace(/[\"\']$/, '')})\n`;
-  }
-  return code;
 };
 
 proto['monitor_showvalue'] = function (block) {

@@ -39,23 +39,14 @@ const events = () => `
       </shadow>
     </value>
   </block>
-  ${blockSeparator}
-  <block type="event_whenbroadcastreceived" />
-  <block type="event_broadcast">
-    <value name="BROADCAST_INPUT">
-      <shadow type="event_broadcast_menu"></shadow>
-    </value>
-  </block>
-  <block type="event_broadcastandwait">
-    <value name="BROADCAST_INPUT">
-      <shadow type="event_broadcast_menu"></shadow>
-    </value>
-  </block>
   ${categorySeparator}
   </category>
 `;
 
-const control = () => `
+// enableCloneBlocks = null 不允许克隆
+// enableCloneBlocks = true 允许克隆并可控制克隆体
+// enableCloneBlocks = false 仅允许克隆但不允许控制克隆体
+const control = (enableCloneBlocks) => `
   <category name="%{BKY_CATEGORY_CONTROL}" id="control" ${controlTheme}>
     <block type="control_wait">
       <value name="DURATION">
@@ -72,28 +63,51 @@ const control = () => `
         </shadow>
       </value>
     </block>
-    <block id="forever" type="control_forever"/>
+    <block type="control_forever"/>
     ${blockSeparator}
     <block type="control_if"/>
     <block type="control_if_else"/>
-    <block id="wait_until" type="control_wait_until"/>
-    <block id="repeat_until" type="control_repeat_until"/>
+    <block type="control_wait_until"/>
+    <block type="control_repeat_until"/>
     <block type="control_while"/>
     ${blockSeparator}
     <block type="control_stop"/>
+    ${
+      enableCloneBlocks != null
+        ? enableCloneBlocks
+          ? `
+            ${blockSeparator}
+            <block type="control_start_as_clone"/>
+            <block type="control_create_clone_of">
+              <value name="CLONE_OPTION">
+                <shadow type="control_create_clone_of_menu"/>
+              </value>
+            </block>
+            <block type="control_delete_this_clone"/>
+            `
+          : `
+            ${blockSeparator}
+            <block type="control_create_clone_of">
+              <value name="CLONE_OPTION">
+                <shadow type="control_create_clone_of_menu"/>
+              </value>
+            </block>
+            `
+        : ''
+    }
     ${categorySeparator}
   </category>
 `;
 
 const sensing = () => `
   <category name="%{BKY_CATEGORY_SENSING}" id="sensing" ${sensingTheme}>
-    <block id="timer" type="sensing_timer"/>
+    <block type="sensing_timer"/>
     <block type="sensing_resettimer"/>
     ${categorySeparator}
   </category>
 `;
 
-const operators = () => `
+const operators = (enableStringBlocks) => `
   <category name="%{BKY_CATEGORY_OPERATORS}" id="operators" ${operatorsTheme}>
     <block type="operator_add">
       <value name="NUM1">
@@ -159,49 +173,49 @@ const operators = () => `
     ${blockSeparator}
     <block type="operator_gt">
       <value name="OPERAND1">
-        <shadow type="text">
-          <field name="TEXT"/>
+        <shadow type="math_number">
+          <field name="NUM"/>
         </shadow>
       </value>
       <value name="OPERAND2">
-        <shadow type="text">
-          <field name="TEXT">50</field>
+        <shadow type="math_number">
+          <field name="NUM">50</field>
         </shadow>
       </value>
     </block>
     <block type="operator_lt">
       <value name="OPERAND1">
-        <shadow type="text">
-          <field name="TEXT"/>
+        <shadow type="math_number">
+          <field name="NUM"/>
         </shadow>
       </value>
       <value name="OPERAND2">
-        <shadow type="text">
-          <field name="TEXT">50</field>
+        <shadow type="math_number">
+          <field name="NUM">50</field>
         </shadow>
       </value>
     </block>
     <block type="operator_gte">
       <value name="OPERAND1">
-        <shadow type="text">
-          <field name="TEXT"/>
+        <shadow type="math_number">
+          <field name="NUM"/>
         </shadow>
       </value>
       <value name="OPERAND2">
-        <shadow type="text">
-          <field name="TEXT">50</field>
+        <shadow type="math_number">
+          <field name="NUM">50</field>
         </shadow>
       </value>
     </block>
     <block type="operator_lte">
       <value name="OPERAND1">
-        <shadow type="text">
-          <field name="TEXT"/>
+        <shadow type="math_number">
+          <field name="NUM"/>
         </shadow>
       </value>
       <value name="OPERAND2">
-        <shadow type="text">
-          <field name="TEXT">50</field>
+        <shadow type="math_number">
+          <field name="NUM">50</field>
         </shadow>
       </value>
     </block>
@@ -221,50 +235,56 @@ const operators = () => `
     <block type="operator_and"/>
     <block type="operator_or"/>
     <block type="operator_not"/>
-    ${blockSeparator}
-    <block type="operator_join">
-      <value name="STRING1">
-        <shadow type="text">
-          <field name="TEXT">${ScratchBlocks.Msg.OPERATORS_JOIN_APPLE}</field>
-        </shadow>
-      </value>
-      <value name="STRING2">
-        <shadow type="text">
-          <field name="TEXT">${ScratchBlocks.Msg.OPERATORS_JOIN_BANANA}</field>
-        </shadow>
-      </value>
-    </block>
-    <block type="operator_letter_of">
-      <value name="LETTER">
-        <shadow type="math_whole_number">
-          <field name="NUM">1</field>
-        </shadow>
-      </value>
-      <value name="STRING">
-      <shadow type="text">
-          <field name="TEXT">${ScratchBlocks.Msg.OPERATORS_JOIN_APPLE}</field>
-      </shadow>
-      </value>
-    </block>
-    <block type="operator_length">
-      <value name="STRING">
-        <shadow type="text">
-          <field name="TEXT">${ScratchBlocks.Msg.OPERATORS_JOIN_APPLE}</field>
-        </shadow>
-      </value>
-    </block>
-    <block id="operator_contains" type="operator_contains">
-      <value name="STRING1">
-        <shadow type="text">
-          <field name="TEXT">${ScratchBlocks.Msg.OPERATORS_JOIN_APPLE}</field>
-        </shadow>
-      </value>
-      <value name="STRING2">
-        <shadow type="text">
-          <field name="TEXT">${ScratchBlocks.Msg.OPERATORS_LETTEROF_APPLE}</field>
-        </shadow>
-      </value>
-    </block>
+    ${
+      enableStringBlocks
+        ? `
+          ${blockSeparator}
+          <block type="operator_join">
+            <value name="STRING1">
+              <shadow type="text">
+                <field name="TEXT">${ScratchBlocks.Msg.OPERATORS_JOIN_APPLE}</field>
+              </shadow>
+            </value>
+            <value name="STRING2">
+              <shadow type="text">
+                <field name="TEXT">${ScratchBlocks.Msg.OPERATORS_JOIN_BANANA}</field>
+              </shadow>
+            </value>
+          </block>
+          <block type="operator_letter_of">
+            <value name="LETTER">
+              <shadow type="math_whole_number">
+                <field name="NUM">1</field>
+              </shadow>
+            </value>
+            <value name="STRING">
+            <shadow type="text">
+                <field name="TEXT">${ScratchBlocks.Msg.OPERATORS_JOIN_APPLE}</field>
+            </shadow>
+            </value>
+          </block>
+          <block type="operator_length">
+            <value name="STRING">
+              <shadow type="text">
+                <field name="TEXT">${ScratchBlocks.Msg.OPERATORS_JOIN_APPLE}</field>
+              </shadow>
+            </value>
+          </block>
+          <block type="operator_contains">
+            <value name="STRING1">
+              <shadow type="text">
+                <field name="TEXT">${ScratchBlocks.Msg.OPERATORS_JOIN_APPLE}</field>
+              </shadow>
+            </value>
+            <value name="STRING2">
+              <shadow type="text">
+                <field name="TEXT">${ScratchBlocks.Msg.OPERATORS_LETTEROF_APPLE}</field>
+              </shadow>
+            </value>
+          </block>
+          `
+        : ''
+    }
     ${blockSeparator}
     <block type="operator_mod">
       <value name="NUM1">
@@ -307,34 +327,37 @@ const myBlocks = () => `
   </category>
 `;
 
-const monitor = () => `
-  <category name="${ScratchBlocks.Msg.CATEGORY_MONITOR}" id="monitor" ${monitorTheme}>
-    ${
-      DEBUG
-        ? `
-          <block type="monitor_debug">
-            <value name="VALUE">
-              <shadow type="text">
-                <field name="TEXT">debug</field>
-              </shadow>
-            </value>
-          </block>
-          ${blockSeparator}`
-        : ''
-    }
-    <block type="monitor_showvalue"/>
-    <block type="monitor_shownamedvalue">
-      <value name="LABEL">
-        <shadow type="text">
-          <field name="TEXT"></field>
-        </shadow>
-      </value>
-    </block>
-    ${categorySeparator}
-  </category>
-`;
+const monitor = (disableMonitor) =>
+  disableMonitor
+    ? ''
+    : `
+      <category name="${ScratchBlocks.Msg.CATEGORY_MONITOR}" id="monitor" ${monitorTheme}>
+        ${
+          DEBUG
+            ? `
+              <block type="monitor_debug">
+                <value name="VALUE">
+                  <shadow type="text">
+                    <field name="TEXT">debug</field>
+                  </shadow>
+                </value>
+              </block>
+              ${blockSeparator}`
+            : ''
+        }
+        <block type="monitor_showvalue"/>
+        <block type="monitor_shownamedvalue">
+          <value name="LABEL">
+            <shadow type="text">
+              <field name="TEXT"></field>
+            </shadow>
+          </value>
+        </block>
+        ${categorySeparator}
+      </category>
+    `;
 
-export function makeToolboxXML(categoriesXML = []) {
+export function makeToolboxXML(categoriesXML = [], options = {}) {
   const moveCategory = (categoryId) => {
     const index = categoriesXML.findIndex((categoryInfo) => categoryInfo.id === categoryId);
     if (index >= 0) {
@@ -344,32 +367,26 @@ export function makeToolboxXML(categoriesXML = []) {
     }
     // return `undefined`
   };
-  const motionXML = moveCategory('motion') ?? '';
-  const looksXML = moveCategory('looks') ?? '';
-  const soundXML = moveCategory('sound') ?? '';
-  const eventsXML = moveCategory('events') ?? events();
-  const controlXML = moveCategory('control') ?? control();
-  const sensingXML = moveCategory('sensing') ?? sensing();
-  const operatorsXML = moveCategory('operators') ?? operators();
-  const variablesXML = moveCategory('data') ?? variables();
-  const myBlocksXML = moveCategory('procedures') ?? myBlocks();
-  const monitorXML = moveCategory('monitor') ?? monitor();
+  const eventsXML = moveCategory('event') || events();
+  const controlXML = moveCategory('control') || control(options.enableCloneBlocks);
+  const sensingXML = moveCategory('sensing') || sensing();
+  const operatorsXML = moveCategory('operators') || operators(options.enableStringBlocks);
+  const variablesXML = variables();
+  const myBlocksXML = myBlocks();
+  const monitorXML = monitor(options.disableMonitor);
 
-  const everything = [
-    motionXML,
-    looksXML,
-    soundXML,
-    eventsXML,
-    controlXML,
-    sensingXML,
-    operatorsXML,
-    variablesXML,
-    monitorXML,
-    myBlocksXML,
-  ];
+  const everything = [eventsXML, controlXML, sensingXML, operatorsXML, variablesXML, monitorXML, myBlocksXML];
+
+  categoriesXML.sort((a, b) => (a.order ?? Infinity) - (b.order ?? Infinity));
 
   for (const extensionCategory of categoriesXML) {
-    everything.push(extensionCategory.xml);
+    if (extensionCategory.xml) {
+      if (Number.isInteger(extensionCategory.order)) {
+        everything.splice(extensionCategory.order, 0, extensionCategory.xml);
+      } else {
+        everything.push(extensionCategory.xml);
+      }
+    }
   }
   return everything.join(`\n`);
 }

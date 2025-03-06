@@ -33,6 +33,6 @@ export { JavaScriptGenerator } from './generators/javascript';
 
 export { PythonGenerator } from './generators/python';
 
-export { MPYGenerator } from './generators/mpy';
+export { MicroPythonGenerator } from './generators/micropython';
 
-export { EMUGenerator } from './generators/emu';
+export { EmulatorGenerator } from './generators/emulator';

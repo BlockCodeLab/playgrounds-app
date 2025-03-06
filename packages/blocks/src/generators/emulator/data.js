@@ -1,6 +1,6 @@
-import { EMUGenerator } from './generator';
+import { EmulatorGenerator } from './generator';
 
-const proto = EMUGenerator.prototype;
+const proto = EmulatorGenerator.prototype;
 
 proto['data_variable'] = function (block) {
   const varName = this.getVariableName(block.getFieldValue('VARIABLE'));
@@ -12,10 +12,8 @@ proto['data_setvariableto'] = function (block) {
   if (this.STATEMENT_PREFIX) {
     code += this.injectId(this.STATEMENT_PREFIX, block);
   }
-
   const varName = this.getVariableName(block.getFieldValue('VARIABLE'));
   const valueCode = this.valueToCode(block, 'VALUE', this.ORDER_NONE) || '""';
-
   code += `${varName} = ${valueCode};\n`;
   return code;
 };
@@ -25,10 +23,8 @@ proto['data_changevariableby'] = function (block) {
   if (this.STATEMENT_PREFIX) {
     code += this.injectId(this.STATEMENT_PREFIX, block);
   }
-
   const varName = this.getVariableName(block.getFieldValue('VARIABLE'));
   const valueCode = this.valueToCode(block, 'VALUE', this.ORDER_NONE) || '0';
-
   code += `${varName} = runtime.number(${varName}) + runtime.number(${valueCode});\n`;
   return code;
 };
@@ -43,10 +39,8 @@ proto['data_addtolist'] = function (block) {
   if (this.STATEMENT_PREFIX) {
     code += this.injectId(this.STATEMENT_PREFIX, block);
   }
-
   const varName = `${this.getVariableName(block.getFieldValue('LIST'))}_ls`;
   const itemCode = this.valueToCode(block, 'ITEM', this.ORDER_NONE) || '""';
-
   code += `${varName}.push(${itemCode});\n`;
   return code;
 };
@@ -56,10 +50,8 @@ proto['data_deleteoflist'] = function (block) {
   if (this.STATEMENT_PREFIX) {
     code += this.injectId(this.STATEMENT_PREFIX, block);
   }
-
   const varName = `${this.getVariableName(block.getFieldValue('LIST'))}_ls`;
   const indexCode = this.getAdjusted(block, 'INDEX');
-
   code += `${varName}.splice(${indexCode}, 1);\n`;
   return code;
 };
@@ -80,11 +72,9 @@ proto['data_insertatlist'] = function (block) {
   if (this.STATEMENT_PREFIX) {
     code += this.injectId(this.STATEMENT_PREFIX, block);
   }
-
   const varName = `${this.getVariableName(block.getFieldValue('LIST'))}_ls`;
   const indexCode = this.getAdjusted(block, 'INDEX');
   const itemCode = this.valueToCode(block, 'ITEM', this.ORDER_NONE) || '""';
-
   code += `${varName}.splice(${indexCode}, 0, ${itemCode});\n`;
   return code;
 };
@@ -94,11 +84,9 @@ proto['data_replaceitemoflist'] = function (block) {
   if (this.STATEMENT_PREFIX) {
     code += this.injectId(this.STATEMENT_PREFIX, block);
   }
-
   const varName = `${this.getVariableName(block.getFieldValue('LIST'))}_ls`;
   const indexCode = this.getAdjusted(block, 'INDEX');
   const itemCode = this.valueToCode(block, 'ITEM', this.ORDER_NONE) || '""';
-
   code += `${varName}.splice(${indexCode}, 1, ${itemCode});\n`;
   return code;
 };

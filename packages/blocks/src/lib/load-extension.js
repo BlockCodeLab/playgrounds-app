@@ -13,6 +13,7 @@ const INPUT_COLOR = themeColors.blocks.secondary;
 const OTHER_COLOR = themeColors.blocks.tertiary;
 
 const ShadowTypes = {
+  broadcast: 'event_broadcast_menu',
   number: 'math_number',
   angle: 'math_angle',
   text: 'text',
@@ -23,6 +24,7 @@ const ShadowTypes = {
 };
 
 const FieldTypes = {
+  broadcast: 'BROADCAST_INPUT',
   number: 'NUM',
   angle: 'NUM',
   text: 'TEXT',
@@ -31,9 +33,10 @@ const FieldTypes = {
   note: 'NOTE',
 };
 
-export function loadExtension(generator, emulator, extObj, translator, blockFilter) {
+export function loadExtension(extObj, options) {
   const extId = extObj.id;
-  const extName = maybeTranslate(extObj.name, translator);
+  const extName = maybeTranslate(extObj.name);
+  const { generator, emulator, onBlockFilter } = options;
 
   // 扩展模拟器
   if (emulator && extObj.emulator && Runtime.currentRuntime) {
@@ -61,13 +64,13 @@ export function loadExtension(generator, emulator, extObj, translator, blockFilt
           return Reflect.get(target, prop, target);
         },
       });
-      const extEmu = extObj.emulator(runtime, Konva, translator);
+      const extEmu = extObj.emulator(runtime, Konva);
       Runtime.currentRuntime._extensions.set(extId, extEmu);
     }
   }
 
-  let categoryXML = `<category name="${xmlEscape(extName)}" id="${xmlEscape(extId)}"`;
-  categoryXML += ` colour="${xmlEscape(extObj.themeColors || THEME_COLOR)}"`;
+  let categoryXML = `<category id="${xmlEscape(extId)}" name="${xmlEscape(extName)}"`;
+  categoryXML += ` colour="${xmlEscape(extObj.themeColor || THEME_COLOR)}"`;
   categoryXML += ` secondaryColour="${xmlEscape(extObj.inputColor || INPUT_COLOR)}"`;
   if (extObj.statusButton) {
     categoryXML += ` showStatusButton="true"`;
@@ -78,18 +81,22 @@ export function loadExtension(generator, emulator, extObj, translator, blockFilt
   categoryXML += `>`;
 
   extObj.menus = extObj.menus || {};
-  extObj.blocks
-    .filter((block) => !block.hidden)
-    .forEach((block) => {
+
+  categoryXML += extObj.blocks
+    .filter((block, index) => {
       if (block === '---') {
-        categoryXML += `${blockSeparator}`;
-        return;
+        return index < extObj.blocks.length - 1;
+      }
+      return !block.hidden;
+    })
+    .reduce((blocksXML, block) => {
+      if (block === '---') {
+        if (!blocksXML.length) return blocksXML;
+        return blocksXML + blockSeparator;
       }
 
+      // 按钮
       if (block.button) {
-        categoryXML += `<button text="${maybeTranslate(block.text, translator)}" callbackKey="${
-          block.button
-        }"></button>`;
         const workspace = ScratchBlocks.getMainWorkspace();
         if (workspace) {
           const flyout = workspace.getFlyout();
@@ -100,168 +107,220 @@ export function loadExtension(generator, emulator, extObj, translator, blockFilt
             }
           }
         }
-        return;
+        return blocksXML + `<button text="${maybeTranslate(block.text)}" callbackKey="${block.button}"></button>`;
       }
-
-      // 运行积木过滤器
-      if (blockFilter && !blockFilter(block)) return;
 
       const blockId = `${extId}_${block.id}`;
-      const blockJson = {
-        message0: maybeTranslate(block.text, translator),
-        category: extId,
-        outputShape: OUTPUT_SHAPE_SQUARE,
-        colour: extObj.themeColors || THEME_COLOR,
-        colourSecondary: extObj.inputColor || INPUT_COLOR,
-        colourTertiary: extObj.otherColor || OTHER_COLOR,
-      };
+      let blockXML = '';
 
-      let argsIndexStart = 1;
-      if (extObj.icon) {
-        blockJson.message0 = `%1 %2 ${blockJson.message0}`;
-        blockJson.args0 = [
-          {
-            type: 'field_image',
-            src: extObj.icon,
-            width: 40,
-            height: 40,
-          },
-          {
-            type: 'field_vertical_separator',
-          },
-        ];
-        blockJson.extensions = ['scratch_extension'];
-        argsIndexStart += 2;
-      }
+      // 创建新的积木（显示）
+      if (block.text) {
+        blockXML = `<block type="${xmlEscape(blockId)}">`;
 
-      if (block.hat) {
-        blockJson.nextStatement = null;
-      } else if (block.output) {
-        if (block.output === 'boolean') {
-          blockJson.output = 'Boolean';
-          blockJson.outputShape = OUTPUT_SHAPE_HEXAGONAL;
-        } else {
-          blockJson.output = 'String'; // TODO: text or nubmer
-          blockJson.outputShape = OUTPUT_SHAPE_ROUND;
+        const blockJson = {
+          message0: maybeTranslate(block.text),
+          category: extId,
+          outputShape: OUTPUT_SHAPE_SQUARE,
+          colour: extObj.themeColor || THEME_COLOR,
+          colourSecondary: extObj.inputColor || INPUT_COLOR,
+          colourTertiary: extObj.otherColor || OTHER_COLOR,
+        };
+
+        let argsIndexStart = 1;
+        if (extObj.icon) {
+          blockJson.message0 = `%1 %2 ${blockJson.message0}`;
+          blockJson.args0 = [
+            {
+              type: 'field_image',
+              src: extObj.icon,
+              width: 40,
+              height: 40,
+            },
+            {
+              type: 'field_vertical_separator',
+            },
+          ];
+          blockJson.extensions = ['scratch_extension'];
+          argsIndexStart += 2;
         }
-        blockJson.checkboxInFlyout = block.monitoring !== false;
-      } else {
-        blockJson.previousStatement = null;
-        blockJson.nextStatement = null;
-      }
 
-      let blockXML = `<block type="${xmlEscape(blockId)}">`;
+        // 积木外观
+        if (block.hat) {
+          blockJson.nextStatement = null;
+        } else if (block.output) {
+          if (block.output === 'boolean') {
+            blockJson.output = 'Boolean';
+            blockJson.outputShape = OUTPUT_SHAPE_HEXAGONAL;
+          } else {
+            blockJson.output = 'String'; // TODO: text or nubmer
+            blockJson.outputShape = OUTPUT_SHAPE_ROUND;
+          }
+          // blockJson.checkboxInFlyout = block.monitoring !== false;
+        } else {
+          blockJson.previousStatement = null;
+          blockJson.nextStatement = null;
+        }
 
-      if (block.inputs) {
-        blockJson.checkboxInFlyout = false;
-        blockJson.args0 = [].concat(
-          blockJson.args0 || [],
-          Object.entries(block.inputs).map(([name, arg]) => {
-            const argObject = {
-              name,
-              type: 'input_value',
-            };
-
-            if (arg.menu) {
-              let menu = arg.menu;
-              let menuName = arg.name || name;
-              let inputMode = arg.inputMode || false;
-              let inputType = arg.type || 'string';
-              let inputDefault = arg.defaultValue || '';
-              if (typeof menu === 'string') {
-                menuName = arg.menu;
-                menu = extObj.menus[menuName];
+        // 积木参数项
+        if (block.inputs) {
+          // blockJson.checkboxInFlyout = false;
+          blockJson.args0 = [].concat(
+            blockJson.args0 || [],
+            Object.entries(block.inputs).map(([name, arg]) => {
+              if (arg.type === 'image') {
+                return {
+                  type: 'field_image',
+                  src: arg.src,
+                  width: 24,
+                  height: 24,
+                };
               }
-              if (!Array.isArray(menu)) {
-                inputMode = menu.inputMode || inputMode;
-                inputType = menu.type || inputType;
-                inputDefault = menu.defaultValue || inputDefault;
-                menu = menu.items;
+
+              if (arg.type === 'variable') {
+                return {
+                  name,
+                  type: 'field_variable',
+                  variableTypes: arg.variables,
+                  variable: arg.defaultValue,
+                };
               }
-              if (inputMode) {
-                if (!extObj.menus[menuName]) {
-                  extObj.menus[menuName] = {
-                    inputMode,
-                    type: inputType,
-                    items: menu,
-                  };
+
+              const argObject = {
+                name,
+                type: 'input_value',
+              };
+
+              if (arg.type === 'boolean') {
+                argObject.check = 'Boolean';
+              } else if (arg.menu) {
+                let menu = arg.menu;
+                let menuName = arg.name || name;
+                let inputMode = arg.inputMode || false;
+                let inputType = arg.type || 'string';
+                let inputDefault = arg.defaultValue || '';
+                if (typeof menu === 'string') {
+                  menuName = arg.menu;
+                  menu = extObj.menus[menuName];
                 }
-                blockXML += `<value name="${xmlEscape(name)}">`;
-                blockXML += `<shadow type="${extId}_menu_${menuName}">`;
-                if (inputDefault) {
-                  blockXML += `<field name="${menuName}">${xmlEscape(inputDefault)}</field>`;
+                if (!Array.isArray(menu)) {
+                  inputMode = menu.inputMode || inputMode;
+                  inputType = menu.type || inputType;
+                  inputDefault = menu.defaultValue || inputDefault;
+                  menu = menu.items;
                 }
-                blockXML += '</shadow></value>';
-              } else if (menu) {
-                argObject.type = 'field_dropdown';
-                argObject.options = menu.map((item) => {
-                  if (Array.isArray(item)) {
-                    const [text, value] = item;
-                    return [maybeTranslate(text, translator), value];
+                if (inputMode) {
+                  if (!extObj.menus[menuName]) {
+                    extObj.menus[menuName] = {
+                      inputMode,
+                      type: inputType,
+                      items: menu,
+                    };
                   }
-                  item = `${item}`;
-                  return [item, item];
-                });
-              }
-            } else if (arg.type === 'boolean') {
-              argObject.check = 'Boolean';
-            } else {
-              blockXML += `<value name="${xmlEscape(name)}">`;
-              if (ShadowTypes[arg.type]) {
-                blockXML += `<shadow type="${ShadowTypes[arg.type]}">`;
-                if (arg.defaultValue && FieldTypes[arg.type]) {
-                  blockXML += `<field name="${FieldTypes[arg.type]}">${xmlEscape(
-                    maybeTranslate(arg.defaultValue, translator),
-                  )}</field>`;
+                  blockXML += `<value name="${xmlEscape(name)}">`;
+                  blockXML += `<shadow type="${extId}_menu_${menuName}">`;
+                  if (inputDefault != null) {
+                    blockXML += `<field name="${menuName}">${xmlEscape(maybeTranslate(inputDefault))}</field>`;
+                  }
+                  blockXML += '</shadow></value>';
+                } else if (menu) {
+                  argObject.type = 'field_dropdown';
+                  argObject.options = menu.map((item) => {
+                    if (Array.isArray(item)) {
+                      const [text, value] = item;
+                      return [maybeTranslate(text), value];
+                    }
+                    item = `${item}`;
+                    return [item, item];
+                  });
+                  if (arg.defaultValue != null) {
+                    blockXML += `<field name="${xmlEscape(name)}">${xmlEscape(maybeTranslate(arg.defaultValue))}</field>`;
+                  }
                 }
-                blockXML += '</shadow>';
+              } else {
+                blockXML += `<value name="${xmlEscape(name)}">`;
+                const shadowType = arg.shadow ?? ShadowTypes[arg.type];
+                if (shadowType) {
+                  blockXML += `<shadow ${arg.id ? `id="${arg.id}"` : ''} `;
+                  blockXML += `type="${arg.shadow ?? ShadowTypes[arg.type]}">`;
+                  const fieldType = FieldTypes[arg.type] ?? name;
+                  if (arg.defaultValue != null && fieldType) {
+                    blockXML += `<field name="${fieldType}">${xmlEscape(maybeTranslate(arg.defaultValue))}</field>`;
+                  }
+                  blockXML += '</shadow>';
+                }
+                blockXML += '</value>';
               }
-              blockXML += '</value>';
-            }
 
-            blockJson.message0 = blockJson.message0.replace(`[${name}]`, `%${argsIndexStart++}`);
-            return argObject;
-          }),
-        );
+              blockJson.message0 = blockJson.message0
+                ? blockJson.message0.replace(`[${name}]`, `%${argsIndexStart++}`)
+                : '';
+              return argObject;
+            }),
+          );
+        }
+
+        // 如果积木已存在且没有备份则先进行备份
+        if (ScratchBlocks.Blocks[blockId] && !ScratchBlocks.Blocks[`#${blockId}`]) {
+          ScratchBlocks.Blocks[`#${blockId}`] = ScratchBlocks.Blocks[blockId];
+        }
+        // 加入扩展的积木
+        ScratchBlocks.Blocks[blockId] = {
+          init() {
+            this.jsonInit(blockJson);
+            block.onInit?.call(this);
+          },
+          onchange(e) {
+            block.onChange?.call(this, e);
+          },
+        };
+
+        blockXML += '</block>';
       }
 
-      // 合并积木
-      ScratchBlocks.Blocks[blockId] = {
-        init() {
-          this.jsonInit(blockJson);
-        },
-      };
-
-      // 合并扩展积木代码生成器
+      // 扩展积木代码生成器
       if (generator) {
         let codeName = generator.name_.toLowerCase();
         if (block[codeName]) {
           generator[blockId] = block[codeName].bind(generator);
-        } else {
+        } else if (!generator[blockId]) {
           generator[blockId] = () => '';
         }
       }
-
-      // 模拟器
       if (emulator) {
         let codeName = emulator.name_.toLowerCase();
         if (block[codeName]) {
           emulator[blockId] = block[codeName].bind(emulator);
-        } else {
+        } else if (!emulator[blockId]) {
           emulator[blockId] = () => '';
         }
       }
 
-      blockXML += '</block>';
-      categoryXML += blockXML;
-    });
+      // 运行积木过滤器
+      if (onBlockFilter && !onBlockFilter(block)) {
+        return blocksXML;
+      }
+      return blocksXML + blockXML;
+    }, '');
+
+  if (extObj.skipXML) {
+    return false;
+  }
 
   // 选项菜单输入
   Object.entries(extObj.menus).forEach(([menuName, menu]) => {
     if (!menu.inputMode) return;
 
-    const blockId = `${extId}_menu_${menuName}`;
+    const menuBlockId = `${extId}_menu_${menuName}`;
     const outputType = menu.type === 'number' ? 'output_number' : 'output_string';
+
+    // 动态获取菜单项
+    if (typeof menu.getItems === 'function') {
+      menu.items = menu.getItems();
+    }
+
+    if (!menu.items) {
+      menu.items = [''];
+    }
     const blockJson = {
       message0: '%1',
       args0: [
@@ -271,7 +330,7 @@ export function loadExtension(generator, emulator, extObj, translator, blockFilt
           options: menu.items.map((item) => {
             if (Array.isArray(item)) {
               const [text, value] = item;
-              return [xmlEscape(maybeTranslate(text, translator)), value];
+              return [xmlEscape(maybeTranslate(text)), value];
             }
             item = `${item}`;
             return [item, item];
@@ -279,29 +338,35 @@ export function loadExtension(generator, emulator, extObj, translator, blockFilt
         },
       ],
       category: extId,
-      colour: extObj.themeColors || THEME_COLOR,
+      colour: extObj.themeColor || THEME_COLOR,
       colourSecondary: extObj.inputColor || INPUT_COLOR,
       colourTertiary: extObj.otherColor || OTHER_COLOR,
       extensions: [outputType],
     };
 
-    ScratchBlocks.Blocks[blockId] = {
+    // 自动生成菜单积木
+    ScratchBlocks.Blocks[menuBlockId] = {
       init() {
         this.jsonInit(blockJson);
       },
     };
 
+    // 自动转换菜单积木代码
     if (generator) {
-      generator[blockId] = (block) => {
-        const value = block.getFieldValue(menuName);
+      generator[menuBlockId] = (block) => {
+        let value = block.getFieldValue(menuName);
+        if (menu.type !== 'number') {
+          value = generator.quote_(value);
+        }
         return [value, generator.ORDER_ATOMIC];
       };
     }
-
-    // 模拟器
     if (emulator) {
-      emulator[blockId] = (block) => {
-        const value = block.getFieldValue(menuName);
+      emulator[menuBlockId] = (block) => {
+        let value = block.getFieldValue(menuName);
+        if (menu.type !== 'number') {
+          value = emulator.quote_(value);
+        }
         return [value, emulator.ORDER_ATOMIC];
       };
     }

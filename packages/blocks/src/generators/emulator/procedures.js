@@ -1,7 +1,7 @@
 import { ScratchBlocks } from '../../lib/scratch-blocks';
-import { EMUGenerator } from './generator';
+import { EmulatorGenerator } from './generator';
 
-const proto = EMUGenerator.prototype;
+const proto = EmulatorGenerator.prototype;
 
 proto['procedures_definition'] = function (block) {
   const myBlock = block.childBlocks_[0];
@@ -23,14 +23,4 @@ proto['procedures_call'] = function (block) {
   let code = '';
   code += `await runtime.call('procedure:${funcName}'${argsCode});\n`;
   return code;
-};
-
-proto['argument_reporter_boolean'] = function (block) {
-  const code = this.getVariableName(block.getFieldValue('VALUE'));
-  return [code, this.ORDER_ATOMIC];
-};
-
-proto['argument_reporter_string_number'] = function (block) {
-  const code = this.getVariableName(block.getFieldValue('VALUE'));
-  return [code, this.ORDER_ATOMIC];
 };

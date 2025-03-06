@@ -27,3 +27,12 @@ ScratchBlocks.Extensions.register(
   'colours_monitor',
   ScratchBlocks.ScratchBlocks.VerticalExtensions.colourHelper('monitor'),
 );
+
+// 还原初始积木
+ScratchBlocks.restoreBlocks = () => {
+  for (const key in ScratchBlocks.Blocks) {
+    if (key[0] === '#') {
+      ScratchBlocks.Blocks[key.slice(1)] = ScratchBlocks.Blocks[key];
+    }
+  }
+};

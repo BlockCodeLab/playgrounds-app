@@ -1,6 +1,6 @@
-import { MPYGenerator } from './generator';
+import { MicroPythonGenerator } from './generator';
 
-const proto = MPYGenerator.prototype;
+const proto = MicroPythonGenerator.prototype;
 
 proto['operator_add'] = function (block) {
   const num1Code = this.valueToCode(block, 'NUM1', this.ORDER_NONE) || 0;

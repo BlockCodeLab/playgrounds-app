@@ -1,6 +1,6 @@
-import { MPYGenerator } from './generator';
+import { PythonGenerator } from './generator';
 
-const proto = MPYGenerator.prototype;
+const proto = PythonGenerator.prototype;
 
 const hexToRgb = (hex) => {
   const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;

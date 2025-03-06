@@ -1,6 +1,6 @@
-import { EMUGenerator } from './generator';
+import { EmulatorGenerator } from './generator';
 
-const proto = EMUGenerator.prototype;
+const proto = EmulatorGenerator.prototype;
 
 proto['sensing_timer'] = function (block) {
   return ['runtime.times', this.ORDER_FUNCTION_CALL];

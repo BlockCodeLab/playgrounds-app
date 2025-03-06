@@ -1,6 +1,6 @@
-import { EMUGenerator } from './generator';
+import { EmulatorGenerator } from './generator';
 
-const proto = EMUGenerator.prototype;
+const proto = EmulatorGenerator.prototype;
 
 proto['event_whenflagclicked'] = function () {
   return `runtime.when('start', ${this.HAT_CALLBACK});\n`;
@@ -15,11 +15,6 @@ proto['event_whengreaterthan'] = function (block) {
 proto['event_whenbroadcastreceived'] = function (block) {
   const messageName = this.getVariableName(block.getFieldValue('BROADCAST_OPTION'));
   return `runtime.when('message:${messageName}', ${this.HAT_CALLBACK});\n`;
-};
-
-proto['event_broadcast_menu'] = function (block) {
-  const messageName = this.getVariableName(block.getFieldValue('BROADCAST_OPTION'));
-  return [messageName, this.ORDER_ATOMIC];
 };
 
 proto['event_broadcast'] = function (block) {

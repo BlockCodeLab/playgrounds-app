@@ -1,7 +1,7 @@
 import { ScratchBlocks } from '../../lib/scratch-blocks';
-import { MPYGenerator } from './generator';
+import { MicroPythonGenerator } from './generator';
 
-const proto = MPYGenerator.prototype;
+const proto = MicroPythonGenerator.prototype;
 
 proto['procedures_definition'] = function (block) {
   const myBlock = block.childBlocks_[0];
@@ -16,14 +16,4 @@ proto['procedures_call'] = function (block) {
   const args = block.argumentIds_.map((arg) => this.valueToCode(block, arg, this.ORDER_NONE));
   const argsCode = args.length > 0 ? `, ${args.join(', ')}` : '';
   return `await runtime.procedure_call("${procName}"${argsCode})\n`;
-};
-
-proto['argument_reporter_boolean'] = function (block) {
-  const code = this.getVariableName(block.getFieldValue('VALUE'));
-  return [code, this.ORDER_ATOMIC];
-};
-
-proto['argument_reporter_string_number'] = function (block) {
-  const code = this.getVariableName(block.getFieldValue('VALUE'));
-  return [code, this.ORDER_ATOMIC];
 };

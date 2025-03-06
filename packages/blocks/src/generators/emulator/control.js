@@ -1,6 +1,6 @@
-import { EMUGenerator } from './generator';
+import { EmulatorGenerator } from './generator';
 
-const proto = EMUGenerator.prototype;
+const proto = EmulatorGenerator.prototype;
 
 proto['control_wait'] = function (block) {
   let code = '';
@@ -125,3 +125,9 @@ proto['control_stop'] = function (block) {
   }
   return code;
 };
+
+proto['control_start_as_clone'] = () => '';
+
+proto['control_create_clone_of'] = () => '';
+
+proto['control_delete_this_clone'] = () => '';

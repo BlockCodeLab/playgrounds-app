@@ -53,56 +53,69 @@ const supportedEvents = new Set([
 export const loadedExtensions = new Map();
 
 // 包装XML
-const wrapToolboxXml = (xml) => `<xml style="display: none">\n${xml}\n</xml>`;
+const wrapToolboxXml = (xml) => `<xml style="display:none">\n${xml}\n</xml>`;
 
 // 更新积木栏XML
-const updateToolboxXml = (generator, emulator, translator, onMakeToolboxXML, onExtensionBlockFilter) =>
+const updateToolboxXml = (buildinExtensions, options) =>
   loadedExtensions.values().reduce(
-    // 将扩展的xml合并到主xml中
-    (xml, extObj) => xml + loadExtension(generator, emulator, extObj, translator, onExtensionBlockFilter),
-    // 将扩展的xml合并到主xml中
-    makeToolboxXML(onMakeToolboxXML?.()),
+    // 将外部扩展的xml合并到主xml中
+    (xml, extObj) => xml + loadExtension(extObj, options),
+    // 将默认扩展的xml合并到主xml中
+    makeToolboxXML(
+      buildinExtensions?.map((extObj) => ({
+        id: extObj.id,
+        order: extObj.order,
+        xml: loadExtension(extObj, options),
+      })),
+      options,
+    ),
   );
 
 // 更新多语言文本
-const updateBlocksMsgs = (messages = {}, translator) => {
+const updateScratchBlocksMsgs = (enableMultiTargets) => {
   Object.entries(
     Object.assign(
       {
         OPERATORS_GTE: '%1 ≥ %2',
         OPERATORS_LTE: '%1 ≤ %2',
-        OPERATORS_AND: translate('blocks.operators.and', '%1 and %2', translator),
-        EVENT_WHENPROGRAMSTART: translate('blocks.events.programStart', 'when program start', translator),
-        CONTROL_STOP_OTHER: translate('blocks.control.stopOther', 'other scripts', translator),
-        PROCEDURES_ADD_LABEL: translate('blocks.myblock.addLabel', ' label text', translator),
-        PROCEDURES_ADD_BOOLEAN: translate('blocks.myblock.addBoolean', 'boolean', translator),
-        PROCEDURES_ADD_STRING_NUMBER: translate('blocks.myblock.addNumbetText', 'number or text', translator),
-        CATEGORY_MONITOR: translate('blocks.monitor', 'Monitor', translator),
-        MONITOR_SHOWVALUE: translate('blocks.monitor.showValue', 'show value %1', translator),
-        MONITOR_SHOWNAMEDVALUE: translate('blocks.monitor.showNamedValue', 'show value %1 named %2', translator),
+        OPERATORS_AND: translate('blocks.operators.and', '%1 and %2'),
+        UNSUPPORTED: translate('blocks.unsupported', 'unsupported block'),
+        EVENT_WHENPROGRAMSTART: translate('blocks.events.programStart', 'when program start'),
+        PROCEDURES_ADD_LABEL: translate('blocks.myblock.addLabel', ' label text'),
+        PROCEDURES_ADD_BOOLEAN: translate('blocks.myblock.addBoolean', 'boolean'),
+        PROCEDURES_ADD_STRING_NUMBER: translate('blocks.myblock.addNumbetText', 'number or text'),
+        CATEGORY_MONITOR: translate('blocks.monitor', 'Monitor'),
+        MONITOR_SHOWVALUE: translate('blocks.monitor.showValue', 'show value %1'),
+        MONITOR_SHOWNAMEDVALUE: translate('blocks.monitor.showNamedValue', 'show value %1 named %2'),
       },
-      messages,
+      enableMultiTargets
+        ? null
+        : {
+            CONTROL_STOP_OTHER: translate('blocks.control.stopOther', 'other scripts'),
+          },
     ),
   ).forEach(([key, value]) => (ScratchBlocks.Msg[key] = value));
 };
 
 export function BlocksEditor({
-  messages,
   emulator,
   generator,
-  disableExtension,
+  enableCloneBlocks,
+  enableStringBlocks,
+  enableMyBlockWarp,
   enableMultiTargets,
   enableLocalVariable,
   enableCloudVariables,
-  enableMyBlockWarp,
-  dataMonitorClassName,
-  onMakeToolboxXML,
+  disableMonitor,
+  disableExtensionButton,
+  monitorOffset,
+  onBuildinExtensions,
   onExtensionsFilter,
   onExtensionBlockFilter,
   onExtensionLoad,
   onDefinitions,
 }) {
-  const { language, translator } = useLocalesContext();
+  const { language } = useLocalesContext();
 
   const { appState, splashVisible, tabIndex } = useAppContext();
 
@@ -116,31 +129,17 @@ export function BlocksEditor({
 
   const extensionsLibraryVisible = useSignal(false);
 
-  // 切换积木语言
-  //
-  useEffect(() => {
-    const locale = unifyLocale(language.value);
-    if (ScratchBlocks.ScratchMsgs.currentLocale_ !== locale) {
-      ScratchBlocks.ScratchMsgs.setLocale(locale);
-    }
-  }, [language.value]);
-
-  // 运行时语言变更时
-  useEffect(() => {
-    // 更新积木文本
-    updateBlocksMsgs(messages, translator);
-    const xml = updateToolboxXml(generator, emulator, translator, onMakeToolboxXML, onExtensionBlockFilter);
-    if (ref.workspace) {
-      updateWorkspaceToolbox(ref.workspace, wrapToolboxXml(xml));
-    }
-  }, [
-    generator,
-    emulator,
-    translator,
-    onMakeToolboxXML,
-    onExtensionBlockFilter,
-    ScratchBlocks.ScratchMsgs.currentLocale_,
-  ]);
+  const options = useMemo(
+    () => ({
+      generator,
+      emulator,
+      enableCloneBlocks,
+      enableStringBlocks,
+      disableMonitor,
+      onBlockFilter: onExtensionBlockFilter,
+    }),
+    [generator, emulator, enableCloneBlocks, enableStringBlocks, disableMonitor, onExtensionBlockFilter],
+  );
 
   // 变量设置确认
   //
@@ -160,13 +159,32 @@ export function BlocksEditor({
     myBlockPrompt.value = null;
   }, []);
 
+  // 更新工作区积木
+  //
+  const updateWorkspace = useCallback(() => {
+    const buildinExtensions = onBuildinExtensions?.();
+    const xml = updateToolboxXml(buildinExtensions, options);
+    if (ref.workspace?.toolbox_) {
+      updateWorkspaceToolbox(ref.workspace, wrapToolboxXml(xml));
+    }
+    return xml;
+  }, [options, onBuildinExtensions]);
+
   // 生成积木栏XML
   //
   const toolboxXml = useMemo(() => {
-    return updateToolboxXml(generator, emulator, translator, onMakeToolboxXML, onExtensionBlockFilter);
-  }, [generator, emulator, translator, onMakeToolboxXML, onExtensionBlockFilter]);
+    // 切换积木语言
+    const locale = unifyLocale(language.value);
+    if (ScratchBlocks.ScratchMsgs.currentLocale_ !== locale) {
+      ScratchBlocks.ScratchMsgs.setLocale(locale);
+    }
+    // 更新积木文本
+    updateScratchBlocksMsgs(enableMultiTargets);
+    return updateWorkspace();
+  }, [enableMultiTargets, updateWorkspace, language.value]);
 
   // 添加扩展XML
+  //
   const handleSelectExtension = useCallback(
     async (extId) => {
       if (loadedExtensions.has(extId)) return;
@@ -245,6 +263,7 @@ export function BlocksEditor({
   );
 
   // 工作区发生变化时产生新的代码
+  //
   const handleChange = useCallback(() => {
     if (!file.value) return;
 
@@ -259,11 +278,13 @@ export function BlocksEditor({
   }, [generateCodes]);
 
   // 切换文件时更新工具栏，加载积木
+  //
   useEffect(() => {
     if (splashVisible.value) return;
 
     if (ref.workspace) {
-      const xml = updateToolboxXml(generator, emulator, translator, onMakeToolboxXML, onExtensionBlockFilter);
+      const buildinExtensions = onBuildinExtensions?.();
+      const xml = updateToolboxXml(buildinExtensions, options);
       updateWorkspaceToolbox(ref.workspace, wrapToolboxXml(xml));
 
       // 共享全局变量
@@ -296,9 +317,10 @@ export function BlocksEditor({
       // 清除撤销记录
       setTimeout(() => ref.workspace.clearUndo(), 50);
     }
-  }, [fileId.value, generateCodes]);
+  }, [fileId.value, generateCodes, options, onBuildinExtensions]);
 
   // 从外部更新后重新生成代码
+  //
   useEffect(() => {
     if (splashVisible.value) return;
     if (appState.value?.running) return;
@@ -309,24 +331,17 @@ export function BlocksEditor({
     }
   }, [modified.value, generateCodes]);
 
-  // 更新工作区积木
-  //
-  const updateWorkspace = useCallback(() => {
-    if (splashVisible.value) return;
-    const xml = updateToolboxXml(generator, emulator, translator, onMakeToolboxXML, onExtensionBlockFilter);
-    if (ref.workspace) {
-      updateWorkspaceToolbox(ref.workspace, wrapToolboxXml(xml));
-    }
-  }, [generator, emulator, translator, onMakeToolboxXML, onExtensionBlockFilter]);
-
   // 增减文件、增加扩展后
   useEffect(() => {
+    if (splashVisible.value) return;
     if (appState.value?.running) return;
     updateWorkspace();
   }, [files.value.length, loadedExtensions.size, updateWorkspace]);
 
   // 在其他标签修改后，更新造型等列表
+  //
   useEffect(() => {
+    if (splashVisible.value) return;
     if (appState.value?.running) return;
     if (tabIndex.value === 0) return;
     updateWorkspace();
@@ -339,7 +354,7 @@ export function BlocksEditor({
       const projData = await preloadProjectBlocks(meta.value, files.value);
 
       for (const [extId, extObj] of projData.extensions) {
-        loadExtension(generator, emulator, extObj, translator, onExtensionBlockFilter);
+        loadExtension(extObj, options);
         loadedExtensions.set(extId, extObj);
       }
 
@@ -372,7 +387,7 @@ export function BlocksEditor({
         hideSplash();
       });
     }
-  }, [splashVisible.value, generateCodes]);
+  }, [splashVisible.value, generateCodes, options]);
 
   // 创建工作区
   //
@@ -549,6 +564,7 @@ export function BlocksEditor({
     }
     return () => {
       loadedExtensions.clear();
+      ScratchBlocks.restoreBlocks();
       if (ref.workspace) {
         ref.workspace.clearUndo();
         ref.workspace.dispose();
@@ -564,9 +580,9 @@ export function BlocksEditor({
         className={styles.blocksEditor}
       />
 
-      <DataMonitor className={dataMonitorClassName} />
+      <DataMonitor offset={monitorOffset} />
 
-      {!disableExtension && (
+      {!disableExtensionButton && (
         <div className={classNames('scratchCategoryMenu', styles.extensionButton)}>
           <button
             className={styles.addButton}

@@ -1,18 +1,18 @@
-import { EMUGenerator } from './generator';
+import { PythonGenerator } from './generator';
 
-const proto = EMUGenerator.prototype;
+const proto = PythonGenerator.prototype;
 
 proto['math_number'] = function (block) {
   let code = parseFloat(block.getFieldValue('NUM'));
   let order;
   if (code === Infinity) {
-    code = 'Infinity';
+    code = 'float("inf")';
     order = this.ORDER_FUNCTION_CALL;
   } else if (code === -Infinity) {
-    code = '-Infinity';
+    code = '-float("inf")';
     order = this.ORDER_UNARY_SIGN;
   } else if (Number.isNaN(code)) {
-    code = 'NaN';
+    code = 'float("nan")';
     order = this.ORDER_UNARY_SIGN;
   } else {
     order = code < 0 ? this.ORDER_UNARY_SIGN : this.ORDER_ATOMIC;
@@ -35,13 +35,13 @@ proto['math_positive_number'] = function (block) {
   let code = parseFloat(block.getFieldValue('NUM'));
   let order;
   if (code === Infinity) {
-    code = 'Infinity';
+    code = 'float("inf")';
     order = this.ORDER_FUNCTION_CALL;
   } else if (code === -Infinity) {
-    code = '-Infinity';
+    code = '-float("inf")';
     order = this.ORDER_FUNCTION_CALL;
   } else if (Number.isNaN(code)) {
-    code = 'NaN';
+    code = 'float("nan")';
     order = this.ORDER_FUNCTION_CALL;
   } else {
     code = code < 0 ? 0 : code;
@@ -54,10 +54,10 @@ proto['math_angle'] = function (block) {
   let code = parseFloat(block.getFieldValue('NUM'));
   let order;
   if (code == Infinity) {
-    code = 'Infinity';
+    code = 'float("inf")';
     order = this.ORDER_FUNCTION_CALL;
   } else if (code == -Infinity) {
-    code = '-Infinity';
+    code = '-float("inf")';
     order = this.ORDER_UNARY_SIGN;
   } else {
     code = code % 360;

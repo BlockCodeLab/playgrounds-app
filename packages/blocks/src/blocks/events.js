@@ -1,7 +1,6 @@
 import { ScratchBlocks } from '../lib/scratch-blocks';
 
 // 将小绿旗事件修改为程序开始事件
-// INFO: 注意有可能被其他编辑器修改，需在需要的时候覆盖修改
 ScratchBlocks.Blocks['event_whenflagclicked'] = {
   init() {
     this.jsonInit({

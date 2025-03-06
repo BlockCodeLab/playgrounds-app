@@ -1,6 +1,6 @@
 import { JavaScriptGenerator } from '../javascript';
 
-export class EMUGenerator extends JavaScriptGenerator {
+export class EmulatorGenerator extends JavaScriptGenerator {
   constructor() {
     super('EMU');
   }
@@ -9,9 +9,8 @@ export class EMUGenerator extends JavaScriptGenerator {
     super.init(workspace);
 
     // 中断运行控制
-    this.definitions_['abort_controller'] = '';
-    this.definitions_['abort_controller'] += 'const controller = runtime.createAbortController();\n';
-    this.definitions_['abort_controller'] += 'const signal = controller.signal;';
+    this.definitions_['abort_controller'] = 'const controller = runtime.createAbortController();';
+    this.definitions_['abort_signal'] = 'const signal = controller.signal;';
 
     // 获取用户定义
     this.onDefinitions?.();

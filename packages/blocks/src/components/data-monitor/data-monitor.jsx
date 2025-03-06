@@ -5,10 +5,13 @@ import { MonitorTypes } from '../../lib/monitor-types';
 import { MonitorValue } from './monitor-value';
 import styles from './data-monitor.module.css';
 
-export function DataMonitor({ className }) {
+export function DataMonitor({ offset }) {
   const { appState } = useAppContext();
   return (
-    <div className={classNames(styles.dataMonitorWrapper, className)}>
+    <div
+      className={styles.dataMonitorWrapper}
+      style={offset}
+    >
       {appState.value?.monitors?.map?.((monitor) =>
         monitor.type === MonitorTypes.Value ? (
           <MonitorValue

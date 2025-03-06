@@ -1,6 +1,6 @@
-import { MPYGenerator } from './generator';
+import { MicroPythonGenerator } from './generator';
 
-const proto = MPYGenerator.prototype;
+const proto = MicroPythonGenerator.prototype;
 
 proto['data_variable'] = function (block) {
   const varName = this.getVariableName(block.getFieldValue('VARIABLE'));

@@ -1,6 +1,6 @@
-import { EMUGenerator } from './generator';
+import { EmulatorGenerator } from './generator';
 
-const proto = EMUGenerator.prototype;
+const proto = EmulatorGenerator.prototype;
 
 proto['operator_add'] = function (block) {
   const num1Code = this.valueToCode(block, 'NUM1', this.ORDER_NONE) || '0';

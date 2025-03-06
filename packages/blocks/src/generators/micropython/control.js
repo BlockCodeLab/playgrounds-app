@@ -1,6 +1,6 @@
-import { MPYGenerator } from './generator';
+import { MicroPythonGenerator } from './generator';
 
-const proto = MPYGenerator.prototype;
+const proto = MicroPythonGenerator.prototype;
 
 proto['control_wait'] = function (block) {
   let code = '';
@@ -8,7 +8,7 @@ proto['control_wait'] = function (block) {
     code += this.injectId(this.STATEMENT_PREFIX, block);
   }
   const durationCode = this.valueToCode(block, 'DURATION', this.ORDER_NONE) || 0;
-  code += `await runtime.wait_for(num(${durationCode}))\n`;
+  code += `await asyncio.sleep(num(${durationCode}))\n`;
   return code;
 };
 
@@ -17,12 +17,10 @@ proto['control_repeat'] = function (block) {
   if (this.STATEMENT_PREFIX) {
     code += this.injectId(this.STATEMENT_PREFIX, block);
   }
-
   let branchCode = this.loopToCode(block, 'SUBSTACK');
   if (this.STATEMENT_SUFFIX) {
     branchCode = this.prefixLines(this.injectId(this.STATEMENT_SUFFIX, block), this.INDENT) + branchCode;
   }
-
   const timesCode = this.valueToCode(block, 'TIMES', this.ORDER_NONE) || 10;
   code += `for _ in range(num(${timesCode})):\n${branchCode}`;
   return code;
@@ -33,12 +31,10 @@ proto['control_forever'] = function (block) {
   if (this.STATEMENT_PREFIX) {
     code += this.injectId(this.STATEMENT_PREFIX, block);
   }
-
   let branchCode = this.loopToCode(block, 'SUBSTACK');
   if (this.STATEMENT_SUFFIX) {
     branchCode = this.prefixLines(this.injectId(this.STATEMENT_SUFFIX, block), this.INDENT) + branchCode;
   }
-
   code += `while True:\n${branchCode}`;
   return code;
 };
@@ -73,12 +69,10 @@ proto['control_repeat_until'] = function (block) {
   if (this.STATEMENT_PREFIX) {
     code += this.injectId(this.STATEMENT_PREFIX, block);
   }
-
   let branchCode = this.loopToCode(block, 'SUBSTACK');
   if (this.STATEMENT_SUFFIX) {
     branchCode = this.prefixLines(this.injectId(this.STATEMENT_SUFFIX, block), this.INDENT) + branchCode;
   }
-
   const conditionCode = this.valueToCode(block, 'CONDITION', this.ORDER_NONE) || 'False';
   code += `while not ${conditionCode}:\n${branchCode}`;
   return code;
@@ -91,12 +85,10 @@ proto['control_while'] = function (block) {
   if (this.STATEMENT_PREFIX) {
     code += this.injectId(this.STATEMENT_PREFIX, block);
   }
-
   let branchCode = this.loopToCode(block, 'SUBSTACK');
   if (this.STATEMENT_SUFFIX) {
     branchCode = this.prefixLines(this.injectId(this.STATEMENT_SUFFIX, block), this.INDENT) + branchCode;
   }
-
   const conditionCode = this.valueToCode(block, 'CONDITION', this.ORDER_NONE) || 'False';
   code += `while ${conditionCode}:\n${branchCode}`;
   return code;
@@ -107,18 +99,24 @@ proto['control_stop'] = function (block) {
   if (this.STATEMENT_PREFIX) {
     code += this.injectId(this.STATEMENT_PREFIX, block);
   }
-
   const stopValue = block.getFieldValue('STOP_OPTION');
   switch (stopValue) {
     case 'all':
-      code += 'runtime.stop()\n';
+      this.definitions_['import_sys'] = 'import sys';
+      code += 'sys.exit()\n';
       break;
     case 'this script':
       code += 'return\n';
       break;
     case 'other scripts in sprite':
-      code += 'runtime.abort(func_id)\n';
+      code += '# other scripts\n';
       break;
   }
   return code;
 };
+
+proto['control_start_as_clone'] = () => '';
+
+proto['control_create_clone_of'] = () => '';
+
+proto['control_delete_this_clone'] = () => '';
