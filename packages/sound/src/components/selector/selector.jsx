@@ -1,16 +1,7 @@
 import { useCallback, useMemo } from 'preact/hooks';
 import { batch } from '@preact/signals';
 import { nanoid } from '@blockcode/utils';
-import {
-  useLocalesContext,
-  useProjectContext,
-  translate,
-  setAlert,
-  delAlert,
-  openAsset,
-  addAsset,
-  delAsset,
-} from '@blockcode/core';
+import { useProjectContext, translate, setAlert, delAlert, openAsset, addAsset, delAsset } from '@blockcode/core';
 import { loadSoundFromFile } from '../../lib/load-sound';
 import { formatTime } from '../../lib/format-time';
 
@@ -25,8 +16,6 @@ import surpriseIcon from './icons/icon-surprise.svg';
 import fileUploadIcon from './icons/icon-file-upload.svg';
 
 export function Selector({ onShowLibrary, onSurprise, onSoundsFilter }) {
-  const { translator } = useLocalesContext();
-
   const { assets, assetId } = useProjectContext();
 
   const getSounds = useCallback(() => {
@@ -83,7 +72,7 @@ export function Selector({ onShowLibrary, onSurprise, onSoundsFilter }) {
       addAsset({
         id: soundId,
         type: 'audio/mp3',
-        name: translate('sound.sound', 'Sound', translator),
+        name: translate('sound.sound', 'Sound'),
         data: '',
         rate: 22050,
         sampleCount: 0,

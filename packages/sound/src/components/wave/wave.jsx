@@ -1,6 +1,6 @@
 import { useRef, useEffect, useCallback } from 'preact/hooks';
 import { classNames } from '@blockcode/utils';
-import { useLocalesContext, useProjectContext, translate, maybeTranslate, setAsset } from '@blockcode/core';
+import { useProjectContext, translate, maybeTranslate, setAsset } from '@blockcode/core';
 import { loadSoundFromBlob } from '../../lib/load-sound';
 
 import WaveSurfer from 'wavesurfer.js';
@@ -22,7 +22,6 @@ export function Wave() {
   const playRef = useRef();
   const recordRef = useRef();
 
-  const { translator } = useLocalesContext();
   const { asset } = useProjectContext();
 
   const sound = asset.value;
@@ -51,12 +50,12 @@ export function Wave() {
 
     if (playRef.current) {
       playRef.current.src = playIcon;
-      playRef.current.title = translate('sound.play', 'Play', translator);
+      playRef.current.title = translate('sound.play', 'Play');
     }
 
     if (recordRef.current) {
       recordRef.current.src = recordIcon;
-      recordRef.current.title = translate('sound.record', 'Record', translator);
+      recordRef.current.title = translate('sound.record', 'Record');
     }
   }, [sound, disabled]);
 
@@ -90,7 +89,7 @@ export function Wave() {
   const handlePlay = useCallback(() => {
     if (playRef.current) {
       playRef.current.src = stopIcon;
-      playRef.current.title = translate('sound.stop', 'Stop', translator);
+      playRef.current.title = translate('sound.stop', 'Stop');
     }
     if (ref.ws) {
       ref.ws.setOptions({
@@ -108,7 +107,7 @@ export function Wave() {
   const handlePause = useCallback(() => {
     if (playRef.current) {
       playRef.current.src = playIcon;
-      playRef.current.title = translate('sound.play', 'Play', translator);
+      playRef.current.title = translate('sound.play', 'Play');
       if (ref.ws) {
         ref.ws.setTime(0);
         setTimeout(() => {
@@ -121,7 +120,7 @@ export function Wave() {
     }
     if (recordRef.current) {
       recordRef.current.src = recordIcon;
-      recordRef.current.title = translate('sound.record', 'Record', translator);
+      recordRef.current.title = translate('sound.record', 'Record');
 
       const recordButton = recordRef.current.parentElement.parentElement;
       recordButton.disabled = false;
@@ -141,7 +140,7 @@ export function Wave() {
   const handleRecord = useCallback(() => {
     if (recordRef.current) {
       recordRef.current.src = stopIcon;
-      recordRef.current.title = translate('sound.stop', 'Stop', translator);
+      recordRef.current.title = translate('sound.stop', 'Stop');
     }
     if (playRef.current) {
       const playButton = playRef.current.parentElement.parentElement;

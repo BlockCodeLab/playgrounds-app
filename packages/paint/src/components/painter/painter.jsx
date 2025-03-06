@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo } from 'preact/hooks';
 import { batch, useComputed, useSignal } from '@preact/signals';
 import { classNames, Color, MathUtils } from '@blockcode/utils';
-import { useLocalesContext, useProjectContext, translate, maybeTranslate, setAsset } from '@blockcode/core';
+import { useProjectContext, translate, maybeTranslate, setAsset } from '@blockcode/core';
 import { EditorModes } from '../../lib/editor-mode';
 
 import { Text, Label, BufferedInput, Button } from '@blockcode/core';
@@ -32,20 +32,18 @@ const UNDO_MAX_LENGTH = 30;
 const ZOOM_STEP = 0.5;
 const ZOOM_MAX = 20;
 
-const getImageName = (mode, translator) => {
+const getImageName = (mode) => {
   switch (mode) {
     case EditorModes.Image:
-      return translate('paint.painter.image', 'Image', translator).toLowerCase();
+      return translate('paint.painter.image', 'Image').toLowerCase();
     case EditorModes.Costume:
-      return translate('paint.painter.costume', 'Costume', translator).toLowerCase();
+      return translate('paint.painter.costume', 'Costume').toLowerCase();
     case EditorModes.Backdrop:
-      return translate('paint.painter.backdrop', 'Backdrop', translator).toLowerCase();
+      return translate('paint.painter.backdrop', 'Backdrop').toLowerCase();
   }
 };
 
 export default function Painter({ mode, maxSize }) {
-  const { translator } = useLocalesContext();
-
   const { asset, assetId, modified } = useProjectContext();
 
   const zoom = useSignal(1);
@@ -190,13 +188,13 @@ export default function Painter({ mode, maxSize }) {
     <div className={styles.painterWrapper}>
       <div className={styles.row}>
         <div className={styles.toolGroup}>
-          <Label text={getImageName(mode, translator)}>
+          <Label text={getImageName(mode)}>
             <BufferedInput
               disabled={disabled}
               className={styles.nameInput}
               placeholder={translate('paint.painter.name', 'name')}
               onSubmit={handleChangeName}
-              value={imageName ? maybeTranslate(imageName) : getImageName(mode, translator)}
+              value={imageName ? maybeTranslate(imageName) : getImageName(mode)}
             />
           </Label>
         </div>

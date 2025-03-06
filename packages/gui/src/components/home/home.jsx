@@ -25,7 +25,7 @@ const DISPLAY_PROJECTS_COUNTS = 7;
 const DISPLAY_EXAMPLES_COUNTS = 10;
 
 export function Home({ onOpenEditor, onOpenProject }) {
-  const { translator, language } = useLocalesContext();
+  const { language } = useLocalesContext();
 
   // 用户保存的项目
   const userProjects = useSignal(null);
@@ -71,7 +71,6 @@ export function Home({ onOpenEditor, onOpenProject }) {
                 defaultMessage="Untitled"
               />
             ),
-            translator,
           ),
         },
       ],
@@ -108,7 +107,6 @@ export function Home({ onOpenEditor, onOpenProject }) {
                 defaultMessage="Untitled"
               />
             ),
-            translator,
           )}
         />
       ),
@@ -317,7 +315,7 @@ export function Home({ onOpenEditor, onOpenProject }) {
                     setTimeout(() => {
                       openPromptModal({
                         title: example.name,
-                        label: maybeTranslate(item.alert, translator),
+                        label: maybeTranslate(item.alert),
                       });
                     }, 500);
                   }

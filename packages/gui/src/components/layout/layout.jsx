@@ -43,14 +43,13 @@ const closeProjectAndLayout = () =>
   });
 
 // 打开项目
-const openProjectWithSplash = (data, translator) => {
+const openProjectWithSplash = (data) => {
   batch(() => {
     showSplash();
     openProject(
       Object.assign(JSON.parse(JSON.stringify(data)), {
         fileId: data.fileId ?? data.files?.[0]?.id,
       }),
-      translator,
     );
     openTab(0);
   });
@@ -63,15 +62,15 @@ export function Layout() {
 
   // 多语言翻译
   //
-  const { language, translator } = useLocalesContext();
+  const { language } = useLocalesContext();
 
   // 应用布局
   //
   const app = useAppContext();
 
-  // 设置应用标题
+  // 设置语言
   useEffect(() => {
-    document.title = translate('gui.name', 'BlockCode Playgrounds', translator);
+    document.title = translate('gui.name', 'BlockCode Playgrounds');
     if (BETA) {
       document.title += ' [BETA]';
     }
@@ -218,10 +217,10 @@ export function Layout() {
             defaultMessage="Replace contents of the current project?"
           />
         ),
-        onSubmit: () => openProjectWithSplash(projData, translator),
+        onSubmit: () => openProjectWithSplash(projData),
       });
     } else {
-      openProjectWithSplash(projData, translator);
+      openProjectWithSplash(projData);
     }
   }, []);
 
@@ -286,17 +285,14 @@ export function Layout() {
   }, []);
 
   // 打开项目事件
-  const handleOpenProject = useCallback(
-    (projData) => {
-      if (meta.value?.editor !== projData.meta.editor) {
-        closeProjectAndLayout();
-        handleOpenEditor(projData.meta.editor, projData);
-        return;
-      }
-      openProjectViaEditor(projData, meta.value?.editor);
-    },
-    [handleOpenEditor],
-  );
+  const handleOpenProject = useCallback((projData) => {
+    if (meta.value?.editor !== projData.meta.editor) {
+      closeProjectAndLayout();
+      handleOpenEditor(projData.meta.editor, projData);
+      return;
+    }
+    openProjectViaEditor(projData, meta.value?.editor);
+  }, []);
 
   return (
     <>
@@ -405,12 +401,11 @@ export function Layout() {
         (app.prompt.value.inputItems ? (
           <InputsPromptModal
             title={app.prompt.value.title}
+            content={app.prompt.value.content}
             inputItems={app.prompt.value.inputItems}
             onClose={closePromptModal}
             onSubmit={app.prompt.value.onSubmit}
-          >
-            {app.prompt.value.body}
-          </InputsPromptModal>
+          />
         ) : (
           <PromptModal
             title={app.prompt.value.title}

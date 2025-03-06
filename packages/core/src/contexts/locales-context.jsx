@@ -1,7 +1,8 @@
 import { createContext } from 'preact';
 import { useContext } from 'preact/hooks';
 import { computed, effect, signal } from '@preact/signals';
-import { TranslationsProvider, useTranslator } from '@eo-locale/preact';
+import { Translator } from '@eo-locale/core';
+import { TranslationsProvider } from '@eo-locale/preact';
 import {
   getCurrentLanguage,
   putCurrentLanguage,
@@ -35,6 +36,7 @@ export function addLocalesMessages(messages) {
 //
 const language = signal(getCurrentLanguage());
 const isRtl = computed(() => isRtlByLanguage(language.value));
+const translator = computed(() => new Translator(language.value, locales.value));
 
 // 当语言发生改变立即保存下最新的语言设置
 effect(() => putCurrentLanguage(language.value));
@@ -45,38 +47,32 @@ export function setLanguage(val) {
 }
 
 // 将默认语言字符串翻译成当前语言
-export function translate(id, options, translator) {
-  if (!translator) {
-    translator = useTranslator();
-  }
+export function translate(id, options) {
   if (typeof options === 'string') {
     options = { defaultMessage: options };
   }
-  return translator.translate(id, options);
+  return translator.value.translate(id, options);
 }
 
 // 检查是否为需要翻译的字符串
-export function maybeTranslate(message, translator) {
+export function maybeTranslate(message) {
   if (!message?.props) {
     return message;
   }
   if (message.props.children) {
     return []
       .concat(message.props.children)
-      .map((child) => maybeTranslate(child, translator))
+      .map((child) => maybeTranslate(child))
       .join('');
   }
-  return translate(message.props.id, message.props, translator);
+  return translate(message.props.id, message.props);
 }
 
 // 本地化上下文组件
 //
 const LocalesContext = createContext();
 
-export const useLocalesContext = () =>
-  Object.assign(useContext(LocalesContext), {
-    translator: useTranslator(),
-  });
+export const useLocalesContext = () => useContext(LocalesContext);
 
 export function LocalesProvider({ children }) {
   return (

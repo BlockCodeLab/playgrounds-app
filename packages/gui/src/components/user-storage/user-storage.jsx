@@ -1,13 +1,7 @@
 import { useCallback, useEffect } from 'preact/hooks';
 import { useComputed, useSignal } from '@preact/signals';
 import { getProjectsThumbs, getProject, cloneProject, renameProject, delProject } from '@blockcode/utils';
-import {
-  useLocalesContext,
-  useProjectContext,
-  closeUserStorage,
-  maybeTranslate,
-  openPromptModal,
-} from '@blockcode/core';
+import { useProjectContext, closeUserStorage, maybeTranslate, openPromptModal } from '@blockcode/core';
 
 import { Text, Library } from '@blockcode/core';
 import styles from './user-storage.module.css';
@@ -15,8 +9,6 @@ import styles from './user-storage.module.css';
 const FILTERABLE_COUNTS = 30;
 
 export function UserStorage({ onOpenProject }) {
-  const { translator } = useLocalesContext();
-
   const { meta } = useProjectContext();
 
   const userProjects = useSignal([]);
@@ -47,7 +39,6 @@ export function UserStorage({ onOpenProject }) {
                 defaultMessage="Untitled"
               />
             ),
-            translator,
           ),
         },
       ],
@@ -84,7 +75,6 @@ export function UserStorage({ onOpenProject }) {
                 defaultMessage="Untitled"
               />
             ),
-            translator,
           )}
         />
       ),
@@ -119,7 +109,6 @@ export function UserStorage({ onOpenProject }) {
             defaultMessage="Untitled"
           />
         ),
-        translator,
       ),
       image: item.thumb,
       onSelect: wrapOpenProject(item.key),
@@ -158,7 +147,7 @@ export function UserStorage({ onOpenProject }) {
         ],
       ],
     }));
-  }, [wrapOpenProject]);
+  }, [wrapOpenProject, rename, remove]);
 
   useEffect(() => getUserProjects(), [getUserProjects]);
 

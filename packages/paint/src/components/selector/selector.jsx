@@ -1,16 +1,7 @@
 import { useCallback, useMemo } from 'preact/hooks';
 import { batch } from '@preact/signals';
 import { nanoid } from '@blockcode/utils';
-import {
-  useLocalesContext,
-  useProjectContext,
-  translate,
-  setAlert,
-  delAlert,
-  openAsset,
-  addAsset,
-  delAsset,
-} from '@blockcode/core';
+import { useProjectContext, translate, setAlert, delAlert, openAsset, addAsset, delAsset } from '@blockcode/core';
 import { loadImageFromFile, BlankImageData } from '../../lib/load-image';
 import { EditorModes } from '../../lib/editor-mode';
 
@@ -66,22 +57,20 @@ const UploadTooltips = {
   ),
 };
 
-const getImageName = (mode, translator) => {
+const getImageName = (mode) => {
   switch (mode) {
     case EditorModes.Image:
-      return translate('paint.painter.image', 'Image', translator).toLowerCase();
+      return translate('paint.painter.image', 'Image').toLowerCase();
     case EditorModes.Costume:
-      return translate('paint.painter.costume', 'Costume', translator).toLowerCase();
+      return translate('paint.painter.costume', 'Costume').toLowerCase();
     case EditorModes.Backdrop:
-      return translate('paint.painter.backdrop', 'Backdrop', translator).toLowerCase();
+      return translate('paint.painter.backdrop', 'Backdrop').toLowerCase();
   }
 };
 
 const getImageIcon = (image) => `data:${image.type};base64,${image.data}`;
 
 export function Selector({ mode, maxSize, onImagesFilter, onShowLibrary, onSurprise, onChange, onDelete }) {
-  const { translator } = useLocalesContext();
-
   const { assets, assetId, modified } = useProjectContext();
 
   const getImages = useCallback(() => {
@@ -160,7 +149,7 @@ export function Selector({ mode, maxSize, onImagesFilter, onShowLibrary, onSurpr
       addAsset({
         id: imageId,
         type: 'image/png',
-        name: getImageName(mode, translator),
+        name: getImageName(mode),
         data: BlankImageData,
         width: 1,
         height: 1,

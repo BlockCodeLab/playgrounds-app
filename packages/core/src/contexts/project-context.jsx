@@ -203,20 +203,20 @@ export function delAsset(id) {
 }
 
 // 载入管理
-const nameTranslateMapper = (translator) => (res) =>
+const nameTranslateMapper = () => (res) =>
   Object.assign(res, {
-    name: maybeTranslate(res.name, translator),
+    name: maybeTranslate(res.name),
   });
 
-export function openProject(res, translator) {
+export function openProject(res) {
   batch(() => {
     meta.value = res.meta;
     id.value = res.id;
     key.value = res.key ?? nanoid();
-    name.value = maybeTranslate(res.name, translator);
-    files.value = res.files?.map?.(nameTranslateMapper(translator));
+    name.value = maybeTranslate(res.name);
+    files.value = res.files?.map?.(nameTranslateMapper());
     fileId.value = res.fileId;
-    assets.value = res.assets?.map?.(nameTranslateMapper(translator));
+    assets.value = res.assets?.map?.(nameTranslateMapper());
     assetId.value = res.assetId;
   });
 }

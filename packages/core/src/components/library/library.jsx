@@ -1,6 +1,5 @@
 import { useEffect, useCallback } from 'preact/hooks';
 import { batch, useSignal } from '@preact/signals';
-import { useTranslator } from '@eo-locale/preact';
 import { classNames } from '@blockcode/utils';
 import { maybeTranslate } from '../../contexts/locales-context';
 
@@ -13,8 +12,6 @@ import { TagButton } from './tag-button';
 import styles from './library.module.css';
 
 export function Library({ items, title, filterable, filterPlaceholder, emptyMessage, tags, large, featured, onClose }) {
-  const translator = useTranslator();
-
   const tag = useSignal('all');
 
   const query = useSignal('');
@@ -31,7 +28,7 @@ export function Library({ items, title, filterable, filterPlaceholder, emptyMess
 
       // 隐藏彩蛋，只有搜索全称才显示
       const queryStr = query.value.toLowerCase();
-      const nameStr = maybeTranslate(item.name, translator).toLowerCase();
+      const nameStr = maybeTranslate(item.name).toLowerCase();
       if (item.eegg) {
         return item.eegg === queryStr || nameStr === queryStr;
       }
@@ -56,19 +53,19 @@ export function Library({ items, title, filterable, filterPlaceholder, emptyMess
         return true;
       }
       if (item.author) {
-        const authorStr = maybeTranslate(item.author, translator).toLowerCase();
+        const authorStr = maybeTranslate(item.author).toLowerCase();
         if (authorStr.includes(queryStr)) {
           return true;
         }
       }
       if (item.copyright) {
-        const copyrightStr = maybeTranslate(item.copyright, translator).toLowerCase();
+        const copyrightStr = maybeTranslate(item.copyright).toLowerCase();
         if (copyrightStr.includes(queryStr)) {
           return true;
         }
       }
       if (item.collaborator) {
-        const collaboratorStr = maybeTranslate(item.collaborator, translator).toLowerCase();
+        const collaboratorStr = maybeTranslate(item.collaborator).toLowerCase();
         if (collaboratorStr.includes(queryStr)) {
           return true;
         }
