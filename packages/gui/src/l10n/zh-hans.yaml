@@ -11,6 +11,8 @@ gui.home.all: 查看全部（{counts}）
 gui.home.new: 开始新作品
 gui.home.examples: 精彩作品
 
+gui.home.slideshow.desktop.title: 桌面端程序已就绪，快来下载！
+gui.home.slideshow.desktop.button: 立即下载
 gui.home.slideshow.tankwar.title: 战争一触即发，赶紧来战吧！
 gui.home.slideshow.tankwar.button: 加入战斗
 gui.home.slideshow.arcade.title: 玩的下一个游戏，一定是自己创作！

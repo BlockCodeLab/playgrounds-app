@@ -11,9 +11,11 @@ gui.home.all: View all ({counts})
 gui.home.new: Create new project
 gui.home.examples: Wonderful projects
 
-gui.home.slideshow.tankwar.title: The Tank War is coming! Join us! NOW!
+gui.home.slideshow.desktop.title: The desktop application is here!
+gui.home.slideshow.desktop.button: Download
+gui.home.slideshow.tankwar.title: The Tank War is coming! Join us!
 gui.home.slideshow.tankwar.button: Join us
-gui.home.slideshow.arcade.title: The next game to play, must be your OWN!
+gui.home.slideshow.arcade.title: Make a game and play it by yourself!
 gui.home.slideshow.arcade.button: Create now
 
 gui.splash.loading: Loading project...
