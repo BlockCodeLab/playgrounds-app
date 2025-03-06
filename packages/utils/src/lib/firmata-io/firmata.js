@@ -453,7 +453,7 @@ const SYSEX_RESPONSE = {
   //   board.emit('get-dht-hum', board.buffer[2]);
   // },
     [SONAR_DATA](board){
-        const pin = data.buffer[1]
+        const pin = board.buffer[1]
         const value = (board.buffer[2] & 0x7f) | ((board.buffer[3] & 0x7f) << 7);
         board.pins[pin].value = value;
     },
@@ -463,6 +463,7 @@ const SYSEX_RESPONSE = {
         :param: data: [pin, dht_type, validation_flag,
         humidity_positivity_flag, temperature_positivity_flag, humidity, temperature]
        */
+      console.log(board.buffer);
       const pin = board.buffer[1];
       const humidity = board.buffer[6];
       const temperature = board.buffer[7];
@@ -1074,8 +1075,8 @@ class Firmata extends EventEmitter {
   //     RUS04,
   //     pin,
   //     END_SYSEX
-  //   ]);
-  // }
+  //   ]); 
+  // } 
 
   // getDHTTemp(pin, callback){
   //   this.once("get-dht-temp", callback);
@@ -1084,7 +1085,7 @@ class Firmata extends EventEmitter {
   //     DHT_TEMP,
   //     pin,
   //     END_SYSEX
-  //   ]);
+  //   ]); 
   // }
 
   // getDHTHum(pin, callback){
@@ -1094,7 +1095,7 @@ class Firmata extends EventEmitter {
   //     DHT_HUM,
   //     pin,
   //     END_SYSEX
-  //   ]);
+  //   ]); 
   // }
 
   /**
@@ -1706,19 +1707,19 @@ class Firmata extends EventEmitter {
   }
 
   reportSonarData(trigger_pin, echo_pin, timeout=80000){
-    timeout_lsb = timeout & 0x7f
-    timeout_msb = (timeout >> 7) & 0x7f
-    this.pinMode(trigger_pin, this.PIN_MODE.SONAR);
-    this.pinMode(echo_pin, this.PIN_MODE.SONAR);
-    data = [START_SYSEX, SONAR_CONFIG, trigger_pin, echo_pin, timeout_lsb, timeout_msb, END_SYSEX];
-    this.pins[pin].report = 1;
+    const timeout_lsb = timeout & 0x7f
+    const timeout_msb = (timeout >> 7) & 0x7f
+    this.pinMode(trigger_pin, this.MODES.SONAR);
+    this.pinMode(echo_pin, this.MODES.SONAR);
+    const data = [START_SYSEX, SONAR_CONFIG, trigger_pin, echo_pin, timeout_lsb, timeout_msb, END_SYSEX];
+    this.pins[trigger_pin].report = 1;
     writeToTransport(this, data);
 
   }
 
   reportDHTData(pin, sensor_type=11){
     /**
-     *
+     * 
         :param pin_number: digital pin number on arduino.
         :param sensor_type: type of dht sensor
                             Valid values = DHT11, DHT22,
