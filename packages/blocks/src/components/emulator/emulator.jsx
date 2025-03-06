@@ -1,9 +1,18 @@
 import { useRef, useEffect } from 'preact/hooks';
 import { Konva } from '@blockcode/utils';
+import { useAppContext, setAppState } from '@blockcode/core';
 import styles from './emulator.module.css';
 
 export function Emulator({ id, zoom, width, height, onRuntime }) {
   const ref = useRef(null);
+
+  const { splashVisible } = useAppContext();
+
+  useEffect(() => {
+    if (splashVisible.value) {
+      setAppState('running', false);
+    }
+  }, [splashVisible.value]);
 
   useEffect(() => {
     if (ref.stage) {
