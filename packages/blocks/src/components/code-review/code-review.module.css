@@ -4,6 +4,7 @@
   background: white;
   overflow: auto;
   font-size: 1rem;
+  border-radius: inherit;
 }
 
 .code-review pre {

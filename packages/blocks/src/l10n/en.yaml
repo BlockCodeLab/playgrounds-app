@@ -18,7 +18,7 @@ blocks.menu.device.turnOnAutoDownload: Turn on Auto Download
 blocks.menu.device.turnOffAutoDownload: Turn off Auto Download
 
 blocks.tabs.code: Code
-blocks.tabs.codeReview: Code Review
+blocks.tabs.codeReview: Source
 
 blocks.panes.monitor: Monitor
 
@@ -51,15 +51,16 @@ blocks.downloadPrompt.firmwareOutdated: The firmware is outdated. Please update 
 
 blocks.events.programStart: when program start
 blocks.control.stopOther: other scripts
-blocks.operators.and: '%1 and %2'
+blocks.operators.and: "%1 and %2"
+blocks.unsupported: unsupported block
 
-blocks.myblock.addLabel: ' label text'
+blocks.myblock.addLabel: " label text"
 blocks.myblock.addBoolean: boolean
 blocks.myblock.addNumbetText: number or text
 
 blocks.monitor: Monitor
 blocks.monitor.showValue: show value %1
 blocks.monitor.showNamedValue: show value %1 named %2
-blocks.monitor.trueValue: 'true'
-blocks.monitor.falseValue: 'false'
-blocks.monitor.listLength: '{length} items'
+blocks.monitor.trueValue: "true"
+blocks.monitor.falseValue: "false"
+blocks.monitor.listLength: "{length} items"

@@ -35,9 +35,11 @@ export function CodeReview() {
           <span>{line}</span>
         ))}
       </pre>
-      <div className={styles.changer}>
-        <Dropdown items={typeItems}>{type.value === 'content' ? 'Device' : 'Emulator'}</Dropdown>
-      </div>
+      {file.value.script && file.value.content && (
+        <div className={styles.changer}>
+          <Dropdown items={typeItems}>{type.value === 'content' ? 'Device' : 'Emulator'}</Dropdown>
+        </div>
+      )}
     </div>
   );
 }

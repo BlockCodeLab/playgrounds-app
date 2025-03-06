@@ -18,7 +18,7 @@ blocks.menu.device.turnOnAutoDownload: 打開自動下載
 blocks.menu.device.turnOffAutoDownload: 關閉自動下載
 
 blocks.tabs.code: 程式
-blocks.tabs.codeReview: 程式審查
+blocks.tabs.codeReview: 原始程式
 
 blocks.panes.monitor: 監視器
 
@@ -52,6 +52,7 @@ blocks.downloadPrompt.firmwareOutdated: 固件版本過低，請升級到最新�
 blocks.events.programStart: 當程序開始運行
 blocks.control.stopOther: 其他腳本
 blocks.operators.and: "%1 且 %2"
+blocks.unsupported: 不支持的積木
 
 blocks.myblock.addLabel: 文本
 blocks.myblock.addBoolean: 布爾值
