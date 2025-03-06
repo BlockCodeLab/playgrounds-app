@@ -96,12 +96,14 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
 
   // 清理编辑完成的图形
   const clearDrawable = useCallback(() => {
+    ref.painting = false;
     ref.transformer.nodes([]);
     for (const child of ref.drawLayer.children) {
       if (child !== ref.image) {
         child.remove();
       }
     }
+    tool.value?.cancel?.();
   }, []);
 
   // 键盘控制
@@ -117,9 +119,7 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
             return;
           }
           e.preventDefault();
-          ref.painting = false;
           clearDrawable();
-          tool.value?.cancel?.();
           return;
         case Keys.RETURN:
         case Keys.ENTER:
@@ -197,11 +197,10 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
   useEffect(async () => {
     if (ref.drawLayer) {
       if (tool.value?.type !== toolOptions.type) {
-        clearSelector();
-        if (ref.painting) {
-          ref.painting = false;
+        if (clearSelector()) {
           await updateImage();
         }
+        clearDrawable();
         tool.value = Tools[toolOptions.type];
         if (tool.value) {
           tool.value.type = toolOptions.type;
@@ -306,6 +305,7 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
 
       // 绘图
       ref.painting = false;
+      ref.stage.on('contextmenu', (e) => e.evt.preventDefault());
       ref.stage.on('pointerdown', async (e) => {
         if (ref.painting || e.target.name() === 'selector' || e.target.parent instanceof Konva.Transformer) {
           return;
@@ -319,9 +319,9 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
           await updateImage();
           tool.value?.cancel?.();
 
-          if ([PaintTools.Text, PaintTools.Polygon, PaintTools.Selector].includes(tool.value?.type)) {
-            return;
-          }
+          // if ([PaintTools.Text, PaintTools.Polygon, PaintTools.Selector].includes(tool.value?.type)) {
+          return;
+          // }
         }
         if (!tool.value) return;
 

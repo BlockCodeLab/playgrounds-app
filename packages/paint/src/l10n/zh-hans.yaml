@@ -36,6 +36,7 @@ paint.painter.flipHorizontal: 水平翻转
 paint.painter.flipVertical: 垂直翻转
 paint.painter.copy: 复制
 paint.painter.paste: 粘贴
+paint.painter.crop: 自动裁剪
 
 paint.colorPicker.color: 颜色
 paint.colorPicker.saturation: 饱和度

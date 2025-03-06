@@ -14,6 +14,7 @@ import styles from './painter.module.css';
 import undoIcon from './icons/icon-undo.svg';
 import redoIcon from './icons/icon-redo.svg';
 import centerIcon from './icons/icon-center.svg';
+import cropIcon from './icons/icon-crop.svg';
 import zoomInIcon from './icons/icon-zoom-in.svg';
 import zoomOutIcon from './icons/icon-zoom-out.svg';
 import zoomResetIcon from './icons/icon-zoom-reset.svg';
@@ -248,6 +249,22 @@ export default function Painter({ mode, maxSize }) {
             <Text
               id="paint.painter.center"
               defaultMessage="Center"
+            />
+          </Button>
+          <Button
+            vertical
+            disabled
+            className={styles.labelButton}
+            onClick={useCallback(() => null, [])}
+          >
+            <img
+              src={cropIcon}
+              className={styles.buttonIcon}
+              title={translate('paint.painter.crop', 'Auto Crop')}
+            />
+            <Text
+              id="paint.painter.crop"
+              defaultMessage="Auto Crop"
             />
           </Button>
         </div>
