@@ -65,3 +65,6 @@ blocks.monitor.showNamedValue: 顯示名為 %2 的 %1 值
 blocks.monitor.trueValue: 真
 blocks.monitor.falseValue: 假
 blocks.monitor.listLength: "{length} 項"
+
+blocks.extensionStatusMenu.bluetooth: 藍牙（BLE）
+blocks.extensionStatusMenu.serial: 串口

@@ -25,7 +25,7 @@ import { loadExtension } from '../../lib/load-extension';
 import { unifyLocale } from '../../lib/unify-locale';
 import blocksConfig from './blocks-config';
 
-import { Text } from '@blockcode/core';
+import { Text, ContextMenu } from '@blockcode/core';
 import { DataMonitor } from '../data-monitor/data-monitor';
 import { DataPromptModal } from '../data-prompt-modal/data-prompt-modal';
 import { MyBlockPromptModal } from '../myblock-prompt-modal/myblock-prompt-modal';
@@ -130,6 +130,8 @@ export function BlocksEditor({
   const myBlockPrompt = useSignal(null);
 
   const extensionsLibraryVisible = useSignal(false);
+
+  const extensionStatusMenu = useSignal(null);
 
   const options = useMemo(
     () => ({
@@ -308,6 +310,7 @@ export function BlocksEditor({
       });
 
       // 加载积木到工作区
+      console.log(file.value.xml);
       loadXmlToWorkspace(file.value.xmlDom ?? file.value.xml, globalVariables, ref.workspace);
 
       // 检查如果有积木没有代码则立即生成
@@ -334,6 +337,7 @@ export function BlocksEditor({
   }, [modified.value, generateCodes]);
 
   // 增减文件、增加扩展后
+  //
   useEffect(() => {
     if (splashVisible.value) return;
     if (appState.value?.running) return;
@@ -376,6 +380,7 @@ export function BlocksEditor({
             ...codes,
           });
         }
+        hideSplash();
 
         // 加载当前选中的文档
         data = projData.xmls.get(fileId.value);
@@ -385,8 +390,6 @@ export function BlocksEditor({
 
         // 清空撤销记录
         ref.workspace.clearUndo();
-
-        hideSplash();
       });
     }
   }, [splashVisible.value, generateCodes, options]);
@@ -504,40 +507,59 @@ export function BlocksEditor({
       // 刷新状态按钮
       const refreshStatus = () => ScratchBlocks.refreshStatusButtons(ref.workspace);
 
+      // 设备断开连接
+      const disconnect = (extObj, reconnect) => () => {
+        const alertId = setAlert('connectionError', {
+          icon: extObj.icon,
+          button: {
+            label: (
+              <Text
+                id="gui.prompt.reconnect"
+                defaultMessage="Reconnect"
+              />
+            ),
+            onClick() {
+              delAlert(alertId);
+              reconnect();
+            },
+          },
+          onClose: () => delAlert(alertId),
+        });
+        setAppState(`device.${extObj.id}`, false);
+        refreshStatus();
+      };
+
       // 连接蓝牙设备
-      const connectBluetooth = async (extId, options) => {
-        const extObj = loadedExtensions.get(extId);
+      const connectBluetooth = async (extObj, options) => {
         const device = await navigator.bluetooth.requestDevice(options);
         // 断开连接
-        device.ongattserverdisconnected = () => {
-          const alertId = setAlert('connectionError', {
-            icon: extObj.icon,
-            button: {
-              label: (
-                <Text
-                  id="gui.prompt.reconnect"
-                  defaultMessage="Reconnect"
-                />
-              ),
-              onClick() {
-                delAlert(alertId);
-                device.ongattserverdisconnected = null;
-                connectBluetooth(extId, options);
-              },
-            },
-            onClose: () => delAlert(alertId),
-          });
-          setAppState(`device.${extId}`, false);
-          refreshStatus();
-        };
+        device.addEventListener(
+          'gattserverdisconnected',
+          disconnect(extObj, () => connectBluetooth(extObj, options)),
+          { once: true },
+        );
         // 连接
         const gattServer = await device.gatt.connect();
-        setAppState(`device.${extId}`, gattServer);
+        setAppState(`device.${extObj.id}`, gattServer);
+        refreshStatus();
+      };
+
+      // 连接串口设备
+      const connectSerial = async (extObj, options) => {
+        const device = await navigator.serial.requestPort(options);
+        // 断开连接
+        device.addEventListener(
+          'disconnect',
+          disconnect(extObj, () => connectSerial(extObj, options)),
+          { once: true },
+        ),
+          // 连接
+          setAppState(`device.${extObj.id}`, device);
         refreshStatus();
       };
 
       // 状态按钮事件
-      ScratchBlocks.statusButtonCallback = async (extId) => {
+      ScratchBlocks.statusButtonCallback = async (extId, categoryHeader) => {
         if (!loadedExtensions.has(extId)) return;
 
         const extObj = loadedExtensions.get(extId);
@@ -553,15 +575,55 @@ export function BlocksEditor({
           return;
         }
 
+        // 连接菜单
+        if (connectionOptions.bluetooth && connectionOptions.serial) {
+          const clientRect = categoryHeader.imageElement_.getBoundingClientRect();
+          extensionStatusMenu.value = {
+            position: {
+              x: clientRect.x + clientRect.width / 2,
+              y: clientRect.y + clientRect.height / 2,
+            },
+            menuItems: [
+              {
+                label: (
+                  <Text
+                    id="blocks.extensionStatusMenu.bluetooth"
+                    defaultMessage="Bluetooth (BLE)"
+                  />
+                ),
+                onClick: () => {
+                  extensionStatusMenu.value = null;
+                  connectBluetooth(extObj, connectionOptions.bluetooth);
+                },
+              },
+              {
+                label: (
+                  <Text
+                    id="blocks.extensionStatusMenu.serial"
+                    defaultMessage="Serial Port"
+                  />
+                ),
+                onClick: () => {
+                  extensionStatusMenu.value = null;
+                  connectSerial(extObj, connectionOptions.serial);
+                },
+              },
+            ],
+          };
+          return;
+        }
+
         // 蓝牙BLE连接
         if (connectionOptions.bluetooth) {
-          connectBluetooth(extId, connectionOptions.bluetooth);
+          connectBluetooth(extObj, connectionOptions.bluetooth);
+          return;
         }
 
         // 串口连接
-        // if (connectionOptions.serial) {
-        //   const device = await navigator.serial.requestPort(connectionOptions.serial);
-        // }
+        if (connectionOptions.serial) {
+          connectSerial(extObj, connectionOptions.serial);
+          return;
+        }
       };
     }
     return () => {
@@ -583,6 +645,11 @@ export function BlocksEditor({
       />
 
       <DataMonitor offset={monitorOffset} />
+
+      <ContextMenu
+        menuItems={extensionStatusMenu.value?.menuItems}
+        position={extensionStatusMenu.value?.position}
+      />
 
       {!disableExtensionButton && (
         <div className={classNames('scratchCategoryMenu', styles.extensionButton)}>

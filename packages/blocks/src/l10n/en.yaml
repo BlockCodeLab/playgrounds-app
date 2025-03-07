@@ -65,3 +65,6 @@ blocks.monitor.showNamedValue: show value %1 named %2
 blocks.monitor.trueValue: "true"
 blocks.monitor.falseValue: "false"
 blocks.monitor.listLength: "{length} items"
+
+blocks.extensionStatusMenu.bluetooth: Bluetooth (BLE)
+blocks.extensionStatusMenu.serial: Serial Port

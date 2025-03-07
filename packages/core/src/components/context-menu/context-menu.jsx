@@ -1,4 +1,4 @@
-import { useEffect, useRef, useId } from 'preact/hooks';
+import { useEffect, useCallback, useRef, useId } from 'preact/hooks';
 import { createPopper } from '@popperjs/core/lib/popper-lite';
 import { classNames } from '@blockcode/utils';
 
@@ -33,52 +33,66 @@ const generateGetBoundingClientRect =
     left: x,
   });
 
-export function ContextMenu({ menuItems, className, children }) {
+const virtualElement = {
+  getBoundingClientRect: generateGetBoundingClientRect(),
+};
+
+export function ContextMenu({ menuItems, className, position, children }) {
   const ref = useRef(null);
 
   const contextId = useId();
 
+  const hide = useCallback(() => {
+    if (ref.popper) {
+      delete ref.current.dataset.show;
+      ref.popper.setOptions((options) => ({
+        ...options,
+        modifiers: [...options.modifiers, { name: 'eventListeners', enabled: false }],
+      }));
+    }
+    document.removeEventListener('click', hide);
+    document.removeEventListener('pointerdown', hide);
+  }, []);
+
+  const show = useCallback((e) => {
+    e.preventDefault?.();
+    if (ref.popper) {
+      virtualElement.getBoundingClientRect = generateGetBoundingClientRect(e.clientX, e.clientY);
+
+      ref.current.dataset.show = true;
+      ref.popper.setOptions((options) => ({
+        ...options,
+        modifiers: [...options.modifiers, { name: 'eventListeners', enabled: true }],
+      }));
+      ref.popper.update();
+      setTimeout(() => {
+        document.addEventListener('click', hide);
+        document.addEventListener('pointerdown', hide);
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (position) {
+      show({
+        clientX: position.x,
+        clientY: position.y,
+      });
+    } else {
+      hide();
+    }
+  }, [position]);
+
   useEffect(() => {
     if (ref.current) {
-      const contextForElement = ref.current.previousElementSibling;
-
-      const virtualElement = {
-        getBoundingClientRect: generateGetBoundingClientRect(),
-      };
-
-      const popper = createPopper(virtualElement, ref.current, {
+      ref.popper = createPopper(virtualElement, ref.current, {
         placement: 'bottom-end',
       });
 
-      const hide = (e) => {
-        if (ref.current) {
-          delete ref.current.dataset.show;
-          popper.setOptions((options) => ({
-            ...options,
-            modifiers: [...options.modifiers, { name: 'eventListeners', enabled: false }],
-          }));
-        }
-        document.removeEventListener('click', hide);
-        document.removeEventListener('pointerdown', hide);
-      };
-
-      const show = (e) => {
-        e.preventDefault();
-
-        virtualElement.getBoundingClientRect = generateGetBoundingClientRect(e.clientX, e.clientY);
-
-        ref.current.dataset.show = true;
-        popper.setOptions((options) => ({
-          ...options,
-          modifiers: [...options.modifiers, { name: 'eventListeners', enabled: true }],
-        }));
-        popper.update();
-        setTimeout(() => {
-          document.addEventListener('click', hide);
-          document.addEventListener('pointerdown', hide);
-        });
-      };
-      contextForElement.addEventListener('contextmenu', show);
+      if (children) {
+        const contextForElement = ref.current.previousElementSibling;
+        contextForElement.addEventListener('contextmenu', show);
+      }
     }
     return () => {};
   }, [ref]);
