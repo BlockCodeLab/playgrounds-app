@@ -174,17 +174,16 @@ export function BlocksEditor({
     return xml;
   }, [options, onBuildinExtensions]);
 
-  // 生成积木栏XML
+  // 切换积木语言
   //
-  const toolboxXml = useMemo(() => {
-    // 切换积木语言
+  useEffect(() => {
     const locale = unifyLocale(language.value);
     if (ScratchBlocks.ScratchMsgs.currentLocale_ !== locale) {
       ScratchBlocks.ScratchMsgs.setLocale(locale);
     }
     // 更新积木文本
     updateScratchBlocksMsgs(enableMultiTargets);
-    return updateWorkspace();
+    updateWorkspace();
   }, [enableMultiTargets, updateWorkspace, language.value]);
 
   // 添加扩展XML
@@ -287,10 +286,6 @@ export function BlocksEditor({
     if (splashVisible.value) return;
 
     if (ref.workspace) {
-      const buildinExtensions = onBuildinExtensions?.();
-      const xml = updateToolboxXml(buildinExtensions, options);
-      updateWorkspaceToolbox(ref.workspace, wrapToolboxXml(xml));
-
       // 共享全局变量
       const globalVariables = ref.workspace.getAllVariables().filter((variable) => {
         if (variable.isLocal) return false;
@@ -310,7 +305,6 @@ export function BlocksEditor({
       });
 
       // 加载积木到工作区
-      console.log(file.value.xml);
       loadXmlToWorkspace(file.value.xmlDom ?? file.value.xml, globalVariables, ref.workspace);
 
       // 检查如果有积木没有代码则立即生成
@@ -318,6 +312,11 @@ export function BlocksEditor({
         const codes = generateCodes(fileIndex.value);
         setFile(codes);
       }
+
+      // 更新积木栏
+      const buildinExtensions = onBuildinExtensions?.();
+      const xml = updateToolboxXml(buildinExtensions, options);
+      updateWorkspaceToolbox(ref.workspace, wrapToolboxXml(xml));
 
       // 清除撤销记录
       setTimeout(() => ref.workspace.clearUndo(), 50);
@@ -380,7 +379,6 @@ export function BlocksEditor({
             ...codes,
           });
         }
-        hideSplash();
 
         // 加载当前选中的文档
         data = projData.xmls.get(fileId.value);
@@ -390,14 +388,26 @@ export function BlocksEditor({
 
         // 清空撤销记录
         ref.workspace.clearUndo();
+
+        updateWorkspace();
+        hideSplash();
       });
     }
-  }, [splashVisible.value, generateCodes, options]);
+  }, [splashVisible.value, generateCodes, options, updateWorkspace]);
 
   // 创建工作区
   //
   useEffect(() => {
     if (ref.current) {
+      // 切换积木语言
+      const locale = unifyLocale(language.value);
+      if (ScratchBlocks.ScratchMsgs.currentLocale_ !== locale) {
+        ScratchBlocks.ScratchMsgs.setLocale(locale);
+      }
+      // 更新积木文本
+      updateScratchBlocksMsgs(enableMultiTargets);
+      // 生成积木栏
+      const toolboxXml = updateWorkspace();
       // 创建工作区
       ref.workspace = ScratchBlocks.inject(
         ref.current,
