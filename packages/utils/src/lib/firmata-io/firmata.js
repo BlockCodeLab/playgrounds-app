@@ -661,7 +661,6 @@ class Firmata extends EventEmitter {
     });
 
     this.transport.on('data', (data) => {
-      console.log(data)
       for (let i = 0; i < data.length; i++) {
         let byte = data[i];
         // we dont want to push 0 as the first byte on our buffer
