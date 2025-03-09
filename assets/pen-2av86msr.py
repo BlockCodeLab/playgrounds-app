@@ -9,6 +9,8 @@ PEN_COLOR = "PEN_COLOR"
 PEN_SIZE = "PEN_SIZE"
 PEN_LAST_POS = "PEN_LAST_POS"
 
+num = runtime.number
+
 
 def clear():
     stage.clear_paints(PEN_PAINT)
@@ -72,14 +74,20 @@ def up(target):
 
 
 def set_color(target, color=None, hue=None, saturation=None, brightness=None):
-    if color == None:
+    if color is None:
         r, g, b = target.data.get(PEN_COLOR, (0, 0, 0))
         h, s, v = colorsys.rgb_to_hsv(r, g, b)
-        if hue != None:
+        if hue is not None:
+            if type(hue) is str:
+                hue = num(hue)
             h = hue % 100 / 100
-        if saturation != None:
+        if saturation is not None:
+            if type(saturation) is str:
+                saturation = num(saturation)
             s = saturation % 100 / 100
-        if brightness != None:
+        if brightness is not None:
+            if type(brightness) is str:
+                brightness = num(brightness)
             v = brightness % 100 / 100
         r, g, b = colorsys.hsv_to_rgb(h, s, v)
         color = round(r), round(g), round(b)
@@ -87,6 +95,12 @@ def set_color(target, color=None, hue=None, saturation=None, brightness=None):
 
 
 def change_color(target, hue=0, saturation=0, brightness=0):
+    if type(hue) is str:
+        hue = num(hue)
+    if type(saturation) is str:
+        saturation = num(saturation)
+    if type(brightness) is str:
+        brightness = num(brightness)
     r, g, b = target.data.get(PEN_COLOR, (0, 0, 0))
     h, s, v = colorsys.rgb_to_hsv(r, g, b)
     h += hue % 100 / 100
