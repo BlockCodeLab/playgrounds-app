@@ -1,12 +1,13 @@
 import { setAlert, Text } from '@blockcode/core';
 import { Firmata } from '@blockcode/utils';
-import { ArduinoBle } from './arduinoBle';
 import { BleSerialPort } from './ble_serialport';
+import { ASerialPort } from './a_serialPort';
+import { Serial } from '@blockcode/core';
 
 class ArudinoBleEmulator {
   constructor() {
-    this.arduinoBle = new ArduinoBle();
-    this.bleSerialPort = new BleSerialPort(this.arduinoBle);
+    this.type = 'ble';
+    this.uniSerialPort = null;
     this.board = null;
   }
 
@@ -14,13 +15,8 @@ class ArudinoBleEmulator {
     return 'firmata';
   }
 
-  async connect(server) {
-    this.arduinoBle.init(server);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    await this.arduinoBle.sendATMessage('AT+BAUD=3');
-    await this.arduinoBle.sendATMessage('AT+BLEUSB=3');
-    await this.arduinoBle.sendATMessage('AT+ALL');
-    this.board = new Firmata(this.bleSerialPort, { skipCapabilities: true });
+  async connect() {
+   
     this.board.on('ready', () => {
       console.log('✔ ready');
       this.board.queryCapabilities(() => {
@@ -38,14 +34,26 @@ class ArudinoBleEmulator {
 
   async flashAndReInit() {
     await this.flash();
-    await this.arduinoBle.sendATMessage('AT+BAUD=3');
-    await this.arduinoBle.sendATMessage('AT+BLEUSB=3');
-    this.board.queryCapabilities(() => {
-      this.board.queryAnalogMapping(() => {
-        console.log('queryAnalogMapping');
+    if(this.type === 'ble'){
+      this.board.reportVersion(()=> {});
+      this.board.queryCapabilities(() => {
+        this.board.queryAnalogMapping(() => {
+          console.log('queryAnalogMapping');
+        });
+        console.log('queryCapabilities');
       });
-      console.log('queryCapabilities');
-    });
+    }else{
+      this.board.reportVersion(()=> {});
+      this.board.queryFirmware(()=> {
+        this.board.queryCapabilities(() => {
+          this.board.queryAnalogMapping(() => {
+            console.log('queryAnalogMapping');
+          });
+          console.log('queryCapabilities');
+        });
+
+      });
+    }
   }
 
   async disconnect() {
@@ -61,8 +69,7 @@ class ArudinoBleEmulator {
         />
       ),
     });
-    await this.arduinoBle.sendATMessage('AT+BAUD=4');
-    await this.bleSerialPort.flashHex();
+    await this.uniSerialPort.flashHex();
     setAlert(
       {
         id: alertId,
@@ -86,7 +93,7 @@ class ArudinoBleEmulator {
       } else {
         console.log('-------new report analog --------');
         this.board.reportAnalogPin(pin, 1);
-        return '0';
+        return pinObj.value;
       }
     }
   }
@@ -101,7 +108,7 @@ class ArudinoBleEmulator {
         console.log('-------new report digital --------');
         this.board.pinMode(pin, this.board.MODES.PULLUP);
         this.board.reportDigitalPin(pin, 1);
-        return false;
+        return Boolean(pinObj.value);
       }
     }
   }
@@ -200,8 +207,20 @@ class ArudinoBleEmulator {
 
 export function emulator(runtime, Konva) {
   const arudinoBleEmulator = new ArudinoBleEmulator();
-  runtime.on('connecting', (server) => {
-    arudinoBleEmulator.connect(server);
+  runtime.on('connecting', async(server) => {
+    if(server instanceof BluetoothRemoteGATTServer){
+      arudinoBleEmulator.uniSerialPort = new BleSerialPort();
+      await arudinoBleEmulator.uniSerialPort.init(server);
+      arudinoBleEmulator.board = new Firmata(arudinoBleEmulator.uniSerialPort, { skipCapabilities: true });
+      arudinoBleEmulator.connect();
+    }else if(server instanceof SerialPort){
+      arudinoBleEmulator.type = 'serial';
+      arudinoBleEmulator.uniSerialPort = new ASerialPort(server);
+      await arudinoBleEmulator.uniSerialPort.open({baudRate: 57600})
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      arudinoBleEmulator.board = new Firmata(arudinoBleEmulator.uniSerialPort, { skipCapabilities: true });
+      arudinoBleEmulator.connect();
+    }
   });
 
   runtime.on('disconnect', () => {

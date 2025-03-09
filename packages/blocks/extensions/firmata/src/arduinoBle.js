@@ -70,7 +70,7 @@ export class ArduinoBle extends EventEmitter {
       });
   }
 
-  init(server) {
+  async init(server) {
     this.bleServer = server;
     this.emit('open');
     this.bleServer
@@ -89,6 +89,11 @@ export class ArduinoBle extends EventEmitter {
         this.atChar = characteristic;
         characteristic.addEventListener('characteristicvaluechanged', this.bleAtNotify.bind(this));
       });
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await this.sendATMessage('AT+BAUD=3');
+    await this.sendATMessage('AT+BLEUSB=3');
+    await this.sendATMessage('AT+ALL');
   }
 
   async disconnect() {
