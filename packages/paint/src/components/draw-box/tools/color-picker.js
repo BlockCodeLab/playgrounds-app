@@ -4,7 +4,6 @@ export default {
   setup(layer, options) {
     this.stage = layer.getStage();
     this.layer = layer;
-    this.ctx = layer.getContext();
     // 工具属性
     this.pickColor = options.onPickColor;
   },
@@ -16,10 +15,14 @@ export default {
     return (y * width + x) << 2;
   },
 
-  onBegin(e) {
+  async onBegin(e) {
     const width = this.layer.width();
     const height = this.layer.height();
-    this.imageData = this.ctx.getImageData(0, 0, width, height);
+    const canvas = await this.layer.toCanvas({
+      pixelRatio: 1,
+    });
+    const ctx = canvas.getContext('2d');
+    this.imageData = ctx.getImageData(0, 0, width, height);
 
     const pos = this.stage.getPointerPosition();
     const index = this.getIndex(pos);
@@ -29,6 +32,7 @@ export default {
   },
 
   onDrawing(e) {
+    if (!this.imageData) return;
     const pos = this.stage.getPointerPosition();
     const index = this.getIndex(pos);
     const rgba = this.imageData.data.slice(index, index + 4);

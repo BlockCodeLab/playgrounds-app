@@ -293,7 +293,7 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
       // 原始图片
       ref.image = new Konva.Image();
       ref.drawLayer.add(ref.image);
-      if (asset.value) {
+      if (/image\//.test(asset.value?.type)) {
         loadImageFromAsset(asset.value).then((image) => {
           ref.image.image(image);
           ref.image.position({
