@@ -54,7 +54,7 @@ def pen_goto(target, *args, **kwargs):
     nx, ny = stage.CENTER_X + target.x, stage.CENTER_Y - target.y
     if x == nx and y == ny:
         return
-    color = target.data.get(PEN_COLOR, (0, 0, 0))
+    color = target.data.get(PEN_COLOR, (255, 0, 0))
     size = target.data.get(PEN_SIZE, 1)
     stage.add_paint(
         PEN_PAINT, lambda disp: disp.line(x, y, nx, ny, size, rgb565(*color))
@@ -75,7 +75,7 @@ def up(target):
 
 def set_color(target, color=None, hue=None, saturation=None, brightness=None):
     if color is None:
-        r, g, b = target.data.get(PEN_COLOR, (0, 0, 0))
+        r, g, b = target.data.get(PEN_COLOR, (255, 0, 0))
         h, s, v = colorsys.rgb_to_hsv(r, g, b)
         if hue is not None:
             if type(hue) is str:
@@ -101,11 +101,11 @@ def change_color(target, hue=0, saturation=0, brightness=0):
         saturation = num(saturation)
     if type(brightness) is str:
         brightness = num(brightness)
-    r, g, b = target.data.get(PEN_COLOR, (0, 0, 0))
+    r, g, b = target.data.get(PEN_COLOR, (255, 0, 0))
     h, s, v = colorsys.rgb_to_hsv(r, g, b)
-    h += hue % 100 / 100
-    s += saturation % 100 / 100
-    v += brightness % 100 / 100
+    h = (h * 100 + hue) % 100 / 100
+    s = (s * 100 + saturation) % 100 / 100
+    v = (v * 100 + brightness) % 100 / 100
     r, g, b = colorsys.hsv_to_rgb(h, s, v)
     target.data[PEN_COLOR] = round(r), round(g), round(b)
 
