@@ -447,7 +447,7 @@ export function BlocksEditor({
         if (e.type === ScratchBlocks.Events.END_DRAG) {
           batch(() => {
             if (appState.value?.removeCopiedBlock && appState.value?.copiedBlock) {
-              const copiedBlock = appState.value.copiedBlock;
+              const copiedBlock = appState.value?.copiedBlock;
               copiedBlock.block.dispose(false, false);
 
               // 生产复制积木的代码
@@ -541,7 +541,16 @@ export function BlocksEditor({
 
       // 连接蓝牙设备
       const connectBluetooth = async (extObj, options) => {
-        const device = await navigator.bluetooth.requestDevice(options);
+        const deviceName = `device.${extObj.id}`;
+        let device = appState.value?.[deviceName];
+        if (device?.disconnect) {
+          await device?.disconnect();
+        }
+        if (device?.close) {
+          await device.close();
+        }
+
+        device = await navigator.bluetooth.requestDevice(options);
         // 断开连接
         device.addEventListener(
           'gattserverdisconnected',
@@ -550,13 +559,22 @@ export function BlocksEditor({
         );
         // 连接
         const gattServer = await device.gatt.connect();
-        setAppState(`device.${extObj.id}`, gattServer);
+        setAppState(deviceName, gattServer);
         refreshStatus();
       };
 
       // 连接串口设备
       const connectSerial = async (extObj, options) => {
-        const device = await navigator.serial.requestPort(options);
+        const deviceName = `device.${extObj.id}`;
+        let device = appState.value?.[deviceName];
+        if (device?.disconnect) {
+          await device?.disconnect();
+        }
+        if (device?.close) {
+          await device.close();
+        }
+
+        device = await navigator.serial.requestPort(options);
         // 断开连接
         device.addEventListener(
           'disconnect',
@@ -564,7 +582,7 @@ export function BlocksEditor({
           { once: true },
         ),
           // 连接
-          setAppState(`device.${extObj.id}`, device);
+          setAppState(deviceName, device);
         refreshStatus();
       };
 
