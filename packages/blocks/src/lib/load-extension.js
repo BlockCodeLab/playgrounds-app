@@ -213,6 +213,7 @@ export function loadExtension(extObj, options) {
                     extObj.menus[menuName] = {
                       inputMode,
                       type: inputType,
+                      defaultValue: inputDefault,
                       items: menu,
                     };
                   }
@@ -354,18 +355,22 @@ export function loadExtension(extObj, options) {
     // 自动转换菜单积木代码
     if (generator) {
       generator[menuBlockId] = (block) => {
-        let value = block.getFieldValue(menuName);
-        if (menu.type !== 'number') {
+        let value = block.getFieldValue(menuName) || menu.defaultValue;
+        if (['text', 'string'].includes(menu.type)) {
           value = generator.quote_(value);
+        } else if (menu.type === 'number') {
+          value = Number(value);
         }
         return [value, generator.ORDER_ATOMIC];
       };
     }
     if (emulator) {
       emulator[menuBlockId] = (block) => {
-        let value = block.getFieldValue(menuName);
-        if (menu.type !== 'number') {
-          value = emulator.quote_(value);
+        let value = block.getFieldValue(menuName) || menu.defaultValue;
+        if (['text', 'string'].includes(menu.type)) {
+          value = generator.quote_(value);
+        } else if (menu.type === 'number') {
+          value = Number(value);
         }
         return [value, emulator.ORDER_ATOMIC];
       };
