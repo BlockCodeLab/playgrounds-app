@@ -52,8 +52,18 @@ const watchAndCopydir = (src, dist) => {
   copydir(src, dist);
   // 添加监控
   if (isWatch) {
+    let timer = null;
+    let timestamp = 0;
     watch(src, (_, f) => {
-      copyfile(relative(src, f), relative(dist, f));
+      timestamp = Date.now();
+      if (!timer) {
+        timer = setInterval(() => {
+          if (Date.now() - timestamp < 1000) return;
+          copydir(src, dist);
+          clearInterval(timer);
+          timer = null;
+        }, 1000);
+      }
     });
   }
 };
