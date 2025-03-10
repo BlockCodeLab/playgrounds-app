@@ -70,10 +70,6 @@ export function emulator(runtime, Konva) {
       runtime.setData(target, 'pen.color', color);
     },
 
-    addColor(target, color) {
-      runtime.setData(target, 'pen.color', color);
-    },
-
     addColorParam(target, param, value) {
       const paramValue = MathUtils.toNumber(value);
       const colorValue = runtime.getData(target, 'pen.color') ?? '#FF0000';
@@ -87,7 +83,7 @@ export function emulator(runtime, Konva) {
           break;
         case 'hub':
         default:
-          color.hsv.h += paramValue;
+          color.hsv.h += paramValue * 3.6;
       }
       runtime.setData(target, 'pen.color', color.hex);
     },
@@ -105,7 +101,7 @@ export function emulator(runtime, Konva) {
           break;
         case 'hub':
         default:
-          color.hsv.h = paramValue;
+          color.hsv.h = paramValue * 3.6;
       }
       runtime.setData(target, 'pen.color', color.hex);
     },

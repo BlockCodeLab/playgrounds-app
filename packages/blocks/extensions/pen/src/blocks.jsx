@@ -123,7 +123,7 @@ export const blocks = [
       if (this.STATEMENT_PREFIX) {
         code += this.injectId(this.STATEMENT_PREFIX, block);
       }
-      const color = this.valueToCode(block, 'COLOR', this.ORDER_NONE) || '"#000000"';
+      const color = this.valueToCode(block, 'COLOR', this.ORDER_NONE) || '"#ff0000"';
       code += `runtime.extensions.pen.setColor(target, ${color});\n`;
       return code;
     },
@@ -132,7 +132,7 @@ export const blocks = [
       if (this.STATEMENT_PREFIX) {
         code += this.injectId(this.STATEMENT_PREFIX, block);
       }
-      const color = this.valueToCode(block, 'COLOR', this.ORDER_NONE) || '(0, 0, 0)';
+      const color = this.valueToCode(block, 'COLOR', this.ORDER_NONE) || '(255, 0, 0)';
       code += `pen.set_color(target, ${color})\n`;
       return code;
     },
@@ -160,9 +160,9 @@ export const blocks = [
       if (this.STATEMENT_PREFIX) {
         code += this.injectId(this.STATEMENT_PREFIX, block);
       }
-      const option = this.quote_(this.valueToCode(block, 'OPTION', this.ORDER_NONE)) || '"hue"';
-      const value = this.valueToCode(block, 'VALUE', this.ORDER_NONE) || '0';
-      code += `runtime.extensions.pen.addColorParam(target, ${option}, ${value});\n`;
+      const option = this.valueToCode(block, 'OPTION', this.ORDER_NONE);
+      const value = this.valueToCode(block, 'VALUE', this.ORDER_NONE) || 10;
+      code += `runtime.extensions.pen.addColorParam(target, '${option}', ${value});\n`;
       return code;
     },
     mpy(block) {
@@ -170,9 +170,9 @@ export const blocks = [
       if (this.STATEMENT_PREFIX) {
         code += this.injectId(this.STATEMENT_PREFIX, block);
       }
-      const option = this.valueToCode(block, 'OPTION', this.ORDER_NONE) || 'hue';
-      const value = this.valueToCode(block, 'VALUE', this.ORDER_NONE) || '0';
-      code += `pen.change_color(target, ${option} = num(${value}))\n`;
+      const option = this.valueToCode(block, 'OPTION', this.ORDER_NONE);
+      const value = this.valueToCode(block, 'VALUE', this.ORDER_NONE) || 10;
+      code += `pen.change_color(target, ${option}=${value})\n`;
       return code;
     },
   },
@@ -199,9 +199,9 @@ export const blocks = [
       if (this.STATEMENT_PREFIX) {
         code += this.injectId(this.STATEMENT_PREFIX, block);
       }
-      const option = this.quote_(this.valueToCode(block, 'OPTION', this.ORDER_NONE)) || '"hue"';
+      const option = this.valueToCode(block, 'OPTION', this.ORDER_NONE);
       const value = this.valueToCode(block, 'VALUE', this.ORDER_NONE) || '0';
-      code += `runtime.extensions.pen.setColorParam(target, ${option}, ${value});\n`;
+      code += `runtime.extensions.pen.setColorParam(target, '${option}', ${value});\n`;
       return code;
     },
     mpy(block) {
@@ -209,9 +209,9 @@ export const blocks = [
       if (this.STATEMENT_PREFIX) {
         code += this.injectId(this.STATEMENT_PREFIX, block);
       }
-      const option = this.valueToCode(block, 'OPTION', this.ORDER_NONE) || 'hue';
+      const option = this.valueToCode(block, 'OPTION', this.ORDER_NONE);
       const value = this.valueToCode(block, 'VALUE', this.ORDER_NONE) || '0';
-      code += `pen.set_color(${option} = num(${value}))\n`;
+      code += `pen.set_color(target, ${option}=${value})\n`;
       return code;
     },
   },
@@ -245,7 +245,7 @@ export const blocks = [
         code += this.injectId(this.STATEMENT_PREFIX, block);
       }
       const size = this.valueToCode(block, 'SIZE', this.ORDER_NONE) || '1';
-      code += `pen.change_size(target, num(${size}))\n`;
+      code += `pen.change_size(target, ${size})\n`;
       return code;
     },
   },
@@ -279,7 +279,7 @@ export const blocks = [
         code += this.injectId(this.STATEMENT_PREFIX, block);
       }
       const size = this.valueToCode(block, 'SIZE', this.ORDER_NONE) || '1';
-      code += `pen.set_size(target, num(${size}))\n`;
+      code += `pen.set_size(target, ${size})\n`;
       return code;
     },
   },
@@ -288,7 +288,6 @@ export const blocks = [
 export const menus = {
   colorParam: {
     inputMode: true,
-    type: 'string',
     defaultValue: 'hue',
     items: [
       [
