@@ -41,3 +41,24 @@ ScratchBlocks.Blocks['operator_lte'] = {
     });
   },
 };
+
+// !=
+ScratchBlocks.Blocks['operator_notequals'] = {
+  init() {
+    this.jsonInit({
+      message0: ScratchBlocks.Msg.OPERATORS_NOTEQUALS,
+      args0: [
+        {
+          type: 'input_value',
+          name: 'OPERAND1',
+        },
+        {
+          type: 'input_value',
+          name: 'OPERAND2',
+        },
+      ],
+      category: ScratchBlocks.Categories.operators,
+      extensions: ['colours_operators', 'output_boolean'],
+    });
+  },
+};

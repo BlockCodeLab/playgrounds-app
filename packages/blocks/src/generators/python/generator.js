@@ -112,12 +112,7 @@ export class PythonGenerator extends ScratchBlocks.Generator {
    * @param {!ScratchBlocks.Workspace} workspace Workspace to generate code from.
    */
   init(workspace) {
-    // 将所有积木对应的转换函数绑定到 this
-    for (const key in this) {
-      if (typeof this[key] === 'function' && !ScratchBlocks.Generator.prototype[key]) {
-        this[key] = this[key].bind(this);
-      }
-    }
+    super.init(workspace);
 
     /**
      * Empty loops or conditionals are not allowed in Python.

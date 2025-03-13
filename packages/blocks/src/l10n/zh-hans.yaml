@@ -35,6 +35,15 @@ blocks.dataPrompt.forThisTarget: 仅适用于当前
 blocks.dataPrompt.availableToAllTargets: 全局都可使用该变量。
 blocks.dataPrompt.listAvailableToAllTargets: 全局都可使用该列表。
 
+blocks.dataPrompt.makeList: 建立一个列表
+blocks.dataPrompt.listExists: 名为 “%1” 的列表已存在。
+blocks.dataPrompt.newList: 新建列表
+blocks.dataPrompt.listTitle: 新的列表名：
+blocks.dataPrompt.makeArray: 建立一个数组
+blocks.dataPrompt.arrayExists: 名为 “%1” 的数组已存在。
+blocks.dataPrompt.newArray: 新建数组
+blocks.dataPrompt.arrayTitle: 新的数组名：
+
 blocks.myBlockPrompt.title: 制作新的积木
 blocks.myBlockPrompt.addAnInputNumberText: 添加输入项
 blocks.myBlockPrompt.numberTextType: 数字或文本
@@ -54,6 +63,11 @@ blocks.control.stopOther: 其他脚本
 blocks.control.stopOtherInTarget: 该角色其他脚本
 blocks.operators.and: "%1 且 %2"
 blocks.unsupported: 不支持的积木
+
+blocks.dataCategory.dataType: 声明 %1 类型为 %2
+blocks.dataCategory.arrayType: 声明 %3 类型为 %1 且长度为 %2
+blocks.dataCategory.arraySetItem: 将 %2 下标 %1 的值设为 %3
+blocks.dataCategory.arrayItem: "%2 下标 %1 的值"
 
 blocks.myblock.addLabel: 文本
 blocks.myblock.addBoolean: 布尔值

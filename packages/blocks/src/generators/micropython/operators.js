@@ -76,6 +76,13 @@ proto['operator_equals'] = function (block) {
   return [code, this.ORDER_FUNCTION_CALL];
 };
 
+proto['operator_notequals'] = function (block) {
+  const operand1Code = this.valueToCode(block, 'OPERAND1', this.ORDER_NONE) || 0;
+  const operand2Code = this.valueToCode(block, 'OPERAND2', this.ORDER_NONE) || 0;
+  const code = `(not runtime.equals(${operand1Code}, ${operand2Code}))`;
+  return [code, this.ORDER_FUNCTION_CALL];
+};
+
 proto['operator_and'] = function (block) {
   const operand1Code = this.valueToCode(block, 'OPERAND1', this.ORDER_NONE) || 'False';
   const operand2Code = this.valueToCode(block, 'OPERAND2', this.ORDER_NONE) || 'False';

@@ -1,6 +1,6 @@
-import { EmulatorGenerator } from './generator';
+import { ClangGenerator } from './generator';
 
-const proto = EmulatorGenerator.prototype;
+const proto = ClangGenerator.prototype;
 
 proto['operator_add'] = function (block) {
   const num1Code = this.valueToCode(block, 'NUM1', this.ORDER_NONE) || '0';

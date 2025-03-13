@@ -33,6 +33,8 @@ export { JavaScriptGenerator } from './generators/javascript';
 
 export { PythonGenerator } from './generators/python';
 
+export { ClangGenerator } from './generators/clang';
+
 export { MicroPythonGenerator } from './generators/micropython';
 
 export { EmulatorGenerator } from './generators/emulator';

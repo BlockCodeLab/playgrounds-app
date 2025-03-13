@@ -1,96 +1,52 @@
 import { ScratchBlocks } from '../../lib/scratch-blocks';
 
-export class JavaScriptGenerator extends ScratchBlocks.Generator {
+export class ClangGenerator extends ScratchBlocks.Generator {
   /**
    * Order of operation ENUMs.
-   * https://developer.mozilla.org/en/JavaScript/Reference/Operators/Operator_Precedence
+   * http://en.cppreference.com/w/cpp/language/operator_precedence
    */
   ORDER_ATOMIC = 0; // 0 "" ...
-  ORDER_NEW = 1.1; // new
-  ORDER_MEMBER = 1.2; // . []
+  ORDER_MEMBER = 2; // . []
   ORDER_FUNCTION_CALL = 2; // ()
   ORDER_INCREMENT = 3; // ++
   ORDER_DECREMENT = 3; // --
-  ORDER_BITWISE_NOT = 4.1; // ~
-  ORDER_UNARY_PLUS = 4.2; // +
-  ORDER_UNARY_NEGATION = 4.3; // -
-  ORDER_LOGICAL_NOT = 4.4; // !
-  ORDER_TYPEOF = 4.5; // typeof
-  ORDER_VOID = 4.6; // void
-  ORDER_DELETE = 4.7; // delete
-  ORDER_DIVISION = 5.1; // /
-  ORDER_MULTIPLICATION = 5.2; // *
-  ORDER_MODULUS = 5.3; // %
-  ORDER_SUBTRACTION = 6.1; // -
-  ORDER_ADDITION = 6.2; // +
-  ORDER_BITWISE_SHIFT = 7; // << >> >>>
+  ORDER_LOGICAL_NOT = 3; // !
+  ORDER_BITWISE_NOT = 3; // ~
+  ORDER_UNARY_PLUS = 3; // +
+  ORDER_UNARY_NEGATION = 3; // -
+  ORDER_MULTIPLICATION = 5; // *
+  ORDER_DIVISION = 5; // /
+  ORDER_MODULUS = 5; // %
+  ORDER_ADDITION = 6; // +
+  ORDER_SUBTRACTION = 6; // -
+  ORDER_BITWISE_SHIFT = 7; // << >>
   ORDER_RELATIONAL = 8; // < <= > >=
-  ORDER_IN = 8; // in
-  ORDER_INSTANCEOF = 8; // instanceof
-  ORDER_EQUALITY = 9; // == != === !==
+  ORDER_EQUALITY = 9; // == !=
   ORDER_BITWISE_AND = 10; // &
   ORDER_BITWISE_XOR = 11; // ^
   ORDER_BITWISE_OR = 12; // |
   ORDER_LOGICAL_AND = 13; // &&
   ORDER_LOGICAL_OR = 14; // ||
   ORDER_CONDITIONAL = 15; // ?:
-  ORDER_ASSIGNMENT = 16; // = += -= *= /= %= <<= >>= ...
+  ORDER_ASSIGNMENT = 15; // = += -= *= /= %= <<= >>= ...
   ORDER_COMMA = 17; // ,
   ORDER_NONE = 99; // (...)
 
-  constructor(name = 'JavaScript') {
+  constructor(name = 'CLang') {
     super(name);
 
     /**
      * List of illegal variable names.
-     * This is not intended to be a security feature.  Blockly is 100% client-side,
+     * This is not intended to be a security feature.  ScratchBlocks is 100% client-side,
      * so bypassing this list is trivial.  This is intended to prevent users from
      * accidentally clobbering a built-in object or function.
      * @private
      */
     this.addReservedWords(
-      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Lexical_grammar#Keywords
-      'break,case,catch,class,const,continue,debugger,default,delete,do,else,export,extends,finally,for,function,if,import,in,instanceof,new,return,super,switch,this,throw,try,typeof,var,void,while,with,yield,' +
-        'enum,' +
-        'implements,interface,let,package,private,protected,public,static,' +
-        'await,' +
-        'null,true,false,' +
-        // Magic variable.
-        'arguments,' +
-        // Everything in the current environment (835 items in Chrome, 104 in Node).
-        Object.getOwnPropertyNames(window).join(','),
+      ',alignas,alignof,and,and_eq,asm,auto,bitand,bitor,bool,break,case,catch,char,char16_t,char32_t,class,compl,const,constexpr,const_cast,continue,decltype,default,delete,do,double,dynamic_cast,else,enum,explicit,export,extern,false,float,for,friend,goto,if,inline,int,long,long double,long long,mutable,namespace,new,noexcept,not,not_eq,nullptr,operator,or,or_eq,private,protected,public,register,reinterpret_cast,return,short,signed,sizeof,static,static_assert,static_cast,struct,switch,template,this,thread_local,throw,true,try,typedef,typeid,typename,union,unsigned,using,virtual,void,volatile,wchar_t,while,xor,xor_eq,posix,' +
+        // http://en.cppreference.com/w/cpp/keyword
+        'game,api,PI,PI2,PI3,PI4,DEG2RAD,RAD2DEG,ZRMS,ZR2D,ZR3D,ALLIANCE', //TODO: add ZR #defines to list
     );
-
-    /**
-     * List of outer-inner pairings that do NOT require parentheses.
-     * @type {!Array.<!Array.<number>>}
-     */
-    this.ORDER_OVERRIDES = [
-      // (foo()).bar -> foo().bar
-      // (foo())[0] -> foo()[0]
-      [this.ORDER_FUNCTION_CALL, this.ORDER_MEMBER],
-      // (foo())() -> foo()()
-      [this.ORDER_FUNCTION_CALL, this.ORDER_FUNCTION_CALL],
-      // (foo.bar).baz -> foo.bar.baz
-      // (foo.bar)[0] -> foo.bar[0]
-      // (foo[0]).bar -> foo[0].bar
-      // (foo[0])[1] -> foo[0][1]
-      [this.ORDER_MEMBER, this.ORDER_MEMBER],
-      // (foo.bar)() -> foo.bar()
-      // (foo[0])() -> foo[0]()
-      [this.ORDER_MEMBER, this.ORDER_FUNCTION_CALL],
-
-      // !(!foo) -> !!foo
-      [this.ORDER_LOGICAL_NOT, this.ORDER_LOGICAL_NOT],
-      // a * (b * c) -> a * b * c
-      [this.ORDER_MULTIPLICATION, this.ORDER_MULTIPLICATION],
-      // a + (b + c) -> a + b + c
-      [this.ORDER_ADDITION, this.ORDER_ADDITION],
-      // a && (b && c) -> a && b && c
-      [this.ORDER_LOGICAL_AND, this.ORDER_LOGICAL_AND],
-      // a || (b || c) -> a || b || c
-      [this.ORDER_LOGICAL_OR, this.ORDER_LOGICAL_OR],
-    ];
   }
 
   /**
@@ -111,39 +67,7 @@ export class JavaScriptGenerator extends ScratchBlocks.Generator {
     } else {
       this.nameDB_.reset();
     }
-
     this.nameDB_.setVariableMap(workspace.getVariableMap());
-
-    let defvars = [];
-    // Add user variables.
-    let variables = workspace.getAllVariables();
-    for (let i = 0; i < variables.length; i++) {
-      if (variables[i].type === ScratchBlocks.BROADCAST_MESSAGE_VARIABLE_TYPE) {
-        continue;
-      }
-      const varName = this.nameDB_.getName(variables[i].getId(), ScratchBlocks.Variables.NAME_TYPE);
-      if (variables[i].type === ScratchBlocks.LIST_VARIABLE_TYPE) {
-        defvars.push(`let ${varName}_ls = [];`);
-      } else {
-        defvars.push(`let ${varName} = 0;`);
-      }
-    }
-
-    // Add developer variables (not created or named by the user).
-    let devVarList = ScratchBlocks.Variables.allDeveloperVariables(workspace);
-    for (let i = 0; i < devVarList.length; i++) {
-      const varName = this.nameDB_.getName(devVarList[i], ScratchBlocks.Names.DEVELOPER_VARIABLE_TYPE);
-      if (variables[i].type === ScratchBlocks.LIST_VARIABLE_TYPE) {
-        defvars.push(`let ${varName}_ls = [];`);
-      } else {
-        defvars.push(`let ${varName} = 0;`);
-      }
-    }
-
-    // Declare all of the variables.
-    if (defvars.length) {
-      this.definitions_['variables'] = defvars.join('\n');
-    }
   }
 
   /**
@@ -152,16 +76,48 @@ export class JavaScriptGenerator extends ScratchBlocks.Generator {
    * @return {string} Completed code.
    */
   finish(code) {
-    // Convert the definitions dictionary into a list.
-    let definitions = [];
-    for (let name in this.definitions_) {
-      definitions.push(this.definitions_[name]);
+    // Indent every line.
+    if (code) {
+      code = this.prefixLines(code, this.INDENT);
     }
-    // Clean up temporary data.
+    code = '\n' + code;
+
+    // Convert the definitions dictionary into a list.
+    const includes = [];
+    const declarations = [];
+    const defines = [];
+    const func_definitions = [];
+    const defvars = [];
+    for (let name in this.definitions_) {
+      const def = this.definitions_[name];
+      if (name.match('include')) {
+        includes.push(def);
+      } else if (name.match('Func_declare')) {
+        declarations.push(def); // declaration
+      } else if (name.match('define')) {
+        defines.push(def); // #define
+      } else if (name.match('variable')) {
+        defvars.push(def); // variable
+      } else {
+        func_definitions.push(def); // definition
+      }
+    }
+    //imports--> #include
+    //definitions--> function def, #def
+    const allDefs =
+      includes.join('\n') +
+      '\n\n' +
+      declarations.join('\n') +
+      '\n\n' +
+      defines.join('\n') +
+      '\n\n' +
+      defvars.join('\n');
+    const allFuncs = func_definitions.join('\n');
+
     delete this.definitions_;
     delete this.functionNames_;
     this.nameDB_.reset();
-    return definitions.join('\n\n') + '\n\n\n' + code;
+    return allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n') + code + allFuncs.replace(/\n\n+/g, '\n\n');
   }
 
   /**
@@ -175,23 +131,18 @@ export class JavaScriptGenerator extends ScratchBlocks.Generator {
   }
 
   /**
-   * Encode a string as a properly escaped JavaScript string, complete with
+   * Encode a string as a properly escaped C string, complete with
    * quotes.
    * @param {string} string Text to encode.
-   * @return {string} JavaScript string.
+   * @return {string} C string.
    * @private
    */
   quote_(string) {
     // Can't use goog.string.quote since Google's style guide recommends
-    // JS string literals use single quotes.
     // string = string.replace(/\\/g, '\\\\').replace(/\n/g, '\\\n').replace(/'/g, "\\'");
-    let quote = "'";
-    if (string.indexOf("'") !== -1) {
-      if (string.indexOf('"') === -1) {
-        quote = '"';
-      } else {
-        string = string.replace(/'/g, "\\'");
-      }
+    let quote = '"';
+    if (string.indexOf('"') !== -1) {
+      string = string.replace(/"/g, '\\"');
     }
     return quote + string + quote;
   }

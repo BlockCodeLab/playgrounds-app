@@ -72,12 +72,15 @@ const updateToolboxXml = (buildinExtensions, options) =>
   );
 
 // 更新多语言文本
-const updateScratchBlocksMsgs = (enableMultiTargets) => {
+const updateScratchBlocksMsgs = (enableMultiTargets, enableVariableTypes) => {
   Object.entries(
     Object.assign(
       {
+        OPERATORS_MULTIPLY: '%1 × %2',
+        OPERATORS_DIVIDE: '%1 ÷ %2',
         OPERATORS_GTE: '%1 ≥ %2',
         OPERATORS_LTE: '%1 ≤ %2',
+        OPERATORS_NOTEQUALS: '%1 ≠ %2',
         OPERATORS_AND: translate('blocks.operators.and', '%1 and %2'),
         UNSUPPORTED: translate('blocks.unsupported', 'unsupported block'),
         EVENT_WHENPROGRAMSTART: translate('blocks.events.programStart', 'when program start'),
@@ -95,6 +98,19 @@ const updateScratchBlocksMsgs = (enableMultiTargets) => {
         : {
             CONTROL_STOP_OTHER: translate('blocks.control.stopOther', 'other scripts'),
           },
+      enableVariableTypes
+        ? {
+            NEW_LIST: translate('blocks.dataPrompt.makeArray', 'Make a Array'),
+            LIST_ALREADY_EXISTS: translate('blocks.dataPrompt.arrayExists', 'A array named "%1" already exists.'),
+            LIST_MODAL_TITLE: translate('blocks.dataPrompt.newArray', 'New Array'),
+            NEW_LIST_TITLE: translate('blocks.dataPrompt.arrayTitle', 'New array name:'),
+          }
+        : {
+            NEW_LIST: translate('blocks.dataPrompt.makeList', 'Make a List'),
+            LIST_ALREADY_EXISTS: translate('blocks.dataPrompt.listExists', 'A list named "%1" already exists.'),
+            LIST_MODAL_TITLE: translate('blocks.dataPrompt.newList', 'New List'),
+            NEW_LIST_TITLE: translate('blocks.dataPrompt.listTitle', 'New list name:'),
+          },
     ),
   ).forEach(([key, value]) => (ScratchBlocks.Msg[key] = value));
 };
@@ -108,9 +124,11 @@ export function BlocksEditor({
   enableMultiTargets,
   enableLocalVariable,
   enableCloudVariables,
-  disableMonitor,
+  enableMonitor,
+  disableSensingBlocks,
   disableExtensionButton,
   monitorOffset,
+  variableTypes,
   onBuildinExtensions,
   onExtensionsFilter,
   onExtensionBlockFilter,
@@ -139,10 +157,19 @@ export function BlocksEditor({
       emulator,
       enableCloneBlocks,
       enableStringBlocks,
-      disableMonitor,
+      enableMonitor,
+      disableSensingBlocks,
       onBlockFilter: onExtensionBlockFilter,
     }),
-    [generator, emulator, enableCloneBlocks, enableStringBlocks, disableMonitor, onExtensionBlockFilter],
+    [
+      generator,
+      emulator,
+      enableCloneBlocks,
+      enableStringBlocks,
+      enableMonitor,
+      disableSensingBlocks,
+      onExtensionBlockFilter,
+    ],
   );
 
   // 变量设置确认
@@ -160,6 +187,12 @@ export function BlocksEditor({
       ref.workspace.refreshToolboxSelection_();
       ref.workspace.toolbox_.scrollToCategoryById('myBlocks');
     }
+    myBlockPrompt.value = null;
+  }, []);
+
+  // 关闭设置对话框
+  const handleClosePrompt = useCallback(() => {
+    dataPrompt.value = null;
     myBlockPrompt.value = null;
   }, []);
 
@@ -182,9 +215,9 @@ export function BlocksEditor({
       ScratchBlocks.ScratchMsgs.setLocale(locale);
     }
     // 更新积木文本
-    updateScratchBlocksMsgs(enableMultiTargets);
+    updateScratchBlocksMsgs(enableMultiTargets, !!variableTypes);
     updateWorkspace();
-  }, [enableMultiTargets, updateWorkspace, language.value]);
+  }, [enableMultiTargets, variableTypes, updateWorkspace, language.value]);
 
   // 添加扩展XML
   //
@@ -405,7 +438,7 @@ export function BlocksEditor({
         ScratchBlocks.ScratchMsgs.setLocale(locale);
       }
       // 更新积木文本
-      updateScratchBlocksMsgs(enableMultiTargets);
+      updateScratchBlocksMsgs(enableMultiTargets, !!variableTypes);
       // 生成积木栏
       const toolboxXml = updateWorkspace();
       // 创建工作区
@@ -665,6 +698,13 @@ export function BlocksEditor({
     };
   }, [ref]);
 
+  // 变量/列表类型
+  useEffect(() => {
+    if (variableTypes) {
+      ScratchBlocks.setDataCategoryForTyped(variableTypes);
+    }
+  }, [variableTypes]);
+
   return (
     <div className={styles.blocksEditorWrapper}>
       <div
@@ -709,7 +749,7 @@ export function BlocksEditor({
           showVariableOptions={dataPrompt.value.showVariableOptions}
           showCloudOption={dataPrompt.value.showCloudOption}
           onSubmit={handleDataPromptSubmit}
-          onClose={useCallback(() => (dataPrompt.value = null), [])}
+          onClose={handleClosePrompt}
         />
       )}
 
@@ -718,7 +758,7 @@ export function BlocksEditor({
           mutator={myBlockPrompt.value.mutator}
           enableWarp={enableMyBlockWarp}
           onSubmit={handleMyBlockPromptSubmit}
-          onClose={useCallback(() => (myBlockPrompt.value = null), [])}
+          onClose={handleClosePrompt}
         />
       )}
 

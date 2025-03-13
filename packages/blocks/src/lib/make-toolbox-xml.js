@@ -29,7 +29,7 @@ export const monitorTheme = `
   colour="${themeColors.blocks.monitor.primary}" secondaryColour="${themeColors.blocks.monitor.secondary}"`;
 
 const events = () => `
-  <category name="%{BKY_CATEGORY_EVENTS}" id="events" ${eventsTheme}>
+  <category name="%{BKY_CATEGORY_EVENTS}" id="event" ${eventsTheme}>
   <block type="event_whenflagclicked"/>
   ${blockSeparator}
   <block type="event_whengreaterthan">
@@ -99,16 +99,19 @@ const control = (enableCloneBlocks) => `
   </category>
 `;
 
-const sensing = () => `
-  <category name="%{BKY_CATEGORY_SENSING}" id="sensing" ${sensingTheme}>
-    <block type="sensing_timer"/>
-    <block type="sensing_resettimer"/>
-    ${categorySeparator}
-  </category>
-`;
+const sensing = (disableSensingBlocks) =>
+  disableSensingBlocks
+    ? ''
+    : `
+      <category name="%{BKY_CATEGORY_SENSING}" id="sensing" ${sensingTheme}>
+        <block type="sensing_timer"/>
+        <block type="sensing_resettimer"/>
+        ${categorySeparator}
+      </category>
+      `;
 
 const operators = (enableStringBlocks) => `
-  <category name="%{BKY_CATEGORY_OPERATORS}" id="operators" ${operatorsTheme}>
+  <category name="%{BKY_CATEGORY_OPERATORS}" id="operator" ${operatorsTheme}>
     <block type="operator_add">
       <value name="NUM1">
         <shadow type="math_number">
@@ -195,6 +198,18 @@ const operators = (enableStringBlocks) => `
         </shadow>
       </value>
     </block>
+    <block type="operator_equals">
+      <value name="OPERAND1">
+        <shadow type="text">
+          <field name="TEXT"/>
+        </shadow>
+      </value>
+      <value name="OPERAND2">
+        <shadow type="text">
+          <field name="TEXT">50</field>
+        </shadow>
+      </value>
+    </block>
     <block type="operator_gte">
       <value name="OPERAND1">
         <shadow type="math_number">
@@ -219,7 +234,7 @@ const operators = (enableStringBlocks) => `
         </shadow>
       </value>
     </block>
-    <block type="operator_equals">
+    <block type="operator_notequals">
       <value name="OPERAND1">
         <shadow type="text">
           <field name="TEXT"/>
@@ -369,13 +384,15 @@ export function makeToolboxXML(categoriesXML = [], options = {}) {
   };
   const eventsXML = moveCategory('event') || events();
   const controlXML = moveCategory('control') || control(options.enableCloneBlocks);
-  const sensingXML = moveCategory('sensing') || sensing();
-  const operatorsXML = moveCategory('operators') || operators(options.enableStringBlocks);
+  const sensingXML = moveCategory('sensing') || sensing(options.disableSensingBlocks);
+  const operatorsXML = moveCategory('operator') || operators(options.enableStringBlocks);
   const variablesXML = variables();
   const myBlocksXML = myBlocks();
-  const monitorXML = monitor(options.disableMonitor);
+  const monitorXML = monitor(!options.enableMonitor);
 
-  const everything = [eventsXML, controlXML, sensingXML, operatorsXML, variablesXML, monitorXML, myBlocksXML];
+  const everything = [eventsXML, controlXML, sensingXML, operatorsXML, monitorXML, variablesXML, myBlocksXML].filter(
+    (s) => s && s.trim(),
+  );
 
   categoriesXML.sort((a, b) => (a.order ?? Infinity) - (b.order ?? Infinity));
 

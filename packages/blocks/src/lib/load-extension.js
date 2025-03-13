@@ -15,6 +15,7 @@ const OTHER_COLOR = themeColors.blocks.tertiary;
 const ShadowTypes = {
   broadcast: 'event_broadcast_menu',
   number: 'math_number',
+  integer: 'math_whole_number',
   angle: 'math_angle',
   text: 'text',
   string: 'text',
@@ -26,6 +27,7 @@ const ShadowTypes = {
 const FieldTypes = {
   broadcast: 'BROADCAST_INPUT',
   number: 'NUM',
+  integer: 'NUM',
   angle: 'NUM',
   text: 'TEXT',
   string: 'TEXT',
@@ -145,8 +147,11 @@ export function loadExtension(extObj, options) {
         }
 
         // 积木外观
+        //
         if (block.hat) {
           blockJson.nextStatement = null;
+        } else if (block.end) {
+          blockJson.previousStatement = null;
         } else if (block.output) {
           if (block.output === 'boolean') {
             blockJson.output = 'Boolean';
@@ -159,6 +164,35 @@ export function loadExtension(extObj, options) {
         } else {
           blockJson.previousStatement = null;
           blockJson.nextStatement = null;
+        }
+        if (block.substack) {
+          blockJson.message1 = '%1';
+          blockJson.args1 = [
+            {
+              type: 'input_statement',
+              name: 'SUBSTACK',
+            },
+          ];
+        } else if (block.repeat) {
+          blockJson.message1 = '%1'; // Statement
+          blockJson.message2 = '%1'; // Icon
+          blockJson.lastDummyAlign2 = 'RIGHT';
+          blockJson.args1 = [
+            {
+              type: 'input_statement',
+              name: 'SUBSTACK',
+            },
+          ];
+          blockJson.args2 = [
+            {
+              type: 'field_image',
+              src: './assets/blocks-media/repeat.svg',
+              width: 24,
+              height: 24,
+              alt: '*',
+              flip_rtl: true,
+            },
+          ];
         }
 
         // 积木参数项
