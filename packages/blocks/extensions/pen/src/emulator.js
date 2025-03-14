@@ -18,7 +18,7 @@ export function emulator(runtime, Konva) {
 
     const line = new Konva.Line({
       points: [pen.x, pen.y, pos.x, pos.y],
-      stroke: runtime.getData(target, 'pen.color') ?? '#000000',
+      stroke: runtime.getData(target, 'pen.color') ?? '#FF0000',
       strokeWidth: runtime.getData(target, 'pen.size') ?? 1,
       lineJoin: 'round',
       lineCap: 'round',
@@ -113,7 +113,7 @@ export function emulator(runtime, Konva) {
 
     addSize(target, value) {
       const sizeValue = MathUtils.toNumber(value);
-      const size = runtime.getData(target, 'pen.size');
+      const size = runtime.getData(target, 'pen.size') ?? 1;
       runtime.setData(target, 'pen.size', size + sizeValue);
     },
   };
