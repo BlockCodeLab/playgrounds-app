@@ -68,6 +68,7 @@ export function loadExtension(extObj, options) {
       });
       const extEmu = extObj.emulator(runtime, Konva);
       Runtime.currentRuntime._extensions.set(extId, extEmu);
+      Runtime.currentRuntime._extensions.set(extEmu.key, extEmu);
     }
   }
 

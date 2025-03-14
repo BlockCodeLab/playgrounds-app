@@ -57,7 +57,7 @@ const wrapToolboxXml = (xml) => `<xml style="display:none">\n${xml}\n</xml>`;
 
 // 更新积木栏XML
 const updateToolboxXml = (buildinExtensions, options) =>
-  loadedExtensions.values().reduce(
+  Array.from(loadedExtensions.values()).reduce(
     // 将外部扩展的xml合并到主xml中
     (xml, extObj) => xml + loadExtension(extObj, options),
     // 将默认扩展的xml合并到主xml中
@@ -134,6 +134,7 @@ export function BlocksEditor({
   onExtensionBlockFilter,
   onExtensionLoad,
   onDefinitions,
+  onLoading,
 }) {
   const { language } = useLocalesContext();
 
@@ -418,13 +419,17 @@ export function BlocksEditor({
         loadXmlToWorkspace(data.xmlDom, null, ref.workspace);
 
         setModified(ModifyTypes.Saved);
-
-        // 清空撤销记录
-        ref.workspace.clearUndo();
-
         updateWorkspace();
-        hideSplash();
       });
+
+      if (onLoading) {
+        await onLoading();
+      }
+
+      hideSplash();
+
+      // 清空撤销记录
+      ref.workspace.clearUndo();
     }
   }, [splashVisible.value, generateCodes, options, updateWorkspace]);
 
