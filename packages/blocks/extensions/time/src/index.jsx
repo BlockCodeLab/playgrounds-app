@@ -79,7 +79,6 @@ export default {
       output: 'number',
       inputs: {
         OPTION: {
-          type: 'text',
           defaultValue: 'year',
           menu: [
             [
@@ -89,7 +88,6 @@ export default {
               />,
               'year',
             ],
-
             [
               <Text
                 id="blocks.time.option.month"
@@ -97,7 +95,6 @@ export default {
               />,
               'month',
             ],
-
             [
               <Text
                 id="blocks.time.option.date"
@@ -105,7 +102,6 @@ export default {
               />,
               'date',
             ],
-
             [
               <Text
                 id="blocks.time.option.weekday"
@@ -113,7 +109,6 @@ export default {
               />,
               'weekday',
             ],
-
             [
               <Text
                 id="blocks.time.option.hour"
@@ -121,7 +116,6 @@ export default {
               />,
               'hour',
             ],
-
             [
               <Text
                 id="blocks.time.option.minute"
@@ -129,7 +123,6 @@ export default {
               />,
               'minute',
             ],
-
             [
               <Text
                 id="blocks.time.option.second"
@@ -141,12 +134,12 @@ export default {
         },
       },
       emu(block) {
-        const option = this.quote_(block.getFieldValue('OPTION')) || `'year'`;
+        const option = this.quote_(block.getFieldValue('OPTION') || 'year');
         const code = `runtime.extensions.time.getTime(${option})`;
         return [code, this.ORDER_FUNCTION_CALL];
       },
       mpy(block) {
-        const option = this.quote_(block.getFieldValue('OPTION')) || `'year'`;
+        const option = this.quote_(block.getFieldValue('OPTION') || 'year');
         const code = `ntptime.get_time(${option})`;
         return [code, this.ORDER_FUNCTION_CALL];
       },
