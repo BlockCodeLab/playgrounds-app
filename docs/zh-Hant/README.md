@@ -25,16 +25,25 @@ Microsoft 的 [MakeCode](https://microsoft.com/makecode) 項目。平台基於�
 
 開始下載 Windows 版本軟件，請根據您的設備選擇適合的版本。
 
-- [64 位](https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.0/BlockCodePlaygrounds-win-x64-1.0.0.zip)
-- [32 位](https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.0/BlockCodePlaygrounds-win-ia32-1.0.0.zip)
+- [64 位][1]
+- [32 位][2]
+- [Windows 7 兼容][3]
+
+如果您的操作系統是 Windows 7，請下載 [Windows 7 兼容][3]版本，版本號高於 Windows 7 的系統請根據實際情況下載。
 
 ### -- macOS --
 
 開始下載 macOS 版本應用，請根據您的設備選擇適合的版本。
 
-- [Apple Silicon](https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.0/BlockCodePlaygrounds-macos-arm64-1.0.0.zip)
-- [Intel](https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.0/BlockCodePlaygrounds-macos-x64-1.0.0.zip)
+- [Apple Silicon][4]
+- [Intel][5]
 
-如果您的 Apple 電腦搭載 M1/M2/M3/M4 芯片，請下載 Apple Silicon 版本；其他情況請下載 Intel 版本。
+如果您的 Apple 電腦搭載 M1/M2/M3/M4 芯片，請下載 [Apple Silicon][4] 版本；其他情況請下載 [Intel][5] 版本。
 
 <!-- select:end -->
+
+[1]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.1/BlockCodePlaygrounds-win-x64-1.0.1.zip
+[2]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.1/BlockCodePlaygrounds-win-x86-1.0.1.zip
+[3]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.1/BlockCodePlaygrounds-win7-1.0.1.zip
+[4]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.1/BlockCodePlaygrounds-macos-apple-silicon-1.0.1.zip
+[5]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.1/BlockCodePlaygrounds-macos-intel-1.0.1.zip
