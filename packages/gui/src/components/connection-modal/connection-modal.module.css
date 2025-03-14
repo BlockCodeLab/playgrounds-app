@@ -12,7 +12,7 @@
 
 .device-list {
   width: 100%;
-  height: 165px;
+  height: 170px;
   padding: 0.5rem;
   background: var(--theme-light-transparent);
   overflow-y: auto;
@@ -90,8 +90,7 @@
   font-size: 0.875rem;
 }
 
-.device-signal-bar {
-}
+.device-signal-bar {}
 
 .button-row {
   font-weight: bolder;
