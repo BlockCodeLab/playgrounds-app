@@ -33,16 +33,16 @@ blocks.prompt.cancel: 取消
 blocks.dataPrompt.forAllTargets: 適用於全局
 blocks.dataPrompt.forThisTarget: 僅適用於當前
 blocks.dataPrompt.availableToAllTargets: 全局都可使用該變量。
-blocks.dataPrompt.listAvailableToAllTargets: 全局都可使用該列表。
+blocks.dataPrompt.listAvailableToAllTargets: 全局都可使用該清單。
 
-blocks.dataPrompt.makeList: 建立一個列表
-blocks.dataPrompt.listExists: 名為 「%1」 的列表已存在。
-blocks.dataPrompt.newList: 新建列表
-blocks.dataPrompt.listTitle: 新的列表名：
-blocks.dataPrompt.makeArray: 建立一個數組
-blocks.dataPrompt.arrayExists: 名為 「%1」 的數組已存在。
-blocks.dataPrompt.newArray: 新建數組
-blocks.dataPrompt.arrayTitle: 新的數組名：
+blocks.dataPrompt.makeList: 建立一個清單
+blocks.dataPrompt.listExists: 名為 「%1」 的清單已存在。
+blocks.dataPrompt.newList: 新建清單
+blocks.dataPrompt.listTitle: 新的清單名：
+blocks.dataPrompt.makeArray: 建立一個陣列
+blocks.dataPrompt.arrayExists: 名為 「%1」 的陣列已存在。
+blocks.dataPrompt.newArray: 新建陣列
+blocks.dataPrompt.arrayTitle: 新的陣列名：
 
 blocks.myBlockPrompt.title: 製作新的積木
 blocks.myBlockPrompt.addAnInputNumberText: 添加輸入項
