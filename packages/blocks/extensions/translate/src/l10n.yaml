@@ -1,0 +1,53 @@
+en:
+  blocks.translate.name: Translate
+  blocks.translate.openplatform: iFLYTEK Open Platform authorization
+  blocks.translate.openplatform.APIPassword: HTTP authorization APIPassword
+  blocks.translate.openplatform.APPID: WebSocket authorization APPID
+  blocks.translate.openplatform.APISecret: WebSocket authorization APISecret
+  blocks.translate.openplatform.APIKey: WebSocket authorization APIKey
+  blocks.translate.openplatform.description1: "Please register your own "
+  blocks.translate.openplatform.description2: iFLYTEK Open Platform (Chinese)
+  blocks.translate.openplatform.description3: " account, the test account we provide does not guarantee that every request will be successful."
+  blocks.translate.language: language
+  blocks.translate.translate: translate [WORDS] to [LANGUAGE]
+  blocks.translate.hello: hello
+  blocks.translate.english: English
+  blocks.translate.chinese: Chinese
+  blocks.translate.japanese: Japanese
+  blocks.translate.korean: Korean
+
+zh-Hans:
+  blocks.translate.name: 翻译
+  blocks.translate.openplatform: 讯飞开放平台认证信息
+  blocks.translate.openplatform.APIPassword: HTTP 服务鉴权 APIPassword
+  blocks.translate.openplatform.APPID: WebSocket 服务鉴权 APPID
+  blocks.translate.openplatform.APISecret: WebSocket 服务鉴权 APISecret
+  blocks.translate.openplatform.APIKey: WebSocket 服务鉴权 APIKey
+  blocks.translate.openplatform.description1: 请注册您自己的
+  blocks.translate.openplatform.description2: 讯飞开放平台
+  blocks.translate.openplatform.description3: 账号，我们提供的测试账号不保证每次请求都成功。
+  blocks.translate.language: 访客语言
+  blocks.translate.translate: 将 [WORDS] 译为 [LANGUAGE]
+  blocks.translate.hello: 你好
+  blocks.translate.english: 英文
+  blocks.translate.chinese: 中文
+  blocks.translate.japanese: 日语
+  blocks.translate.korean: 韩语
+
+zh-Hant:
+  blocks.translate.name: 翻譯
+  blocks.translate.openplatform: 訊飛開放平台認證信息
+  blocks.translate.openplatform.APIPassword: HTTP 服務鑒權 APIPassword
+  blocks.translate.openplatform.APPID: WebSocket 服務鑒權 APPID
+  blocks.translate.openplatform.APISecret: WebSocket 服務鑒權 APISecret
+  blocks.translate.openplatform.APIKey: WebSocket 服務鑒權 APIKey
+  blocks.translate.openplatform.description1: 請註冊您自己的
+  blocks.translate.openplatform.description2: 訊飛開放平台
+  blocks.translate.openplatform.description3: 賬號，我們提供的測試賬號不保證每次請求都成功。
+  blocks.translate.language: 訪客語言
+  blocks.translate.translate: 將 [WORDS] 譯為 [LANGUAGE]
+  blocks.translate.hello: 你好
+  blocks.translate.english: 英文
+  blocks.translate.chinese: 中文
+  blocks.translate.japanese: 日文
+  blocks.translate.korean: 韓文

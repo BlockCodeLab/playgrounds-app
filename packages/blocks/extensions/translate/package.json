@@ -1,0 +1,21 @@
+{
+  "name": "@blockcode/blocks-translate",
+  "private": "true",
+  "version": "1.0.0",
+  "type": "module",
+  "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    },
+    "./info": {
+      "import": "./dist/info.js"
+    }
+  },
+  "dependencies": {
+    "preact": "^10.25.4"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  }
+}
