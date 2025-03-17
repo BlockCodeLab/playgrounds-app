@@ -35,6 +35,15 @@ blocks.dataPrompt.forThisTarget: 僅適用於當前
 blocks.dataPrompt.availableToAllTargets: 全局都可使用該變量。
 blocks.dataPrompt.listAvailableToAllTargets: 全局都可使用該列表。
 
+blocks.dataPrompt.makeList: 建立一個列表
+blocks.dataPrompt.listExists: 名為 「%1」 的列表已存在。
+blocks.dataPrompt.newList: 新建列表
+blocks.dataPrompt.listTitle: 新的列表名：
+blocks.dataPrompt.makeArray: 建立一個數組
+blocks.dataPrompt.arrayExists: 名為 「%1」 的數組已存在。
+blocks.dataPrompt.newArray: 新建數組
+blocks.dataPrompt.arrayTitle: 新的數組名：
+
 blocks.myBlockPrompt.title: 製作新的積木
 blocks.myBlockPrompt.addAnInputNumberText: 添加輸入項
 blocks.myBlockPrompt.numberTextType: 數字或文本
