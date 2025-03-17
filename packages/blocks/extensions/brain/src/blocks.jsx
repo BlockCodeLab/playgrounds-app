@@ -70,14 +70,14 @@ export const blocks = [
       return code;
     },
     mpy(block) {
-      const model = getUserConfig('SparkAI.Model') ?? 'lite';
-      const apiPassword = getUserConfig('SparkAI.APIPassword') ?? APIPASSWORD;
+      const model = this.quote_(getUserConfig('SparkAI.Model') ?? 'lite');
+      const apiPassword = this.quote_(getUserConfig('SparkAI.APIPassword') ?? APIPASSWORD);
       let code = '';
       if (this.STATEMENT_PREFIX) {
         code += this.injectId(this.STATEMENT_PREFIX, block);
       }
       const question = this.valueToCode(block, 'QUESTION', this.ORDER_NONE) || '""';
-      code += `await brain.ask_spark((target.id if 'target' in dir() else 'default'), ${question}, '${apiPassword}', '${model}')\n`;
+      code += `await brain.ask_spark((target.id if 'target' in dir() else 'default'), ${question}, ${apiPassword}, ${model})\n`;
       return code;
     },
   },

@@ -7,6 +7,7 @@ const SPARK_URL = 'https://spark-api-open.xf-yun.com/v1/chat/completions';
 // 仅供免费测试使用，不能保证每次请求的稳定和成功
 // HTTP 请求鉴权信息
 export const APIPASSWORD = 'qQIJHdBFkpbHDoMnPqnW:oeanHZdXCBHIHTOYvVim';
+
 // WebSocket 请求鉴权信息
 const APPID = 'db45f79e';
 const APISecret = 'MWFiNjVmNDA4YjNhODFkZGE0MGQ1YWRj';
