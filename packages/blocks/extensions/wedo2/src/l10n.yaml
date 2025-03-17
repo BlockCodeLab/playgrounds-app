@@ -1,0 +1,80 @@
+en:
+  extension.wedo2.name: LEGO WeDo 2.0
+  extension.wedo2.getDistance: distance
+  extension.wedo2.getTiltAngle: tilt angle [TILT_DIRECTION]
+  extension.wedo2.isTilted: tilted [TILT_DIRECTION_ANY]?
+  extension.wedo2.motorDirection.backward: that way
+  extension.wedo2.motorDirection.forward: this way
+  extension.wedo2.motorDirection.reverse: reverse
+  extension.wedo2.motorId.a: motor A
+  extension.wedo2.motorId.all: all motors
+  extension.wedo2.motorId.b: motor B
+  extension.wedo2.motorId.default: motor
+  extension.wedo2.motorOff: turn [MOTOR_ID] off
+  extension.wedo2.motorOn: turn [MOTOR_ID] on
+  extension.wedo2.motorOnFor: turn [MOTOR_ID] on for [DURATION] seconds
+  extension.wedo2.playNoteFor: play note [NOTE] for [DURATION] seconds
+  extension.wedo2.setLightHue: set light color to [HUE]
+  extension.wedo2.setMotorDirection: set [MOTOR_ID] direction to [MOTOR_DIRECTION]
+  extension.wedo2.startMotorPower: set [MOTOR_ID] power to [POWER]
+  extension.wedo2.tiltDirection.any: any
+  extension.wedo2.tiltDirection.down: down
+  extension.wedo2.tiltDirection.left: left
+  extension.wedo2.tiltDirection.right: right
+  extension.wedo2.tiltDirection.up: up
+  extension.wedo2.whenDistance: when distance [OP] [REFERENCE]
+  extension.wedo2.whenTilted: when tilted [TILT_DIRECTION_ANY]
+
+zh-Hans:
+  extension.wedo2.name: LEGO WeDo 2.0
+  extension.wedo2.getDistance: 距离
+  extension.wedo2.getTiltAngle: 向 [TILT_DIRECTION] 倾角
+  extension.wedo2.isTilted: 向 [TILT_DIRECTION_ANY] 倾斜？
+  extension.wedo2.motorDirection.backward: 逆时针
+  extension.wedo2.motorDirection.forward: 顺时针
+  extension.wedo2.motorDirection.reverse: 反转
+  extension.wedo2.motorId.a: 马达A
+  extension.wedo2.motorId.all: 所有马达
+  extension.wedo2.motorId.b: 马达B
+  extension.wedo2.motorId.default: 马达
+  extension.wedo2.motorOff: 关闭 [MOTOR_ID]
+  extension.wedo2.motorOn: 开启 [MOTOR_ID]
+  extension.wedo2.motorOnFor: 开启 [MOTOR_ID][DURATION] 秒
+  extension.wedo2.playNoteFor: 演奏音符 [NOTE][DURATION] 秒
+  extension.wedo2.setLightHue: 将灯光颜色设为[HUE]
+  extension.wedo2.setMotorDirection: 将 [MOTOR_ID] 转向设为 [MOTOR_DIRECTION]
+  extension.wedo2.startMotorPower: 将 [MOTOR_ID] 功率设为 [POWER]
+  extension.wedo2.tiltDirection.any: 任意方向
+  extension.wedo2.tiltDirection.down: 下
+  extension.wedo2.tiltDirection.left: 左
+  extension.wedo2.tiltDirection.right: 右
+  extension.wedo2.tiltDirection.up: 上
+  extension.wedo2.whenDistance: 当距离 [OP][REFERENCE]
+  extension.wedo2.whenTilted: 当向 [TILT_DIRECTION_ANY] 倾
+
+zh-Hant:
+  extension.wedo2.name: LEGO WeDo 2.0
+  extension.wedo2.getDistance: 距離
+  extension.wedo2.getTiltAngle: 向 [TILT_DIRECTION] 傾角
+  extension.wedo2.isTilted: 向 [TILT_DIRECTION_ANY] 傾斜？
+  extension.wedo2.motorDirection.backward: 逆時針
+  extension.wedo2.motorDirection.forward: 順時針
+  extension.wedo2.motorDirection.reverse: 反轉
+  extension.wedo2.motorId.a: 馬達A
+  extension.wedo2.motorId.all: 所有馬達
+  extension.wedo2.motorId.b: 馬達B
+  extension.wedo2.motorId.default: 馬達
+  extension.wedo2.motorOff: 關閉 [MOTOR_ID]
+  extension.wedo2.motorOn: 開啟 [MOTOR_ID]
+  extension.wedo2.motorOnFor: 開啟 [MOTOR_ID][DURATION] 秒
+  extension.wedo2.playNoteFor: 演奏音符 [NOTE][DURATION] 秒
+  extension.wedo2.setLightHue: 將燈光顏色設為[HUE]
+  extension.wedo2.setMotorDirection: 將 [MOTOR_ID] 轉向設為 [MOTOR_DIRECTION]
+  extension.wedo2.startMotorPower: 將 [MOTOR_ID] 功率設為 [POWER]
+  extension.wedo2.tiltDirection.any: 任意方向
+  extension.wedo2.tiltDirection.down: 下
+  extension.wedo2.tiltDirection.left: 左
+  extension.wedo2.tiltDirection.right: 右
+  extension.wedo2.tiltDirection.up: 上
+  extension.wedo2.whenDistance: 當距離 [OP][REFERENCE]
+  extension.wedo2.whenTilted: 當向 [TILT_DIRECTION_ANY] 傾
