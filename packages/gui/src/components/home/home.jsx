@@ -19,12 +19,11 @@ import getSlideshow from '../../lib/get-slideshow';
 import getExamples from '../../lib/get-examples';
 import getEditors from '../../lib/get-editors';
 
-// 项目限制数量限制
-// TODO: 根据页面宽度自动调整
-const DISPLAY_PROJECTS_COUNTS = 7;
-const DISPLAY_EXAMPLES_COUNTS = 10;
-
 export function Home({ onOpenEditor, onOpenProject }) {
+  // 项目限制数量限制，依据页面宽度调整
+  const DISPLAY_PROJECTS_COUNTS = Math.floor((document.body.clientWidth - 20) / (160 + 16));
+  const DISPLAY_EXAMPLES_COUNTS = Math.floor((document.body.clientWidth - 20) / (220 + 16)) * 2;
+
   const { language } = useLocalesContext();
 
   // 用户保存的项目
