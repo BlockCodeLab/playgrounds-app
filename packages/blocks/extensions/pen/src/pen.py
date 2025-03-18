@@ -103,13 +103,10 @@ def change_color(target, hue=0, saturation=0, brightness=0):
         brightness = num(brightness)
     r, g, b = target.data.get(PEN_COLOR, (255, 0, 0))
     h, s, v = colorsys.rgb_to_hsv(r / 255, g / 255, b / 255)
-    print(r, g, b, h, s, v)
     h = (h * 100 + hue) % 101 / 100
     s = (s * 100 + saturation) % 101 / 100
     v = (v * 100 + brightness) % 101 / 100
     r, g, b = colorsys.hsv_to_rgb(h, s, v)
-    print(r, g, b, h, s, v)
-    print("---")
     color = round(r * 255), round(g * 255), round(b * 255)
     target.data[PEN_COLOR] = color
 

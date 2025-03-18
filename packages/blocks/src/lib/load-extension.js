@@ -98,6 +98,16 @@ export function loadExtension(extObj, options) {
         return blocksXML + blockSeparator;
       }
 
+      // 运行积木过滤器
+      if (onBlockFilter && !onBlockFilter(block)) {
+        return blocksXML;
+      }
+
+      // 文本标签
+      if (block.label) {
+        return blocksXML + `<label text="${block.label}"/>`;
+      }
+
       // 按钮
       if (block.button) {
         const workspace = ScratchBlocks.getMainWorkspace();
@@ -110,7 +120,7 @@ export function loadExtension(extObj, options) {
             }
           }
         }
-        return blocksXML + `<button text="${maybeTranslate(block.text)}" callbackKey="${block.button}"></button>`;
+        return blocksXML + `<button text="${maybeTranslate(block.text)}" callbackKey="${block.button}"/>`;
       }
 
       const blockId = `${extId}_${block.id}`;
@@ -331,10 +341,6 @@ export function loadExtension(extObj, options) {
         }
       }
 
-      // 运行积木过滤器
-      if (onBlockFilter && !onBlockFilter(block)) {
-        return blocksXML;
-      }
       return blocksXML + blockXML;
     }, '');
 
