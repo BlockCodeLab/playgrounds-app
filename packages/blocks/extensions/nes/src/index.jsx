@@ -31,7 +31,7 @@ const downloadingAlert = (progress) => {
       icon: <Spinner level="success" />,
       message: (
         <Text
-          id="arcade.alert.downloading"
+          id="blocks.alert.downloading"
           defaultMessage="Downloading...{progress}%"
           progress={progress}
         />
@@ -47,8 +47,6 @@ const errorAlert = (err) => {
   if (err === 'NotFoundError') return;
   setAlert('connectionError', 1000);
 };
-
-let currentDevice;
 
 export default {
   icon: iconImage,
@@ -70,12 +68,11 @@ export default {
       async onClick() {
         if (downloadingAlertId) return;
 
-        MPYUtils.disconnect(currentDevice);
+        let currentDevice;
         try {
           currentDevice = await MPYUtils.connect(deviceFilters);
         } catch (err) {
           errorAlert(err.name);
-          currentDevice = null;
         }
         if (!currentDevice) return;
 
@@ -102,16 +99,14 @@ export default {
 
           try {
             await MPYUtils.write(currentDevice, files, downloadingAlert);
-            await MPYUtils.config(currentDevice, {
-              'latest-game': gameKey,
-            });
+            await MPYUtils.config(currentDevice, { 'latest-game': gameKey, });
             currentDevice.hardReset();
           } catch (err) {
             errorAlert(err.name);
             removeDownloading();
-          } finally {
-            checker.cancel();
           }
+
+          checker.cancel();
         });
       },
     },
