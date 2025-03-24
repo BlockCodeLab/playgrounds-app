@@ -1,0 +1,11 @@
+en:
+  blocks.sprite.name: Sprite Action
+  blocks.sprite.blockA: block [KEY]
+
+zh-Hans:
+  blocks.sprite.name: 动作精灵
+  blocks.sprite.blockA: 积木 [KEY]
+
+zh-Hant:
+  blocks.sprite.name: 動作精靈
+  blocks.sprite.blockA: 積木 [KEY]
