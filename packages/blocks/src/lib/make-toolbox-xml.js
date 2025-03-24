@@ -360,11 +360,22 @@ const monitor = (disableMonitor) =>
               ${blockSeparator}`
             : ''
         }
-        <block type="monitor_showvalue"/>
+        <block type="monitor_showvalue">
+          <value name="VALUE">
+            <shadow type="text">
+            <field name="TEXT"/>
+            </shadow>
+          </value>
+        </block>
         <block type="monitor_shownamedvalue">
+          <value name="VALUE">
+            <shadow type="text">
+            <field name="TEXT"/>
+            </shadow>
+          </value>
           <value name="LABEL">
             <shadow type="text">
-              <field name="TEXT"></field>
+            <field name="TEXT"/>
             </shadow>
           </value>
         </block>
