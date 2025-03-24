@@ -33,11 +33,11 @@ export default {
       inputs: {
         PIN: {
           type: 'number',
-          default: 1,
+          defaultValue: 1,
         },
         ANGLE: {
-          type: 'angle',
-          default: 0,
+          shadow: 'angle180',
+          defaultValue: 90,
         },
       },
       mpy(block) {
@@ -62,11 +62,11 @@ export default {
       inputs: {
         PIN: {
           type: 'number',
-          default: 1,
+          defaultValue: 1,
         },
         ANGLE: {
-          type: 'angle',
-          default: 0,
+          shadow: 'angle90',
+          defaultValue: 0,
         },
       },
       mpy(block) {
@@ -91,11 +91,11 @@ export default {
       inputs: {
         PIN: {
           type: 'number',
-          default: 1,
+          defaultValue: 1,
         },
         ROTATE: {
           type: 'number',
-          default: '1',
+          defaultValue: '1',
           menu: [
             [
               <Text
@@ -130,6 +130,41 @@ export default {
         const rotateCode = block.getFieldValue('ROTATE') || '0';
         code += `servo.set_motor(num(${pinCode}), num(${rotateCode}))\n`;
         return code;
+      },
+    },
+    // 内连输入积木，不显示
+    {
+      id: 'angle180',
+      inline: true,
+      output: 'number',
+      inputs: {
+        ANGLE: {
+          type: 'slider',
+          defaultValue: 0,
+          min: 0,
+          max: 180,
+        },
+      },
+      mpy(block) {
+        const angleCode = block.getFieldValue('ANGLE') || 0;
+        return [angleCode, this.ORDER_NONE];
+      },
+    },
+    {
+      id: 'angle90',
+      inline: true,
+      output: 'number',
+      inputs: {
+        ANGLE: {
+          type: 'slider',
+          defaultValue: 0,
+          min: 0,
+          max: 90,
+        },
+      },
+      mpy(block) {
+        const angleCode = block.getFieldValue('ANGLE') || 0;
+        return [angleCode, this.ORDER_NONE];
       },
     },
   ],

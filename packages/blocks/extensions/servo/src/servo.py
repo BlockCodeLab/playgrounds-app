@@ -1,6 +1,5 @@
 from micropython import const
 from machine import Pin, PWM
-import math
 
 FREQ = const(50)
 U16BIT = const(65535)

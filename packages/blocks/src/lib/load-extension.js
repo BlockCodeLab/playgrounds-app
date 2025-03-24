@@ -4,10 +4,6 @@ import { Runtime } from './runtime/runtime';
 import { ScratchBlocks } from '../lib/scratch-blocks';
 import { blockSeparator, categorySeparator } from '../lib/make-toolbox-xml';
 
-const OUTPUT_SHAPE_HEXAGONAL = 1;
-const OUTPUT_SHAPE_ROUND = 2;
-const OUTPUT_SHAPE_SQUARE = 3;
-
 const THEME_COLOR = themeColors.blocks.primary;
 const INPUT_COLOR = themeColors.blocks.secondary;
 const OTHER_COLOR = themeColors.blocks.tertiary;
@@ -24,7 +20,7 @@ const ShadowTypes = {
   note: 'note',
 };
 
-const FieldTypes = {
+const FieldNames = {
   broadcast: 'BROADCAST_INPUT',
   number: 'NUM',
   integer: 'NUM',
@@ -126,21 +122,26 @@ export function loadExtension(extObj, options) {
       const blockId = `${extId}_${block.id}`;
       let blockXML = '';
 
-      // 创建新的积木（显示）
-      if (block.text) {
+      // 创建新的积木（内部连接或可显示）
+      if (block.inline || block.text) {
         blockXML = `<block type="${xmlEscape(blockId)}">`;
 
         const blockJson = {
-          message0: maybeTranslate(block.text),
+          message0: block.text ? maybeTranslate(block.text) : '%1',
           category: extId,
-          outputShape: OUTPUT_SHAPE_SQUARE,
+          outputShape: ScratchBlocks.OUTPUT_SHAPE_SQUARE,
           colour: extObj.themeColor || THEME_COLOR,
           colourSecondary: extObj.inputColor || INPUT_COLOR,
           colourTertiary: extObj.otherColor || OTHER_COLOR,
         };
 
         let argsIndexStart = 1;
-        if (extObj.icon) {
+        if (block.inline) {
+          blockJson.colour = ScratchBlocks.Colours.textField;
+          blockJson.colourSecondary = ScratchBlocks.Colours.textField;
+          blockJson.colourTertiary = ScratchBlocks.Colours.textField;
+          blockJson.colourQuaternary = ScratchBlocks.Colours.textField;
+        } else if (extObj.icon) {
           blockJson.message0 = `%1 %2 ${blockJson.message0}`;
           blockJson.args0 = [
             {
@@ -166,10 +167,10 @@ export function loadExtension(extObj, options) {
         } else if (block.output) {
           if (block.output === 'boolean') {
             blockJson.output = 'Boolean';
-            blockJson.outputShape = OUTPUT_SHAPE_HEXAGONAL;
+            blockJson.outputShape = ScratchBlocks.OUTPUT_SHAPE_HEXAGONAL;
           } else {
-            blockJson.output = 'String'; // TODO: text or nubmer
-            blockJson.outputShape = OUTPUT_SHAPE_ROUND;
+            blockJson.output = block.output === 'number' ? 'Number' : 'String';
+            blockJson.outputShape = ScratchBlocks.OUTPUT_SHAPE_ROUND;
           }
           // blockJson.checkboxInFlyout = block.monitoring !== false;
         } else {
@@ -212,89 +213,94 @@ export function loadExtension(extObj, options) {
           blockJson.args0 = [].concat(
             blockJson.args0 || [],
             Object.entries(block.inputs).map(([name, arg]) => {
-              if (arg.type === 'image') {
-                return {
-                  type: 'field_image',
-                  src: arg.src,
-                  width: 24,
-                  height: 24,
-                };
-              }
+              const argObject = { name };
+              switch (arg.type) {
+                case 'image':
+                  argObject.type = 'field_image';
+                  argObject.src = arg.src;
+                  argObject.width = 24;
+                  argObject.height = 24;
+                  break;
 
-              if (arg.type === 'variable') {
-                return {
-                  name,
-                  type: 'field_variable',
-                  variableTypes: arg.variables,
-                  variable: arg.defaultValue,
-                };
-              }
+                case 'variable':
+                  argObject.type = 'field_variable';
+                  argObject.variableTypes = arg.variables;
+                  argObject.variable = arg.defaultValue;
+                  break;
 
-              const argObject = {
-                name,
-                type: 'input_value',
-              };
+                case 'slider':
+                  argObject.type = 'field_slider';
+                  argObject.value = arg.defaultValue ?? 0;
+                  argObject.min = arg.min ?? 0;
+                  argObject.max = arg.max ?? 100;
+                  argObject.precision = arg.step ?? 1;
+                  break;
 
-              if (arg.type === 'boolean') {
-                argObject.check = 'Boolean';
-              } else if (arg.menu) {
-                let menu = arg.menu;
-                let menuName = arg.name || name;
-                let inputMode = arg.inputMode || false;
-                let inputType = arg.type || 'string';
-                let inputDefault = arg.defaultValue || '';
-                if (typeof menu === 'string') {
-                  menuName = arg.menu;
-                  menu = extObj.menus[menuName];
-                }
-                if (!Array.isArray(menu)) {
-                  inputMode = menu.inputMode || inputMode;
-                  inputType = menu.type || inputType;
-                  inputDefault = menu.defaultValue || inputDefault;
-                  menu = menu.items;
-                }
-                if (inputMode) {
-                  if (!extObj.menus[menuName]) {
-                    extObj.menus[menuName] = {
-                      inputMode,
-                      type: inputType,
-                      defaultValue: inputDefault,
-                      items: menu,
-                    };
-                  }
-                  blockXML += `<value name="${xmlEscape(name)}">`;
-                  blockXML += `<shadow type="${extId}_menu_${menuName}">`;
-                  if (inputDefault != null) {
-                    blockXML += `<field name="${menuName}">${xmlEscape(maybeTranslate(inputDefault))}</field>`;
-                  }
-                  blockXML += '</shadow></value>';
-                } else if (menu) {
-                  argObject.type = 'field_dropdown';
-                  argObject.options = menu.map((item) => {
-                    if (Array.isArray(item)) {
-                      const [text, value] = item;
-                      return [maybeTranslate(text), value];
+                default:
+                  argObject.type = 'input_value';
+
+                  if (arg.type === 'boolean') {
+                    argObject.check = 'Boolean';
+                  } else if (arg.menu) {
+                    let menu = arg.menu;
+                    let menuName = arg.name || name;
+                    let inputMode = arg.inputMode || false;
+                    let inputType = arg.type || 'string';
+                    let inputDefault = arg.defaultValue || '';
+                    if (typeof menu === 'string') {
+                      menuName = arg.menu;
+                      menu = extObj.menus[menuName];
                     }
-                    item = `${item}`;
-                    return [item, item];
-                  });
-                  if (arg.defaultValue != null) {
-                    blockXML += `<field name="${xmlEscape(name)}">${xmlEscape(maybeTranslate(arg.defaultValue))}</field>`;
+                    if (!Array.isArray(menu)) {
+                      inputMode = menu.inputMode || inputMode;
+                      inputType = menu.type || inputType;
+                      inputDefault = menu.defaultValue || inputDefault;
+                      menu = menu.items;
+                    }
+                    if (inputMode) {
+                      if (!extObj.menus[menuName]) {
+                        extObj.menus[menuName] = {
+                          inputMode,
+                          type: inputType,
+                          defaultValue: inputDefault,
+                          items: menu,
+                        };
+                      }
+                      blockXML += `<value name="${xmlEscape(name)}">`;
+                      blockXML += `<shadow type="${extId}_menu_${menuName}">`;
+                      if (inputDefault != null) {
+                        blockXML += `<field name="${menuName}">${xmlEscape(maybeTranslate(inputDefault))}</field>`;
+                      }
+                      blockXML += '</shadow></value>';
+                    } else if (menu) {
+                      argObject.type = 'field_dropdown';
+                      argObject.options = menu.map((item) => {
+                        if (Array.isArray(item)) {
+                          const [text, value] = item;
+                          return [maybeTranslate(text), value];
+                        }
+                        item = `${item}`;
+                        return [item, item];
+                      });
+                      if (arg.defaultValue != null) {
+                        blockXML += `<field name="${xmlEscape(name)}">${xmlEscape(
+                          maybeTranslate(arg.defaultValue),
+                        )}</field>`;
+                      }
+                    }
+                  } else {
+                    blockXML += `<value name="${xmlEscape(name)}">`;
+                    const shadowType = arg.shadowType ?? ShadowTypes[arg.type] ?? `${extId}_${arg.shadow}`;
+                    if (shadowType) {
+                      blockXML += `<shadow ${arg.id ? `id="${arg.id}"` : ''} type="${shadowType}">`;
+                      const fieldName = arg.fieldName ?? FieldNames[arg.type] ?? xmlEscape(name);
+                      if (arg.defaultValue != null && fieldName) {
+                        blockXML += `<field name="${fieldName}">${xmlEscape(maybeTranslate(arg.defaultValue))}</field>`;
+                      }
+                      blockXML += '</shadow>';
+                    }
+                    blockXML += '</value>';
                   }
-                }
-              } else {
-                blockXML += `<value name="${xmlEscape(name)}">`;
-                const shadowType = arg.shadow ?? ShadowTypes[arg.type];
-                if (shadowType) {
-                  blockXML += `<shadow ${arg.id ? `id="${arg.id}"` : ''} `;
-                  blockXML += `type="${arg.shadow ?? ShadowTypes[arg.type]}">`;
-                  const fieldType = FieldTypes[arg.type] ?? name;
-                  if (arg.defaultValue != null && fieldType) {
-                    blockXML += `<field name="${fieldType}">${xmlEscape(maybeTranslate(arg.defaultValue))}</field>`;
-                  }
-                  blockXML += '</shadow>';
-                }
-                blockXML += '</value>';
               }
 
               blockJson.message0 = blockJson.message0
@@ -312,6 +318,7 @@ export function loadExtension(extObj, options) {
         // 加入扩展的积木
         ScratchBlocks.Blocks[blockId] = {
           init() {
+            ScratchBlocks.Blocks['field_slider'];
             this.jsonInit(blockJson);
             block.onInit?.call(this);
           },
@@ -321,6 +328,9 @@ export function loadExtension(extObj, options) {
         };
 
         blockXML += '</block>';
+        if (block.inline) {
+          blockXML = '';
+        }
       }
 
       // 扩展积木代码生成器
