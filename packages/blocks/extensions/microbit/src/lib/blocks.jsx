@@ -41,6 +41,20 @@ export const blocks = [
   },
   '---',
   {
+    id: 'displaySymbol',
+    text: (
+      <Text
+        id="blocks.microbit.displayMatrix"
+        defaultMessage="display [MATRIX]"
+      />
+    ),
+    inputs: {
+      MATRIX: {
+        type: 'matrix',
+      },
+    },
+  },
+  {
     id: 'displayText',
     text: (
       <Text

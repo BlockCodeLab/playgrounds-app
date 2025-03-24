@@ -56,7 +56,7 @@ en:
   blocks.microbit.whenTouchEvent: when pin [NAME] is [EVENT]
   blocks.microbit.isPinTouched: pin [NAME] is touched?
   blocks.microbit.whenGesture: when [GESTURE]
-  blocks.microbit.displayMatrix: display pattern [MATRIX]
+  blocks.microbit.displayMatrix: display [MATRIX]
   blocks.microbit.displayText: display text [TEXT] delay [DELAY] ms
   blocks.microbit.clearDisplay: clear display
   blocks.microbit.lightLevel: light intensity
@@ -69,7 +69,7 @@ en:
   blocks.microbit.acceleration: acceleration [AXIS]
   blocks.microbit.analogValue: analog value of pin [PIN]
   blocks.microbit.setPullMode: set pin [PIN] to input [MODE]
-  blocks.microbit.isPinHigh: '[PIN] pin is high?'
+  blocks.microbit.isPinHigh: "[PIN] pin is high?"
   blocks.microbit.setDigitalOut: set [PIN] digital [LEVEL]
   blocks.microbit.setAnalogOut: set [PIN] analog [LEVEL] %
   blocks.microbit.setServo: set [PIN] servo angle [ANGLE]
@@ -143,8 +143,8 @@ zh-Hans:
   blocks.microbit.whenTouchEvent: 当引脚 [NAME] 被 [EVENT]
   blocks.microbit.isPinTouched: 引脚 [NAME] 被触摸?
   blocks.microbit.whenGesture: 当 [GESTURE] 时
-  blocks.microbit.displayMatrix: 显示图案 [MATRIX]
-  blocks.microbit.displayText: 显示文本 [TEXT] 延时 [DELAY] ms
+  blocks.microbit.displayMatrix: 显示 [MATRIX]
+  blocks.microbit.displayText: 显示文本 [TEXT] [DELAY] 毫秒
   blocks.microbit.clearDisplay: 清空屏幕
   blocks.microbit.lightLevel: 亮度级别
   blocks.microbit.temperature: 温度
@@ -229,8 +229,8 @@ zh-Hant:
   blocks.microbit.whenTouchEvent: 當引腳 [NAME] 被 [EVENT]
   blocks.microbit.isPinTouched: 引腳 [NAME] 被觸摸?
   blocks.microbit.whenGesture: 當 [GESTURE] 時
-  blocks.microbit.displayMatrix: 顯示圖案 [MATRIX]
-  blocks.microbit.displayText: 顯示文本 [TEXT] 延時 [DELAY] ms
+  blocks.microbit.displayMatrix: 顯示圖示 [MATRIX]
+  blocks.microbit.displayText: 顯示文本 [TEXT] 持續 [DELAY] 毫秒
   blocks.microbit.clearDisplay: 清空屏幕
   blocks.microbit.lightLevel: 亮度級別
   blocks.microbit.temperature: 溫度
