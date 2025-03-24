@@ -67,6 +67,7 @@ blocks.unsupported: 不支持的積木
 blocks.myblock.addLabel: 文本
 blocks.myblock.addBoolean: 布爾值
 blocks.myblock.addNumbetText: 數字或文本
+blocks.myblock.return: 返回 %1
 
 blocks.monitor: 監視
 blocks.monitor.showValue: 顯示 %1 值

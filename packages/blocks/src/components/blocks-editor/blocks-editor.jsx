@@ -124,6 +124,7 @@ export function BlocksEditor({
   enableMultiTargets,
   enableLocalVariable,
   enableCloudVariables,
+  enableProcedureReturns,
   enableMonitor,
   disableSensingBlocks,
   disableExtensionButton,
@@ -454,6 +455,7 @@ export function BlocksEditor({
           media: './assets/blocks-media/',
         }),
       );
+      ref.workspace.procedureReturnsEnabled_ = enableProcedureReturns;
 
       // 绑定工作区事件
       ref.workspace.addChangeListener((e) => {

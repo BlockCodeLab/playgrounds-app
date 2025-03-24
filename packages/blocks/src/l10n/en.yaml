@@ -72,6 +72,7 @@ blocks.dataCategory.arrayItem: index %1 of %2
 blocks.myblock.addLabel: " label text"
 blocks.myblock.addBoolean: boolean
 blocks.myblock.addNumbetText: number or text
+blocks.myblock.return: return %1
 
 blocks.monitor: Monitor
 blocks.monitor.showValue: show value %1

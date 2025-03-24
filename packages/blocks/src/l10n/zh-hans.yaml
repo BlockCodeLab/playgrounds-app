@@ -72,6 +72,7 @@ blocks.dataCategory.arrayItem: "%2 下标 %1 的值"
 blocks.myblock.addLabel: 文本
 blocks.myblock.addBoolean: 布尔值
 blocks.myblock.addNumbetText: 数字或文本
+blocks.myblock.return: 返回 %1
 
 blocks.monitor: 监视
 blocks.monitor.showValue: 显示 %1 值
