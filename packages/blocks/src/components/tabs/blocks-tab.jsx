@@ -6,8 +6,8 @@ export const blocksTab = {
   icon: blocksIcon,
   label: (
     <Text
-      id="blocks.tabs.code"
-      defaultMessage="Code"
+      id="blocks.tabs.blocks"
+      defaultMessage="Blocks"
     />
   ),
 };

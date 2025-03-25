@@ -17,8 +17,8 @@ blocks.menu.device.download: Download program
 blocks.menu.device.turnOnAutoDownload: Turn on Auto Download
 blocks.menu.device.turnOffAutoDownload: Turn off Auto Download
 
+blocks.tabs.blocks: Blocks
 blocks.tabs.code: Code
-blocks.tabs.codeReview: Source
 
 blocks.panes.monitor: Monitor
 

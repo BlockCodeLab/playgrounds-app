@@ -17,8 +17,8 @@ blocks.menu.device.download: 下载程序
 blocks.menu.device.turnOnAutoDownload: 打开自动下载
 blocks.menu.device.turnOffAutoDownload: 关闭自动下载
 
+blocks.tabs.blocks: 脚本
 blocks.tabs.code: 代码
-blocks.tabs.codeReview: 源代码
 
 blocks.panes.monitor: 监视器
 

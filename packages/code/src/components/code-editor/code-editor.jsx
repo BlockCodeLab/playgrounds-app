@@ -30,7 +30,9 @@ export function CodeEditor({ readOnly, onLoading }) {
   const { file } = useProjectContext();
 
   useEffect(() => {
-    ref.editor.updateOptions({ readOnly });
+    if (ref.editor) {
+      ref.editor.updateOptions({ readOnly });
+    }
   }, [readOnly]);
 
   useEffect(() => {

@@ -17,8 +17,8 @@ blocks.menu.device.download: 下載程序
 blocks.menu.device.turnOnAutoDownload: 打開自動下載
 blocks.menu.device.turnOffAutoDownload: 關閉自動下載
 
+blocks.tabs.blocks: 積木
 blocks.tabs.code: 程式
-blocks.tabs.codeReview: 原始程式
 
 blocks.panes.monitor: 監視器
 
