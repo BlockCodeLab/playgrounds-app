@@ -10,7 +10,7 @@ export { default as Konva } from 'konva';
 
 export { default as localForage } from 'localforage';
 
-export { default as mime } from 'mime/lite';
+export { default as mime } from 'mime';
 
 export { default as UPNG } from 'upng-js';
 

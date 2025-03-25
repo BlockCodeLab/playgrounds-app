@@ -1,0 +1,18 @@
+.editor-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.editor-wrapper :global(.scrollbar.horizontal) {
+  bottom: 1px !important;
+}
+
+.editor-wrapper :global(.scrollbar.vertical) {
+  right: 1px !important;
+}
+
+.editor-wrapper :global(.slider) {
+  border-radius: 3px;
+  overflow: hidden;
+}
