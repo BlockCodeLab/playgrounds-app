@@ -1,6 +1,10 @@
-from scratch import runtime
 import aiohttp
 import asyncio
+
+try:
+    from scratch import runtime
+except Exception:
+    from blocks import runtime
 
 REQUEST_FAILS = "REQUEST_FAILS"
 REQUEST_SUCCESS = "REQUEST_SUCCESS"
@@ -14,7 +18,6 @@ async def fetch_raw(method, url):
     global option, data, status
     async with aiohttp.ClientSession() as client:
         try:
-            print(option)
             async with client.request(method, url, **option) as resp:
                 status = resp.status
                 if status == 200:
@@ -54,9 +57,9 @@ def get_content(index_path=None):
     result = data
     index_path = index_path.split(".")
     for index in index_path:
-        if type(result) == list:
+        if type(result) is list:
             result = result[int(index) - 1]
-        elif type(result) == dict:
+        elif type(result) is dict:
             result = result.get(index)
         else:
             break

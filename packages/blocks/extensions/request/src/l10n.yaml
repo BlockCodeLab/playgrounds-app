@@ -19,7 +19,7 @@ zh-Hans:
   blocks.request.name: HTTP 请求
   blocks.request.request: 用 [MOTHOD] 方法从 [URL] 请求数据
   blocks.request.getText: 文本数据内容
-  blocks.request.getContent: 数据路径 [PATH] 的内容
+  blocks.request.getContent: 路径 [PATH] 的数据内容
   blocks.request.clearCache: 清除请求应答缓存
   blocks.request.whenResponds: 当网站有应答
   blocks.request.whenFails: 当请求失败
@@ -36,7 +36,7 @@ zh-Hant:
   blocks.request.name: HTTP 請求
   blocks.request.request: 用 [MOTHOD] 方法從 [URL] 請求數據
   blocks.request.getText: 文本數據內容
-  blocks.request.getContent: 數據路徑 [PATH] 的內容
+  blocks.request.getContent: 路徑 [PATH] 的數據內容
   blocks.request.clearCache: 清除請求應答緩存
   blocks.request.whenResponds: 當網站有應答
   blocks.request.whenFails: 當請求失敗

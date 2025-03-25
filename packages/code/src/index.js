@@ -1,3 +1,5 @@
+import './l10n';
+
 import 'monaco-editor/esm/vs/base/browser/ui/codicons/codiconStyles';
 
 export * as monaco from 'monaco-editor/esm/vs/editor/editor.api';

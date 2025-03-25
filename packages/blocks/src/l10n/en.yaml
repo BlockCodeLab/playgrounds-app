@@ -1,22 +1,3 @@
-blocks.menu.file: File
-blocks.menu.file.newProject: New
-blocks.menu.file.openProject: Open
-blocks.menu.file.saveProject: Save
-blocks.menu.file.uploadProject: Load from your computer
-blocks.menu.file.downloadProject: Save to your computer
-blocks.menu.file.saveAlert: Saved.
-
-blocks.menu.edit: Edit
-blocks.menu.edit.undo: Undo
-blocks.menu.edit.redo: Redo
-
-blocks.menu.device: Device
-blocks.menu.device.connect: Connect to your {name}
-blocks.menu.device.disconnect: Disconnect this {name}
-blocks.menu.device.download: Download program
-blocks.menu.device.turnOnAutoDownload: Turn on Auto Download
-blocks.menu.device.turnOffAutoDownload: Turn off Auto Download
-
 blocks.tabs.blocks: Blocks
 blocks.tabs.code: Code
 

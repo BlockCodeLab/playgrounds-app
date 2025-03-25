@@ -1,11 +1,11 @@
 en:
-  blocks.text.name: Example
+  blocks.text.name: Animated Text
   blocks.text.blockA: block [KEY]
 
 zh-Hans:
-  blocks.text.name: 案例
+  blocks.text.name: 动画文字
   blocks.text.blockA: 积木 [KEY]
 
 zh-Hant:
-  blocks.text.name: 案例
+  blocks.text.name: 動畫文字
   blocks.text.blockA: 積木 [KEY]

@@ -1,22 +1,3 @@
-blocks.menu.file: 文件
-blocks.menu.file.newProject: 新作品
-blocks.menu.file.openProject: 打開
-blocks.menu.file.saveProject: 保存
-blocks.menu.file.uploadProject: 從電腦中打開
-blocks.menu.file.downloadProject: 保存到電腦
-blocks.menu.file.saveAlert: 已保存。
-
-blocks.menu.edit: 編輯
-blocks.menu.edit.undo: 撤銷
-blocks.menu.edit.redo: 恢復
-
-blocks.menu.device: 設備
-blocks.menu.device.connect: 連接{name}
-blocks.menu.device.disconnect: 斷開{name}連接
-blocks.menu.device.download: 下載程序
-blocks.menu.device.turnOnAutoDownload: 打開自動下載
-blocks.menu.device.turnOffAutoDownload: 關閉自動下載
-
 blocks.tabs.blocks: 積木
 blocks.tabs.code: 程式
 

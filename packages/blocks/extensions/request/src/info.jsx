@@ -23,7 +23,7 @@ export default {
   name: (
     <Text
       id="blocks.request.name"
-      defaultMessage="Request"
+      defaultMessage="HTTP Request"
     />
   ),
   description: (
