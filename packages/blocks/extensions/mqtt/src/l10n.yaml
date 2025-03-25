@@ -1,0 +1,38 @@
+en:
+  blocks.mqtt.name: MQTT
+  blocks.mqtt.connect: connect to [URL]
+  blocks.mqtt.subscribe: subscribe topic [TOPIC]
+  blocks.mqtt.publish: publish message [MESSAGE] to topic [TOPIC]
+  blocks.mqtt.whenReceived: when received from topic [TOPIC]
+  blocks.mqtt.message: last message from topic [TOPIC]
+  blocks.mqtt.messageTopic: greeting
+  blocks.mqtt.messageContent: hello
+  blocks.mqtt.whenConnected: when connected to MQTT server
+  blocks.mqtt.isConnected: is connected?
+  blocks.mqtt.close: close connection
+
+zh-Hans:
+  blocks.mqtt.name: MQTT
+  blocks.mqtt.connect: 连接到 [URL]
+  blocks.mqtt.subscribe: 订阅主题 [TOPIC]
+  blocks.mqtt.publish: 向主题 [TOPIC] 发送消息 [MESSAGE]
+  blocks.mqtt.whenReceived: 当接收到来自主题 [TOPIC] 的消息
+  blocks.mqtt.message: 主题 [TOPIC] 最后的消息
+  blocks.mqtt.messageTopic: 问候
+  blocks.mqtt.messageContent: 你好
+  blocks.mqtt.whenConnected: 当连接到 MQTT 服务器
+  blocks.mqtt.isConnected: 连接成功？
+  blocks.mqtt.close: 关闭连接
+
+zh-Hant:
+  blocks.mqtt.name: MQTT
+  blocks.mqtt.connect: 連接到 [URL]
+  blocks.mqtt.subscribe: 訂閱主題 [TOPIC]
+  blocks.mqtt.publish: 向主題 [TOPIC] 發送消息 [MESSAGE]
+  blocks.mqtt.whenReceived: 當接收到來自主題 [TOPIC] 的消息
+  blocks.mqtt.message: 主題 [TOPIC] 最後的消息
+  blocks.mqtt.messageTopic: 問候
+  blocks.mqtt.messageContent: 你好
+  blocks.mqtt.whenConnected: 當連接到 MQTT 服務器
+  blocks.mqtt.isConnected: 連接成功？
+  blocks.mqtt.close: 關閉連接

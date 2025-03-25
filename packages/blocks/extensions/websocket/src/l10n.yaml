@@ -1,0 +1,59 @@
+en:
+  blocks.websocket.name: WebSocket
+  blocks.websocket.connect: connect to [URL]
+  blocks.websocket.send: send message [MESSAGE] with [ENCODE]
+  blocks.websocket.encodeText: text
+  blocks.websocket.encodeBase64: base64
+  blocks.websocket.whenMessageReceived: when message received
+  blocks.websocket.receivedDecode: decode received message via [DECODE]
+  blocks.websocket.decodeJSON: json
+  blocks.websocket.decodeBase64: base64
+  blocks.websocket.receivedObject: item [PATH] of received data
+  blocks.websocket.receivedText: received text message
+  blocks.websocket.whenConnected: when connected to WebSocket server
+  blocks.websocket.isConnected: is connected?
+  blocks.websocket.whenConnectionErrors: when connection errors
+  blocks.websocket.isConnectionErrored: is connection errored?
+  blocks.websocket.whenConnectionCloses: when connection closes
+  blocks.websocket.isConnectionClosed: is connection cloased?
+  blocks.websocket.closeConnection: close connection
+
+zh-Hans:
+  blocks.websocket.name: WebSocket
+  blocks.websocket.connect: 连接到 [URL]
+  blocks.websocket.send: 用 [ENCODE] 编码发送消息用 [MESSAGE]
+  blocks.websocket.encodeText: 文本
+  blocks.websocket.encodeBase64: base64
+  blocks.websocket.whenMessageReceived: 当接收到消息
+  blocks.websocket.receivedDecode: 将接收到的消息用 [DECODE] 解码
+  blocks.websocket.decodeJSON: json
+  blocks.websocket.decodeBase64: base64
+  blocks.websocket.receivedObject: 路径 [PATH] 的消息内容
+  blocks.websocket.receivedText: 文本消息
+  blocks.websocket.whenConnected: 当连接到 WebSocket 服务器
+  blocks.websocket.isConnected: 连接成功？
+  blocks.websocket.whenConnectionErrors: 当服务器连接发生错误
+  blocks.websocket.isConnectionErrored: 连接失败？
+  blocks.websocket.whenConnectionCloses: 当服务器连接关闭
+  blocks.websocket.isConnectionClosed: 连接关闭？
+  blocks.websocket.closeConnection: 关闭连接
+
+zh-Hant:
+  blocks.websocket.name: WebSocket
+  blocks.websocket.connect: 連接到 [URL]
+  blocks.websocket.send: 用 [ENCODE] 編碼發送消息用 [MESSAGE]
+  blocks.websocket.encodeText: 文本
+  blocks.websocket.encodeBase64: base64
+  blocks.websocket.whenMessageReceived: 當接收到消息
+  blocks.websocket.receivedDecode: 將接收到的消息用 [DECODE] 解碼
+  blocks.websocket.decodeJSON: json
+  blocks.websocket.decodeBase64: base64
+  blocks.websocket.receivedObject: 路徑 [PATH] 的消息內容
+  blocks.websocket.receivedText: 文本消息
+  blocks.websocket.whenConnected: 當連接到 WebSocket 服務器
+  blocks.websocket.isConnected: 連接成功？
+  blocks.websocket.whenConnectionErrors: 當服務器連接發生錯誤
+  blocks.websocket.isConnectionErrored: 連接失敗？
+  blocks.websocket.whenConnectionCloses: 當服務器連接關閉
+  blocks.websocket.isConnectionClosed: 連接關閉？
+  blocks.websocket.closeConnection: 關閉連接

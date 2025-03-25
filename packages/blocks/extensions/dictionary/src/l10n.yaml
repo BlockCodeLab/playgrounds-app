@@ -1,0 +1,11 @@
+en:
+  blocks.dictionary.name: Dictionary
+  blocks.dictionary.blockA: block [KEY]
+
+zh-Hans:
+  blocks.dictionary.name: 字典
+  blocks.dictionary.blockA: 积木 [KEY]
+
+zh-Hant:
+  blocks.dictionary.name: 字典
+  blocks.dictionary.blockA: 積木 [KEY]

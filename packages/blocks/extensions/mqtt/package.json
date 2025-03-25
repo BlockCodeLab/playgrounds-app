@@ -1,0 +1,26 @@
+{
+  "name": "@blockcode/blocks-mqtt",
+  "private": "true",
+  "version": "1.0.0",
+  "type": "module",
+  "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    },
+    "./info": {
+      "import": "./dist/info.js"
+    }
+  },
+  "scripts": {
+    "build": "playground-build ."
+  },
+  "dependencies": {
+    "mqtt": "^5.10.4",
+    "preact": "^10.25.4"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "playground-build": "git+https://github.com/BlockCodeLab/playground-build.git"
+  }
+}
