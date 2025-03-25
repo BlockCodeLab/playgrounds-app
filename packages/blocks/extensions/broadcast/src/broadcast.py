@@ -5,7 +5,7 @@ import time
 
 try:
     from scratch import runtime, when_start
-except:
+except Exception:
     from blocks import runtime, when_start
 
 
@@ -89,7 +89,7 @@ async def send_raw(msg):
 
 
 def send(msg, name="default"):
-    asyncio.create_task(send_raw(bytes(f"{options["group"]}:{name}:{msg}", "utf-8")))
+    asyncio.create_task(send_raw(bytes(f"{options['group']}:{name}:{msg}", "utf-8")))
 
 
 def set_group(value):
