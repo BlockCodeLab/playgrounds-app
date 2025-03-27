@@ -6,13 +6,13 @@ proto['math_number'] = function (block) {
   let code = parseFloat(block.getFieldValue('NUM'));
   let order;
   if (code === Infinity) {
-    code = 'float("inf")';
+    code = '3.4028235E+38';
     order = this.ORDER_FUNCTION_CALL;
   } else if (code === -Infinity) {
-    code = '-float("inf")';
+    code = '-3.4028235E+38';
     order = this.ORDER_UNARY_SIGN;
   } else if (Number.isNaN(code)) {
-    code = 'float("nan")';
+    code = '0';
     order = this.ORDER_UNARY_SIGN;
   } else {
     order = code < 0 ? this.ORDER_UNARY_SIGN : this.ORDER_ATOMIC;
@@ -35,13 +35,13 @@ proto['math_positive_number'] = function (block) {
   let code = parseFloat(block.getFieldValue('NUM'));
   let order;
   if (code === Infinity) {
-    code = 'float("inf")';
+    code = '3.4028235E+38';
     order = this.ORDER_FUNCTION_CALL;
   } else if (code === -Infinity) {
-    code = '-float("inf")';
+    code = '-3.4028235E+38';
     order = this.ORDER_FUNCTION_CALL;
   } else if (Number.isNaN(code)) {
-    code = 'float("nan")';
+    code = '0';
     order = this.ORDER_FUNCTION_CALL;
   } else {
     code = code < 0 ? 0 : code;
@@ -54,10 +54,10 @@ proto['math_angle'] = function (block) {
   let code = parseFloat(block.getFieldValue('NUM'));
   let order;
   if (code == Infinity) {
-    code = 'float("inf")';
+    code = '3.4028235E+38';
     order = this.ORDER_FUNCTION_CALL;
   } else if (code == -Infinity) {
-    code = '-float("inf")';
+    code = '-3.4028235E+38';
     order = this.ORDER_UNARY_SIGN;
   } else {
     code = code % 360;
