@@ -15,8 +15,24 @@ export const blocks = [
         defaultValue: 'wss://echo.websocket.org/',
       },
     },
-    mpy(block) {},
-    emu(block) {},
+    mpy(block) {
+      let code = '';
+      if (this.STATEMENT_PREFIX) {
+        code += this.injectId(this.STATEMENT_PREFIX, block);
+      }
+      const url = this.valueToCode(block, 'URL', this.ORDER_NONE);
+      code += `await websocket.connect(${url})\n`;
+      return code;
+    },
+    emu(block) {
+      let code = '';
+      if (this.STATEMENT_PREFIX) {
+        code += this.injectId(this.STATEMENT_PREFIX, block);
+      }
+      const url = this.valueToCode(block, 'URL', this.ORDER_NONE);
+      code += `await runtime.extensions.websocket.connect(${url});\n`;
+      return code;
+    },
   },
   '---',
   {
@@ -24,7 +40,7 @@ export const blocks = [
     text: (
       <Text
         id="blocks.websocket.send"
-        defaultMessage="send message [MESSAGE] with [ENCODE]"
+        defaultMessage="send message [MESSAGE]"
       />
     ),
     inputs: {
@@ -32,28 +48,25 @@ export const blocks = [
         type: 'text',
         defaultValue: 'hello',
       },
-      ENCODE: {
-        type: 'text',
-        menu: [
-          [
-            <Text
-              id="blocks.websocket.encodeText"
-              defaultMessage="text"
-            />,
-            'text',
-          ],
-          [
-            <Text
-              id="blocks.websocket.encodeBase64"
-              defaultMessage="base64"
-            />,
-            'base64',
-          ],
-        ],
-      },
     },
-    mpy(block) {},
-    emu(block) {},
+    mpy(block) {
+      let code = '';
+      if (this.STATEMENT_PREFIX) {
+        code += this.injectId(this.STATEMENT_PREFIX, block);
+      }
+      const message = this.valueToCode(block, 'MESSAGE', this.ORDER_NONE);
+      code += `websocket.send(${message})\n`;
+      return code;
+    },
+    emu(block) {
+      let code = '';
+      if (this.STATEMENT_PREFIX) {
+        code += this.injectId(this.STATEMENT_PREFIX, block);
+      }
+      const message = this.valueToCode(block, 'MESSAGE', this.ORDER_NONE);
+      code += `runtime.extensions.websocket.send(${message});\n`;
+      return code;
+    },
   },
   '---',
   {
@@ -65,47 +78,20 @@ export const blocks = [
       />
     ),
     hat: true,
-    mpy(block) {},
-    emu(block) {},
-  },
-  {
-    id: 'receivedDecode',
-    text: (
-      <Text
-        id="blocks.websocket.receivedDecode"
-        defaultMessage="decode received message via [DECODE]"
-      />
-    ),
-    inputs: {
-      DECODE: {
-        type: 'text',
-        menu: [
-          [
-            <Text
-              id="blocks.websocket.decodeJSON"
-              defaultMessage="json"
-            />,
-            'json',
-          ],
-          [
-            <Text
-              id="blocks.websocket.decodeBase64"
-              defaultMessage="base64"
-            />,
-            'base64',
-          ],
-        ],
-      },
+    mpy(block) {
+      const eventCode = this.eventToCode('websocket_received', 'False', 'target');
+      return `@when(websocket.WEBSOCKET_RECEIVED, target)\n${eventCode}`;
     },
-    mpy(block) {},
-    emu(block) {},
+    emu(block) {
+      return `runtime.when('websocket.received', ${this.HAT_CALLBACK});\n`;
+    },
   },
   {
-    id: 'receivedObject',
+    id: 'receivedJSON',
     text: (
       <Text
-        id="blocks.websocket.receivedObject"
-        defaultMessage="item [PATH] of received data"
+        id="blocks.websocket.receivedJSON"
+        defaultMessage="item [PATH] of received JSON data"
       />
     ),
     output: 'text',
@@ -115,8 +101,16 @@ export const blocks = [
         defaultValue: 'path.2.item',
       },
     },
-    mpy(block) {},
-    emu(block) {},
+    mpy(block) {
+      const path = this.valueToCode(block, 'PATH', this.ORDER_NONE);
+      const code = `websocket.get_data(${path})`;
+      return [code, this.ORDER_FUNCTION_CALL];
+    },
+    emu(block) {
+      const path = this.valueToCode(block, 'PATH', this.ORDER_NONE);
+      const code = `runtime.extensions.websocket.getData(${path})`;
+      return [code, this.ORDER_FUNCTION_CALL];
+    },
   },
   {
     id: 'receivedText',
@@ -127,8 +121,14 @@ export const blocks = [
       />
     ),
     output: 'text',
-    mpy(block) {},
-    emu(block) {},
+    mpy(block) {
+      const code = 'websocket.get_text()';
+      return [code, this.ORDER_FUNCTION_CALL];
+    },
+    emu(block) {
+      const code = 'runtime.extensions.websocket.getText()';
+      return [code, this.ORDER_FUNCTION_CALL];
+    },
   },
   '---',
   {
@@ -140,22 +140,14 @@ export const blocks = [
       />
     ),
     hat: true,
-    mpy(block) {},
-    emu(block) {},
+    mpy(block) {
+      const eventCode = this.eventToCode('websocket_connected', 'False', 'target');
+      return `@when(websocket.WEBSOCKET_CONNECTED, target)\n${eventCode}`;
+    },
+    emu(block) {
+      return `runtime.when('websocket.connected', ${this.HAT_CALLBACK});\n`;
+    },
   },
-  {
-    id: 'isConnected',
-    text: (
-      <Text
-        id="blocks.websocket.isConnected"
-        defaultMessage="is connected?"
-      />
-    ),
-    output: 'boolean',
-    mpy(block) {},
-    emu(block) {},
-  },
-  '---',
   {
     id: 'whenConnectionErrors',
     text: (
@@ -165,8 +157,74 @@ export const blocks = [
       />
     ),
     hat: true,
-    mpy(block) {},
-    emu(block) {},
+    mpy(block) {
+      const eventCode = this.eventToCode('websocket_errors', 'False', 'target');
+      return `@when(websocket.WEBSOCKET_ERRORS, target)\n${eventCode}`;
+    },
+    emu(block) {
+      return `runtime.when('websocket.errors', ${this.HAT_CALLBACK});\n`;
+    },
+  },
+  {
+    id: 'whenConnectionCloses',
+    text: (
+      <Text
+        id="blocks.websocket.whenConnectionCloses"
+        defaultMessage="when connection closes"
+      />
+    ),
+    hat: true,
+    mpy(block) {
+      const eventCode = this.eventToCode('websocket_disconnected', 'False', 'target');
+      return `@when(websocket.WEBSOCKET_DISCONNECTED, target)\n${eventCode}`;
+    },
+    emu(block) {
+      return `runtime.when('websocket.disconnected', ${this.HAT_CALLBACK});\n`;
+    },
+  },
+  {
+    id: 'closeConnection',
+    text: (
+      <Text
+        id="blocks.websocket.closeConnection"
+        defaultMessage="close connection"
+      />
+    ),
+    mpy(block) {
+      let code = '';
+      if (this.STATEMENT_PREFIX) {
+        code += this.injectId(this.STATEMENT_PREFIX, block);
+      }
+      code += 'websocket.disconnect()\n';
+      return code;
+    },
+    emu(block) {
+      let code = '';
+      if (this.STATEMENT_PREFIX) {
+        code += this.injectId(this.STATEMENT_PREFIX, block);
+      }
+      code += 'runtime.extensions.websocket.disconnect();\n';
+      return code;
+    },
+  },
+  '---',
+  {
+    id: 'isConnected',
+    text: (
+      <Text
+        id="blocks.websocket.isConnected"
+        defaultMessage="is connected?"
+      />
+    ),
+    output: 'boolean',
+    mpy(block) {
+      const code = 'websocket.is_connected()';
+      return [code, this.ORDER_FUNCTION_CALL];
+    },
+    emu(block) {
+      const code = 'runtime.extensions.websocket.isConnected()';
+      return [code, this.ORDER_FUNCTION_CALL];
+    },
   },
   {
     id: 'isConnectionErrored',
@@ -177,21 +235,14 @@ export const blocks = [
       />
     ),
     output: 'boolean',
-    mpy(block) {},
-    emu(block) {},
-  },
-  '---',
-  {
-    id: 'whenConnectionCloses',
-    text: (
-      <Text
-        id="blocks.websocket.whenConnectionCloses"
-        defaultMessage="when connection closes"
-      />
-    ),
-    hat: true,
-    mpy(block) {},
-    emu(block) {},
+    mpy(block) {
+      const code = 'websocket.is_errors()';
+      return [code, this.ORDER_FUNCTION_CALL];
+    },
+    emu(block) {
+      const code = 'runtime.extensions.websocket.isErrors()';
+      return [code, this.ORDER_FUNCTION_CALL];
+    },
   },
   {
     id: 'isConnectionClosed',
@@ -202,18 +253,13 @@ export const blocks = [
       />
     ),
     output: 'boolean',
-    mpy(block) {},
-    emu(block) {},
-  },
-  {
-    id: 'closeConnection',
-    text: (
-      <Text
-        id="blocks.websocket.closeConnection"
-        defaultMessage="close connection"
-      />
-    ),
-    mpy(block) {},
-    emu(block) {},
+    mpy(block) {
+      const code = 'websocket.is_disonnected()';
+      return [code, this.ORDER_FUNCTION_CALL];
+    },
+    emu(block) {
+      const code = 'runtime.extensions.websocket.isDisonnected()';
+      return [code, this.ORDER_FUNCTION_CALL];
+    },
   },
 ];

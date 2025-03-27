@@ -1,60 +1,125 @@
 import aiohttp
 import asyncio
+import json
 
 try:
     from scratch import runtime
 except Exception:
     from blocks import runtime
 
-REQUEST_FAILS = "REQUEST_FAILS"
-REQUEST_SUCCESS = "REQUEST_SUCCESS"
+WEBSOCKET_CONNECTED = "WEBSOCKET_CONNECTED"
+WEBSOCKET_RECEIVED = "WEBSOCKET_RECEIVED"
+WEBSOCKET_DISCONNECTED = "WEBSOCKET_DISCONNECTED"
+WEBSOCKET_ERRORS = "WEBSOCKET_ERRORS"
 
-option = {}
-status = 0
-data = None
+ws_client = None
+
+data = {
+    "ERROR": False,
+    "TEXT": None,
+    "JSON": None,
+}
 
 
-async def fetch_raw(method, url):
-    global option, data, status
+def is_ssl(url):
+    if url.startswith("wss:"):
+        try:
+            import ssl
+
+            sslctx = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+            sslctx.verify_mode = ssl.CERT_NONE
+            return sslctx
+        except Exception:
+            return False
+
+
+async def _disconnect():
+    global ws_client
+    if ws_client:
+        await ws_client.close()
+        runtime.fire(WEBSOCKET_DISCONNECTED)
+        ws_client = None
+
+
+async def _connect(url):
+    global ws_client
+
+    if not runtime.wifi_connected:
+        return
+
+    await _disconnect()
+
     async with aiohttp.ClientSession() as client:
         try:
-            async with client.request(method, url, **option) as resp:
-                status = resp.status
-                if status == 200:
-                    content_type = resp.headers.get("Content-Type", "text/plain")
-                    if content_type.startswith("application/json"):
-                        data = await resp.json()
-                    else:
-                        data = await resp.text()
-                    runtime.fire(REQUEST_SUCCESS)
-                    option = {}
-                else:
-                    runtime.fire(REQUEST_FAILS)
+            async with client.ws_connect(url, ssl=is_ssl(url)) as ws:
+                ws_client = ws
+                runtime.fire(WEBSOCKET_CONNECTED)
+                async for msg in ws:
+                    if msg.type == aiohttp.WSMsgType.TEXT:
+                        data["ERROR"] = False
+                        if data["TEXT"] != msg.data:
+                            data["JSON"] = None
+                        data["TEXT"] = msg.data
+                        runtime.fire(WEBSOCKET_RECEIVED)
+                    elif msg.type == aiohttp.WSMsgType.ERROR:
+                        data["ERROR"] = True
+                        runtime.fire(WEBSOCKET_ERRORS)
+            runtime.fire(WEBSOCKET_DISCONNECTED)
+            ws_client = None
+            data["ERROR"] = False
         except Exception:
-            runtime.fire(REQUEST_FAILS)
+            data["ERROR"] = True
+            runtime.fire(WEBSOCKET_ERRORS)
 
 
-def fetch(method, url):
-    if runtime.wifi_connected:
-        asyncio.create_task(fetch_raw(method, url))
-    else:
-        runtime.fire(REQUEST_FAILS)
+async def connect(url):
+    asyncio.create_task(_connect(url))
+    while not ws_client:
+        await asyncio.sleep_ms(100)
 
 
-async def afetch(method, url):
-    if runtime.wifi_connected:
-        await fetch_raw(method, url)
-    else:
-        runtime.fire(REQUEST_FAILS)
+def disconnect():
+    asyncio.create_task(_disconnect())
 
 
-def get_content(index_path=None):
-    if not index_path:
+def is_connected():
+    return ws_client is not None and not ws_client.ws.closed
+
+
+def is_disconnected():
+    return ws_client is None or ws_client.ws.closed
+
+
+def is_errors():
+    return data["ERROR"]
+
+
+def send(message):
+    if is_connected():
+        data["ERROR"] = False
+        try:
+            if type(message) is dict:
+                message = json.dumps(message)
+            asyncio.create_task(ws_client.send_str(str(message)))
+        except Exception:
+            data["ERROR"] = True
+            runtime.fire(WEBSOCKET_ERRORS)
+
+
+def get_text():
+    return data["TEXT"] if data["TEXT"] else ""
+
+
+def get_data(index_path):
+    if not data["TEXT"]:
         return ""
-    if not data:
-        return ""
+    if not data["JSON"]:
+        try:
+            data["JSON"] = json.loads(data["TEXT"])
+        except Exception:
+            data["JSON"] = {}
 
-    result = data
+    result = data["JSON"]
     index_path = index_path.split(".")
     for index in index_path:
         if type(result) is list:
@@ -66,44 +131,3 @@ def get_content(index_path=None):
     if result != 0 and not result:
         return ""
     return result
-
-
-def clear_cache():
-    global option, data, status
-    option = {}
-    status = 0
-    data = None
-
-
-def set_header(header, value):
-    global option
-    option.setdefault("headers", {})
-    option["headers"][header] = value
-
-
-def set_body(key, value):
-    global option
-    option.setdefault("json", {})
-    option["json"][key] = value
-
-
-_CHARACTERS_EXCEPT = (
-    b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.!~*'()"
-)
-
-
-def encode_uri_component(value, encode="utf-8"):
-    data = value.encode(encode)
-    new_value = ""
-    for i in data:
-        if i in _CHARACTERS_EXCEPT:
-            new_value += chr(int(i))
-        else:
-            new_value += f"%{int(i):x}"
-    return new_value
-
-
-def set_param(key, value):
-    global option
-    option.setdefault("params", {})
-    option["params"][encode_uri_component(key)] = encode_uri_component(value)

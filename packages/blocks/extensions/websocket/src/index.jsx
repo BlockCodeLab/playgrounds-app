@@ -12,13 +12,13 @@ export default {
   icon: iconImage,
   name: (
     <Text
-      id="blocks.websockte.name"
+      id="blocks.websocket.name"
       defaultMessage="WebSocket"
     />
   ),
   files: [
     {
-      name: 'request',
+      name: 'websocket',
       type: 'text/x-python',
       uri: websocketFile,
     },
