@@ -49,6 +49,7 @@ export const blocks = [
       return code;
     },
   },
+  '---',
   {
     id: 'clear_cache',
     text: (
@@ -74,12 +75,13 @@ export const blocks = [
       return code;
     },
   },
+  '---',
   {
     id: 'get_content',
     text: (
       <Text
         id="blocks.request.getContent"
-        defaultMessage="item [PATH] of content"
+        defaultMessage="item [PATH] of responded JSON data"
       />
     ),
     inputs: {
@@ -110,7 +112,7 @@ export const blocks = [
     ),
     output: 'string',
     mpy() {
-      const code = `request.get_content()`;
+      const code = `request.get_text()`;
       return [code, this.ORDER_FUNCTION_CALL];
     },
     emu() {
@@ -154,24 +156,6 @@ export const blocks = [
     },
   },
   {
-    id: 'is_responds',
-    text: (
-      <Text
-        id="blocks.request.isResponds"
-        defaultMessage="site responds?"
-      />
-    ),
-    output: 'boolean',
-    mpy() {
-      const code = `bool(request.response)`;
-      return [code, this.ORDER_FUNCTION_CALL];
-    },
-    emu() {
-      const code = `Boolean(runtime.extensions.request.getStatusCode(target))`;
-      return [code, this.ORDER_FUNCTION_CALL];
-    },
-  },
-  {
     id: 'status_code',
     text: (
       <Text
@@ -186,6 +170,24 @@ export const blocks = [
     },
     emu() {
       const code = `runtime.extensions.request.getStatusCode(target)`;
+      return [code, this.ORDER_FUNCTION_CALL];
+    },
+  },
+  {
+    id: 'is_responds',
+    text: (
+      <Text
+        id="blocks.request.isResponds"
+        defaultMessage="site responds?"
+      />
+    ),
+    output: 'boolean',
+    mpy() {
+      const code = `bool(request.response)`;
+      return [code, this.ORDER_FUNCTION_CALL];
+    },
+    emu() {
+      const code = `Boolean(runtime.extensions.request.getStatusCode(target))`;
       return [code, this.ORDER_FUNCTION_CALL];
     },
   },

@@ -19,7 +19,7 @@ def clear():
 def stamp(target):
     frame_module = target.frames[target.frame_index]
     image = frame_module.BITMAP
-    x, y = round(target._x), round(target._y)
+    x, y = target._x, target._y
     width, height, cx, cy = target._width, target._height, target._cx, target._cy
     angle = target.direction - 90
     scale_x = scale_y = target.size / 100
@@ -33,8 +33,8 @@ def stamp(target):
         PEN_PAINT,
         lambda disp: disp.blit(
             image,
-            x,
-            y,
+            round(x),
+            round(y),
             width,
             height,
             cx=cx,
@@ -57,7 +57,10 @@ def pen_goto(target, *args, **kwargs):
     color = target.data.get(PEN_COLOR, (1, 0, 0))
     size = target.data.get(PEN_SIZE, 1)
     stage.add_paint(
-        PEN_PAINT, lambda disp: disp.line(x, y, nx, ny, size, rgb565(*color))
+        PEN_PAINT,
+        lambda disp: disp.line(
+            round(x), round(y), round(nx), round(ny), size, rgb565(*color)
+        ),
     )
     target.data[PEN_LAST_POS] = nx, ny
 

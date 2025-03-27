@@ -94,7 +94,9 @@ export function ContextMenu({ menuItems, className, position, children }) {
         contextForElement.addEventListener('contextmenu', show);
       }
     }
-    return () => {};
+    return () => {
+      ref.popper = null;
+    };
   }, [ref]);
 
   return (

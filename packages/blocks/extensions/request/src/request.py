@@ -16,6 +16,7 @@ data = None
 
 async def fetch_raw(method, url):
     global option, data, status
+    data = None
     async with aiohttp.ClientSession() as client:
         try:
             async with client.request(method, url, **option) as resp:
@@ -48,9 +49,11 @@ async def afetch(method, url):
         runtime.fire(REQUEST_FAILS)
 
 
-def get_content(index_path=None):
-    if not index_path:
-        return ""
+def get_text():
+    return data if str(data) else ""
+
+
+def get_content(index_path):
     if not data:
         return ""
 
