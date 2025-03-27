@@ -41,6 +41,11 @@ gui.menubar.edit: 编辑
 gui.menubar.edit.undo: 撤销
 gui.menubar.edit.redo: 重做
 
+gui.menubar.device: 设备
+gui.menubar.device.connect: 连接
+gui.menubar.device.disconnect: 断开连接
+gui.menubar.device.download: 下载程序
+
 gui.project.name: 未命名作品
 gui.project.shortname: 未命名
 
