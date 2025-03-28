@@ -74,13 +74,29 @@ function computeConvexHull(points) {
 
 // 更新凸包位置（考虑旋转和缩放）
 function updateConvexHulls(target) {
-  const x = target.x();
-  const y = target.y();
-  const offsetX = target.offsetX();
-  const offsetY = target.offsetY();
-  const scaleX = target.scaleX(); // 缩放因子
-  const scaleY = target.scaleY();
-  const rotation = (target.rotation() * Math.PI) / 180; // 旋转角度（弧度）
+  let x, y, offsetX, offsetY, scaleX, scaleY, rotation;
+
+  // 如果有 onUpdateConvexHulls 方法，使用该方法获取属性
+  if (target.onUpdateConvexHulls) {
+    const prop = target.onUpdateConvexHulls();
+    x = prop.x;
+    y = prop.y;
+    offsetX = prop.offsetX;
+    offsetY = prop.offsetY;
+    scaleX = prop.scaleX;
+    scaleY = prop.scaleY;
+    rotation = prop.rotation;
+  } else {
+    x = target.x();
+    y = target.y();
+    offsetX = target.offsetX();
+    offsetY = target.offsetY();
+    scaleX = target.scaleX(); // 缩放因子
+    scaleY = target.scaleY();
+    rotation = target.rotation(); // 旋转角度
+  }
+
+  rotation = (rotation * Math.PI) / 180; // 弧度
   const sinRotation = Math.sin(rotation);
   const cosRotation = Math.cos(rotation);
 
