@@ -58,6 +58,7 @@ export class ClangGenerator extends ScratchBlocks.Generator {
 
     // Create a dictionary of definitions to be printed before the code.
     this.definitions_ = Object.create(null);
+    this.setupAdd_ = "";
     // Create a dictionary mapping desired function names in definitions_
     // to actual function names (to avoid collisions with user functions).
     this.functionNames_ = Object.create(null);
@@ -117,7 +118,9 @@ export class ClangGenerator extends ScratchBlocks.Generator {
     delete this.definitions_;
     delete this.functionNames_;
     this.nameDB_.reset();
-    return allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n') + code + allFuncs.replace(/\n\n+/g, '\n\n');
+    const ret = allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n') + code + allFuncs.replace(/\n\n+/g, '\n\n');
+    console.log(ret); //TODO: remove thi
+    return ret;
   }
 
   /**
@@ -186,12 +189,23 @@ export class ClangGenerator extends ScratchBlocks.Generator {
       }
     }
 
-    if (block.startHat_) {
+    if (block.type === 'event_whensetup') {
       const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
       let nextCode = this.blockToCode(nextBlock);
       if (nextCode) {
         nextCode = this.prefixLines(nextCode, this.INDENT);
-        code = code.replace('/* hatcode */', nextCode);
+        nextCode = this.setupAdd_ + nextCode;
+        code = code.replace('/* setupCode */', nextCode);
+      }
+      return commentCode + code;
+    }
+
+    if (block.type === 'event_whenloop') {
+      const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
+      let nextCode = this.blockToCode(nextBlock);
+      if (nextCode) {
+        nextCode = this.prefixLines(nextCode, this.INDENT);
+        code = code.replace('/* loopCode */', nextCode);
       }
       return commentCode + code;
     }
