@@ -95,30 +95,33 @@ export function loadExtension(extObj, options) {
       }
 
       // 运行积木过滤器
-      if (onBlockFilter && !onBlockFilter(block)) {
-        return blocksXML;
-      }
+      const needShow = onBlockFilter ? onBlockFilter(block) : true;
 
-      // 文本标签
-      if (block.label) {
-        return blocksXML + `<label text="${block.label}"/>`;
-      }
-
-      // 按钮
-      if (block.button) {
-        const workspace = ScratchBlocks.getMainWorkspace();
-        if (workspace) {
-          const flyout = workspace.getFlyout();
-          if (flyout) {
-            const toolboxWorkspace = flyout.getWorkspace();
-            if (toolboxWorkspace) {
-              toolboxWorkspace.registerButtonCallback(block.button, block.onClick);
+      // 仅显示不需要构建积木
+      if (needShow) {
+        // 文本标签
+        if (block.label) {
+          return blocksXML + `<label text="${block.label}"/>`;
+        }
+        // 按钮
+        if (block.button) {
+          const workspace = ScratchBlocks.getMainWorkspace();
+          if (workspace) {
+            const flyout = workspace.getFlyout();
+            if (flyout) {
+              const toolboxWorkspace = flyout.getWorkspace();
+              if (toolboxWorkspace) {
+                toolboxWorkspace.registerButtonCallback(block.button, block.onClick);
+              }
             }
           }
+          return blocksXML + `<button text="${maybeTranslate(block.text)}" callbackKey="${block.button}"/>`;
         }
-        return blocksXML + `<button text="${maybeTranslate(block.text)}" callbackKey="${block.button}"/>`;
       }
 
+      // 构建积木
+      // xml用于在工具栏显示
+      // json用于代码转换，有可能不显示的积木也存在代码转换
       const blockId = `${extId}_${block.id}`;
       let blockXML = '';
 
@@ -292,7 +295,7 @@ export function loadExtension(extObj, options) {
                     blockXML += `<value name="${xmlEscape(name)}">`;
                     const shadowType = arg.shadowType ?? ShadowTypes[arg.type] ?? `${extId}_${arg.shadow}`;
                     if (shadowType) {
-                      blockXML += `<shadow ${arg.id ? `id="${arg.id}"` : ''} type="${shadowType}">`;
+                      blockXML += `<shadow ${arg.id ? `id="${arg.id}" ` : ''}type="${shadowType}">`;
                       const fieldName = arg.fieldName ?? FieldNames[arg.type] ?? xmlEscape(name);
                       if (arg.defaultValue != null && fieldName) {
                         blockXML += `<field name="${fieldName}">${xmlEscape(maybeTranslate(arg.defaultValue))}</field>`;
@@ -318,7 +321,6 @@ export function loadExtension(extObj, options) {
         // 加入扩展的积木
         ScratchBlocks.Blocks[blockId] = {
           init() {
-            ScratchBlocks.Blocks['field_slider'];
             this.jsonInit(blockJson);
             block.onInit?.call(this);
           },
@@ -351,7 +353,11 @@ export function loadExtension(extObj, options) {
         }
       }
 
-      return blocksXML + blockXML;
+      // 将需要显示的积木添加到工具栏
+      if (needShow) {
+        blocksXML += blockXML;
+      }
+      return blocksXML;
     }, '');
 
   if (extObj.skipXML) {
