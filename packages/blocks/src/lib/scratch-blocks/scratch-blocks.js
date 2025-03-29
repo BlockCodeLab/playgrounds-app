@@ -22,22 +22,11 @@ ScratchBlocks.Extensions.register(
   ScratchBlocks.ScratchBlocks.VerticalExtensions.colourHelper('monitor'),
 );
 
-// 将所有积木对应的转换函数绑定到 this
-const generatorInit = ScratchBlocks.Generator.prototype.init;
-ScratchBlocks.Generator.prototype.init = function (workspace) {
-  for (const key in this) {
-    if (typeof this[key] === 'function' && !ScratchBlocks.Generator.prototype[key]) {
-      this[key] = this[key].bind(this);
-    }
-  }
-  generatorInit.call(this, workspace);
-};
-
 // 禁用显示/隐藏变量/列表的积木
-ScratchBlocks.DataCategory.addShowVariable = () => { };
-ScratchBlocks.DataCategory.addHideVariable = () => { };
-ScratchBlocks.DataCategory.addShowList = () => { };
-ScratchBlocks.DataCategory.addHideList = () => { };
+ScratchBlocks.DataCategory.addShowVariable = () => {};
+ScratchBlocks.DataCategory.addHideVariable = () => {};
+ScratchBlocks.DataCategory.addShowList = () => {};
+ScratchBlocks.DataCategory.addHideList = () => {};
 
 // 备份所有变量/列表积木
 // 用于在C语言替换默认积木后的还原

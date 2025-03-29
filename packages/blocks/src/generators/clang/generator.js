@@ -43,7 +43,12 @@ export class ClangGenerator extends ScratchBlocks.Generator {
      * @private
      */
     this.addReservedWords(
-      ',alignas,alignof,and,and_eq,asm,auto,bitand,bitor,bool,break,case,catch,char,char16_t,char32_t,class,compl,const,constexpr,const_cast,continue,decltype,default,delete,do,double,dynamic_cast,else,enum,explicit,export,extern,false,float,for,friend,goto,if,inline,int,long,long double,long long,mutable,namespace,new,noexcept,not,not_eq,nullptr,operator,or,or_eq,private,protected,public,register,reinterpret_cast,return,short,signed,sizeof,static,static_assert,static_cast,struct,switch,template,this,thread_local,throw,true,try,typedef,typeid,typename,union,unsigned,using,virtual,void,volatile,wchar_t,while,xor,xor_eq,posix,' +
+      'alignas,alignof,and,and_eq,asm,auto,bitand,bitor,bool,break,case,catch,char,char16_t,char32_t,class,compl,' +
+        'const,constexpr,const_cast,continue,decltype,default,delete,do,double,dynamic_cast,else,enum,explicit,export,' +
+        'extern,false,float,for,friend,goto,if,inline,int,long,long double,long long,mutable,namespace,new,noexcept,not,' +
+        'not_eq,nullptr,operator,or,or_eq,private,protected,public,register,reinterpret_cast,return,short,signed,sizeof,' +
+        'static,static_assert,static_cast,struct,switch,template,this,thread_local,throw,true,try,typedef,typeid,typename,' +
+        'union,unsigned,using,virtual,void,volatile,wchar_t,while,xor,xor_eq,posix,' +
         // http://en.cppreference.com/w/cpp/keyword
         'game,api,PI,PI2,PI3,PI4,DEG2RAD,RAD2DEG,ZRMS,ZR2D,ZR3D,ALLIANCE', //TODO: add ZR #defines to list
     );
@@ -58,7 +63,6 @@ export class ClangGenerator extends ScratchBlocks.Generator {
 
     // Create a dictionary of definitions to be printed before the code.
     this.definitions_ = Object.create(null);
-    this.setupAdd_ = "";
     // Create a dictionary mapping desired function names in definitions_
     // to actual function names (to avoid collisions with user functions).
     this.functionNames_ = Object.create(null);
@@ -77,12 +81,6 @@ export class ClangGenerator extends ScratchBlocks.Generator {
    * @return {string} Completed code.
    */
   finish(code) {
-    // Indent every line.
-    if (code) {
-      code = this.prefixLines(code, this.INDENT);
-    }
-    code = '\n' + code;
-
     // Convert the definitions dictionary into a list.
     const includes = [];
     const declarations = [];
@@ -118,9 +116,8 @@ export class ClangGenerator extends ScratchBlocks.Generator {
     delete this.definitions_;
     delete this.functionNames_;
     this.nameDB_.reset();
-    const ret = allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n') + code + allFuncs.replace(/\n\n+/g, '\n\n');
-    console.log(ret); //TODO: remove thi
-    return ret;
+
+    return allDefs.replace(/\n\n+/g, '\n\n') + code + allFuncs.replace(/\n\n+/g, '\n\n');
   }
 
   /**
@@ -189,32 +186,19 @@ export class ClangGenerator extends ScratchBlocks.Generator {
       }
     }
 
-    if (block.type === 'event_whensetup') {
-      const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-      let nextCode = this.blockToCode(nextBlock);
-      if (nextCode) {
-        nextCode = this.prefixLines(nextCode, this.INDENT);
-        nextCode = this.setupAdd_ + nextCode;
-        code = code.replace('/* setupCode */', nextCode);
-      }
+    // 帽子积木自处理后续积木代码
+    if (block.startHat_) {
       return commentCode + code;
     }
 
-    if (block.type === 'event_whenloop') {
-      const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-      let nextCode = this.blockToCode(nextBlock);
-      if (nextCode) {
-        nextCode = this.prefixLines(nextCode, this.INDENT);
-        code = code.replace('/* loopCode */', nextCode);
-      }
-      return commentCode + code;
-    }
-
+    // 禁止孤立积木的代码转换
     if (block.parentBlock_) {
       const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
       const nextCode = this.blockToCode(nextBlock);
       return commentCode + code + nextCode;
     }
+
+    return commentCode;
   }
 
   /**
@@ -275,11 +259,5 @@ export class ClangGenerator extends ScratchBlocks.Generator {
       }
     }
     return at;
-  }
-
-  // 得到变量名称
-  getVariableName(name, type = ScratchBlocks.Variables.NAME_TYPE) {
-    const varName = this.nameDB_.getName(name, type);
-    return varName;
   }
 }
