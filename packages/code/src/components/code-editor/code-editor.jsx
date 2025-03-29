@@ -51,6 +51,7 @@ export function CodeEditor({ readOnly, onLoading }) {
       ref.editor.updateOptions({ readOnly });
       if (file.value) {
         modelname.value = setModel(ref.editor, file.value);
+        ref.editor.getModel().setValue(file.value.content);
       }
       if (onLoading) {
         onLoading(ref.editor);

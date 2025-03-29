@@ -20,7 +20,7 @@ export function ToggleButtons({ disabled, items, value, onChange }) {
             [styles.toggleButtonLast]: index === lastIndex,
             [styles.toggleButtonActived]: !disabled && value === item.value,
           })}
-          onClick={useCallback(() => onChange(item.value), [onChange])}
+          onClick={useCallback(() => onChange?.(item.value), [onChange])}
         >
           {item.icon ? (
             <img
