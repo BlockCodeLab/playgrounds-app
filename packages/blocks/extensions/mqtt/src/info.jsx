@@ -18,6 +18,7 @@ addLocalesMessages({
 });
 
 export default {
+  beta: true,
   image: featureImage,
   icon: iconImage,
   name: (

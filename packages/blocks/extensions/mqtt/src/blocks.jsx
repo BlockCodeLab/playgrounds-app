@@ -12,9 +12,10 @@ export const blocks = [
     inputs: {
       URL: {
         type: 'string',
-        defaultValue: 'ws://test.mosquitto.org:8080',
+        defaultValue: 'mqtt://test.mosquitto.org:1883',
       },
     },
+    emu(block) {},
   },
   '---',
   {
