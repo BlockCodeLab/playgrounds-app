@@ -67,12 +67,12 @@ export class ClangGenerator extends ScratchBlocks.Generator {
     // to actual function names (to avoid collisions with user functions).
     this.functionNames_ = Object.create(null);
 
-    if (!this.nameDB_) {
-      this.nameDB_ = new ScratchBlocks.Names(this.RESERVED_WORDS_);
+    if (!this.variableDB_) {
+      this.variableDB_ = new ScratchBlocks.Names(this.RESERVED_WORDS_);
     } else {
-      this.nameDB_.reset();
+      this.variableDB_.reset();
     }
-    this.nameDB_.setVariableMap(workspace.getVariableMap());
+    this.variableDB_.setVariableMap(workspace.getVariableMap());
   }
 
   /**
@@ -115,9 +115,9 @@ export class ClangGenerator extends ScratchBlocks.Generator {
 
     delete this.definitions_;
     delete this.functionNames_;
-    this.nameDB_.reset();
+    this.variableDB_.reset();
 
-    return allDefs.replace(/\n\n+/g, '\n\n') + code + allFuncs.replace(/\n\n+/g, '\n\n');
+    return allDefs.replace(/\n\n+/g, '\n\n') + code + '\n' + allFuncs.replace(/\n\n+/g, '\n\n');
   }
 
   /**
@@ -191,14 +191,14 @@ export class ClangGenerator extends ScratchBlocks.Generator {
       return commentCode + code;
     }
 
-    // 禁止孤立积木的代码转换
-    if (block.parentBlock_) {
-      const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-      const nextCode = this.blockToCode(nextBlock);
-      return commentCode + code + nextCode;
-    }
+    const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
+    const nextCode = this.blockToCode(nextBlock);
+    return commentCode + code + nextCode;
+  }
 
-    return commentCode;
+  // 检查孤立积木
+  check_(block) {
+    return block?.startHat_ || block?.parentBlock_;
   }
 
   /**

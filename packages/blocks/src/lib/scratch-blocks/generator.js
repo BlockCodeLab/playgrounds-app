@@ -3,6 +3,13 @@ import { ScratchBlocks } from './scratch-blocks';
 const BaseGenerator = ScratchBlocks.Generator;
 
 class Generator extends BaseGenerator {
+  blockToCode(block) {
+    if (this.check_(block)) {
+      return super.blockToCode(block);
+    }
+    return '';
+  }
+
   init(workspace) {
     // 将所有积木对应的转换函数绑定到 this
     for (const key in this) {
@@ -17,13 +24,24 @@ class Generator extends BaseGenerator {
     // to actual function names (to avoid collisions with user functions).
     this.functionNames_ = Object.create(null);
 
-    if (!this.nameDB_) {
-      this.nameDB_ = new ScratchBlocks.Names(this.RESERVED_WORDS_);
+    if (!this.variableDB_) {
+      this.variableDB_ = new ScratchBlocks.Names(this.RESERVED_WORDS_);
     } else {
-      this.nameDB_.reset();
+      this.variableDB_.reset();
     }
 
-    this.nameDB_.setVariableMap(workspace.getVariableMap());
+    this.variableDB_.setVariableMap(workspace.getVariableMap());
+  }
+
+  addLoopTrap(branch, id) {
+    id = id.replace(/\$/g, '$$$$');
+    if (this.INFINITE_LOOP_TRAP && !branch) {
+      branch = this.prefixLines(this.INFINITE_LOOP_TRAP.replace(/%1/g, "'" + id + "'"), this.INDENT) + branch;
+    }
+    if (this.STATEMENT_PREFIX) {
+      branch += this.prefixLines(this.STATEMENT_PREFIX.replace(/%1/g, "'" + id + "'"), this.INDENT);
+    }
+    return branch;
   }
 
   statementToCode(block, name) {
@@ -37,9 +55,18 @@ class Generator extends BaseGenerator {
     return code;
   }
 
-  getVariableName(name, type = ScratchBlocks.Variables.NAME_TYPE) {
-    const varName = this.nameDB_.getName(name, type);
-    return varName;
+  check_(block) {
+    return !!block;
+  }
+
+  getVariableName(desiredName) {
+    const variableName = this.variableDB_.getName(desiredName, ScratchBlocks.Variables.NAME_TYPE);
+    return variableName;
+  }
+
+  getFunctionName(desiredName) {
+    const functionName = this.variableDB_.getDistinctName(desiredName, ScratchBlocks.Procedures.NAME_TYPE);
+    return functionName;
   }
 }
 

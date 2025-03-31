@@ -3,61 +3,46 @@ import { MicroPythonGenerator } from './generator';
 const proto = MicroPythonGenerator.prototype;
 
 proto['control_wait'] = function (block) {
-  let code = '';
-  if (this.STATEMENT_PREFIX) {
-    code += this.injectId(this.STATEMENT_PREFIX, block);
-  }
-  const durationCode = this.valueToCode(block, 'DURATION', this.ORDER_NONE) || 0;
-  code += `await asyncio.sleep(num(${durationCode}))\n`;
+  const durationCode = this.valueToCode(block, 'DURATION', this.ORDER_NONE);
+  const code = `await asyncio.sleep(num(${durationCode}))\n`;
   return code;
 };
 
 proto['control_repeat'] = function (block) {
+  const timesCode = this.valueToCode(block, 'TIMES', this.ORDER_NONE);
+
+  let branchCode = this.statementToCode(block, 'SUBSTACK');
+  branchCode = this.addLoopTrap(branchCode, block.id);
+
   let code = '';
-  if (this.STATEMENT_PREFIX) {
-    code += this.injectId(this.STATEMENT_PREFIX, block);
-  }
-  let branchCode = this.loopToCode(block, 'SUBSTACK');
-  if (this.STATEMENT_SUFFIX) {
-    branchCode = this.prefixLines(this.injectId(this.STATEMENT_SUFFIX, block), this.INDENT) + branchCode;
-  }
-  const timesCode = this.valueToCode(block, 'TIMES', this.ORDER_NONE) || 10;
-  code += `for _ in range(num(${timesCode})):\n${branchCode}`;
+  code += `for _ in range(num(${timesCode})):\n`;
+  code += branchCode;
   return code;
 };
 
 proto['control_forever'] = function (block) {
+  let branchCode = this.statementToCode(block, 'SUBSTACK');
+  branchCode = this.addLoopTrap(branchCode, block.id);
+
   let code = '';
-  if (this.STATEMENT_PREFIX) {
-    code += this.injectId(this.STATEMENT_PREFIX, block);
-  }
-  let branchCode = this.loopToCode(block, 'SUBSTACK');
-  if (this.STATEMENT_SUFFIX) {
-    branchCode = this.prefixLines(this.injectId(this.STATEMENT_SUFFIX, block), this.INDENT) + branchCode;
-  }
-  code += `while True:\n${branchCode}`;
+  code += 'while True:\n';
+  code += branchCode;
   return code;
 };
 
 proto['control_if'] = function (block) {
-  let code = '';
-  if (this.STATEMENT_PREFIX) {
-    code += this.injectId(this.STATEMENT_PREFIX, block);
-  }
-  let branchCode = this.statementToCode(block, 'SUBSTACK') || this.PASS;
-  if (this.STATEMENT_SUFFIX) {
-    branchCode = this.prefixLines(this.injectId(this.STATEMENT_SUFFIX, block), this.INDENT) + branchCode;
-  }
   const conditionCode = this.valueToCode(block, 'CONDITION', this.ORDER_NONE) || 'False';
-  code += `if ${conditionCode}:\n${branchCode}`;
+
+  let code = '';
+  let branchCode = this.statementToCode(block, 'SUBSTACK') || this.PASS;
+  code += `if ${conditionCode}:\n`;
+  code += branchCode;
 
   // else branch.
   if (block.getInput('SUBSTACK2')) {
     branchCode = this.statementToCode(block, 'SUBSTACK2') || this.PASS;
-    if (this.STATEMENT_SUFFIX) {
-      branchCode = this.prefixLines(this.injectId(this.STATEMENT_SUFFIX, block), this.INDENT) + branchCode;
-    }
-    code += `else:\n${branchCode}`;
+    code += 'else:\n';
+    code += branchCode;
   }
   return code;
 };
@@ -65,40 +50,32 @@ proto['control_if'] = function (block) {
 proto['control_if_else'] = proto['control_if'];
 
 proto['control_repeat_until'] = function (block) {
-  let code = '';
-  if (this.STATEMENT_PREFIX) {
-    code += this.injectId(this.STATEMENT_PREFIX, block);
-  }
-  let branchCode = this.loopToCode(block, 'SUBSTACK');
-  if (this.STATEMENT_SUFFIX) {
-    branchCode = this.prefixLines(this.injectId(this.STATEMENT_SUFFIX, block), this.INDENT) + branchCode;
-  }
   const conditionCode = this.valueToCode(block, 'CONDITION', this.ORDER_NONE) || 'False';
-  code += `while not ${conditionCode}:\n${branchCode}`;
+
+  let branchCode = this.statementToCode(block, 'SUBSTACK');
+  branchCode = this.addLoopTrap(branchCode, block.id);
+
+  let code = '';
+  code += `while not ${conditionCode}:\n`;
+  code += branchCode;
   return code;
 };
 
 proto['control_wait_until'] = proto['control_repeat_until'];
 
 proto['control_while'] = function (block) {
-  let code = '';
-  if (this.STATEMENT_PREFIX) {
-    code += this.injectId(this.STATEMENT_PREFIX, block);
-  }
-  let branchCode = this.loopToCode(block, 'SUBSTACK');
-  if (this.STATEMENT_SUFFIX) {
-    branchCode = this.prefixLines(this.injectId(this.STATEMENT_SUFFIX, block), this.INDENT) + branchCode;
-  }
   const conditionCode = this.valueToCode(block, 'CONDITION', this.ORDER_NONE) || 'False';
-  code += `while ${conditionCode}:\n${branchCode}`;
+
+  let branchCode = this.statementToCode(block, 'SUBSTACK');
+  branchCode = this.addLoopTrap(branchCode, block.id);
+
+  code += `while ${conditionCode}:\n`;
+  code += branchCode;
   return code;
 };
 
 proto['control_stop'] = function (block) {
   let code = '';
-  if (this.STATEMENT_PREFIX) {
-    code += this.injectId(this.STATEMENT_PREFIX, block);
-  }
   const stopValue = block.getFieldValue('STOP_OPTION');
   switch (stopValue) {
     case 'all':

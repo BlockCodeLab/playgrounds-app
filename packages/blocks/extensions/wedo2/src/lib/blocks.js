@@ -40,11 +40,6 @@ export const blocks = [
       },
     },
     mpy(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
-
       const motorId = this.valueToCode(block, 'MOTOR_ID', this.ORDER_NONE) || WeDo2MotorLabel.DEFAULT;
       const durationCode = this.valueToCode(block, 'DURATION', this.ORDER_NONE) || 1;
       let indexes = [];
@@ -54,7 +49,7 @@ export const blocks = [
       if (motorId !== WeDo2MotorLabel.A) {
         indexes.push(1);
       }
-      code += `await wedo2.motor_on_for((${indexes.join(',')},), ${durationCode})\n`;
+      const code = `await wedo2.motor_on_for((${indexes.join(',')},), ${durationCode})\n`;
       return code;
     },
   },
@@ -72,10 +67,6 @@ export const blocks = [
       },
     },
     mpy(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
       const motorId = this.valueToCode(block, 'MOTOR_ID', this.ORDER_NONE) || WeDo2MotorLabel.DEFAULT;
       let indexes = [];
       if (motorId !== WeDo2MotorLabel.B) {
@@ -84,7 +75,7 @@ export const blocks = [
       if (motorId !== WeDo2MotorLabel.A) {
         indexes.push(1);
       }
-      code += `await wedo2.motor_on((${indexes.join(',')},))\n`;
+      const code = `await wedo2.motor_on((${indexes.join(',')},))\n`;
       return code;
     },
   },
@@ -102,10 +93,6 @@ export const blocks = [
       },
     },
     mpy(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
       const motorId = this.valueToCode(block, 'MOTOR_ID', this.ORDER_NONE) || WeDo2MotorLabel.DEFAULT;
       let indexes = [];
       if (motorId !== WeDo2MotorLabel.B) {
@@ -114,7 +101,7 @@ export const blocks = [
       if (motorId !== WeDo2MotorLabel.A) {
         indexes.push(1);
       }
-      code += `await wedo2.motor_off((${indexes.join(',')},))\n`;
+      const code = `await wedo2.motor_off((${indexes.join(',')},))\n`;
       return code;
     },
   },
@@ -136,10 +123,6 @@ export const blocks = [
       },
     },
     mpy(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
       const motorId = this.valueToCode(block, 'MOTOR_ID', this.ORDER_NONE) || WeDo2MotorLabel.DEFAULT;
       const powerCode = this.valueToCode(block, 'POWER', this.ORDER_NONE) || 100;
       let indexes = [];
@@ -149,7 +132,7 @@ export const blocks = [
       if (motorId !== WeDo2MotorLabel.A) {
         indexes.push(1);
       }
-      code += `await wedo2.start_motor_power((${indexes.join(',')},), ${powerCode})\n`;
+      const code = `await wedo2.start_motor_power((${indexes.join(',')},), ${powerCode})\n`;
       return code;
     },
   },
@@ -170,11 +153,6 @@ export const blocks = [
       },
     },
     mpy(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
-
       const motorId = this.valueToCode(block, 'MOTOR_ID', this.ORDER_NONE) || WeDo2MotorLabel.DEFAULT;
       const direction = this.valueToCode(block, 'MOTOR_DIRECTION', this.ORDER_NONE) || WeDo2MotorDirection.FORWARD;
 
@@ -197,7 +175,7 @@ export const blocks = [
           directionCode = 255;
           break;
       }
-      code += `await wedo2.set_motor_direction((${indexes.join(',')},), ${directionCode})\n`;
+      const code = `await wedo2.set_motor_direction((${indexes.join(',')},), ${directionCode})\n`;
       return code;
     },
   },
@@ -216,12 +194,8 @@ export const blocks = [
       },
     },
     mpy(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
       const hueCode = this.valueToCode(block, 'HUE', this.ORDER_NONE) || 50;
-      code += `await wedo2.set_led(${hueCode})\n`;
+      const code = `await wedo2.set_led(${hueCode})\n`;
       return code;
     },
   },

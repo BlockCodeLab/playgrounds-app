@@ -5,6 +5,9 @@ const code = importModuleExport('scratch-blocks/dist/vertical');
 new Function('module', code)(module);
 export const ScratchBlocks = module.exports;
 
+// 添加字典类型变量类型
+ScratchBlocks.DICTIONARY_VARIABLE_TYPE = 'dictionary';
+
 // 禁用积木前的选项框
 ScratchBlocks.Block.prototype.setCheckboxInFlyout = function (hasCheckbox) {
   this.checkboxInFlyout_ = false;

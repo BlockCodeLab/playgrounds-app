@@ -23,21 +23,13 @@ export const blocks = [
       },
     },
     emu(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
       const prompt = this.valueToCode(block, 'PROMPT', this.ORDER_NONE) || '';
-      code += `runtime.extensions.brain.addPrompt(target, ${prompt});\n`;
+      const code = `runtime.extensions.brain.addPrompt(target, ${prompt});\n`;
       return code;
     },
     mpy(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
       const prompt = this.valueToCode(block, 'PROMPT', this.ORDER_NONE) || '';
-      code += `brain.set_prompt((target.id if 'target' in dir() else 'default'), ${prompt})\n`;
+      const code = `brain.set_prompt((target.id if 'target' in dir() else 'default'), ${prompt})\n`;
       return code;
     },
   },
@@ -61,23 +53,15 @@ export const blocks = [
       },
     },
     emu(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
       const question = this.valueToCode(block, 'QUESTION', this.ORDER_NONE) || '""';
-      code += `await runtime.extensions.brain.askSpark(target, ${question})\n`;
+      const code = `await runtime.extensions.brain.askSpark(target, ${question})\n`;
       return code;
     },
     mpy(block) {
       const model = this.quote_(getUserConfig('SparkAI.Model') ?? 'lite');
       const apiPassword = this.quote_(getUserConfig('SparkAI.APIPassword') ?? APIPASSWORD);
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
       const question = this.valueToCode(block, 'QUESTION', this.ORDER_NONE) || '""';
-      code += `await brain.ask_spark((target.id if 'target' in dir() else 'default'), ${question}, ${apiPassword}, ${model})\n`;
+      const code = `await brain.ask_spark((target.id if 'target' in dir() else 'default'), ${question}, ${apiPassword}, ${model})\n`;
       return code;
     },
   },
@@ -90,11 +74,11 @@ export const blocks = [
       />
     ),
     output: 'string',
-    emu() {
+    emu(block) {
       const code = `runtime.extensions.brain.getAnswer(target)`;
       return [code, this.ORDER_FUNCTION_CALL];
     },
-    mpy() {
+    mpy(block) {
       const code = `brain.get_answer(target.id if 'target' in dir() else 'default')`;
       return [code, this.ORDER_FUNCTION_CALL];
     },
@@ -109,19 +93,11 @@ export const blocks = [
       />
     ),
     emu(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
-      code += `runtime.extensions.brain.clear(target);\n`;
+      const code = `runtime.extensions.brain.clear(target);\n`;
       return code;
     },
     mpy(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
-      code += `brain.clear(target.id if 'target' in dir() else 'default')\n`;
+      const code = `brain.clear(target.id if 'target' in dir() else 'default')\n`;
       return code;
     },
   },

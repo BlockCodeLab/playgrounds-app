@@ -10,19 +10,11 @@ export const blocks = [
       />
     ),
     emu(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
-      code += `runtime.extensions.pen.erase();\n`;
+      const code = `runtime.extensions.pen.erase();\n`;
       return code;
     },
     mpy(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
-      code += `pen.clear()\n`;
+      const code = `pen.clear()\n`;
       return code;
     },
   },
@@ -36,19 +28,11 @@ export const blocks = [
     ),
     forStage: false,
     emu(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
-      code += `await runtime.extensions.pen.stamp(target);\n`;
+      const code = `await runtime.extensions.pen.stamp(target);\n`;
       return code;
     },
     mpy(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
-      code += `pen.stamp(target)\n`;
+      const code = `pen.stamp(target)\n`;
       return code;
     },
   },
@@ -62,19 +46,11 @@ export const blocks = [
     ),
     forStage: false,
     emu(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
-      code += `runtime.extensions.pen.down(target);\n`;
+      const code = `runtime.extensions.pen.down(target);\n`;
       return code;
     },
     mpy(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
-      code += `pen.down(target)\n`;
+      const code = `pen.down(target)\n`;
       return code;
     },
   },
@@ -88,19 +64,11 @@ export const blocks = [
     ),
     forStage: false,
     emu(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
-      code += `runtime.extensions.pen.up(target);\n`;
+      const code = `runtime.extensions.pen.up(target);\n`;
       return code;
     },
     mpy(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
-      code += `pen.up(target)\n`;
+      const code = `pen.up(target)\n`;
       return code;
     },
   },
@@ -119,21 +87,13 @@ export const blocks = [
       },
     },
     emu(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
       const color = this.valueToCode(block, 'COLOR', this.ORDER_NONE) || '"#ff0000"';
-      code += `runtime.extensions.pen.setColor(target, ${color});\n`;
+      const code = `runtime.extensions.pen.setColor(target, ${color});\n`;
       return code;
     },
     mpy(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
       const color = this.valueToCode(block, 'COLOR', this.ORDER_NONE) || '(255, 0, 0)';
-      code += `pen.set_color(target, ${color})\n`;
+      const code = `pen.set_color(target, ${color})\n`;
       return code;
     },
   },
@@ -156,23 +116,15 @@ export const blocks = [
       },
     },
     emu(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
       const option = this.valueToCode(block, 'OPTION', this.ORDER_NONE);
       const value = this.valueToCode(block, 'VALUE', this.ORDER_NONE) || 10;
-      code += `runtime.extensions.pen.addColorParam(target, '${option}', ${value});\n`;
+      const code = `runtime.extensions.pen.addColorParam(target, '${option}', ${value});\n`;
       return code;
     },
     mpy(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
       const option = this.valueToCode(block, 'OPTION', this.ORDER_NONE);
       const value = this.valueToCode(block, 'VALUE', this.ORDER_NONE) || 10;
-      code += `pen.change_color(target, ${option}=${value})\n`;
+      const code = `pen.change_color(target, ${option}=${value})\n`;
       return code;
     },
   },
@@ -195,23 +147,15 @@ export const blocks = [
       },
     },
     emu(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
       const option = this.valueToCode(block, 'OPTION', this.ORDER_NONE);
       const value = this.valueToCode(block, 'VALUE', this.ORDER_NONE) || '0';
-      code += `runtime.extensions.pen.setColorParam(target, '${option}', ${value});\n`;
+      const code = `runtime.extensions.pen.setColorParam(target, '${option}', ${value});\n`;
       return code;
     },
     mpy(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
       const option = this.valueToCode(block, 'OPTION', this.ORDER_NONE);
       const value = this.valueToCode(block, 'VALUE', this.ORDER_NONE) || '0';
-      code += `pen.set_color(target, ${option}=${value})\n`;
+      const code = `pen.set_color(target, ${option}=${value})\n`;
       return code;
     },
   },
@@ -231,21 +175,13 @@ export const blocks = [
       },
     },
     emu(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
       const size = this.valueToCode(block, 'SIZE', this.ORDER_NONE) || '1';
-      code += `runtime.extensions.pen.addSize(target, ${size});\n`;
+      const code = `runtime.extensions.pen.addSize(target, ${size});\n`;
       return code;
     },
     mpy(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
       const size = this.valueToCode(block, 'SIZE', this.ORDER_NONE) || '1';
-      code += `pen.change_size(target, ${size})\n`;
+      const code = `pen.change_size(target, ${size})\n`;
       return code;
     },
   },
@@ -265,21 +201,13 @@ export const blocks = [
       },
     },
     emu(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
       const size = this.valueToCode(block, 'SIZE', this.ORDER_NONE) || '1';
-      code += `runtime.extensions.pen.setSize(target, ${size});\n`;
+      const code = `runtime.extensions.pen.setSize(target, ${size});\n`;
       return code;
     },
     mpy(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
       const size = this.valueToCode(block, 'SIZE', this.ORDER_NONE) || '1';
-      code += `pen.set_size(target, ${size})\n`;
+      const code = `pen.set_size(target, ${size})\n`;
       return code;
     },
   },

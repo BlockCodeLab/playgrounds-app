@@ -10,9 +10,15 @@ export const blocks = [
       />
     ),
     hat: true,
-    mpy() {
-      const eventCode = this.eventToCode('broadcast_received', 'False', 'target');
-      return `@broadcast.when_received("default", target)\n${eventCode}`;
+    mpy(block) {
+      let branchCode = this.statementToCode(block);
+      branchCode = this.addEventTrap(branchCode, block.id);
+      branchCode = branchCode.replace('():\n', '(target):\n');
+
+      let code = '';
+      code += `@broadcast.when_received("default", target)\n`;
+      code += branchCode;
+      return code;
     },
   },
   {
@@ -35,12 +41,8 @@ export const blocks = [
       },
     },
     mpy(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
       const message = this.valueToCode(block, 'MESSAGE', this.ORDER_NONE) || '""';
-      code += `broadcast.send(str(${message.replace(':', '_')}))\n`;
+      const code = `broadcast.send(str(${message.replace(':', '_')}))\n`;
       return code;
     },
   },
@@ -53,7 +55,7 @@ export const blocks = [
       />
     ),
     output: 'string',
-    mpy() {
+    mpy(block) {
       const code = 'broadcast.get_message()\n';
       return [code, this.ORDER_FUNCTION_CALL];
     },
@@ -80,9 +82,16 @@ export const blocks = [
       },
     },
     mpy(block) {
-      const eventCode = this.eventToCode('broadcast_received', 'False', 'target');
-      const name = this.valueToCode(block, 'NAME', this.ORDER_NONE) || '"default"';
-      return `@broadcast.when_received(str(${name}), target)\n${eventCode}`;
+      const name = this.valueToCode(block, 'NAME', this.ORDER_NONE);
+
+      let branchCode = this.statementToCode(block);
+      branchCode = this.addEventTrap(branchCode, block.id);
+      branchCode = branchCode.replace('():\n', '(target):\n');
+
+      let code = '';
+      code += `@broadcast.when_received(${name}, target)\n`;
+      code += branchCode;
+      return code;
     },
   },
   {
@@ -114,13 +123,9 @@ export const blocks = [
       },
     },
     mpy(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
       const name = this.valueToCode(block, 'NAME', this.ORDER_NONE) || '"default"';
       const message = this.valueToCode(block, 'MESSAGE', this.ORDER_NONE) || '""';
-      code += `broadcast.send(str(${message}), name=str(${name}))\n`;
+      const code = `broadcast.send(str(${message}), name=str(${name}))\n`;
       return code;
     },
   },
@@ -217,12 +222,8 @@ export const blocks = [
       },
     },
     mpy(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
       const id = this.valueToCode(block, 'ID', this.ORDER_NONE) || '1';
-      code += `broadcast.set_group(str(${id}))\n`;
+      const code = `broadcast.set_group(str(${id}))\n`;
       return code;
     },
   },

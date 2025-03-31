@@ -5,15 +5,22 @@ const proto = MicroPythonGenerator.prototype;
 
 proto['procedures_definition'] = function (block) {
   const myBlock = block.childBlocks_[0];
-  const procName = this.getProcedureName(myBlock.getProcCode(), ScratchBlocks.Procedures.NAME_TYPE);
+  const funcName = this.getFunctionName(myBlock.getProcCode());
   const args = myBlock.childBlocks_.map((argBlock) => this.getVariableName(argBlock.getFieldValue('VALUE')));
-  const branchCode = this.eventToCode('procedure', 'runtime.flash_mode', ...args);
-  return `@when_procedure("${procName}")\n${branchCode}`;
+
+  let branchCode = this.statementToCode(block);
+  branchCode = this.addEventTrap(branchCode, block.id);
+
+  let code = '';
+  code += `@when_procedure("procedure:${funcName}")\n`;
+  code += `def ${funcName}(${args.join(', ')}):\n`;
+  code += branchCode;
 };
 
 proto['procedures_call'] = function (block) {
-  const procName = this.getProcedureName(block.getProcCode(), ScratchBlocks.Procedures.NAME_TYPE);
+  const funcName = this.getFunctionName(myBlock.getProcCode());
   const args = block.argumentIds_.map((arg) => this.valueToCode(block, arg, this.ORDER_NONE));
   const argsCode = args.length > 0 ? `, ${args.join(', ')}` : '';
-  return `await runtime.procedure_call("${procName}"${argsCode})\n`;
+  const code = `await runtime.procedure_call("procedure:${funcName}"${argsCode})\n`;
+  return code;
 };

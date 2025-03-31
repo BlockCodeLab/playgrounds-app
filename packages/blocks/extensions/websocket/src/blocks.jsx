@@ -16,21 +16,13 @@ export const blocks = [
       },
     },
     mpy(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
       const url = this.valueToCode(block, 'URL', this.ORDER_NONE);
-      code += `await websocket.connect(${url})\n`;
+      const code = `await websocket.connect(${url})\n`;
       return code;
     },
     emu(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
       const url = this.valueToCode(block, 'URL', this.ORDER_NONE);
-      code += `await runtime.extensions.websocket.connect(${url});\n`;
+      const code = `await runtime.extensions.websocket.connect(${url});\n`;
       return code;
     },
   },
@@ -50,21 +42,13 @@ export const blocks = [
       },
     },
     mpy(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
       const message = this.valueToCode(block, 'MESSAGE', this.ORDER_NONE);
-      code += `websocket.send(${message})\n`;
+      const code = `websocket.send(${message})\n`;
       return code;
     },
     emu(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
       const message = this.valueToCode(block, 'MESSAGE', this.ORDER_NONE);
-      code += `runtime.extensions.websocket.send(${message});\n`;
+      const code = `runtime.extensions.websocket.send(${message});\n`;
       return code;
     },
   },
@@ -79,11 +63,20 @@ export const blocks = [
     ),
     hat: true,
     mpy(block) {
-      const eventCode = this.eventToCode('websocket_received', 'False', 'target');
-      return `@when(websocket.WEBSOCKET_RECEIVED, target)\n${eventCode}`;
+      let branchCode = this.statementToCode(block);
+      branchCode = this.addEventTrap(branchCode, block.id);
+
+      let code = '';
+      code += `@when(websocket.WEBSOCKET_RECEIVED)\n`;
+      code += branchCode;
+      return code;
     },
     emu(block) {
-      return `runtime.when('websocket.received', ${this.HAT_CALLBACK});\n`;
+      let branchCode = this.statementToCode(block);
+      branchCode = this.addEventTrap(branchCode, block.id);
+
+      const code = `runtime.when('websocket.received', ${branchCode});\n`;
+      return code;
     },
   },
   {
@@ -141,11 +134,20 @@ export const blocks = [
     ),
     hat: true,
     mpy(block) {
-      const eventCode = this.eventToCode('websocket_connected', 'False', 'target');
-      return `@when(websocket.WEBSOCKET_CONNECTED, target)\n${eventCode}`;
+      let branchCode = this.statementToCode(block);
+      branchCode = this.addEventTrap(branchCode, block.id);
+
+      let code = '';
+      code += `@when(websocket.WEBSOCKET_CONNECTED)\n`;
+      code += branchCode;
+      return code;
     },
     emu(block) {
-      return `runtime.when('websocket.connected', ${this.HAT_CALLBACK});\n`;
+      let branchCode = this.statementToCode(block);
+      branchCode = this.addEventTrap(branchCode, block.id);
+
+      const code = `runtime.when('websocket.connected', ${branchCode});\n`;
+      return code;
     },
   },
   {
@@ -158,11 +160,20 @@ export const blocks = [
     ),
     hat: true,
     mpy(block) {
-      const eventCode = this.eventToCode('websocket_errors', 'False', 'target');
-      return `@when(websocket.WEBSOCKET_ERRORS, target)\n${eventCode}`;
+      let branchCode = this.statementToCode(block);
+      branchCode = this.addEventTrap(branchCode, block.id);
+
+      let code = '';
+      code += `@when(websocket.WEBSOCKET_ERRORS)\n`;
+      code += branchCode;
+      return code;
     },
     emu(block) {
-      return `runtime.when('websocket.errors', ${this.HAT_CALLBACK});\n`;
+      let branchCode = this.statementToCode(block);
+      branchCode = this.addEventTrap(branchCode, block.id);
+
+      const code = `runtime.when('websocket.errors', ${branchCode});\n`;
+      return code;
     },
   },
   {
@@ -175,11 +186,20 @@ export const blocks = [
     ),
     hat: true,
     mpy(block) {
-      const eventCode = this.eventToCode('websocket_disconnected', 'False', 'target');
-      return `@when(websocket.WEBSOCKET_DISCONNECTED, target)\n${eventCode}`;
+      let branchCode = this.statementToCode(block);
+      branchCode = this.addEventTrap(branchCode, block.id);
+
+      let code = '';
+      code += `@when(websocket.WEBSOCKET_DISCONNECTED)\n`;
+      code += branchCode;
+      return code;
     },
     emu(block) {
-      return `runtime.when('websocket.disconnected', ${this.HAT_CALLBACK});\n`;
+      let branchCode = this.statementToCode(block);
+      branchCode = this.addEventTrap(branchCode, block.id);
+
+      const code = `runtime.when('websocket.disconnected', ${branchCode});\n`;
+      return code;
     },
   },
   {
@@ -191,19 +211,11 @@ export const blocks = [
       />
     ),
     mpy(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
-      code += 'websocket.disconnect()\n';
+      const code = 'websocket.disconnect()\n';
       return code;
     },
     emu(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
-      code += 'runtime.extensions.websocket.disconnect();\n';
+      const code = 'runtime.extensions.websocket.disconnect();\n';
       return code;
     },
   },

@@ -41,13 +41,9 @@ export default {
         },
       },
       mpy(block) {
-        let code = '';
-        if (this.STATEMENT_PREFIX) {
-          code += this.injectId(this.STATEMENT_PREFIX, block);
-        }
         const pinCode = this.valueToCode(block, 'PIN', this.ORDER_NONE) || '0';
         const angleCode = this.valueToCode(block, 'ANGLE', this.ORDER_NONE) || '0';
-        code += `servo.set_angle(num(${pinCode}), num(${angleCode}))\n`;
+        const code = `servo.set_angle(num(${pinCode}), num(${angleCode}))\n`;
         return code;
       },
     },
@@ -70,13 +66,9 @@ export default {
         },
       },
       mpy(block) {
-        let code = '';
-        if (this.STATEMENT_PREFIX) {
-          code += this.injectId(this.STATEMENT_PREFIX, block);
-        }
         const pinCode = this.valueToCode(block, 'PIN', this.ORDER_NONE) || '0';
         const angleCode = this.valueToCode(block, 'ANGLE', this.ORDER_NONE) || '0';
-        code += `servo.set_angle(num(${pinCode}), num(${angleCode}), angle=90)\n`;
+        const code = `servo.set_angle(num(${pinCode}), num(${angleCode}), angle=90)\n`;
         return code;
       },
     },
@@ -122,13 +114,9 @@ export default {
         },
       },
       mpy(block) {
-        let code = '';
-        if (this.STATEMENT_PREFIX) {
-          code += this.injectId(this.STATEMENT_PREFIX, block);
-        }
         const pinCode = this.valueToCode(block, 'PIN', this.ORDER_NONE) || '0';
         const rotateCode = block.getFieldValue('ROTATE') || '0';
-        code += `servo.set_motor(num(${pinCode}), num(${rotateCode}))\n`;
+        const code = `servo.set_motor(num(${pinCode}), num(${rotateCode}))\n`;
         return code;
       },
     },

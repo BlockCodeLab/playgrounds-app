@@ -154,11 +154,11 @@ export default {
       ),
       output: 'number',
       monitoring: false,
-      emu() {
+      emu(block) {
         const code = 'runtime.extensions.time.getDays()';
         return [code, this.ORDER_FUNCTION_CALL];
       },
-      mpy() {
+      mpy(block) {
         const code = 'ntptime.get_days()';
         return [code, this.ORDER_FUNCTION_CALL];
       },
@@ -179,21 +179,13 @@ export default {
         },
       },
       emu(block) {
-        let code = '';
-        if (this.STATEMENT_PREFIX) {
-          code += this.injectId(this.STATEMENT_PREFIX, block);
-        }
         const timezone = this.valueToCode(block, 'TIMEZONE', this.ORDER_NONE) || '8';
-        code += `runtime.extensions.time.setTimezone(${timezone})\n`;
+        const code = `runtime.extensions.time.setTimezone(${timezone})\n`;
         return code;
       },
       mpy(block) {
-        let code = '';
-        if (this.STATEMENT_PREFIX) {
-          code += this.injectId(this.STATEMENT_PREFIX, block);
-        }
         const timezone = this.valueToCode(block, 'TIMEZONE', this.ORDER_NONE) || '8';
-        code += `ntptime.timezone = num(${timezone})\n`;
+        const code = `ntptime.timezone = num(${timezone})\n`;
         return code;
       },
     },
@@ -207,11 +199,7 @@ export default {
         />
       ),
       mpy(block) {
-        let code = '';
-        if (this.STATEMENT_PREFIX) {
-          code += this.injectId(this.STATEMENT_PREFIX, block);
-        }
-        code += 'await ntptime.async_world_time()\n';
+        const code = 'await ntptime.async_world_time()\n';
         return code;
       },
     },

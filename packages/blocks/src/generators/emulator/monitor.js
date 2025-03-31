@@ -20,20 +20,21 @@ proto['monitor_showvalue'] = function (block) {
   const monitor = getMonitor(block.getInput('VALUE'));
   if (!monitor) return '';
 
-  let code = '';
-  if (this.STATEMENT_PREFIX) {
-    code += this.injectId(this.STATEMENT_PREFIX, block);
-  }
-
   let labelCode = '""';
   if (block.getInput('LABEL')) {
-    labelCode = this.valueToCode(block, 'LABEL', this.ORDER_NONE) || '""';
+    labelCode = this.valueToCode(block, 'LABEL', this.ORDER_NONE);
   }
 
-  const valueCode = this.valueToCode(block, 'VALUE', this.ORDER_NONE) || '""';
+  const valueCode = this.valueToCode(block, 'VALUE', this.ORDER_NONE);
+
+  let code = '';
   code += `runtime.monitorValue(`;
-  code += `target.id() + '${monitor.id}', target.name(), ${labelCode}, `;
-  code += `'${monitor.color}', ${valueCode});\n`;
+  code += `target.id() + '${monitor.id}',`;
+  code += 'target.name(),';
+  code += `${labelCode},`;
+  code += `'${monitor.color}',`;
+  code += valueCode;
+  code += ');\n';
   return code;
 };
 

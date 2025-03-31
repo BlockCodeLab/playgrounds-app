@@ -55,7 +55,7 @@ export const blocks = [
       },
       PIN_E: {
         menu: 'digitalPin',
-      }
+      },
     },
     output: 'number',
     emu(block) {
@@ -125,11 +125,7 @@ export const blocks = [
     emu(block) {
       const pin = block.getFieldValue('PIN') || '3';
       const value = this.quote_(this.valueToCode(block, 'VALUE', this.ORDER_NONE)) || '50';
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
-      code += `runtime.extensions.firmata.writePWM(${pin}, ${value});\n`;
+      const code = `runtime.extensions.firmata.writePWM(${pin}, ${value});\n`;
       return code;
     },
   },
@@ -152,11 +148,7 @@ export const blocks = [
     emu(block) {
       const pin = block.getFieldValue('PIN') || '0';
       const value = block.getFieldValue('VALUE') || '0';
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
-      code += `runtime.extensions.firmata.writeDigital(${pin}, ${value});\n`;
+      const code = `runtime.extensions.firmata.writeDigital(${pin}, ${value});\n`;
       return code;
     },
   },
@@ -180,11 +172,7 @@ export const blocks = [
     emu(block) {
       const pin = block.getFieldValue('PIN') || '3';
       const value = this.quote_(this.valueToCode(block, 'VALUE', this.ORDER_NONE)) || '90';
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
-      code += `runtime.extensions.firmata.writeServo(${pin}, ${value});\n`;
+      const code = `runtime.extensions.firmata.writeServo(${pin}, ${value});\n`;
       return code;
     },
   },
@@ -213,11 +201,7 @@ export const blocks = [
       const pin = block.getFieldValue('PIN') || '3';
       const frequency = this.quote_(this.valueToCode(block, 'FREQUENCY', this.ORDER_NONE)) || '100';
       const duration = this.quote_(this.valueToCode(block, 'DURATION', this.ORDER_NONE)) || '100';
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
-      code += `runtime.extensions.firmata.playTone(${pin}, ${frequency}, ${duration});\n`;
+      const code = `runtime.extensions.firmata.playTone(${pin}, ${frequency}, ${duration});\n`;
       return code;
     },
   },

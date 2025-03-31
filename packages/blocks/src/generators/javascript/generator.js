@@ -100,20 +100,6 @@ export class JavaScriptGenerator extends ScratchBlocks.Generator {
   init(workspace) {
     super.init(workspace);
 
-    // Create a dictionary of definitions to be printed before the code.
-    this.definitions_ = Object.create(null);
-    // Create a dictionary mapping desired function names in definitions_
-    // to actual function names (to avoid collisions with user functions).
-    this.functionNames_ = Object.create(null);
-
-    if (!this.nameDB_) {
-      this.nameDB_ = new ScratchBlocks.Names(this.RESERVED_WORDS_);
-    } else {
-      this.nameDB_.reset();
-    }
-
-    this.nameDB_.setVariableMap(workspace.getVariableMap());
-
     let defvars = [];
     // Add user variables.
     let variables = workspace.getAllVariables();
@@ -121,20 +107,11 @@ export class JavaScriptGenerator extends ScratchBlocks.Generator {
       if (variables[i].type === ScratchBlocks.BROADCAST_MESSAGE_VARIABLE_TYPE) {
         continue;
       }
-      const varName = this.nameDB_.getName(variables[i].getId(), ScratchBlocks.Variables.NAME_TYPE);
+      const varName = this.getVariableName(variables[i].getId());
       if (variables[i].type === ScratchBlocks.LIST_VARIABLE_TYPE) {
         defvars.push(`let ${varName}_ls = [];`);
-      } else {
-        defvars.push(`let ${varName} = 0;`);
-      }
-    }
-
-    // Add developer variables (not created or named by the user).
-    let devVarList = ScratchBlocks.Variables.allDeveloperVariables(workspace);
-    for (let i = 0; i < devVarList.length; i++) {
-      const varName = this.nameDB_.getName(devVarList[i], ScratchBlocks.Names.DEVELOPER_VARIABLE_TYPE);
-      if (variables[i].type === ScratchBlocks.LIST_VARIABLE_TYPE) {
-        defvars.push(`let ${varName}_ls = [];`);
+      } else if (variables[i].type === ScratchBlocks.DICTIONARY_VARIABLE_TYPE) {
+        defvars.push(`let ${varName}_dt = {};`);
       } else {
         defvars.push(`let ${varName} = 0;`);
       }
@@ -160,8 +137,8 @@ export class JavaScriptGenerator extends ScratchBlocks.Generator {
     // Clean up temporary data.
     delete this.definitions_;
     delete this.functionNames_;
-    this.nameDB_.reset();
-    return definitions.join('\n\n') + '\n\n\n' + code;
+    this.variableDB_.reset();
+    return definitions.join('\n') + '\n\n' + code;
   }
 
   /**
@@ -235,21 +212,14 @@ export class JavaScriptGenerator extends ScratchBlocks.Generator {
       }
     }
 
+    // 帽子积木自处理后续积木代码
     if (block.startHat_) {
-      const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-      let nextCode = this.blockToCode(nextBlock);
-      if (nextCode) {
-        nextCode = this.prefixLines(nextCode, this.INDENT);
-        code = code.replace('/* hatcode */', nextCode);
-      }
       return commentCode + code;
     }
 
-    if (block.parentBlock_) {
-      const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-      const nextCode = this.blockToCode(nextBlock);
-      return commentCode + code + nextCode;
-    }
+    const nextBlock = block.nextConnection?.targetBlock();
+    const nextCode = this.blockToCode(nextBlock);
+    return commentCode + code + nextCode;
   }
 
   /**
@@ -310,11 +280,5 @@ export class JavaScriptGenerator extends ScratchBlocks.Generator {
       }
     }
     return at;
-  }
-
-  // 得到变量名称
-  getVariableName(name, type = ScratchBlocks.Variables.NAME_TYPE) {
-    const varName = this.nameDB_.getName(name, type);
-    return varName;
   }
 }

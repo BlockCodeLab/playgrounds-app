@@ -126,25 +126,14 @@ export class PythonGenerator extends ScratchBlocks.Generator {
     // 循环变量计数器编号
     this.loopVarCount_ = 0;
 
-    if (!this.nameDB_) {
-      this.nameDB_ = new ScratchBlocks.Names(this.RESERVED_WORDS_);
+    if (!this.variableDB_) {
+      this.variableDB_ = new ScratchBlocks.Names(this.RESERVED_WORDS_);
     } else {
-      this.nameDB_.reset();
+      this.variableDB_.reset();
     }
-    this.nameDB_.setVariableMap(workspace.getVariableMap());
+    this.variableDB_.setVariableMap(workspace.getVariableMap());
 
     const defvars = [];
-    // Add developer variables (not created or named by the user).
-    const devVarList = ScratchBlocks.Variables.allDeveloperVariables(workspace);
-    for (let i = 0; i < devVarList.length; i++) {
-      let varName = this.getVariableName(devVarList[i], ScratchBlocks.Names.DEVELOPER_VARIABLE_TYPE);
-      let varValue = '0';
-      if (variables[i].type === ScratchBlocks.LIST_VARIABLE_TYPE) {
-        varName = `${varName}_ls`;
-        varValue = '[]';
-      }
-      defvars.push(`${varName} = ${varValue}`);
-    }
 
     // Add user variables.
     const variables = workspace.getAllVariables();
@@ -154,12 +143,13 @@ export class PythonGenerator extends ScratchBlocks.Generator {
         continue;
       }
       let varName = this.getVariableName(variables[i].getId());
-      let varValue = '0';
       if (variables[i].type === ScratchBlocks.LIST_VARIABLE_TYPE) {
-        varName = `${varName}_ls`;
-        varValue = '[]';
+        defvars.push(`${varName}_ls = []`);
+      } else if (variables[i].type === ScratchBlocks.DICTIONARY_VARIABLE_TYPE) {
+        defvars.push(`${varName}_dt = {}`);
+      } else {
+        defvars.push(`${varName} = 0`);
       }
-      defvars.push(`${varName} = ${varValue}`);
     }
 
     // Declare all of the variables.
@@ -190,7 +180,7 @@ export class PythonGenerator extends ScratchBlocks.Generator {
     // Clean up temporary data.
     delete this.definitions_;
     delete this.functionNames_;
-    this.nameDB_.reset();
+    this.variableDB_.reset();
     const allDefs = imports.join('\n') + '\n\n' + definitions.join('\n\n');
     return allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n\n\n') + code;
   }
@@ -321,29 +311,5 @@ export class PythonGenerator extends ScratchBlocks.Generator {
       }
     }
     return at;
-  }
-
-  // 得到变量名称
-  getVariableName(name, type = ScratchBlocks.Variables.NAME_TYPE) {
-    const varName = this.nameDB_.getName(name, type);
-    return varName;
-  }
-
-  // 得到过程名称
-  getProcedureName(name, type = ScratchBlocks.Names.DEVELOPER_VARIABLE_TYPE) {
-    let procName = this.getVariableName(name, type);
-    if (!this.functionNames_[procName]) {
-      this.functionNames_[procName] = 0;
-    }
-    const count = ++this.functionNames_[procName];
-    procName = `${procName}_${count}`;
-    return procName;
-  }
-
-  // 将事件积木转为代码
-  eventToCode(name, ...args) {
-    const eventName = this.getProcedureName(name);
-    const funcCode = `async def ${eventName}(${args.join(',')}):\n${this.PASS}`;
-    return funcCode;
   }
 }

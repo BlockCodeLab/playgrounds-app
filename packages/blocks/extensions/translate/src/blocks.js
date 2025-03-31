@@ -51,10 +51,10 @@ export const blocks = [
       />
     ),
     output: 'string',
-    emu() {
+    emu(block) {
       return ['runtime.extensions.translate.language', this.ORDER_MEMBER];
     },
-    mpy() {
+    mpy(block) {
       return ['translate.get_language()', this.ORDER_FUNCTION_CALL];
     },
   },

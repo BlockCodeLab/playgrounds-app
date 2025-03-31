@@ -73,13 +73,9 @@ export const blocks = [
       },
     },
     emu(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
       const text = this.valueToCode(block, 'TEXT', this.ORDER_NONE) || '""';
       const delay = this.valueToCode(block, 'DELAY', this.ORDER_NONE) || '0';
-      code += `runtime.extensions.microbit.displayText(${text}, ${delay});\n`;
+      const code = `runtime.extensions.microbit.displayText(${text}, ${delay});\n`;
       return code;
     },
   },
@@ -91,13 +87,7 @@ export const blocks = [
         defaultMessage="clear display"
       />
     ),
-    emu(block) {
-      let code = '';
-      if (this.STATEMENT_PREFIX) {
-        code += this.injectId(this.STATEMENT_PREFIX, block);
-      }
-      return code;
-    },
+    emu(block) {},
   },
 ];
 

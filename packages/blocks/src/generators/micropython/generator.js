@@ -1,6 +1,8 @@
 import { PythonGenerator } from '../python';
 
 export class MicroPythonGenerator extends PythonGenerator {
+  INFINITE_LOOP_TRAP = 'await asyncio.sleep(0)\n';
+
   constructor() {
     super('MPY');
   }
@@ -29,16 +31,15 @@ export class MicroPythonGenerator extends PythonGenerator {
     this.definitions_['running_times'] = '_times__ = time.ticks_ms()';
   }
 
-  // 将事件积木转为代码
-  eventToCode(name, flash, ...args) {
-    const eventName = this.getProcedureName(name);
+  addEventTrap(branchCode, id) {
+    const funcName = this.getFunctionName(id);
     let code = '';
+    code += `async def ${funcName}():\n`;
+    code += branchCode;
     return code;
   }
 
-  // 将循环积木转为代码
-  loopToCode(block, name) {
-    let code = '';
-    return code;
+  addLoopTrap(branchCode, id) {
+    return super.addLoopTrap(branchCode, id);
   }
 }

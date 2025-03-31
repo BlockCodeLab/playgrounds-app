@@ -58,13 +58,9 @@ export default {
         },
       },
       mpy(block) {
-        let code = '';
-        if (this.STATEMENT_PREFIX) {
-          code += this.injectId(this.STATEMENT_PREFIX, block);
-        }
         const pinCode = this.valueToCode(block, 'PIN', this.ORDER_NONE) || '1';
         const stateCode = this.valueToCode(block, 'STATE', this.ORDER_NONE) || '1';
-        code += `light.set_led(num(${pinCode}), num(${stateCode}))\n`;
+        const code = `light.set_led(num(${pinCode}), num(${stateCode}))\n`;
         return code;
       },
     },
@@ -83,12 +79,8 @@ export default {
         },
       },
       mpy(block) {
-        let code = '';
-        if (this.STATEMENT_PREFIX) {
-          code += this.injectId(this.STATEMENT_PREFIX, block);
-        }
         const pinCode = this.valueToCode(block, 'PIN', this.ORDER_NONE) || '7';
-        code += `light.toggle_led(num(${pinCode}))\n`;
+        const code = `light.toggle_led(num(${pinCode}))\n`;
         return code;
       },
     },
