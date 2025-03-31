@@ -39,7 +39,7 @@
     "@electron-forge/cli": "^7.8.0",
     "@electron-forge/maker-zip": "^7.8.0",
     "@types/bun": "latest",
-    "electron": "^34.3.4",
+    "electron": "^34.4.1",
     "gh-pages": "^6.3.0",
     "mkdirp": "^3.0.1",
     "playground-build": "git+https://github.com/BlockCodeLab/playground-build.git",
