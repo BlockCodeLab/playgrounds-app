@@ -26,14 +26,12 @@ blocks.dataPrompt.newArray: 新建陣列
 blocks.dataPrompt.arrayTitle: 新的陣列名：
 
 blocks.myBlockPrompt.title: 製作新的積木
-blocks.myBlockPrompt.addAnInputNumberText: 添加輸入項
+blocks.myBlockPrompt.addAnInput: 添加輸入項
 blocks.myBlockPrompt.numberTextType: 數字或文本
-blocks.myBlockPrompt.addAnInputBoolean: 添加輸入項
+blocks.myBlockPrompt.numberType: 數字
+blocks.myBlockPrompt.textType: 文本
 blocks.myBlockPrompt.booleanType: 布爾值
-blocks.myBlockPrompt.addALabel: 添加文本標簽
-blocks.myBlockPrompt.command: 無返回值
-blocks.myBlockPrompt.reporterNumberText: 返回數字或文本
-blocks.myBlockPrompt.reporterBoolean: 返回布爾值
+blocks.myBlockPrompt.addALabel: 添加文本標籤
 blocks.myBlockPrompt.warpLabel: 開啟加速模式
 
 blocks.downloadPrompt.flashOutSpace: 設備空間不足。
@@ -45,10 +43,18 @@ blocks.control.stopOtherInTarget: 這個物件的其他程式
 blocks.operators.and: "%1 且 %2"
 blocks.unsupported: 不支持的積木
 
+blocks.dataCategory.dataType: 聲明 %1 類型為 %2
+blocks.dataCategory.arrayType: 聲明 %3 類型為 %1 且長度為 %2
+blocks.dataCategory.arraySetItem: 將 %2 下標 %1 的值設為 %3
+blocks.dataCategory.arrayItem: "%2 下標 %1 的值"
+
 blocks.myblock.addLabel: 文本
 blocks.myblock.addBoolean: 布爾值
-blocks.myblock.addNumbetText: 數字或文本
+blocks.myblock.addNumberText: 數字或文本
+blocks.myblock.addNumber: 數字
+blocks.myblock.addText: 文本
 blocks.myblock.return: 返回 %1
+blocks.myblock.returnString: 返回文本 %1
 
 blocks.monitor: 監視
 blocks.monitor.showValue: 顯示 %1 值

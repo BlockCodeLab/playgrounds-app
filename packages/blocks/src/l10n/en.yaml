@@ -26,14 +26,12 @@ blocks.dataPrompt.newArray: New Array
 blocks.dataPrompt.arrayTitle: "New array name:"
 
 blocks.myBlockPrompt.title: Make a Block
-blocks.myBlockPrompt.addAnInputNumberText: Add an input
+blocks.myBlockPrompt.addAnInput: Add an input
 blocks.myBlockPrompt.numberTextType: number or text
-blocks.myBlockPrompt.addAnInputBoolean: Add an input
+blocks.myBlockPrompt.numberType: number
+blocks.myBlockPrompt.textType: text
 blocks.myBlockPrompt.booleanType: boolean
 blocks.myBlockPrompt.addALabel: Add a label
-blocks.myBlockPrompt.command: Command
-blocks.myBlockPrompt.reporterNumberText: Return number or text
-blocks.myBlockPrompt.reporterBoolean: Return boolean
 blocks.myBlockPrompt.warpLabel: Run Turbo Mode
 
 blocks.downloadPrompt.flashOutSpace: The flash is running out of space.
@@ -52,8 +50,11 @@ blocks.dataCategory.arrayItem: index %1 of %2
 
 blocks.myblock.addLabel: " label text"
 blocks.myblock.addBoolean: boolean
-blocks.myblock.addNumbetText: number or text
+blocks.myblock.addNumberText: number or text
+blocks.myblock.addNumber: number
+blocks.myblock.addText: text
 blocks.myblock.return: return %1
+blocks.myblock.returnString: return string %1
 
 blocks.monitor: Monitor
 blocks.monitor.showValue: show value %1

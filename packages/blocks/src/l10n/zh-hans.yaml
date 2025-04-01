@@ -26,14 +26,12 @@ blocks.dataPrompt.newArray: 新建数组
 blocks.dataPrompt.arrayTitle: 新的数组名：
 
 blocks.myBlockPrompt.title: 制作新的积木
-blocks.myBlockPrompt.addAnInputNumberText: 添加输入项
+blocks.myBlockPrompt.addAnInput: 添加输入项
 blocks.myBlockPrompt.numberTextType: 数字或文本
-blocks.myBlockPrompt.addAnInputBoolean: 添加输入项
+blocks.myBlockPrompt.numberType: 数字
+blocks.myBlockPrompt.textType: 文本
 blocks.myBlockPrompt.booleanType: 布尔值
 blocks.myBlockPrompt.addALabel: 添加文本标签
-blocks.myBlockPrompt.command: 无返回值
-blocks.myBlockPrompt.reporterNumberText: 返回数字或文本
-blocks.myBlockPrompt.reporterBoolean: 返回布尔值
 blocks.myBlockPrompt.warpLabel: 开启加速模式
 
 blocks.downloadPrompt.flashOutSpace: 设备空间不足。
@@ -52,8 +50,11 @@ blocks.dataCategory.arrayItem: "%2 下标 %1 的值"
 
 blocks.myblock.addLabel: 文本
 blocks.myblock.addBoolean: 布尔值
-blocks.myblock.addNumbetText: 数字或文本
+blocks.myblock.addNumberText: 数字或文本
+blocks.myblock.addNumber: 数字
+blocks.myblock.addText: 文本
 blocks.myblock.return: 返回 %1
+blocks.myblock.returnString: 返回文本 %1
 
 blocks.monitor: 监视
 blocks.monitor.showValue: 显示 %1 值

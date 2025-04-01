@@ -2,8 +2,9 @@ import { ScratchBlocks } from './scratch-blocks';
 import { translate } from '@blockcode/core';
 
 const PROCEDURES_CALL_TYPE_STATEMENT = 0;
-const PROCEDURES_CALL_TYPE_REPORTER = 1;
-const PROCEDURES_CALL_TYPE_BOOLEAN = 2;
+const PROCEDURES_CALL_TYPE_BOOLEAN = 1;
+const PROCEDURES_CALL_TYPE_REPORTER = 2;
+const PROCEDURES_CALL_TYPE_REPORTER_STRING = 3;
 
 // 返回值积木
 ScratchBlocks.Blocks['procedures_return'] = {
@@ -22,76 +23,95 @@ ScratchBlocks.Blocks['procedures_return'] = {
   },
 };
 
-// 自制积木
-const procedureCallBlock = ScratchBlocks.Blocks[ScratchBlocks.PROCEDURES_CALL_BLOCK_TYPE];
-ScratchBlocks.Blocks[ScratchBlocks.PROCEDURES_CALL_BLOCK_TYPE] = Object.assign(procedureCallBlock, {
+// 返回字符串
+ScratchBlocks.Blocks['procedures_return_string'] = {
   init() {
     this.jsonInit({
-      extensions: ['colours_more', 'procedure_call_contextmenu'],
+      message0: translate('blocks.myblock.returnString', 'return string %1'),
+      args0: [
+        {
+          type: 'input_value',
+          name: 'STR',
+        },
+      ],
+      category: ScratchBlocks.Categories.more,
+      extensions: ['colours_more', 'shape_end'],
     });
-    this.procCode_ = '';
-    this.argumentIds_ = [];
-    this.warp_ = false;
-    this.return_ = PROCEDURES_CALL_TYPE_STATEMENT;
   },
-  updateDisplay_() {
-    const wasRendered = this.rendered;
-    this.rendered = false;
+};
 
-    const connectionMap = this.disconnectOldBlocks_();
-    this.removeAllInputs_();
+// 调用自制积木
+//
+ScratchBlocks.Blocks['procedures_call'].init = function () {
+  this.jsonInit({
+    extensions: ['colours_more', 'procedure_call_contextmenu'],
+  });
+  this.procCode_ = '';
+  this.argumentIds_ = [];
+  this.warp_ = false;
+  this.return_ = PROCEDURES_CALL_TYPE_STATEMENT;
+};
 
-    this.createAllInputs_(connectionMap);
-    this.deleteShadows_(connectionMap);
+ScratchBlocks.Blocks['procedures_call'].updateDisplay_ = function () {
+  const wasRendered = this.rendered;
+  this.rendered = false;
 
-    if (!wasRendered) {
-      if (this.return_ === PROCEDURES_CALL_TYPE_STATEMENT) {
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
+  const connectionMap = this.disconnectOldBlocks_();
+  this.removeAllInputs_();
+
+  this.createAllInputs_(connectionMap);
+  this.deleteShadows_(connectionMap);
+
+  if (!wasRendered) {
+    if (this.return_ === PROCEDURES_CALL_TYPE_STATEMENT) {
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+    } else {
+      if (this.return_ === PROCEDURES_CALL_TYPE_BOOLEAN) {
+        this.setOutput(true, null);
+        this.setOutputShape(ScratchBlocks.OUTPUT_SHAPE_HEXAGONAL);
       } else {
-        if (this.return_ === PROCEDURES_CALL_TYPE_BOOLEAN) {
-          this.setOutput(true, null);
-          this.setOutputShape(ScratchBlocks.OUTPUT_SHAPE_HEXAGONAL);
-        } else {
-          this.setOutput(true, ScratchBlocks.Procedures.ENFORCE_TYPES ? 'Number' : null);
-          this.setOutputShape(ScratchBlocks.OUTPUT_SHAPE_ROUND);
-        }
+        this.setOutput(true, ScratchBlocks.Procedures.ENFORCE_TYPES ? 'Number' : null);
+        this.setOutputShape(ScratchBlocks.OUTPUT_SHAPE_ROUND);
       }
     }
+  }
 
-    this.rendered = wasRendered;
-    if (wasRendered && !this.isInsertionMarker()) {
-      this.initSvg();
-      this.render();
-    }
-  },
-  domToMutation(xmlElement) {
-    this.procCode_ = xmlElement.getAttribute('proccode');
-    this.generateShadows_ = JSON.parse(xmlElement.getAttribute('generateshadows'));
-    this.argumentIds_ = JSON.parse(xmlElement.getAttribute('argumentids'));
-    this.warp_ = JSON.parse(xmlElement.getAttribute('warp'));
-    this.return_ = parseReturnMutation(xmlElement);
-    this.updateDisplay_();
-  },
-  mutationToDom() {
-    var container = document.createElement('mutation');
-    container.setAttribute('proccode', this.procCode_);
-    container.setAttribute('argumentids', JSON.stringify(this.argumentIds_));
-    container.setAttribute('warp', JSON.stringify(this.warp_));
-    if (this.return_ !== PROCEDURES_CALL_TYPE_STATEMENT) {
-      container.setAttribute('return', this.return_);
-    }
-    return container;
-  },
-});
+  this.rendered = wasRendered;
+  if (wasRendered && !this.isInsertionMarker()) {
+    this.initSvg();
+    this.render();
+  }
+};
+
+ScratchBlocks.Blocks['procedures_call'].domToMutation = function (xmlElement) {
+  this.procCode_ = xmlElement.getAttribute('proccode');
+  this.generateShadows_ = JSON.parse(xmlElement.getAttribute('generateshadows'));
+  this.argumentIds_ = JSON.parse(xmlElement.getAttribute('argumentids'));
+  this.warp_ = JSON.parse(xmlElement.getAttribute('warp'));
+  this.return_ = parseReturnMutation(xmlElement);
+  this.updateDisplay_();
+};
+
+ScratchBlocks.Blocks['procedures_call'].mutationToDom = function () {
+  const container = document.createElement('mutation');
+  container.setAttribute('proccode', this.procCode_);
+  container.setAttribute('argumentids', JSON.stringify(this.argumentIds_));
+  container.setAttribute('warp', JSON.stringify(this.warp_));
+  if (this.return_ !== PROCEDURES_CALL_TYPE_STATEMENT) {
+    container.setAttribute('return', this.return_);
+  }
+  return container;
+};
 
 function parseReturnMutation(xmlElement) {
   if (xmlElement.hasAttribute('return')) {
     const type = +xmlElement.getAttribute('return');
     if (
       type === PROCEDURES_CALL_TYPE_STATEMENT ||
+      type === PROCEDURES_CALL_TYPE_BOOLEAN ||
       type === PROCEDURES_CALL_TYPE_REPORTER ||
-      type === PROCEDURES_CALL_TYPE_BOOLEAN
+      type === PROCEDURES_CALL_TYPE_REPORTER_STRING
     ) {
       return type;
     }
@@ -113,17 +133,29 @@ ScratchBlocks.Procedures.flyoutCategory = function (workspace) {
 
   // 初始时启用返回值积木，如果有自制积木，显示返回值积木
   if (workspace.procedureReturnsEnabled_ && mutations.length > 0) {
-    // 返回值积木
-    const blockText =
-      '<block type="procedures_return">' +
-      '<value name="VALUE">' +
+    // 返回字符串积木
+    const returnStringText =
+      '<block type="procedures_return_string">' +
+      '<value name="STR">' +
       '<shadow type="text">' +
       '<field name="TEXT"/>' +
       '</shadow>' +
       '</value>' +
       '</block>';
-    const block = ScratchBlocks.Xml.textToDom(blockText);
-    xmlList.push(block);
+    const returnStringBlock = ScratchBlocks.Xml.textToDom(returnStringText);
+    xmlList.push(returnStringBlock);
+
+    // 返回值积木
+    const returnText =
+      '<block type="procedures_return">' +
+      '<value name="VALUE">' +
+      '<shadow type="math_number">' +
+      '<field name="NUM">1</field>' +
+      '</shadow>' +
+      '</value>' +
+      '</block>';
+    const returnBlock = ScratchBlocks.Xml.textToDom(returnText);
+    xmlList.push(returnBlock);
 
     // 分割线
     const sep = ScratchBlocks.Xml.textToDom('<sep gap="36"/>');
@@ -152,7 +184,7 @@ ScratchBlocks.Procedures.flyoutCategory = function (workspace) {
 };
 
 function getProcedureReturnType(procCode, workspace) {
-  var defineBlock = ScratchBlocks.Procedures.getDefineBlock(procCode, workspace);
+  const defineBlock = ScratchBlocks.Procedures.getDefineBlock(procCode, workspace);
   if (!defineBlock) {
     return PROCEDURES_CALL_TYPE_STATEMENT;
   }
@@ -162,20 +194,26 @@ function getProcedureReturnType(procCode, workspace) {
 function getBlockReturnType(block) {
   let hasSeenBooleanReturn = false;
   const descendants = block.getDescendants();
+  const myBlock = block.childBlocks_[0];
   for (let i = 0; i < descendants.length; i++) {
-    if (descendants[i].type === 'procedures_return') {
+    if (descendants[i].type === 'procedures_return_string') {
+      myBlock.return_ = PROCEDURES_CALL_TYPE_REPORTER_STRING;
+      return myBlock.return_;
+    } else if (descendants[i].type === 'procedures_return') {
       if (i + 1 < descendants.length && descendants[i + 1].outputShape_ === ScratchBlocks.OUTPUT_SHAPE_HEXAGONAL) {
         hasSeenBooleanReturn = true;
       } else {
-        return PROCEDURES_CALL_TYPE_REPORTER;
+        myBlock.return_ = PROCEDURES_CALL_TYPE_REPORTER;
+        return myBlock.return_;
       }
     }
   }
   if (hasSeenBooleanReturn) {
-    return PROCEDURES_CALL_TYPE_BOOLEAN;
+    myBlock.return_ = PROCEDURES_CALL_TYPE_BOOLEAN;
   } else {
-    return PROCEDURES_CALL_TYPE_STATEMENT;
+    myBlock.return_ = PROCEDURES_CALL_TYPE_STATEMENT;
   }
+  return myBlock.return_;
 }
 
 // 积木断开连接时
@@ -186,12 +224,12 @@ ScratchBlocks.Connection.prototype.disconnectInternal_ = function (parentBlock, 
     childBlock.workspace.procedureReturnsWillChange();
   }
 
-  var event;
+  let event;
   if (ScratchBlocks.Events.isEnabled()) {
     event = new ScratchBlocks.Events.BlockMove(childBlock);
   }
 
-  var otherConnection = this.targetConnection;
+  const otherConnection = this.targetConnection;
   otherConnection.targetConnection = null;
   this.targetConnection = null;
   childBlock.setParent(null);
@@ -205,10 +243,10 @@ ScratchBlocks.Connection.prototype.disconnectInternal_ = function (parentBlock, 
 // 根据是否使用返回值积木自动切换自制积木的外形
 //
 ScratchBlocks.Connection.prototype.connect_ = function (childConnection) {
-  var parentConnection = this;
-  var parentBlock = parentConnection.getSourceBlock();
-  var childBlock = childConnection.getSourceBlock();
-  var isSurroundingC = false;
+  const parentConnection = this;
+  const parentBlock = parentConnection.getSourceBlock();
+  const childBlock = childConnection.getSourceBlock();
+  let isSurroundingC = false;
   if (parentConnection == parentBlock.getFirstStatementConnection()) {
     isSurroundingC = true;
   }
@@ -219,20 +257,21 @@ ScratchBlocks.Connection.prototype.connect_ = function (childConnection) {
   }
 
   // Disconnect any existing parent on the child connection.
+  let previousParentConnection;
   if (childConnection.isConnected()) {
     // Scratch-specific behaviour:
     // If we're using a c-shaped block to surround a stack, remember where the
     // stack used to be connected.
     if (isSurroundingC) {
-      var previousParentConnection = childConnection.targetConnection;
+      previousParentConnection = childConnection.targetConnection;
     }
     childConnection.disconnect();
   }
   if (parentConnection.isConnected()) {
     // Other connection is already connected to something.
     // Disconnect it and reattach it or bump it as needed.
-    var orphanBlock = parentConnection.targetBlock();
-    var shadowDom = parentConnection.getShadowDom();
+    let orphanBlock = parentConnection.targetBlock();
+    let shadowDom = parentConnection.getShadowDom();
     // Temporarily set the shadow DOM to null so it does not respawn.
     parentConnection.setShadowDom(null);
     // Displaced shadow blocks dissolve rather than reattaching or bumping.
@@ -250,9 +289,9 @@ ScratchBlocks.Connection.prototype.connect_ = function (childConnection) {
       }
       // Attempt to reattach the orphan at the bottom of the newly inserted
       // block.  Since this block may be a stack, walk down to the end.
-      var newBlock = childBlock;
+      let newBlock = childBlock;
       while (newBlock.nextConnection) {
-        var nextBlock = newBlock.getNextBlock();
+        const nextBlock = newBlock.getNextBlock();
         if (nextBlock && !nextBlock.isShadow()) {
           newBlock = nextBlock;
         } else {
@@ -269,7 +308,7 @@ ScratchBlocks.Connection.prototype.connect_ = function (childConnection) {
       parentConnection.disconnect();
       if (ScratchBlocks.Events.recordUndo) {
         // Bump it off to the side after a moment.
-        var group = ScratchBlocks.Events.getGroup();
+        const group = ScratchBlocks.Events.getGroup();
         setTimeout(function () {
           // Verify orphan hasn't been deleted or reconnected (user on meth).
           if (orphanBlock.workspace && !orphanBlock.getParent()) {
@@ -292,7 +331,7 @@ ScratchBlocks.Connection.prototype.connect_ = function (childConnection) {
     previousParentConnection.connect(parentBlock.previousConnection);
   }
 
-  var event;
+  let event;
   if (ScratchBlocks.Events.isEnabled()) {
     event = new ScratchBlocks.Events.BlockMove(childBlock);
   }
@@ -322,18 +361,18 @@ ScratchBlocks.WorkspaceSvg.prototype.procedureReturnsWillChange = function () {
 };
 
 ScratchBlocks.WorkspaceSvg.prototype.processProcedureReturnsChanged_ = function () {
-  var initialTypes = this.initialProcedureReturnTypes_;
-  var finalTypes = getAllProcedureReturnTypes(this);
+  const initialTypes = this.initialProcedureReturnTypes_;
+  const finalTypes = getAllProcedureReturnTypes(this);
 
   this.initialProcedureReturnTypes_ = null;
   this.checkProcedureReturnAfterGesture_ = false;
   this.procedureReturnChangeTimeout_ = null;
 
   ScratchBlocks.Events.setGroup(true);
-  var topBlocks = this.getTopBlocks(false);
-  for (var i = 0; i < topBlocks.length; i++) {
-    var block = topBlocks[i];
-    if (block.type !== ScratchBlocks.PROCEDURES_CALL_BLOCK_TYPE) continue;
+  const topBlocks = this.getTopBlocks(false);
+  for (let i = 0; i < topBlocks.length; i++) {
+    const block = topBlocks[i];
+    if (block.type !== 'procedures_call') continue;
 
     // After a gesture, we are called early enough that there could still be insertion markers.
     if (block.isInsertionMarker()) continue;
@@ -342,7 +381,7 @@ ScratchBlocks.WorkspaceSvg.prototype.processProcedureReturnsChanged_ = function 
     // block is connected below, we should leave it unchanged instead of unplugging.
     if (block.getNextBlock()) continue;
 
-    var procCode = block.getProcCode();
+    const procCode = block.getProcCode();
     // If the procedure doesn't exist or is new, ignore it.
     if (
       !Object.prototype.hasOwnProperty.call(initialTypes, procCode) ||
@@ -350,7 +389,7 @@ ScratchBlocks.WorkspaceSvg.prototype.processProcedureReturnsChanged_ = function 
     )
       continue;
 
-    var actualReturnType = finalTypes[procCode];
+    const actualReturnType = finalTypes[procCode];
     if (
       block.return_ !== actualReturnType &&
       // If user is allowed to override call block shape, only update the shape if the definition's
@@ -363,8 +402,8 @@ ScratchBlocks.WorkspaceSvg.prototype.processProcedureReturnsChanged_ = function 
   ScratchBlocks.Events.setGroup(false);
 
   // Toolbox refresh can be slow, so only do when needed.
-  var toolboxOutdated = false;
-  for (var procCode in finalTypes) {
+  let toolboxOutdated = false;
+  for (const procCode in finalTypes) {
     // If a current procedure existed but its type has changed, the toolbox must be updated.
     // If a new procedure was created, the toolbox is already updated elsewhere.
     if (
@@ -389,11 +428,11 @@ ScratchBlocks.WorkspaceSvg.prototype.clearGesture = function () {
 };
 
 function getAllProcedureReturnTypes(workspace) {
-  var result = Object.create(null);
-  var blocks = workspace.getTopBlocks(false);
-  for (var i = 0; i < blocks.length; i++) {
+  const result = Object.create(null);
+  const blocks = workspace.getTopBlocks(false);
+  for (let i = 0; i < blocks.length; i++) {
     if (blocks[i].type == ScratchBlocks.PROCEDURES_DEFINITION_BLOCK_TYPE) {
-      var procCode = blocks[i].getInput('custom_block').connection.targetBlock().getProcCode();
+      const procCode = blocks[i].getInput('custom_block').connection.targetBlock().getProcCode();
       // To match behavior of getDefineBlock, if multiple instances of this procedure are
       // defined, only use the first one.
       if (!Object.prototype.hasOwnProperty.call(result, procCode)) {
@@ -406,14 +445,14 @@ function getAllProcedureReturnTypes(workspace) {
 
 function changeReturnType(block, returnType) {
   block.unplug(true);
-  var workspace = block.workspace;
-  var xml = ScratchBlocks.Xml.blockToDom(block);
-  var xy = block.getRelativeToSurfaceXY();
+  const workspace = block.workspace;
+  const xml = ScratchBlocks.Xml.blockToDom(block);
+  const xy = block.getRelativeToSurfaceXY();
   block.dispose();
 
-  var mutation = xml.querySelector('mutation');
+  const mutation = xml.querySelector('mutation');
   mutation.setAttribute('return', returnType);
 
-  var newBlock = ScratchBlocks.Xml.domToBlock(xml, workspace);
+  const newBlock = ScratchBlocks.Xml.domToBlock(xml, workspace);
   newBlock.moveBy(xy.x, xy.y);
 }

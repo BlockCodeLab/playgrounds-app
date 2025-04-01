@@ -11,20 +11,10 @@ import booleanInputIcon from './icons/icon-boolean-input.svg';
 import textInputIcon from './icons/icon-text-input.svg';
 import labelIcon from './icons/icon-label.svg';
 
-const BlockType = keyMirror({
-  Hat: null,
-  Command: null,
-  ReturnNumberOrText: null,
-  ReturnBoolean: null,
-});
-
-export function MyBlockPromptModal({ mutator, enableWarp, onClose, onSubmit }) {
+export function MyBlockPromptModal({ mutator, enableTypes, enableWarp, onClose, onSubmit }) {
   const ref = useRef(null);
 
   const blockWarp = useSignal(false);
-
-  // TODO: 积木类型：帽子积木、字符或数字积木、布尔值积木、命令积木
-  const blockType = useSignal(BlockType.Command);
 
   const handleChangeType = () => {};
 
@@ -43,6 +33,18 @@ export function MyBlockPromptModal({ mutator, enableWarp, onClose, onSubmit }) {
   const handleAddTextNumber = useCallback(() => {
     if (ref.mutationRoot) {
       ref.mutationRoot.addStringNumberExternal();
+    }
+  }, []);
+
+  const handleAddText = useCallback(() => {
+    if (ref.mutationRoot) {
+      ref.mutationRoot.addStringExternal();
+    }
+  }, []);
+
+  const handleAddNumber = useCallback(() => {
+    if (ref.mutationRoot) {
+      ref.mutationRoot.addNumberExternal();
     }
   }, []);
 
@@ -123,28 +125,77 @@ export function MyBlockPromptModal({ mutator, enableWarp, onClose, onSubmit }) {
       />
       <div className={styles.body}>
         <div className={styles.optionsRow}>
-          <div
-            role="button"
-            className={styles.optionCard}
-            onClick={handleAddTextNumber}
-          >
-            <img
-              className={styles.optionIcon}
-              src={textInputIcon}
-            />
-            <div className={styles.optionTitle}>
-              <Text
-                id="blocks.myBlockPrompt.addAnInputNumberText"
-                defaultMessage="Add an input"
+          {enableTypes ? (
+            <>
+              <div
+                role="button"
+                className={styles.optionCard}
+                onClick={handleAddNumber}
+              >
+                <img
+                  className={styles.optionIcon}
+                  src={textInputIcon}
+                />
+                <div className={styles.optionTitle}>
+                  <Text
+                    id="blocks.myBlockPrompt.addAnInput"
+                    defaultMessage="Add an input"
+                  />
+                </div>
+                <div className={styles.optionDescription}>
+                  <Text
+                    id="blocks.myBlockPrompt.numberType"
+                    defaultMessage="number"
+                  />
+                </div>
+              </div>
+              <div
+                role="button"
+                className={styles.optionCard}
+                onClick={handleAddText}
+              >
+                <img
+                  className={styles.optionIcon}
+                  src={textInputIcon}
+                />
+                <div className={styles.optionTitle}>
+                  <Text
+                    id="blocks.myBlockPrompt.addAnInput"
+                    defaultMessage="Add an input"
+                  />
+                </div>
+                <div className={styles.optionDescription}>
+                  <Text
+                    id="blocks.myBlockPrompt.textType"
+                    defaultMessage="text"
+                  />
+                </div>
+              </div>
+            </>
+          ) : (
+            <div
+              role="button"
+              className={styles.optionCard}
+              onClick={handleAddTextNumber}
+            >
+              <img
+                className={styles.optionIcon}
+                src={textInputIcon}
               />
+              <div className={styles.optionTitle}>
+                <Text
+                  id="blocks.myBlockPrompt.addAnInput"
+                  defaultMessage="Add an input"
+                />
+              </div>
+              <div className={styles.optionDescription}>
+                <Text
+                  id="blocks.myBlockPrompt.numberTextType"
+                  defaultMessage="number or text"
+                />
+              </div>
             </div>
-            <div className={styles.optionDescription}>
-              <Text
-                id="blocks.myBlockPrompt.numberTextType"
-                defaultMessage="number or text"
-              />
-            </div>
-          </div>
+          )}
           <div
             role="button"
             className={styles.optionCard}
@@ -156,7 +207,7 @@ export function MyBlockPromptModal({ mutator, enableWarp, onClose, onSubmit }) {
             />
             <div className={styles.optionTitle}>
               <Text
-                id="blocks.myBlockPrompt.addAnInputBoolean"
+                id="blocks.myBlockPrompt.addAnInput"
                 defaultMessage="Add an input"
               />
             </div>
@@ -184,49 +235,6 @@ export function MyBlockPromptModal({ mutator, enableWarp, onClose, onSubmit }) {
             </div>
           </div>
         </div>
-        {/*
-        <div className={styles.radioboxRow}>
-          <label>
-            <input
-              checked={type === 'command'}
-              name="typeOption"
-              type="radio"
-              value="command"
-              onChange={useCallback(() => setType('command'), [])}
-            />
-            <Text
-              id="blocks.myBlockPrompt.command"
-              defaultMessage="Command"
-            />
-          </label>
-          <label>
-            <input
-              checked={type === 'numberText'}
-              name="typeOption"
-              type="radio"
-              value="numberText"
-              onChange={useCallback(() => setType('numberText'), [])}
-            />
-            <Text
-              id="blocks.myBlockPrompt.reporterNumberText"
-              defaultMessage="Return number or text"
-            />
-          </label>
-          <label>
-            <input
-              checked={type === 'boolean'}
-              name="typeOption"
-              type="radio"
-              value="boolean"
-              onChange={useCallback(() => setType('boolean'), [])}
-            />
-            <Text
-              id="blocks.myBlockPrompt.reporterBoolean"
-              defaultMessage="Return boolean"
-            />
-          </label>
-        </div>
-        */}
         {enableWarp && (
           <div className={styles.checkboxRow}>
             <label>

@@ -86,7 +86,9 @@ const updateScratchBlocksMsgs = (enableMultiTargets, enableVariableTypes) => {
         EVENT_WHENPROGRAMSTART: translate('blocks.events.programStart', 'when program start'),
         PROCEDURES_ADD_LABEL: translate('blocks.myblock.addLabel', ' label text'),
         PROCEDURES_ADD_BOOLEAN: translate('blocks.myblock.addBoolean', 'boolean'),
-        PROCEDURES_ADD_STRING_NUMBER: translate('blocks.myblock.addNumbetText', 'number or text'),
+        PROCEDURES_ADD_STRING_NUMBER: translate('blocks.myblock.addNumberText', 'number or text'),
+        PROCEDURES_ADD_NUMBER: translate('blocks.myblock.addNumber', 'number'),
+        PROCEDURES_ADD_STRING: translate('blocks.myblock.addText', 'text'),
         CATEGORY_MONITOR: translate('blocks.monitor', 'Monitor'),
         MONITOR_SHOWVALUE: translate('blocks.monitor.showValue', 'show value %1'),
         MONITOR_SHOWNAMEDVALUE: translate('blocks.monitor.showNamedValue', 'show value %1 named %2'),
@@ -763,6 +765,7 @@ export function BlocksEditor({
       {myBlockPrompt.value && (
         <MyBlockPromptModal
           mutator={myBlockPrompt.value.mutator}
+          enableTypes={variableTypes}
           enableWarp={enableMyBlockWarp}
           onSubmit={handleMyBlockPromptSubmit}
           onClose={handleClosePrompt}
