@@ -61,12 +61,12 @@ class Generator extends BaseGenerator {
 
   getVariableName(desiredName) {
     const variableName = this.variableDB_.getName(desiredName, ScratchBlocks.Variables.NAME_TYPE);
-    return variableName;
+    return `_${variableName.replaceAll('_', '')}`;
   }
 
   getFunctionName(desiredName) {
-    const functionName = this.variableDB_.getDistinctName(desiredName, ScratchBlocks.Procedures.NAME_TYPE);
-    return functionName;
+    const functionName = this.variableDB_.getName(desiredName, ScratchBlocks.Procedures.NAME_TYPE);
+    return `_${functionName.replaceAll('_25', '').replaceAll('_', '')}`;
   }
 }
 
