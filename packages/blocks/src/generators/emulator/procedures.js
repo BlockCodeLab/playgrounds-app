@@ -20,7 +20,7 @@ proto['procedures_definition'] = function (block) {
 
 proto['procedures_call'] = function (block) {
   const funcName = this.getFunctionName(block.getProcCode());
-  const args = block.argumentIds_.map((arg) => this.valueToCode(block, arg, this.ORDER_NONE));
+  const args = block.argumentIds_.map((arg) => this.valueToCode(block, arg, this.ORDER_NONE) || 'false');
   const argsCode = args.length > 0 ? `, ${args.join(', ')}` : '';
   const code = `await runtime.call('procedure:${funcName}'${argsCode});\n`;
   return code;

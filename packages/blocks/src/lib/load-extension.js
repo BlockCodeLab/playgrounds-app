@@ -11,7 +11,8 @@ const OTHER_COLOR = themeColors.blocks.tertiary;
 const ShadowTypes = {
   broadcast: 'event_broadcast_menu',
   number: 'math_number',
-  integer: 'math_whole_number',
+  integer: 'math_integer',
+  index: 'math_whole_number',
   angle: 'math_angle',
   text: 'text',
   string: 'text',
