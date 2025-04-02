@@ -69,6 +69,7 @@ proto['control_while'] = function (block) {
   let branchCode = this.statementToCode(block, 'SUBSTACK');
   branchCode = this.addLoopTrap(branchCode, block.id);
 
+  let code = '';
   code += `while ${conditionCode}:\n`;
   code += branchCode;
   return code;
