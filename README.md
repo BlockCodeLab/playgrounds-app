@@ -12,6 +12,7 @@
   - [blocks/](packages/blocks/): 图形积木编程组件
     - [extensions](packages/blocks/extensions): 图形积木扩展
   - [board/](packages/board/): 开发板硬件支持库
+  - [code/](packages/code/): 代码编辑器组件
   - [core/](packages/core/): 核心模块，包含核心全局状态机、标准 UI、主题样式定义等
   - [gui/](packages/gui/): 基于 Preact 框架的浏览器端图形界面
     - [editors](packages/gui/editors): 编辑器扩展
