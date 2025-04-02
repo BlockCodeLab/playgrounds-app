@@ -3,6 +3,7 @@ import projectUri from './pingpong.proj';
 
 export default {
   name: 'Ping-pong',
+  editor: '@blockcode/gui-arcade',
   uri: projectUri,
   alert: (
     <Text

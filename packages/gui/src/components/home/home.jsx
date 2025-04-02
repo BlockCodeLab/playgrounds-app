@@ -182,8 +182,6 @@ export function Home({ onOpenEditor, onOpenProject }) {
 
   // 根据当前语言获取可用编辑器和案例数据
   useSignalEffect(async () => {
-    examples.value = getExamples(language.value);
-
     let result = await getEditors();
     result = result.map((editor) =>
       Object.assign(editor, {
@@ -206,6 +204,11 @@ export function Home({ onOpenEditor, onOpenProject }) {
       return true;
     });
     editors.value = result.sort((a, b) => a.sortIndex - b.sortIndex);
+
+    // 案例根据可用的编辑器进行过滤
+    examples.value = getExamples(language.value).filter((exam) => {
+      return result.some((editor) => editor.id === exam.editor);
+    });
   });
 
   return (
@@ -331,6 +334,12 @@ export function Home({ onOpenEditor, onOpenProject }) {
           onClick={() => window.open('https://lab.blockcode.fun/', '_blank')}
         >
           BlockCode Lab
+        </span>
+        <span
+          className={classNames(styles.footerItem, styles.link)}
+          onClick={() => window.open('https://github.com/BlockCodeLab', '_blank')}
+        >
+          GitHub
         </span>
         <span
           className={classNames(styles.footerItem, styles.link)}
