@@ -44,8 +44,8 @@ Microsoft 的 [MakeCode](https://microsoft.com/makecode) 项目。平台基于�
 
 国内用户请通过[百度网盘](https://pan.baidu.com/s/1yr7Q-6PFuaimyv_noXxJ_w?pwd=ahj3)加速下载。
 
-[1]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.1/BlockCodePlaygrounds-win-x64-1.0.1.zip
-[2]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.1/BlockCodePlaygrounds-win-x86-1.0.1.zip
-[3]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.1/BlockCodePlaygrounds-win7-1.0.1.zip
-[4]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.1/BlockCodePlaygrounds-macos-apple-silicon-1.0.1.zip
-[5]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.1/BlockCodePlaygrounds-macos-intel-1.0.1.zip
+[1]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.4/BlockCodePlaygrounds-win-x64-1.0.4.zip
+[2]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.4/BlockCodePlaygrounds-win-x86-1.0.4.zip
+[3]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.4/BlockCodePlaygrounds-win7-1.0.4.zip
+[4]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.4/BlockCodePlaygrounds-macos-apple-silicon-1.0.4.zip
+[5]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.4/BlockCodePlaygrounds-macos-intel-1.0.4.zip

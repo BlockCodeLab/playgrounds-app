@@ -47,8 +47,8 @@ download the [Intel][5] version.
 
 <!-- select:end -->
 
-[1]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.1/BlockCodePlaygrounds-win-x64-1.0.1.zip
-[2]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.1/BlockCodePlaygrounds-win-x86-1.0.1.zip
-[3]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.1/BlockCodePlaygrounds-win7-1.0.1.zip
-[4]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.1/BlockCodePlaygrounds-macos-apple-silicon-1.0.1.zip
-[5]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.1/BlockCodePlaygrounds-macos-intel-1.0.1.zip
+[1]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.4/BlockCodePlaygrounds-win-x64-1.0.4.zip
+[2]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.4/BlockCodePlaygrounds-win-x86-1.0.4.zip
+[3]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.4/BlockCodePlaygrounds-win7-1.0.4.zip
+[4]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.4/BlockCodePlaygrounds-macos-apple-silicon-1.0.4.zip
+[5]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.4/BlockCodePlaygrounds-macos-intel-1.0.4.zip
