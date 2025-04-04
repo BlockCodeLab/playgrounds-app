@@ -58,10 +58,12 @@ ScratchBlocks.ContextMenu.blockCommentOption = function (block) {
       const bbox = block.svgGroup_.getBBox();
       // 修复帽子积木被裁剪掉帽子
       bbox.y = 0;
-      bbox.height += 2;
+      bbox.width += 2;
+      bbox.height += 1;
       block.svgGroup_.getBBox = () => bbox;
       if (block.startHat_) {
         options.top = -17;
+        options.left = -1;
       }
       saveSvgAsPng(block.svgGroup_, nanoid(), options);
     },
