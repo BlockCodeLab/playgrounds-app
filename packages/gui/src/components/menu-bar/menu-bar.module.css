@@ -56,6 +56,7 @@
   justify-content: flex-start;
   flex-wrap: nowrap;
   align-items: center;
+  gap: 0.25rem;
   /* flex-grow: 1; */
 
   -webkit-app-region: no-drag;
@@ -71,6 +72,7 @@
   justify-content: flex-start;
   flex-wrap: nowrap;
   align-items: center;
+  gap: 0.25rem;
 
   -webkit-app-region: no-drag;
 }
@@ -92,12 +94,12 @@ input.menu-label {
   display: none;
 }
 
-input.menu-label + .menu-bar-item:hover {
+input.menu-label+.menu-bar-item:hover {
   cursor: pointer;
   background: var(--ui-black-transparent);
 }
 
-input.menu-label:checked + .menu-bar-item {
+input.menu-label:checked+.menu-bar-item {
   background: var(--ui-black-transparent);
 }
 
@@ -135,7 +137,7 @@ input.menu-label:checked + .menu-bar-item {
 }
 
 .divider {
-  margin: 0 0.5rem;
+  margin: 0 0.7rem;
   height: 34px;
   border-right: 1px dashed var(--ui-black-transparent);
 }

@@ -14,7 +14,7 @@ export { default as mime } from 'mime';
 
 export { default as UPNG } from 'upng-js';
 
-export { saveSvgAsPng, svgAsDataUri } from 'save-svg-as-png';
+export { saveSvg, saveSvgAsPng, svgAsDataUri } from 'save-svg-as-png';
 
 export { Firmata } from './lib/firmata-io/firmata';
 
