@@ -421,7 +421,6 @@ export function BlocksEditor({
         data = projData.xmls.get(fileId.value);
         loadXmlToWorkspace(data.xmlDom, null, ref.workspace);
 
-        setModified(ModifyTypes.Saved);
         updateWorkspace();
       });
 
@@ -431,8 +430,11 @@ export function BlocksEditor({
 
       hideSplash();
 
-      // 清空撤销记录
-      ref.workspace.clearUndo();
+      setTimeout(() => {
+        setModified(ModifyTypes.Saved);
+        // 清空撤销记录
+        ref.workspace.clearUndo();
+      });
     }
   }, [splashVisible.value, generateCodes, options, updateWorkspace]);
 

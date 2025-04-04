@@ -1,5 +1,5 @@
-import { ScratchBlocks } from "./scratch-blocks";
 import { translate } from '@blockcode/core';
+import { ScratchBlocks } from './scratch-blocks';
 
 // 静态类型变量/列表积木
 const DATA_BLOCKS = [
@@ -16,6 +16,12 @@ const DATA_BLOCKS = [
   'data_listcontainsitem',
 ];
 
+// 禁用显示/隐藏变量/列表的积木
+ScratchBlocks.DataCategory.addShowVariable = () => {};
+ScratchBlocks.DataCategory.addHideVariable = () => {};
+ScratchBlocks.DataCategory.addShowList = () => {};
+ScratchBlocks.DataCategory.addHideList = () => {};
+
 // 备份设置变量/列表的积木
 for (const key of DATA_BLOCKS) {
   ScratchBlocks.Blocks[`#${key}`] = ScratchBlocks.Blocks[key];
@@ -24,15 +30,15 @@ for (const key of DATA_BLOCKS) {
 // 设置强类型变量声明积木
 ScratchBlocks.setDataCategoryForTyped = (typeOptions) => {
   // 禁用变量/列表的部分的积木
-  ScratchBlocks.DataCategory.addAddToList = () => { };
-  ScratchBlocks.DataCategory.addDeleteOfList = () => { };
-  ScratchBlocks.DataCategory.addDeleteAllOfList = () => { };
+  ScratchBlocks.DataCategory.addAddToList = () => {};
+  ScratchBlocks.DataCategory.addDeleteOfList = () => {};
+  ScratchBlocks.DataCategory.addDeleteAllOfList = () => {};
   // ScratchBlocks.DataCategory.addInsertAtList = () => {};
   // ScratchBlocks.DataCategory.addReplaceItemOfList = () => {};
   // ScratchBlocks.DataCategory.addItemOfList = () => {};
-  ScratchBlocks.DataCategory.addItemNumberOfList = () => { };
+  ScratchBlocks.DataCategory.addItemNumberOfList = () => {};
   // ScratchBlocks.DataCategory.addLengthOfList = () => {};
-  ScratchBlocks.DataCategory.addListContainsItem = () => { };
+  ScratchBlocks.DataCategory.addListContainsItem = () => {};
 
   // 声明变量
   ScratchBlocks.Blocks['data_setvariableto'] = {

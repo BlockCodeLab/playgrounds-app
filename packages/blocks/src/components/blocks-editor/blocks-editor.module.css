@@ -124,6 +124,10 @@
   cursor: pointer !important;
 }
 
+:global(.blocklyContextMenu .goog-menuitem:last-child:not(.goog-menuitem-disabled):hover) {
+  background: var(--error-primary) !important;
+}
+
 :global(.scratchCategoryMenuItemLabel) {
   text-wrap: pretty;
 }

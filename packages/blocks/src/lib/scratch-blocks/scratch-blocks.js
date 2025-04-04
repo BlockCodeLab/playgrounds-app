@@ -1,4 +1,6 @@
 import { importModuleExport } from '../import-module-export' with { type: 'macro' };
+import { saveSvgAsPng, nanoid } from '@blockcode/utils';
+import { translate } from '@blockcode/core';
 
 const module = {};
 const code = importModuleExport('scratch-blocks/dist/vertical');
@@ -25,14 +27,8 @@ ScratchBlocks.Extensions.register(
   ScratchBlocks.ScratchBlocks.VerticalExtensions.colourHelper('monitor'),
 );
 
-// 禁用显示/隐藏变量/列表的积木
-ScratchBlocks.DataCategory.addShowVariable = () => {};
-ScratchBlocks.DataCategory.addHideVariable = () => {};
-ScratchBlocks.DataCategory.addShowList = () => {};
-ScratchBlocks.DataCategory.addHideList = () => {};
-
-// 备份所有变量/列表积木
-// 用于在C语言替换默认积木后的还原
+// 备份变量列表自动添加的积木
+// 有些情况下会改变这些积木
 const DataCategoryFunctions = {};
 for (const key in ScratchBlocks.DataCategory) {
   if (key.startsWith('add')) {
@@ -40,7 +36,7 @@ for (const key in ScratchBlocks.DataCategory) {
   }
 }
 
-// 还原初始积木
+// 每次重新创建工作区，还原备份的初始积木
 ScratchBlocks.restoreBlocks = () => {
   for (const key in ScratchBlocks.Blocks) {
     if (key[0] === '#') {
@@ -50,4 +46,55 @@ ScratchBlocks.restoreBlocks = () => {
   for (const key in DataCategoryFunctions) {
     ScratchBlocks.DataCategory[key] = DataCategoryFunctions[key];
   }
+};
+
+// 将为积木添加注释的菜单项改为导出积木图片
+ScratchBlocks.ContextMenu.blockCommentOption = function (block) {
+  const exportPngOption = {
+    enabled: true,
+    text: translate('blocks.centextMenu.exportPng', 'Export to PNG'),
+    callback() {
+      const options = {};
+      const bbox = block.svgGroup_.getBBox();
+      // 修复帽子积木被裁剪掉帽子
+      bbox.y = 0;
+      bbox.height += 2;
+      block.svgGroup_.getBBox = () => bbox;
+      if (block.startHat_) {
+        options.top = -17;
+      }
+      saveSvgAsPng(block.svgGroup_, nanoid(), options);
+    },
+  };
+  return exportPngOption;
+};
+
+// 给工作区添加导出积木图片菜单项
+const showContextMenu = ScratchBlocks.ContextMenu.show;
+ScratchBlocks.ContextMenu.show = function (e, options, rtl) {
+  const exportText = translate('blocks.centextMenu.exportPng', 'Export to PNG');
+  let hasExport = false;
+  for (const item of options) {
+    if (item.text === exportText) {
+      hasExport = true;
+    }
+  }
+
+  // 添加导出菜单
+  if (!hasExport) {
+    const exportPngOption = {
+      enabled: true,
+      text: exportText,
+      callback() {
+        const workspace = ScratchBlocks.getMainWorkspace();
+        const canvas = workspace.getCanvas();
+        if (canvas) {
+          saveSvgAsPng(canvas, nanoid());
+        }
+      },
+    };
+    options.splice(-1, 0, exportPngOption);
+  }
+
+  showContextMenu(e, options, rtl);
 };

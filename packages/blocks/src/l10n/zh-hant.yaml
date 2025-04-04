@@ -65,3 +65,5 @@ blocks.monitor.listLength: "{length} 項"
 
 blocks.extensionStatusMenu.bluetooth: 藍牙（BLE）
 blocks.extensionStatusMenu.serial: 串口
+
+blocks.centextMenu.exportPng: 匯出 PNG
