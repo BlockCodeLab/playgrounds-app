@@ -31,7 +31,7 @@ const downloadingAlert = (progress) => {
       icon: <Spinner level="success" />,
       message: (
         <Text
-          id="blocks.alert.downloading"
+          id="gui.alert.downloadingProgress"
           defaultMessage="Downloading...{progress}%"
           progress={progress}
         />
@@ -99,7 +99,7 @@ export default {
 
           try {
             await MPYUtils.write(currentDevice, files, downloadingAlert);
-            await MPYUtils.config(currentDevice, { 'latest-game': gameKey, });
+            await MPYUtils.config(currentDevice, { 'latest-game': gameKey });
             currentDevice.hardReset();
           } catch (err) {
             errorAlert(err.name);

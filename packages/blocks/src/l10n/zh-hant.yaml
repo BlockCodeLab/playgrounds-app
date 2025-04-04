@@ -6,8 +6,6 @@ blocks.panes.monitor: 監視器
 blocks.extensions.addExtension: 添加擴展
 blocks.extensions.empty: 沒有擴展！
 
-blocks.alert.downloading: 正在下載…{progress}%
-
 blocks.prompt.ok: 確認
 blocks.prompt.cancel: 取消
 
@@ -66,4 +64,6 @@ blocks.monitor.listLength: "{length} 項"
 blocks.extensionStatusMenu.bluetooth: 藍牙（BLE）
 blocks.extensionStatusMenu.serial: 串口
 
-blocks.centextMenu.exportPng: 匯出 PNG
+blocks.centextMenu.exportPng: 匯出積木到 PNG
+blocks.centextMenu.exportBlocksPng: 匯出積木到 PNG
+blocks.centextMenu.exportAllBlocksPng: 匯出所有積木到 PNG

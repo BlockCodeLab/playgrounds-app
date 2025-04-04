@@ -2,6 +2,7 @@ gui.name: BlockCode Playgrounds
 
 gui.alert.importing: 载入中…
 gui.alert.downloading: 正在下载…
+gui.alert.downloadingProgress: 正在下载…{progress}%
 gui.alert.downloadCompleted: 下载完成。
 gui.alert.connectionCancel: 连接取消。
 gui.alert.connectionError: 连接发生错误，或已断开。

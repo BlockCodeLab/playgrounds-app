@@ -6,8 +6,6 @@ blocks.panes.monitor: Monitor
 blocks.extensions.addExtension: Add Extension
 blocks.extensions.empty: No extension!
 
-blocks.alert.downloading: Downloading...{progress}%
-
 blocks.prompt.ok: OK
 blocks.prompt.cancel: Cancel
 
@@ -66,4 +64,6 @@ blocks.monitor.listLength: "{length} items"
 blocks.extensionStatusMenu.bluetooth: Bluetooth (BLE)
 blocks.extensionStatusMenu.serial: Serial Port
 
-blocks.centextMenu.exportPng: Export to PNG
+blocks.centextMenu.exportPng: Export Block to PNG
+blocks.centextMenu.exportBlocksPng: Export Blocks to PNG
+blocks.centextMenu.exportAllBlocksPng: Export all Blocks to PNG

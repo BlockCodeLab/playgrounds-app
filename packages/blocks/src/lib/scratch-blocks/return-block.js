@@ -1,5 +1,5 @@
-import { ScratchBlocks } from './scratch-blocks';
 import { translate } from '@blockcode/core';
+import { ScratchBlocks } from './scratch-blocks';
 
 const PROCEDURES_CALL_TYPE_STATEMENT = 0;
 const PROCEDURES_CALL_TYPE_BOOLEAN = 1;
