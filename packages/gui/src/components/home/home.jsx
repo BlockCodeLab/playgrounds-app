@@ -337,7 +337,7 @@ export function Home({ onOpenEditor, onOpenProject }) {
         </span>
         <span
           className={classNames(styles.footerItem, styles.link)}
-          onClick={() => window.open('https://github.com/BlockCodeLab', '_blank')}
+          onClick={() => window.open('https://github.com/BlockCodeLab/playgrounds-app', '_blank')}
         >
           GitHub
         </span>
