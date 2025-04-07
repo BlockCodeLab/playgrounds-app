@@ -65,3 +65,31 @@ export function openProjectFromComputer() {
     });
   });
 }
+
+export async function openProjectFromURL(url) {
+  const blob = await fetch(url).then((res) => res.blob());
+  const file = new File([blob], url);
+
+  const zip = await JSZip.loadAsync(file);
+  const projectRaw = await zip.file('project.json')?.async('string');
+  if (!projectRaw) {
+    throw new Error('not found "project.json"');
+  }
+  const projectJson = JSON.parse(projectRaw);
+
+  // 读取资源文件
+  for (const key in projectJson.assets) {
+    const asset = projectJson.assets[key];
+    const extname = mime.getExtension(asset.type);
+    const data = await zip.file(`${asset.id}.${extname}`)?.async('base64');
+    if (data) {
+      projectJson.assets[key] = { data, ...asset };
+    }
+  }
+  if (!projectJson.name) {
+    const nameParts = file.name.split('.');
+    nameParts.pop();
+    projectJson.name = nameParts.join('.');
+  }
+  return projectJson;
+}
