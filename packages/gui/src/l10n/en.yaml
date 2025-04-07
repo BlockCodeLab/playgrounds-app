@@ -46,6 +46,8 @@ gui.menubar.device: Device
 gui.menubar.device.connect: Connect
 gui.menubar.device.disconnect: Disconnect
 gui.menubar.device.download: Download program
+gui.menubar.device.ble_download: Download program by ble
+gui.menubar.device.usb_download: Download program by usb
 
 gui.project.name: Untitled Project
 gui.project.shortname: Untitled

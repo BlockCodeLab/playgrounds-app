@@ -84,6 +84,18 @@ export class ASerialPort extends Serial {
     await new Promise(resolve => setTimeout(resolve, 2000));
   }
 
+  async flashFile(file) {
+    await this.close();
+    await this.open({ baudRate: 115200 });
+    await new Promise(resolve => setTimeout(resolve, 100));
+    await this.flash(file);
+    await new Promise(resolve => setTimeout(resolve, 100));
+    await this.close();
+    await new Promise(resolve => setTimeout(resolve, 100));
+    await this.open({ baudRate: 57600 });
+    await new Promise(resolve => setTimeout(resolve, 2000));
+  }
+
   waitForResponse(resp_data, timeout = 5000) {
     return new Promise((resolve, reject) => {
       let timeoutId;

@@ -1,8 +1,7 @@
 import { setAlert, Text } from '@blockcode/core';
 import { Firmata } from '@blockcode/utils';
-import { BleSerialPort } from './ble_serialport';
-import { ASerialPort } from './a_serialPort';
-import { Serial } from '@blockcode/core';
+import { BleSerialPort } from '@blockcode/board';
+import { ASerialPort } from '@blockcode/board';
 
 class ArudinoBleEmulator {
   constructor() {
