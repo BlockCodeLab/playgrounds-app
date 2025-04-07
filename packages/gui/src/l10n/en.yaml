@@ -8,9 +8,10 @@ gui.alert.connectionCancel: Connection cancel.
 gui.alert.connectionError: Connection error, or connection was lost.
 
 gui.home.my: My projects
-gui.home.all: View all ({counts})
+gui.home.all: View all
+gui.home.allCounts: View all ({counts})
 gui.home.new: Create new project
-gui.home.examples: Wonderful projects
+gui.home.examples: Wonderful {label} projects
 
 gui.home.slideshow.desktop.title: The desktop application is here!
 gui.home.slideshow.desktop.button: Download

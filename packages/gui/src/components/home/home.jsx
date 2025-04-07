@@ -1,6 +1,14 @@
 import { useEffect, useCallback } from 'preact/hooks';
 import { batch, useSignal, useSignalEffect } from '@preact/signals';
-import { classNames, getProjectsThumbs, getProject, cloneProject, renameProject, delProject } from '@blockcode/utils';
+import {
+  classNames,
+  getProjectsThumbs,
+  getProject,
+  cloneProject,
+  renameProject,
+  delProject,
+  openProjectFromURL,
+} from '@blockcode/utils';
 import {
   useLocalesContext,
   maybeTranslate,
@@ -34,7 +42,7 @@ export function Home({ onOpenEditor, onOpenProject }) {
   const editors = useSignal(null);
 
   // 精彩案例
-  const examples = useSignal(null);
+  const exampleHub = useSignal(null);
 
   const getUserProjects = useCallback(async () => {
     const result = await getProjectsThumbs();
@@ -205,10 +213,7 @@ export function Home({ onOpenEditor, onOpenProject }) {
     });
     editors.value = result.sort((a, b) => a.sortIndex - b.sortIndex);
 
-    // 案例根据可用的编辑器进行过滤
-    examples.value = getExamples(language.value).filter((exam) => {
-      return result.some((editor) => editor.id === exam.editor);
-    });
+    exampleHub.value = await getExamples(result);
   });
 
   return (
@@ -233,7 +238,7 @@ export function Home({ onOpenEditor, onOpenProject }) {
                 onClick={openUserStorage}
               >
                 <Text
-                  id="gui.home.all"
+                  id="gui.home.allCounts"
                   defaultMessage="View all ({counts})"
                   counts={projectsCount.value}
                 />
@@ -275,72 +280,60 @@ export function Home({ onOpenEditor, onOpenProject }) {
         </>
       )}
 
-      {examples.value?.length > 0 && (
-        <>
-          <div className={styles.libraryLabel}>
-            <span>
-              <Text
-                id="gui.home.examples"
-                defaultMessage="Wonderful examples"
-              />
-            </span>
-          </div>
-          {examples.value.length > DISPLAY_EXAMPLES_COUNTS && (
-            <span
-              className={classNames(styles.viewAll, styles.link)}
-              // onClick={openExamplesLibrary}
-            >
-              <Text
-                id="gui.home.all"
-                defaultMessage="View all ({counts})"
-                counts={examples.value.length}
-              />
-            </span>
-          )}
-          <div className={styles.libraryGrid}>
-            {examples.value.map((item, index) => (
-              <LibraryItem
-                large
-                id={index}
-                name={item.name}
-                author={item.author}
-                copyright={item.copyright}
-                image={item.thumb}
-                onSelect={async () => {
-                  setAlert('importing', { id: item.name });
-                  const example = await fetch(item.uri).then((res) => res.json());
-                  delAlert(item.name);
+      {exampleHub.value?.map(
+        (hub) =>
+          hub.examples.length > 0 && (
+            <>
+              <div className={styles.libraryLabel}>
+                <span>
+                  <Text
+                    id="gui.home.examples"
+                    defaultMessage="Wonderful {label} examples"
+                    label={maybeTranslate(hub.name)}
+                  />
+                </span>
+              </div>
+              {hub.examples.length > DISPLAY_EXAMPLES_COUNTS && (
+                <span
+                  className={classNames(styles.viewAll, styles.link)}
+                  // onClick={openExamplesLibrary}
+                >
+                  <Text
+                    id="gui.home.all"
+                    defaultMessage="View all"
+                  />
+                </span>
+              )}
+              <div className={styles.libraryGrid}>
+                {hub.examples.map((item, index) => (
+                  <LibraryItem
+                    large
+                    id={index}
+                    name={item.name}
+                    author={item.author}
+                    copyright={item.copyright}
+                    image={item.thumb}
+                    onSelect={async () => {
+                      setAlert('importing', { id: item.name });
+                      const example = await openProjectFromURL(item.file);
+                      delAlert(item.name);
 
-                  onOpenProject(example);
-
-                  if (item.alert) {
-                    setTimeout(() => {
-                      openPromptModal({
-                        title: example.name,
-                        label: maybeTranslate(item.alert),
-                      });
-                    }, 500);
-                  }
-                }}
-              />
-            ))}
-          </div>
-        </>
+                      onOpenProject(example);
+                    }}
+                  />
+                ))}
+              </div>
+            </>
+          ),
       )}
 
       <div className={styles.footer}>
-        <span
+        {/* <span
           className={classNames(styles.footerItem, styles.link)}
           onClick={() => window.open('https://lab.blockcode.fun/', '_blank')}
         >
           BlockCode Lab
-        </span>
-        <span
-          className={classNames(styles.footerItem, styles.link)}
-          onClick={() => window.open('https://github.com/BlockCodeLab/playgrounds-app', '_blank')}
-        >
-          GitHub
-        </span>
+        </span> */}
         <span
           className={classNames(styles.footerItem, styles.link)}
           onClick={() => {
@@ -388,6 +381,12 @@ export function Home({ onOpenEditor, onOpenProject }) {
             id="gui.privacy.title"
             defaultMessage="Privacy"
           />
+        </span>
+        <span
+          className={classNames(styles.footerItem, styles.link)}
+          onClick={() => window.open('https://github.com/BlockCodeLab/playgrounds-app', '_blank')}
+        >
+          GitHub
         </span>
         <span
           className={classNames(styles.footerItem, styles.link)}

@@ -8,9 +8,10 @@ gui.alert.connectionCancel: 连接取消。
 gui.alert.connectionError: 连接发生错误，或已断开。
 
 gui.home.my: 我的作品
-gui.home.all: 查看全部（{counts}）
+gui.home.all: 查看全部
+gui.home.allCounts: 查看全部（{counts}）
 gui.home.new: 开始新作品
-gui.home.examples: 精彩作品
+gui.home.examples: "{label} 精彩作品"
 
 gui.home.slideshow.desktop.title: 桌面端程序已就绪，快来下载！
 gui.home.slideshow.desktop.button: 立即下载

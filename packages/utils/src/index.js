@@ -34,7 +34,7 @@ export { MathUtils } from './lib/math-utils';
 
 export { nanoid, nanoidLooks } from './lib/nanoid';
 
-export { openProjectFromComputer, saveProjectToComputer } from './lib/project-file';
+export { saveProjectToComputer, openProjectFromComputer, openProjectFromURL } from './lib/project-file';
 
 export { getBinaryCache, setBinaryCache } from './lib/binary-cache';
 

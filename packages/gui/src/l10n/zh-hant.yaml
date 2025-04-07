@@ -7,10 +7,11 @@ gui.alert.downloadCompleted: 下載完成。
 gui.alert.connectionCancel: 連接取消。
 gui.alert.connectionError: 連接發生錯誤，或已斷開。
 
-gui.home.my: 我的作品
-gui.home.all: 查看全部（{counts}）
-gui.home.new: 開始新作品
-gui.home.examples: 精彩作品
+gui.home.my: 我的專案
+gui.home.all: 查看全部
+gui.home.allCounts: 查看全部（{counts}）
+gui.home.new: 開始新專案
+gui.home.examples: "{label} 精彩專案"
 
 gui.home.slideshow.desktop.title: 桌面端程序已就緒，快來下載！
 gui.home.slideshow.desktop.button: 立即下載
@@ -19,20 +20,20 @@ gui.home.slideshow.tankwar.button: 加入戰鬥
 gui.home.slideshow.arcade.title: 玩的下一個游戲，一定是自己創作！
 gui.home.slideshow.arcade.button: 開始創作
 
-gui.splash.loading: 加載作品…
+gui.splash.loading: 加載專案…
 gui.splash.errorTitle: 發生錯誤
 gui.splash.errorLabel: 請刷新頁面重新打開。
 
 gui.menubar.courses: 課程
 gui.menubar.tutorials: 教程
-gui.menubar.titlePlaceholder: 在此填寫作品標題
+gui.menubar.titlePlaceholder: 在此填寫專案標題
 gui.menubar.modified: 保存到本地
-gui.menubar.saving: 正在保存作品…
+gui.menubar.saving: 正在保存專案…
 gui.menubar.saved: 已保存到本地。
 gui.menubar.savedComputer: 已保存到電腦。
 
 gui.menubar.file: 文檔
-gui.menubar.file.newProject: 新作品
+gui.menubar.file.newProject: 新專案
 gui.menubar.file.openProject: 打開
 gui.menubar.file.saveProject: 保存
 gui.menubar.file.uploadProject: 從電腦中打開
@@ -47,23 +48,23 @@ gui.menubar.device.connect: 連接
 gui.menubar.device.disconnect: 斷開連接
 gui.menubar.device.download: 下載程序
 
-gui.project.name: 未命名作品
+gui.project.name: 未命名專案
 gui.project.shortname: 未命名
 
 gui.library.search: 搜索
 
-gui.library.projects.empty: 沒有作品！
+gui.library.projects.empty: 沒有專案！
 gui.library.projects.rename: 重命名
 gui.library.projects.duplicate: 複製
 gui.library.projects.delete: 刪除
-gui.library.projects.deleteConfirm: 要刪除“《{name}》”作品嗎？
-gui.library.projects.notSaved: 未保存作品
-gui.library.projects.closeProject: 要關閉當前作品嗎？
-gui.library.projects.replace: 要創建新作品替換當前作品嗎？
-gui.library.projects.errorEditor: 這個作品不是當前編輯器創作，請切換至“{editor}”編輯器然後打開。
+gui.library.projects.deleteConfirm: 要刪除“《{name}》”專案嗎？
+gui.library.projects.notSaved: 未保存專案
+gui.library.projects.closeProject: 要關閉當前專案嗎？
+gui.library.projects.replace: 要創建新專案替換當前專案嗎？
+gui.library.projects.errorEditor: 這個專案不是當前編輯器創作，請切換至“{editor}”編輯器然後打開。
 gui.library.projects.notFoundEditor: 沒有發現「{editor}」編輯器。
 
-gui.library.examples.interconnect: 該作品需要兩枱設備聯機纔能正常運行。
+gui.library.examples.interconnect: 該專案需要兩枱設備聯機纔能正常運行。
 
 gui.library.tutorials.course: 選擇一個課程
 gui.library.tutorials.tutorial: 選擇一個教程
