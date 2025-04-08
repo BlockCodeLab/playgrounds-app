@@ -37,6 +37,7 @@ export {
   ProjectProvider,
   useProjectContext,
   ModifyTypes,
+  setMeta,
   setModified,
   isModifyType,
   renameProject,

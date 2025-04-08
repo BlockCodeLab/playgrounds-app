@@ -12,6 +12,13 @@ import { uniqueName } from '../lib/unique-name';
 //
 const meta = signal(null);
 
+export function setMeta(key, value) {
+  if (typeof key === 'string') {
+    key = { [key]: value };
+  }
+  meta.value = Object.assign({}, meta.value ?? {}, key);
+}
+
 // 项目唯一ID和本地Key
 //
 const id = signal(null); // 服务器储存唯一标识
@@ -34,18 +41,18 @@ export const ModifyTypes = {
 };
 
 // 根据修改类型设置
-export const setModified = (type = ModifyTypes.Saved) => {
+export function setModified(type = ModifyTypes.Saved) {
   if (type === ModifyTypes.Saved) {
     modified.value = ModifyTypes.Saved;
   } else {
     modified.value = (Math.floor(modified.value / 10) + 1) * 10 + type;
   }
-};
+}
 
 // 检查修改类型
-export const isModifyType = (type = ModifyTypes.Saved) => {
+export function isModifyType(type = ModifyTypes.Saved) {
   return modified.value % 10 === type;
-};
+}
 
 // 项目可见名称
 //
