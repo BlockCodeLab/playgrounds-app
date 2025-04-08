@@ -28,8 +28,8 @@ export class BleSerialPort extends EventEmitter {
     this._ble.requestPort();
   }
 
-  disConnect() {
-    this._ble.disConnect();
+  disconnect() {
+    this._ble.disconnect();
   }
 
   async write(data, callback) {
