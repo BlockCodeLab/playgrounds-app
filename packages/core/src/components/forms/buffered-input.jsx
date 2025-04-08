@@ -28,7 +28,6 @@ export function BufferedInput({ value, type, forceFocus, onSubmit, ...props }) {
   const handleKeyPress = useCallback(
     (e) => {
       if (e.key === 'Enter') {
-        handleFlush(e);
         e.target.blur();
       }
     },

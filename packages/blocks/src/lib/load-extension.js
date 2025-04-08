@@ -35,7 +35,7 @@ const FieldNames = {
 export function loadExtension(extObj, options) {
   const extId = extObj.id;
   const extName = maybeTranslate(extObj.name);
-  const { generator, emulator, onBlockFilter } = options;
+  const { generator, emulator } = options;
 
   // 扩展模拟器
   if (emulator && extObj.emulator && Runtime.currentRuntime) {
@@ -84,22 +84,21 @@ export function loadExtension(extObj, options) {
 
   categoryXML += extObj.blocks
     .filter((block, index) => {
+      // 不显示排在最后的空白分割线
       if (block === '---') {
         return index < extObj.blocks.length - 1;
       }
-      return !block.hidden;
+      // block.hidden 不用于过滤，只用于是否需要显示在积木栏
+      return true;
     })
     .reduce((blocksXML, block) => {
+      // 空白分割线
       if (block === '---') {
         if (!blocksXML.length) return blocksXML;
         return blocksXML + blockSeparator;
       }
 
-      // 运行积木过滤器
-      const needShow = onBlockFilter ? onBlockFilter(block) : true;
-
-      // 仅显示不需要构建积木
-      if (needShow) {
+      if (!block.hidden) {
         // 文本标签
         if (block.label) {
           return blocksXML + `<label text="${block.label}"/>`;
@@ -355,7 +354,7 @@ export function loadExtension(extObj, options) {
       }
 
       // 将需要显示的积木添加到工具栏
-      if (needShow) {
+      if (!block.hidden) {
         blocksXML += blockXML;
       }
       return blocksXML;

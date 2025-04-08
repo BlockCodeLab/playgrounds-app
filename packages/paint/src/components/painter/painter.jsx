@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo } from 'preact/hooks';
 import { batch, useComputed, useSignal } from '@preact/signals';
 import { classNames, Color, MathUtils } from '@blockcode/utils';
 import { useProjectContext, translate, maybeTranslate, setAsset } from '@blockcode/core';
+import { loadImageFromURL } from '../../lib/load-image';
 import { EditorModes } from '../../lib/editor-mode';
 
 import { Text, Label, BufferedInput, Button } from '@blockcode/core';
@@ -36,11 +37,11 @@ const ZOOM_MAX = 20;
 const getImageName = (mode) => {
   switch (mode) {
     case EditorModes.Image:
-      return translate('paint.painter.image', 'Image').toLowerCase();
+      return translate('paint.painter.image', 'Image');
     case EditorModes.Costume:
-      return translate('paint.painter.costume', 'Costume').toLowerCase();
+      return translate('paint.painter.costume', 'Costume');
     case EditorModes.Backdrop:
-      return translate('paint.painter.backdrop', 'Backdrop').toLowerCase();
+      return translate('paint.painter.backdrop', 'Backdrop');
   }
 };
 
@@ -185,6 +186,24 @@ export default function Painter({ mode, maxSize }) {
     });
   }, []);
 
+  // 修改大小
+  const handleResize = useCallback(async (size) => {
+    if (asset.value) {
+      const scale = size / 100;
+      const dataUrl = `data:${asset.value.type};base64,${asset.value.data}`;
+      const image = await loadImageFromURL(dataUrl, scale);
+
+      const newAsset = {
+        data: image.dataset.data,
+        width: image.width,
+        height: image.height,
+        centerX: Math.round(asset.value.centerX * scale),
+        centerY: Math.round(asset.value.centerY * scale),
+      };
+      handleChange(newAsset);
+    }
+  }, []);
+
   return (
     <div className={styles.painterWrapper}>
       <div className={styles.row}>
@@ -267,6 +286,19 @@ export default function Painter({ mode, maxSize }) {
               defaultMessage="Auto Crop"
             />
           </Button>
+        </div>
+
+        <div className={styles.toolGroup}>
+          <Label text={translate('paint.painter.resize', 'Resize')}>
+            <BufferedInput
+              small
+              type="number"
+              disabled={disabled}
+              className={styles.largeInput}
+              onSubmit={handleResize}
+              value={100}
+            />
+          </Label>
         </div>
       </div>
 

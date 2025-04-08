@@ -37,6 +37,7 @@ paint.painter.flipVertical: Flip Vertical
 paint.painter.copy: Copy
 paint.painter.paste: Paste
 paint.painter.crop: Auto Crop
+paint.painter.resize: Resize
 
 paint.colorPicker.color: Color
 paint.colorPicker.saturation: Saturation

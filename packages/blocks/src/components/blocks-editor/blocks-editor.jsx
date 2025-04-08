@@ -134,7 +134,6 @@ export function BlocksEditor({
   variableTypes,
   onBuildinExtensions,
   onExtensionsFilter,
-  onExtensionBlockFilter,
   onExtensionLoad,
   onDefinitions,
   onLoading,
@@ -163,17 +162,8 @@ export function BlocksEditor({
       enableStringBlocks,
       enableMonitor,
       disableSensingBlocks,
-      onBlockFilter: onExtensionBlockFilter,
     }),
-    [
-      generator,
-      emulator,
-      enableCloneBlocks,
-      enableStringBlocks,
-      enableMonitor,
-      disableSensingBlocks,
-      onExtensionBlockFilter,
-    ],
+    [generator, emulator, enableCloneBlocks, enableStringBlocks, enableMonitor, disableSensingBlocks],
   );
 
   // 变量设置确认
