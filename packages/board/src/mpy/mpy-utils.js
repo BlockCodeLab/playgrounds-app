@@ -1,4 +1,4 @@
-import { MPYBoard } from './mpyboard';
+import { MPYBoard } from './mpy-board';
 import { getImageBase64 } from '../lib/image-base64';
 
 export class MPYUtils {
