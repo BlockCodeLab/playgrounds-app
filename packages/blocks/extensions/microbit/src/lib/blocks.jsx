@@ -50,7 +50,7 @@ export const blocks = [
     ),
     inputs: {
       MATRIX: {
-        type: 'matrix',
+        shadowType: 'matrix',
       },
     },
   },

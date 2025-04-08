@@ -12,7 +12,6 @@ const ShadowTypes = {
   broadcast: 'event_broadcast_menu',
   number: 'math_number',
   integer: 'math_integer',
-  index: 'math_whole_number',
   angle: 'math_angle',
   text: 'text',
   string: 'text',
@@ -139,12 +138,7 @@ export function loadExtension(extObj, options) {
         };
 
         let argsIndexStart = 1;
-        if (block.inline) {
-          blockJson.colour = ScratchBlocks.Colours.textField;
-          blockJson.colourSecondary = ScratchBlocks.Colours.textField;
-          blockJson.colourTertiary = ScratchBlocks.Colours.textField;
-          blockJson.colourQuaternary = ScratchBlocks.Colours.textField;
-        } else if (extObj.icon) {
+        if (!block.inline && extObj.icon) {
           blockJson.message0 = `%1 %2 ${blockJson.message0}`;
           blockJson.args0 = [
             {
@@ -237,6 +231,16 @@ export function loadExtension(extObj, options) {
                   argObject.min = arg.min ?? 0;
                   argObject.max = arg.max ?? 100;
                   argObject.precision = arg.step ?? 1;
+                  blockJson.colour = ScratchBlocks.Colours.textField;
+                  blockJson.colourSecondary = ScratchBlocks.Colours.textField;
+                  blockJson.colourTertiary = ScratchBlocks.Colours.textField;
+                  blockJson.colourQuaternary = ScratchBlocks.Colours.textField;
+                  break;
+
+                case 'matrix':
+                  argObject.type = 'field_matrix';
+                  argObject.width = arg.width ?? 5;
+                  argObject.height = arg.height ?? 5;
                   break;
 
                 default:

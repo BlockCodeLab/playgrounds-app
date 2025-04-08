@@ -254,3 +254,4 @@ class FieldMatrix extends BaseFieldMatrix {
 }
 
 ScratchBlocks.FieldMatrix = FieldMatrix;
+ScratchBlocks.Field.register('field_matrix', ScratchBlocks.FieldMatrix);
