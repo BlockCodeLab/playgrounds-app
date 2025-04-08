@@ -29,7 +29,7 @@ export function FileMenu({ onNew, onOpen, onSave, onThumb, ExtendedMenu }) {
   const { meta, key, name, files, assets } = useProjectContext();
 
   const getProjectData = useCallback(async () => {
-    const data = await onSave(files.value, assets.value);
+    const data = await onSave(files.value, assets.value, meta.value);
     data.meta = Object.assign(data.meta ?? {}, {
       editor: meta.value.editor,
       version: meta.value.version,
