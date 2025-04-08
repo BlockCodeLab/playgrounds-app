@@ -47,8 +47,6 @@ gui.menubar.device: 设备
 gui.menubar.device.connect: 连接
 gui.menubar.device.disconnect: 断开连接
 gui.menubar.device.download: 下载程序
-gui.menubar.device.ble_download: 下载程序(蓝牙)
-gui.menubar.device.usb_download: 下载程序(串口)
 
 gui.project.name: 未命名作品
 gui.project.shortname: 未命名

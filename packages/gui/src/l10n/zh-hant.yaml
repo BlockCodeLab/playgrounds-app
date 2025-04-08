@@ -47,8 +47,6 @@ gui.menubar.device: 設備
 gui.menubar.device.connect: 連接
 gui.menubar.device.disconnect: 斷開連接
 gui.menubar.device.download: 下載程序
-gui.menubar.device.ble_download: 下载程序(蓝牙)
-gui.menubar.device.usb_download: 下载程序(串口)
 
 gui.project.name: 未命名專案
 gui.project.shortname: 未命名
@@ -59,9 +57,9 @@ gui.library.projects.empty: 沒有專案！
 gui.library.projects.rename: 重命名
 gui.library.projects.duplicate: 複製
 gui.library.projects.delete: 刪除
-gui.library.projects.deleteConfirm: 要刪除“《{name}》”專案嗎？
 gui.library.projects.notSaved: 未保存專案
-gui.library.projects.closeProject: 要關閉當前專案嗎？
+gui.library.projects.close: 要關閉當前專案嗎？
+gui.library.projects.deleteConfirm: 要刪除“《{name}》”專案嗎？
 gui.library.projects.replace: 要創建新專案替換當前專案嗎？
 gui.library.projects.errorEditor: 這個專案不是當前編輯器創作，請切換至“{editor}”編輯器然後打開。
 gui.library.projects.notFoundEditor: 沒有發現「{editor}」編輯器。

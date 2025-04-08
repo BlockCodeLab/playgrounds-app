@@ -6,6 +6,7 @@ import {
   useLocalesContext,
   useProjectContext,
   translate,
+  maybeTranslate,
   showSplash,
   hideSplash,
   openPromptModal,
@@ -191,7 +192,7 @@ export function Layout() {
           <Text
             id="gui.library.projects.errorEditor"
             defaultMessage='This project is not currently editor creation, please switch to "{editor}" and open it.'
-            editor={editorsInfos.value[projData.meta.editor]?.name}
+            editor={maybeTranslate(editorsInfos.value[projData.meta.editor]?.name)}
           />
         ),
         redStyle: true,
