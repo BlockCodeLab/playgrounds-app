@@ -326,6 +326,7 @@ export function Layout() {
                   <TabLabel
                     key={index}
                     name={index}
+                    disabled={tab.disabled}
                     checked={index === app.tabIndex.value}
                     onSelect={() => openTab(index)}
                   >
@@ -337,7 +338,7 @@ export function Layout() {
                     name={index}
                     className={tabPanelClass}
                   >
-                    {(index === 0 || app.tabIndex.value === index) && <TabContent />}
+                    {(index === 0 || app.tabIndex.value === index) && TabContent && <TabContent />}
                   </TabPanel>
                 </>
               ))}

@@ -26,6 +26,12 @@
   white-space: nowrap;
 }
 
+.tab-label.disabled {
+  filter: opacity(0.5);
+  cursor: default;
+  pointer-events: none;
+}
+
 .tab-label:nth-of-type(n + 2) {
   margin-left: calc(-1 * var(--space));
 }
@@ -34,7 +40,7 @@
   margin-right: var(--space);
 }
 
-.tab-label:hover {
+.tab-label:not(.disabled):hover {
   cursor: pointer;
   background: var(--ui-primary);
 }
@@ -48,7 +54,7 @@
   display: none;
 }
 
-.tab:checked + .tab-label {
+.tab:checked+.tab-label {
   --scale: var(--space) / 2;
 
   line-height: calc(var(--line-height) + var(--scale));
@@ -57,7 +63,7 @@
   background: var(--ui-white);
 }
 
-.tab:checked + .tab-label img {
+.tab:checked+.tab-label img {
   filter: none;
 }
 
