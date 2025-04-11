@@ -16,8 +16,6 @@ export { default as UPNG } from 'upng-js';
 
 export { saveSvg, saveSvgAsPng, svgAsDataUri } from 'save-svg-as-png';
 
-export { Firmata } from './lib/firmata-io/firmata';
-
 export { Base64Utils } from './lib/base64-utils';
 
 export { Color } from './lib/color';
