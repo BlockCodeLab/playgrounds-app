@@ -26,8 +26,7 @@ export class ArduinoUtils {
       board = ArduinoBLEBoard.fromGATTServer(device);
     }
     if (!board) {
-      Promise.reject(new Error('Invalid device'));
-      return;
+      throw new Error('Invalid device');
     }
 
     await board.connect();

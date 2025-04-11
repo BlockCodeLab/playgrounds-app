@@ -180,7 +180,6 @@ export class MPYBoard {
       await this.exitRawRepl();
       return out;
     }
-    return Promise.reject();
   }
 
   async run(code, dataConsumer) {
@@ -286,7 +285,7 @@ export class MPYBoard {
       await this.exitRawRepl();
       return output;
     }
-    return Promise.reject(new Error(`Path to file was not specified`));
+    throw new Error(`Path to file was not specified`);
   }
 
   async rmdir(filePath) {
@@ -302,7 +301,7 @@ export class MPYBoard {
       await this.exitRawRepl();
       return output;
     }
-    return Promise.reject(new Error(`Path to file was not specified`));
+    throw new Error(`Path to file was not specified`);
   }
 
   async remove(filePath) {
@@ -318,7 +317,7 @@ export class MPYBoard {
       this.exitRawRepl();
       return output;
     }
-    return Promise.reject(new Error(`Path to file was not specified`));
+    throw new Error(`Path to file was not specified`);
   }
 
   async rename(oldFilePath, newFilePath) {
@@ -328,7 +327,7 @@ export class MPYBoard {
       this.exitRawRepl();
       return output;
     }
-    return Promise.reject(new Error(`Path to file was not specified`));
+    throw new Error(`Path to file was not specified`);
   }
 
   async cat(filePath) {
@@ -341,7 +340,7 @@ export class MPYBoard {
       output = extract(output);
       return fixLineBreak(output);
     }
-    return Promise.reject(new Error(`Path to file was not specified`));
+    throw new Error(`Path to file was not specified`);
   }
 
   async hash(filePath) {
@@ -363,13 +362,12 @@ export class MPYBoard {
       output = output.slice(2, output.indexOf('\n') - 1);
       return output;
     }
-    return Promise.reject(new Error(`Path to file was not specified`));
+    throw new Error(`Path to file was not specified`);
   }
 
   async put(content, dest, progress = function () {}) {
     if (!dest) {
-      Promise.reject(new Error(`Must specify content and destination path`));
-      return;
+      throw new Error(`Must specify content and destination path`);
     }
 
     let contentUint8;
@@ -380,7 +378,7 @@ export class MPYBoard {
     } else if (content instanceof Uint8Array) {
       contentUint8 = content;
     } else {
-      Promise.reject(new Error(`${content} must string, Uint8Array or ArrayBuffer`));
+      throw new Error(`${content} must string, Uint8Array or ArrayBuffer`);
     }
 
     // skip same file

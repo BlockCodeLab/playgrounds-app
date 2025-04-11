@@ -155,7 +155,7 @@ export class ArduinoBoard {
     const okResp = new Uint8Array(OK_RESPONSE);
     const out = await this.writeAndReadUntil(syncReq, okResp);
     if (!out) {
-      Promise.reject(new Error('stk500 sync error'));
+      throw new Error('stk500 sync error');
     }
     return out;
   }
@@ -165,7 +165,7 @@ export class ArduinoBoard {
     const okResp = new Uint8Array(OK_RESPONSE);
     const out = await this.writeAndReadUntil(enterProgModeReq, okResp);
     if (!out) {
-      Promise.reject(new Error('stk500 enter progmode error'));
+      throw new Error('stk500 enter progmode error');
     }
     return out;
   }
@@ -175,7 +175,7 @@ export class ArduinoBoard {
     const okResp = new Uint8Array(OK_RESPONSE);
     const out = await this.writeAndReadUntil(leaveProgModeReq, okResp);
     if (!out) {
-      Promise.reject(new Error('stk500 leave progmode error'));
+      throw new Error('stk500 leave progmode error');
     }
     return out;
   }
@@ -185,7 +185,7 @@ export class ArduinoBoard {
     const universalResp = new Uint8Array([Resp_STK_INSYNC, 0, Resp_STK_OK]);
     const out = await this.writeAndReadUntil(universalReq, universalResp);
     if (!out) {
-      Promise.reject(new Error('stk500 universal error'));
+      throw new Error('stk500 universal error');
     }
     return out;
   }
@@ -197,7 +197,7 @@ export class ArduinoBoard {
     const okResp = new Uint8Array(OK_RESPONSE);
     const out = await this.writeAndReadUntil(cmd, okResp);
     if (!out) {
-      Promise.reject(new Error('stk500 load address error'));
+      throw new Error('stk500 load address error');
     }
     return out;
   }
@@ -213,7 +213,7 @@ export class ArduinoBoard {
     const okResp = new Uint8Array(OK_RESPONSE);
     const out = await this.writeAndReadUntil(cmd, okResp);
     if (!out) {
-      Promise.reject(new Error('stk500 load page error'));
+      throw new Error('stk500 load page error');
     }
     return out;
   }
@@ -315,7 +315,7 @@ export class ArduinoBLEBoard extends ArduinoBoard {
     const okResp = new Uint8Array(OK_RESPONSE);
     const out = await this.writeAndReadUntil(cmd2, okResp);
     if (!out) {
-      Promise.reject(new Error('stk500 load page error'));
+      throw new Error('stk500 load page error');
     }
   }
 
