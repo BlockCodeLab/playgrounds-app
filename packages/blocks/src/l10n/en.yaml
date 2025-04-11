@@ -61,8 +61,8 @@ blocks.monitor.trueValue: "true"
 blocks.monitor.falseValue: "false"
 blocks.monitor.listLength: "{length} items"
 
-blocks.extensionStatusMenu.bluetooth: Bluetooth (BLE)
-blocks.extensionStatusMenu.serial: Serial Port
+blocks.extensionStatusMenu.bluetooth: Connect via Bluetooth
+blocks.extensionStatusMenu.serial: Connect via USB
 
 blocks.centextMenu.exportPng: Export Block to PNG
 blocks.centextMenu.exportBlocksPng: Export Blocks to PNG

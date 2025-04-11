@@ -61,8 +61,8 @@ blocks.monitor.trueValue: 真
 blocks.monitor.falseValue: 假
 blocks.monitor.listLength: "{length} 項"
 
-blocks.extensionStatusMenu.bluetooth: 藍牙（BLE）
-blocks.extensionStatusMenu.serial: 串口
+blocks.extensionStatusMenu.bluetooth: 藍牙連接
+blocks.extensionStatusMenu.serial: USB 連接
 
 blocks.centextMenu.exportPng: 匯出積木到 PNG
 blocks.centextMenu.exportBlocksPng: 匯出積木到 PNG

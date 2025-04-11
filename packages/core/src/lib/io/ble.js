@@ -5,18 +5,19 @@ export class BLE extends EventEmitter {
   constructor(server) {
     super();
     this._server = server;
-  }
-
-  get device() {
-    return this.server.device;
+    this.device._ble = this;
   }
 
   get server() {
     return this._server;
   }
 
+  get device() {
+    return this.server.device;
+  }
+
   dispose() {
-    this.disconnect();
+    this.close();
     this._server = null;
   }
 
@@ -27,22 +28,30 @@ export class BLE extends EventEmitter {
     };
   }
 
-  connect() {
-    this.server.connect().then(() => {
-      this.device.addEventListener('gattserverdisconnected', () => {
-        this.emit('disconnect');
-        this.disconnect();
-      });
-      this.emit('connect');
+  open() {
+    return new Promise((resolve) => {
+      this.server
+        .connect()
+        .then(() => {
+          this.device.addEventListener('gattserverdisconnected', () => {
+            this.emit('disconnect');
+            this.close();
+          });
+          this.emit('connect');
+          resolve();
+        })
+        .catch((err) => {
+          this.handleDisconnectError(err);
+        });
     });
   }
 
-  disconnect() {
+  close() {
     this.server.disconnect();
   }
 
-  isConnected() {
-    return this.server?.connected;
+  get connected() {
+    return !!this.server?.connected;
   }
 
   startNotifications(serviceId, characteristicId) {
@@ -57,6 +66,9 @@ export class BLE extends EventEmitter {
           this.emit('data', buffer);
         };
         characteristic.startNotifications();
+      })
+      .catch((err) => {
+        this.emit('error', err);
       });
   }
 
@@ -80,7 +92,7 @@ export class BLE extends EventEmitter {
         message: new Uint8Array(dataView.buffer),
       }))
       .catch((err) => {
-        this.handleDisconnectError(err);
+        this.emit('error', err);
       });
   }
 
@@ -93,18 +105,18 @@ export class BLE extends EventEmitter {
         if (withResponse && characteristic.writeValueWithResponse) {
           return characteristic.writeValueWithResponse(data);
         }
-        if (characteristic.writeValueWithoutResponse) {
+        if (withResponse === false && characteristic.writeValueWithoutResponse) {
           return characteristic.writeValueWithoutResponse(data);
         }
         return characteristic.writeValue(data);
       })
-      .catch((e) => {
-        this.handleDisconnectError(err);
+      .catch((err) => {
+        this.emit('error', err);
       });
   }
 
   handleDisconnectError(err) {
-    console.error(err);
-    this.disconnect();
+    this.emit('error', err);
+    this.close();
   }
 }

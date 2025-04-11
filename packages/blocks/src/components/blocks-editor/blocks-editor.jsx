@@ -614,9 +614,9 @@ export function BlocksEditor({
           'disconnect',
           disconnect(extObj, () => connectSerial(extObj, options)),
           { once: true },
-        ),
-          // 连接
-          setAppState(deviceName, device);
+        );
+        // 连接
+        setAppState(deviceName, device);
         refreshStatus();
       };
 

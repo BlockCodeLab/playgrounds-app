@@ -9,7 +9,7 @@ addAlertConfig('importing', {
   message: (
     <Text
       id="gui.alert.importing"
-      defaultMessage="importing..."
+      defaultMessage="Importing..."
     />
   ),
 });
@@ -54,6 +54,39 @@ addAlertConfig('connectionCancel', {
     <Text
       id="gui.alert.connectionCancel"
       defaultMessage="Connection cancel."
+    />
+  ),
+});
+
+// 编译
+addAlertConfig('compiling', {
+  icon: <Spinner level="success" />,
+  message: (
+    <Text
+      id="gui.alert.compiling"
+      defaultMessage="Compiling..."
+    />
+  ),
+});
+
+// 编译成功
+addAlertConfig('compileCompleted', {
+  icon: null,
+  message: (
+    <Text
+      id="gui.alert.compileSuccess"
+      defaultMessage="Compilation completed."
+    />
+  ),
+});
+
+// 编译失败
+addAlertConfig('compileError', {
+  mode: 'warn',
+  message: (
+    <Text
+      id="gui.alert.compileError"
+      defaultMessage="Compilation error."
     />
   ),
 });

@@ -2,21 +2,11 @@ import { MPYBoard } from './mpy-board';
 import { getImageBase64 } from '../lib/image-base64';
 
 export class MPYUtils {
-  static async connect(filters, downloadMode = true) {
+  static async connect(filters, options) {
     const board = new MPYBoard();
     await board.requestPort(filters);
-    await board.connect();
-    if (downloadMode) {
-      await board.stop(true);
-      await board.enterRawRepl();
-      await board.execRaw('import download_screen\n');
-      await board.exitRawRepl();
-    }
+    await board.connect(options);
     return board;
-  }
-
-  static async disconnect(board) {
-    await board?.disconnect();
   }
 
   static check(board, timeout = 1000) {
@@ -52,6 +42,13 @@ export class MPYUtils {
         return this;
       },
     };
+  }
+
+  static async enterDownloadMode(board) {
+    await board.stop(true);
+    await board.enterRawRepl();
+    await board.execRaw('import download_screen\n');
+    await board.exitRawRepl();
   }
 
   static async config(board, settings) {
@@ -115,11 +112,11 @@ export class MPYUtils {
   static async write(board, files, progress) {
     await board.stop();
 
-    const len = files.length;
     let finished = 0;
     const reporter = (x) => {
-      progress(((finished + (1 / len) * (x / 100)) * 100).toFixed(1));
+      progress(((finished + (1 / files.length) * (x / 100)) * 100).toFixed(1));
     };
+
     for (const file of files) {
       let { id: filePath, content } = file;
       if (file.type) {
@@ -130,7 +127,7 @@ export class MPYUtils {
         }
       }
       await board.put(content || '', filePath, reporter);
-      finished += 1 / len;
+      finished += 1 / files.length;
     }
     progress(100);
   }

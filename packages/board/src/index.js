@@ -6,4 +6,6 @@ export { ESPTool } from './lib/esptool';
 
 export { Firmata } from './lib/firmata-io/firmata';
 
-export { ASerialPort } from './arduino/a_serialPort';
+export { ArduinoBoard } from './arduino/arduino-board';
+
+export { ArduinoUtils } from './arduino/arduino-utils';

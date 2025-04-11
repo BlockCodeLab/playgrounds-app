@@ -6,6 +6,9 @@ gui.alert.downloadingProgress: 正在下載…{progress}%
 gui.alert.downloadCompleted: 下載完成。
 gui.alert.connectionCancel: 連接取消。
 gui.alert.connectionError: 連接發生錯誤，或已斷開。
+gui.alert.compiling: 正在編譯…
+gui.alert.compileSuccess: 編譯完成。
+gui.alert.compileError: 編譯錯誤。
 
 gui.home.my: 我的專案
 gui.home.all: 查看全部

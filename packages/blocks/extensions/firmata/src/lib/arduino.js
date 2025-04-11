@@ -1,12 +1,7 @@
-import { setAlert, Text } from '@blockcode/core';
-import { Firmata } from '@blockcode/utils';
-import { BleSerialPort } from '@blockcode/board';
-import { ASerialPort } from '@blockcode/board';
+import { delAlert } from '@blockcode/core';
 
-class ArudinoBleEmulator {
+export class Arduino {
   constructor() {
-    this.type = 'ble';
-    this.uniSerialPort = null;
     this.board = null;
   }
 
@@ -14,73 +9,23 @@ class ArudinoBleEmulator {
     return 'firmata';
   }
 
-  async connect() {
-   
+  connect() {
+    this.board.reportVersion(() => {});
+    this.board.queryFirmware(() => {});
+
     this.board.on('ready', () => {
-      console.log('✔ ready');
+      delAlert('firmata-checking');
       this.board.queryCapabilities(() => {
-        this.board.queryAnalogMapping(() => {
-          console.log('queryAnalogMapping');
-        });
-        console.log('queryCapabilities');
+        this.board.queryAnalogMapping(() => {});
       });
     });
-    this.board.on('reportVersionTimeout', () => {
-      console.log('timeOut----');
-      this.flashAndReInit();
+
+    this.board.on('reportVersionTimeout', async () => {
+      delAlert('firmata-checking');
+      await this.board.transport.flash();
+      this.board.reportVersion(() => {});
+      this.board.queryFirmware(() => {});
     });
-  }
-
-  async flashAndReInit() {
-    await this.flash();
-    if(this.type === 'ble'){
-      this.board.reportVersion(()=> {});
-      this.board.queryCapabilities(() => {
-        this.board.queryAnalogMapping(() => {
-          console.log('queryAnalogMapping');
-        });
-        console.log('queryCapabilities');
-      });
-    }else{
-      this.board.reportVersion(()=> {});
-      this.board.queryFirmware(()=> {
-        this.board.queryCapabilities(() => {
-          this.board.queryAnalogMapping(() => {
-            console.log('queryAnalogMapping');
-          });
-          console.log('queryCapabilities');
-        });
-
-      });
-    }
-  }
-
-  async disconnect() {
-    await this.arduinoBle.disconnect();
-  }
-
-  async flash() {
-    const alertId = setAlert({
-      message: (
-        <Text
-          id="blocks.firmata.firmware"
-          defaultMessage="Updating firmware..."
-        />
-      ),
-    });
-    await this.uniSerialPort.flashHex();
-    setAlert(
-      {
-        id: alertId,
-        message: (
-          <Text
-            id="blocks.firmata.completed"
-            defaultMessage="Updating firmware completed."
-          />
-        ),
-      },
-      2000,
-    );
   }
 
   getAnalogValue(pinV) {
@@ -90,7 +35,6 @@ class ArudinoBleEmulator {
       if (pinObj.report && pinObj.report === 1) {
         return pinObj.value;
       } else {
-        console.log('-------new report analog --------');
         this.board.reportAnalogPin(pin, 1);
         return pinObj.value;
       }
@@ -104,7 +48,6 @@ class ArudinoBleEmulator {
       if (pinObj.report && pinObj.report === 1) {
         return Boolean(pinObj.value);
       } else {
-        console.log('-------new report digital --------');
         this.board.pinMode(pin, this.board.MODES.PULLUP);
         this.board.reportDigitalPin(pin, 1);
         return Boolean(pinObj.value);
@@ -137,7 +80,6 @@ class ArudinoBleEmulator {
       if (pinObj.report && pinObj.report === 1) {
         return pinObj.value;
       } else {
-        console.log('-------new report digital --------');
         this.board.reportSonarData(triggerPin, echoPin);
         return false;
       }
@@ -151,7 +93,6 @@ class ArudinoBleEmulator {
       if (pinObj.report && pinObj.report === 1) {
         return pinObj.value[1];
       } else {
-        console.log('-------new report digital --------');
         this.board.reportDHTData(pin);
         return false;
       }
@@ -165,7 +106,6 @@ class ArudinoBleEmulator {
       if (pinObj.report && pinObj.report === 1) {
         return pinObj.value[0];
       } else {
-        console.log('-------new report digital --------');
         this.board.reportDHTData(pin);
         return false;
       }
@@ -202,33 +142,4 @@ class ArudinoBleEmulator {
       }
     });
   }
-}
-
-export function emulator(runtime, Konva) {
-  const arudinoBleEmulator = new ArudinoBleEmulator();
-  runtime.on('connecting', async(server) => {
-    if(server instanceof BluetoothRemoteGATTServer){
-      arudinoBleEmulator.uniSerialPort = new BleSerialPort();
-      await arudinoBleEmulator.uniSerialPort.init(server);
-      arudinoBleEmulator.board = new Firmata(arudinoBleEmulator.uniSerialPort, { skipCapabilities: true });
-      arudinoBleEmulator.connect();
-    }else if(server instanceof SerialPort){
-      arudinoBleEmulator.type = 'serial';
-      arudinoBleEmulator.uniSerialPort = new ASerialPort(server);
-      await arudinoBleEmulator.uniSerialPort.open({baudRate: 57600})
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      arudinoBleEmulator.board = new Firmata(arudinoBleEmulator.uniSerialPort, { skipCapabilities: true });
-      arudinoBleEmulator.connect();
-    }
-  });
-
-  runtime.on('disconnect', () => {
-    arudinoBleEmulator.disconnect();
-  });
-  runtime.on('stop', () => {
-    console.log('stop');
-    arudinoBleEmulator.reset();
-  });
-
-  return arudinoBleEmulator;
 }

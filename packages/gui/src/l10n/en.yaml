@@ -1,11 +1,14 @@
 gui.name: BlockCode Playgrounds
 
-gui.alert.importing: importing...
+gui.alert.importing: Importing...
 gui.alert.downloading: Downloading...
 gui.alert.downloadingProgress: Downloading...{progress}%
 gui.alert.downloadCompleted: Download completed.
 gui.alert.connectionCancel: Connection cancel.
 gui.alert.connectionError: Connection error, or connection was lost.
+gui.alert.compiling: Compiling...
+gui.alert.compileSuccess: Compilation completed.
+gui.alert.compileError: Compilation error.
 
 gui.home.my: My projects
 gui.home.all: View all

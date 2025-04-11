@@ -14,6 +14,9 @@ const FILE_CHUNK_SIZE = 80;
 // const BAUD_RATE = 115200;
 const BAUD_RATE = 460800;
 
+const encoder = new TextEncoder();
+const decoder = new TextDecoder();
+
 function fixLineBreak(str) {
   // https://stackoverflow.com/questions/4025760/python-file-write-creating-extra-carriage-return
   return str.replaceAll('\r\n', '\n');
@@ -28,24 +31,43 @@ function extract(str) {
 }
 
 export class MPYBoard {
+  static fromPort(port) {
+    const board = new MPYBoard();
+    board._setSerial(port);
+    return board;
+  }
+
   constructor() {
-    this.serial = null;
+    this._serial = null;
+    this._timeout = 5000;
     this._connected = false;
-    this._encoder = new TextEncoder();
-    this._decoder = new TextDecoder();
+  }
+
+  get timeout() {
+    return this._timeout;
+  }
+
+  set timeout(timeout) {
+    this._timeout = timeout;
+  }
+
+  get serial() {
+    return this._serial;
+  }
+
+  _setSerial(port) {
+    if (port._serial) {
+      this._serial = port._serial;
+    } else {
+      this._serial = new Serial(port);
+    }
+    this.serial.on('connect', () => (this._connected = true));
+    this.serial.on('disconnect', () => (this._connected = false));
   }
 
   requestPort(filters = []) {
     return navigator.serial.requestPort({ filters }).then((port) => {
-      if (port._serial) {
-        this.serial = port._serial;
-        this.serial.on('connect', () => (this._connected = true));
-        this.serial.on('disconnect', () => (this._connected = false));
-        return;
-      }
-      this.serial = new Serial(port);
-      this.serial.on('connect', () => (this._connected = true));
-      this.serial.on('disconnect', () => (this._connected = false));
+      this._setSerial(port);
     });
   }
 
@@ -57,7 +79,7 @@ export class MPYBoard {
             baudRate: BAUD_RATE,
             ...options,
           })
-          .then(() => resolve())
+          .then(resolve)
           .catch((err) => {
             if (err.name === 'InvalidStateError') {
               this._connected = true;
@@ -83,29 +105,38 @@ export class MPYBoard {
     return this.serial.getInfo();
   }
 
+  setSignals(options) {
+    this.serial.setSignals({ dataTerminalReady: true, requestToSend: true });
+  }
+
   readUntil(ending, dataConsumer) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       let buff = '';
-      const fn = async (data) => {
+      const fn = (data) => {
         if (data) {
-          buff += this._decoder.decode(data);
-          if (dataConsumer) {
-            dataConsumer(data);
-          }
+          buff += decoder.decode(data);
+          dataConsumer?.(data);
         }
         if (buff.indexOf(ending) !== -1) {
+          clearTimeout(this._timer);
           this.serial.off('data', fn);
           resolve(buff);
         }
       };
+
+      this._timer = setTimeout(() => {
+        this.serial.off('data', fn);
+        reject(new Error('Timeout waiting for response'));
+      }, this.timeout);
+
       this.serial.on('data', fn);
     });
   }
 
   writeAndReadUntil(cmd, expect, dataConsumer) {
-    return new Promise(async (resolve) => {
+    return new Promise(async (resolve, reject) => {
       if (expect) {
-        this.readUntil(expect, dataConsumer).then(resolve);
+        this.readUntil(expect, dataConsumer).then(resolve).catch(reject);
       }
       for (let i = 0; i < cmd.length; i += CMD_CHUNK_SIZE) {
         await this.serial.write(cmd.slice(i, i + CMD_CHUNK_SIZE));
@@ -209,8 +240,8 @@ export class MPYBoard {
     await this.stop();
     // Hardware reboot
     await this.enterRawRepl();
-    this.execRaw('import machine\nmachine.reset()');
-    // await this.exitRawRepl();
+    await this.writeAndReadUntil('import machine\nmachine.reset()');
+    await this.writeAndReadUntil(CTRL_D);
   }
 
   /**
@@ -335,7 +366,7 @@ export class MPYBoard {
     return Promise.reject(new Error(`Path to file was not specified`));
   }
 
-  async put(content, dest, dataConsumer) {
+  async put(content, dest, progress = function () {}) {
     if (!dest) {
       Promise.reject(new Error(`Must specify content and destination path`));
       return;
@@ -343,7 +374,7 @@ export class MPYBoard {
 
     let contentUint8;
     if (typeof content === 'string') {
-      contentUint8 = this._encoder.encode(fixLineBreak(content));
+      contentUint8 = encoder.encode(fixLineBreak(content));
     } else if (content instanceof ArrayBuffer) {
       contentUint8 = new Uint8Array(content);
     } else if (content instanceof Uint8Array) {
@@ -351,8 +382,6 @@ export class MPYBoard {
     } else {
       Promise.reject(new Error(`${content} must string, Uint8Array or ArrayBuffer`));
     }
-
-    dataConsumer = dataConsumer || function () {};
 
     // skip same file
     if (await this.exists(dest)) {
@@ -362,7 +391,7 @@ export class MPYBoard {
         .join('');
       const result = await this.hash(dest);
       if (hash === result) {
-        dataConsumer(100);
+        progress(100);
         return;
       }
     }
@@ -393,11 +422,11 @@ export class MPYBoard {
       // out += await this.execRaw(`w(bytes([${bytes.join(',')}]))`);
       const bytes = hexArray.slice(i, i + FILE_CHUNK_SIZE).map((h) => `\\x${h}`);
       out += await this.execRaw(`w(b"${bytes.join('')}")`);
-      dataConsumer(parseInt((i / hexArray.length) * 100));
+      progress(parseInt(((i + FILE_CHUNK_SIZE) / hexArray.length) * 100));
     }
     out += await this.execRaw(`f.close()`);
     out += await this.exitRawRepl();
-    dataConsumer(100);
+    progress(100);
     return out;
   }
 }
