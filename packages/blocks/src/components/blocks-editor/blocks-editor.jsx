@@ -136,7 +136,8 @@ export function BlocksEditor({
   onExtensionsFilter,
   onExtensionLoad,
   onDefinitions,
-  onLoading,
+  onLoad,
+  onResize,
 }) {
   const { language } = useLocalesContext();
 
@@ -414,8 +415,8 @@ export function BlocksEditor({
         updateWorkspace();
       });
 
-      if (onLoading) {
-        await onLoading();
+      if (onLoad) {
+        await onLoad();
       }
 
       hideSplash();
@@ -504,7 +505,10 @@ export function BlocksEditor({
       });
 
       // 缩放工作区
-      ref.resizeObserver = new ResizeObserver(() => ref.workspace && ScratchBlocks.svgResize(ref.workspace));
+      ref.resizeObserver = new ResizeObserver(() => {
+        ref.workspace && ScratchBlocks.svgResize(ref.workspace);
+        onResize?.();
+      });
       ref.resizeObserver.observe(ref.current);
 
       // 清空撤销记录

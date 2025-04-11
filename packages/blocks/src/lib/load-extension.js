@@ -124,8 +124,17 @@ export function loadExtension(extObj, options) {
       const blockId = `${extId}_${block.id}`;
       let blockXML = '';
 
+      // 显示特殊定义的积木
+      if (block.custom) {
+        blockXML = `<block type="${xmlEscape(blockId)}">`;
+        if (typeof custom === 'string') {
+          blockXML += custom;
+        }
+        blockXML += '</block>';
+      }
+
       // 创建新的积木（内部连接或可显示）
-      if (block.inline || block.text) {
+      else if (block.inline || block.text) {
         blockXML = `<block type="${xmlEscape(blockId)}">`;
 
         const blockJson = {

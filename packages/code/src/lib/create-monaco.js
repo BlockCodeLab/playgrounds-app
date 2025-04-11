@@ -56,7 +56,7 @@ export default async function createEditor(ref, options) {
     copyWithSyntaxHighlighting: true,
     // dropIntoEditor: true,
     // fontLigatures: true,
-    fontSize: 16,
+    // fontSize: 16,
     formatOnPaste: true,
     inlineSuggest: {
       enabled: true,
