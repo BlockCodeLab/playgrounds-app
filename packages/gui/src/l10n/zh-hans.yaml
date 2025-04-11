@@ -8,7 +8,8 @@ gui.alert.connectionCancel: 连接取消。
 gui.alert.connectionError: 连接发生错误，或已断开。
 gui.alert.compiling: 正在编译…
 gui.alert.compileSuccess: 编译完成。
-gui.alert.compileError: 编译错误。
+gui.alert.compileError: 编译失败。
+gui.alert.compileViewError: 查看信息
 
 gui.home.my: 我的作品
 gui.home.all: 查看全部

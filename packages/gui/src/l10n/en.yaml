@@ -8,7 +8,8 @@ gui.alert.connectionCancel: Connection cancel.
 gui.alert.connectionError: Connection error, or connection was lost.
 gui.alert.compiling: Compiling...
 gui.alert.compileSuccess: Compilation completed.
-gui.alert.compileError: Compilation error.
+gui.alert.compileError: Compilation failed.
+gui.alert.compileViewError: View Message.
 
 gui.home.my: My projects
 gui.home.all: View all
