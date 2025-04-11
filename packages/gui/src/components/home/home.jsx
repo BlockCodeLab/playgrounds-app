@@ -266,7 +266,7 @@ export function Home({ onOpenEditor, onOpenProject }) {
                 id={index}
                 key={index}
                 disabled={item.disabled}
-                beta={item.beta}
+                beta={item.beta || item.preview}
                 image={item.image}
                 name={item.name}
                 description={item.description}

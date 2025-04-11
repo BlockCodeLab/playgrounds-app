@@ -160,7 +160,7 @@ export function Library({ items, title, filterable, filterPlaceholder, emptyMess
                 large={large}
                 featured={featured}
                 disabled={item.disabled}
-                beta={item.beta}
+                beta={item.beta || item.preview}
                 icon={item.icon}
                 image={item.image}
                 name={item.name}
