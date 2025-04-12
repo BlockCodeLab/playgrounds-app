@@ -1,7 +1,7 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
 /* register contribs */
-import 'monaco-editor/esm/vs/editor/contrib/find/browser/findController';
+// import 'monaco-editor/esm/vs/editor/contrib/find/browser/findController';
 import 'monaco-editor/esm/vs/editor/contrib/folding/browser/folding';
 import 'monaco-editor/esm/vs/editor/contrib/format/browser/formatActions.js';
 import 'monaco-editor/esm/vs/editor/contrib/suggest/browser/suggestController';
@@ -38,45 +38,45 @@ window.MonacoEnvironment = {
   },
 };
 
-export default async function createEditor(ref, options) {
-  return monaco.editor.create(ref, {
-    /* config */
-    theme: 'bc',
-    autoClosingBrackets: 'languageDefined',
-    autoClosingDelete: 'auto',
-    autoClosingQuotes: 'languageDefined',
-    autoSurround: 'languageDefined',
-    automaticLayout: true,
-    bracketPairColorization: {
-      enabled: true,
-      independentColorPoolPerBracketType: true,
-    },
-    // colorDecorators: true,
-    contextmenu: false,
-    copyWithSyntaxHighlighting: true,
-    // dropIntoEditor: true,
-    // fontLigatures: true,
-    // fontSize: 16,
-    formatOnPaste: true,
-    inlineSuggest: {
-      enabled: true,
-    },
-    minimap: {
-      enabled: false,
-    },
-    hideCursorInOverviewRuler: true,
-    overviewRulerBorder: false,
-    // renderLineHighlight: 'none',
-    // renderWhitespace: 'boundary',
-    scrollbar: {
-      horizontal: 'visible',
-      horizontalScrollbarSize: 6,
-      vertical: 'visible',
-      verticalScrollbarSize: 6,
-    },
-    showDeprecated: true,
-    smoothScrolling: true,
+// 默认配置
+export const DefaultOptions = {
+  theme: 'bc',
+  autoClosingBrackets: 'languageDefined',
+  autoClosingDelete: 'auto',
+  autoClosingQuotes: 'languageDefined',
+  autoSurround: 'languageDefined',
+  automaticLayout: true,
+  bracketPairColorization: {
+    enabled: true,
+    independentColorPoolPerBracketType: true,
+  },
+  // colorDecorators: true,
+  contextmenu: false,
+  copyWithSyntaxHighlighting: true,
+  // dropIntoEditor: true,
+  // fontLigatures: true,
+  fontSize: 16,
+  formatOnPaste: true,
+  inlineSuggest: {
+    enabled: true,
+  },
+  minimap: {
+    enabled: false,
+  },
+  hideCursorInOverviewRuler: true,
+  overviewRulerBorder: false,
+  // renderLineHighlight: 'none',
+  // renderWhitespace: 'boundary',
+  scrollbar: {
+    horizontal: 'visible',
+    horizontalScrollbarSize: 6,
+    vertical: 'visible',
+    verticalScrollbarSize: 6,
+  },
+  showDeprecated: true,
+  smoothScrolling: true,
+};
 
-    ...options,
-  });
+export async function createEditor(ref, options) {
+  return monaco.editor.create(ref, Object.assign({}, DefaultOptions, options));
 }
