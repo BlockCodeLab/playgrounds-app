@@ -128,6 +128,7 @@ export function BlocksEditor({
   enableCloudVariables,
   enableProcedureReturns,
   enableMonitor,
+  disableGenerateCode,
   disableSensingBlocks,
   disableExtensionButton,
   monitorOffset,
@@ -244,6 +245,8 @@ export function BlocksEditor({
   //
   const generateCodes = useCallback(
     (index) => {
+      if (disableGenerateCode) return;
+
       // 查询使用的扩展
       const extensions = Array.from(
         new Set(
@@ -290,7 +293,7 @@ export function BlocksEditor({
         extensions,
       };
     },
-    [emulator, generator, onDefinitions],
+    [emulator, generator, disableGenerateCode, onDefinitions],
   );
 
   // 工作区发生变化时产生新的代码
@@ -303,8 +306,12 @@ export function BlocksEditor({
 
     // 积木发生变化
     if (xml !== file.value.xml) {
+      const data = { xml, xmlDom };
       const codes = generateCodes(fileIndex.value);
-      setFile({ xml, xmlDom, ...codes });
+      if (codes) {
+        Object.assign(data, codes);
+      }
+      setFile(data);
     }
   }, [generateCodes]);
 
@@ -338,7 +345,9 @@ export function BlocksEditor({
       // 检查如果有积木没有代码则立即生成
       if (file.value.xml && (!file.value.content || !file.value.script)) {
         const codes = generateCodes(fileIndex.value);
-        setFile(codes);
+        if (codes) {
+          setFile(codes);
+        }
       }
 
       // 更新积木栏
@@ -358,7 +367,7 @@ export function BlocksEditor({
     if (appState.value?.running) return;
 
     const codes = generateCodes(fileIndex.value);
-    if (file.value.content !== codes.content || file.value.script !== codes.script) {
+    if (codes && (file.value.content !== codes.content || file.value.script !== codes.script)) {
       setFile(codes);
     }
   }, [modified.value, generateCodes]);
@@ -396,16 +405,15 @@ export function BlocksEditor({
         for (let i = 0; i < files.value.length; i++) {
           id = files.value[i].id;
           data = projData.xmls.get(id);
+          data.id = id;
 
           // 加载积木到工作区并转换积木到代码
           loadXmlToWorkspace(data.xmlDom, null, ref.workspace);
           codes = generateCodes(i);
-
-          setFile({
-            id,
-            ...data,
-            ...codes,
-          });
+          if (codes) {
+            Object.assign(data, codes);
+          }
+          setFile(data);
         }
 
         // 加载当前选中的文档
@@ -487,11 +495,12 @@ export function BlocksEditor({
 
               // 生产复制积木的代码
               if (copiedBlock.toFileId != null) {
+                const data = { id: copiedBlock.toFileId };
                 const codes = generateCodes(copiedBlock.toFileIndex);
-                setFile({
-                  id: copiedBlock.toFileId,
-                  ...codes,
-                });
+                if (codes) {
+                  Object.assign(data, codes);
+                }
+                setFile(data);
               }
             }
             setAppState({ copiedBlock: null, removeCopiedBlock: null });

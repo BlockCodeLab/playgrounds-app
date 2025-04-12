@@ -11,13 +11,13 @@ import styles from './code-editor.module.css';
 let completionProvider;
 
 const setModel = (editor, file) => {
-  if (!file) return;
   const extname = mime.getExtension(file.type ?? 'text/plain');
-  const fileUri = monaco.Uri.file(`${file.name}.${extname}`);
+  const fileUri = monaco.Uri.file(`${editor.getId()}/${file.id}.${extname}`);
   const modelId = fileUri.toString();
   let model = monaco.editor.getModel(modelId);
   if (!model) {
     model = monaco.editor.createModel(file.content, undefined, fileUri);
+    model;
     model.onDidChangeContent(() => {
       if (editor.getRawOptions().readOnly) return;
       const content = model.getValue();
@@ -30,6 +30,17 @@ const setModel = (editor, file) => {
   return extname;
 };
 
+const updateContent = (editor, file, modelname) => {
+  if (!editor || !file) return;
+  const extname = mime.getExtension(file.type ?? 'text/plain');
+  if (extname && modelname !== extname) {
+    modelname = setModel(editor, file);
+  }
+  const model = editor.getModel();
+  model.setValue(file.content);
+  return modelname;
+};
+
 export function CodeEditor({ className, options, readOnly, onLoad, onRegisterCompletionItems }) {
   const { language } = useLocalesContext();
 
@@ -38,16 +49,6 @@ export function CodeEditor({ className, options, readOnly, onLoad, onRegisterCom
   const ref = useRef(null);
 
   const modelname = useSignal(null);
-
-  const updateContent = useCallback(() => {
-    if (!ref.editor) return;
-    const extname = mime.getExtension(file.value.type ?? 'text/plain');
-    if (extname && modelname.value !== extname) {
-      modelname.value = setModel(ref.editor, file.value);
-    }
-    const model = ref.editor.getModel();
-    model.setValue(file.value.content);
-  }, []);
 
   useEffect(() => {
     if (!ref.editor) return;
@@ -69,12 +70,14 @@ export function CodeEditor({ className, options, readOnly, onLoad, onRegisterCom
   }, [ref.editor, modelname.value, language.value, onRegisterCompletionItems]);
 
   // 切换文件时更新
-  useEffect(updateContent, [file.value]);
+  useEffect(() => {
+    modelname.value = updateContent(ref.editor, file.value, modelname.value);
+  }, [file.value]);
 
   // 只读时自动更新
   useEffect(() => {
     if (!readOnly) return;
-    updateContent();
+    modelname.value = updateContent(ref.editor, file.value, modelname.value);
   }, [readOnly, modified.value]);
 
   useEffect(async () => {
@@ -82,7 +85,6 @@ export function CodeEditor({ className, options, readOnly, onLoad, onRegisterCom
       ref.editor = await createEditor(ref.current, options);
       if (file.value) {
         modelname.value = setModel(ref.editor, file.value);
-        ref.editor.getModel().setValue(file.value.content);
       }
       if (onLoad) {
         onLoad(ref.editor);
