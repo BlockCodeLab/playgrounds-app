@@ -273,6 +273,7 @@ export function Home({ onOpenEditor, onOpenProject }) {
                 collaborator={item.collaborator}
                 blocksRequired={item.blocksRequired}
                 micropythonRequired={item.micropythonRequired}
+                clangRequired={item.clangRequired}
                 onSelect={item.onSelect}
               />
             ))}

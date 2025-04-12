@@ -1,8 +1,8 @@
+import { Text } from '@eo-locale/preact';
 import { classNames } from '@blockcode/utils';
 import styles from './library-item.module.css';
 
-import { Text } from '@eo-locale/preact';
-
+import iconClang from './icons/icon-clang.svg';
 import iconBlocks from './icons/icon-blocks.svg';
 import iconMicroPython from './icons/icon-micropython.svg';
 import iconBluetooth from './icons/icon-bluetooth.svg';
@@ -83,10 +83,11 @@ export function LibraryItem(props) {
                   )}
                 </div>
                 <div className={styles.featuredMetadataDetail}>
-                  {props.blocksRequired && <img src={iconBlocks} />}
-                  {props.micropythonRequired && <img src={iconMicroPython} />}
                   {props.bluetoothRequired && <img src={iconBluetooth} />}
                   {props.internetRequired && <img src={iconInternet} />}
+                  {props.blocksRequired && <img src={iconBlocks} />}
+                  {props.micropythonRequired && <img src={iconMicroPython} />}
+                  {props.clangRequired && <img src={iconClang} />}
                 </div>
               </div>
             )}
