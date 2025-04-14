@@ -39,11 +39,12 @@ export async function registerCompletionProvider(languageId, completionItems) {
         if (Array.isArray(item)) {
           item = {
             label: {
-              label: item[0],
-              description: item[2],
+              label: item[0], // 显示名称
+              description: item[2], // 右侧显示信息
             },
             kind: item[1] ?? CompletionItemKind.Keyword,
-            insertText: item[0],
+            insertText: item[0], // 插入的内容
+            range: range,
           };
         }
         if (typeof item.label === 'string') {
@@ -72,7 +73,7 @@ export async function registerCompletionProvider(languageId, completionItems) {
           }));
       }
 
-      // 代码中词
+      // 代码中的关键词
       const tokens = getTokens(model.getValue())
         .filter((token) => token !== word.word && !customItems.find((item) => item.label.label === token))
         .map((token) => ({

@@ -4,7 +4,7 @@
   // 推荐社区扩展ID格式：@{Your ID}/{Name}
   "name": "@example/blocks",
   "private": "true",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "type": "module",
   "module": "dist/index.js",
   "exports": {

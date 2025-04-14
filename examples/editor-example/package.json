@@ -2,9 +2,9 @@
   // 编辑器扩展ID，用于识别扩展
   // 官方编辑器ID格式： @blockcode/gui-{Name}
   // 推荐社区编辑器ID格式：@{Your ID}/{Name}
-  "name": "@example/playground",
+  "name": "@example/editor",
   "private": "true",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "type": "module",
   "module": "dist/index.js",
   "exports": {

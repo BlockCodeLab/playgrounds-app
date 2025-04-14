@@ -86,21 +86,15 @@ export default {
   // menuItems: [],
 
   // 工作区标签页
+  // {
+  //   icon: 图标,
+  //   label: 文字,
+  //   Content: 编辑器组件,
+  // },
   tabs: [
     {
       ...blocksTab,
       Content: () => {
-        // 将小绿旗事件显示名修改为程序开始
-        ScratchBlocks.Blocks['event_whenflagclicked'] = {
-          init() {
-            this.jsonInit({
-              message0: ScratchBlocks.Msg.EVENT_WHENPROGRAMSTART,
-              category: ScratchBlocks.Categories.event,
-              extensions: ['colours_event', 'shape_hat'],
-            });
-          },
-        };
-
         return <BlocksEditor onExtensionsFilter={handleExtensionsFilter} />;
       },
     },
