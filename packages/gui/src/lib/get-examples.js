@@ -1,5 +1,5 @@
 // 从网络（projecthub）加载案例
-const PROJECTHUB_URL = 'https://hub.blockcode.fun/';
+const PROJECTHUB_URL = 'https://hub.blockcode.fun';
 
 export default async function (editors) {
   const hub = await fetch(`${PROJECTHUB_URL}/home.json`).then((res) => res.json());
