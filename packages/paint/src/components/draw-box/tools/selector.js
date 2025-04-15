@@ -2,15 +2,58 @@ import { Konva } from '@blockcode/utils';
 import { themeColors } from '@blockcode/core';
 
 export default {
-  setup(layer, options) {
+  setup(layer, options, updateImage) {
     this.stage = layer.getStage();
     this.layer = layer;
     this.selectorLayer = this.stage.getLayers().at(-1);
+    this.updateImage = updateImage;
+    options.onToolProxy(this);
   },
 
   cancel() {
     this.clipImage?.remove?.();
     this.clipImage = null;
+    this.cliped = false;
+  },
+
+  async delete() {
+    if (this.clipImage) {
+      this.cancel();
+    } else {
+      const image = this.layer.children[0];
+      image.image(null);
+    }
+    await this.updateImage();
+  },
+
+  flip(x, y) {
+    let clipImage = this.clipImage;
+    if (!clipImage) {
+      // 反转全图
+      const image = this.layer.children[0];
+      const offsetX = image.width() / 2;
+      const offsetY = image.height() / 2;
+
+      clipImage = new Konva.Image({
+        offsetX,
+        offsetY,
+        image: image.image(),
+        x: image.x() + offsetX,
+        y: image.y() + offsetY,
+      });
+      this.layer.add(clipImage);
+      image.image(null);
+    }
+
+    const scale = clipImage.scale();
+    clipImage.scale({
+      x: Math.sign(x) * scale.x,
+      y: Math.sign(y) * scale.y,
+    });
+
+    if (!this.clipImage) {
+      this.updateImage();
+    }
   },
 
   async clip() {
@@ -22,15 +65,22 @@ export default {
 
     // 截取选框内容
     const image = await this.layer.toImage(clipRect);
+    const offsetX = image.width / 2;
+    const offsetY = image.height / 2;
 
     this.clipImage = new Konva.Image({
       image,
-      x: clipRect.x,
-      y: clipRect.y,
+      offsetX,
+      offsetY,
+      x: clipRect.x + offsetX,
+      y: clipRect.y + offsetY,
       name: 'selector',
       draggable: true,
     });
+    this.clipImage.on('dragmove', () => (this.changed = true));
     this.layer.add(this.clipImage);
+    this.changed = false;
+    this.cliped = true;
 
     // 清除选框内容
     this.poly.setAttrs({
@@ -52,6 +102,7 @@ export default {
       strokeWidth: 1,
     });
     this.selectorLayer.add(this.poly);
+    this.cliped = false;
   },
 
   onDrawing(e) {
@@ -75,7 +126,7 @@ export default {
     if (!this.poly) return;
     const size = this.poly.size();
     if (size.width < 10 && size.height < 10) {
-      this.poly.remove();
+      this.poly.destroy();
     } else {
       await this.clip();
     }

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useCallback } from 'preact/hooks';
-import { useSignal } from '@preact/signals';
+import { batch, useSignal } from '@preact/signals';
 import { classNames, Konva } from '@blockcode/utils';
 import { useProjectContext, Keys } from '@blockcode/core';
 import { loadImageFromAsset } from '../../lib/load-image';
@@ -51,7 +51,7 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
   const updateImage = useCallback(async () => {
     if (tool.value?.type === PaintTools.Center) return;
 
-    if (ref.drawLayer.children.length <= 1) return;
+    if (!ref.drawLayer.children.length) return;
 
     const pos = ref.image.position();
     pos.x += asset.value.centerX;
@@ -154,8 +154,8 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
     if (!/image\//.test(asset.value?.type) || !ref.image) return;
 
     const image = await loadImageFromAsset(asset.value);
-    ref.image.image(image);
-    ref.image.position({
+    ref.image.setAttrs({
+      image,
       x: ref.stage.width() / 2 - asset.value.centerX,
       y: ref.stage.height() / 2 - asset.value.centerY,
     });
@@ -210,7 +210,10 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
       if (toolOptions.type === PaintTools.Center) {
         toolOptions.onCenterChange = updateCenter;
       }
-      tool.value?.setup?.(ref.drawLayer, toolOptions);
+      batch(() => {
+        toolOptions.onToolProxy(null);
+        tool.value?.setup?.(ref.drawLayer, toolOptions, updateImage);
+      });
     }
   }, [toolOptions, clearSelector, updateCenter, updateImage]);
 
@@ -313,6 +316,11 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
 
         if ([PaintTools.ColorPicker, PaintTools.OutlineColorPicker].includes(tool.value?.type)) {
           e.evt.stopPropagation();
+        }
+
+        if (tool.value.type === PaintTools.Selector && tool.value.cliped && !tool.value.changed) {
+          clearDrawable();
+          return;
         }
 
         if (clearSelector()) {

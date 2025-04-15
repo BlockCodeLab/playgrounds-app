@@ -56,6 +56,7 @@ export default function Painter({ mode, maxSize }) {
 
   // 绘图工具
   const paintTool = useSignal(PaintTools.Pen);
+  const paintToolProxy = useSignal(null);
 
   // 绘图设置
   const penSize = useSignal(10);
@@ -204,6 +205,19 @@ export default function Painter({ mode, maxSize }) {
     }
   }, []);
 
+  const handleCenter = useCallback(
+    () => (toolMode.value = toolMode.value !== PaintTools.Center ? PaintTools.Center : null),
+    [],
+  );
+
+  const handleToolProxy = useCallback((proxy) => (paintToolProxy.value = proxy), []);
+
+  const handleDelete = useCallback(() => paintToolProxy.value?.delete?.(), []);
+
+  const handleFlipHorizontal = useCallback(() => paintToolProxy.value?.flip?.(-1, 1), []);
+
+  const handleFlipVertical = useCallback(() => paintToolProxy.value?.flip?.(1, -1), []);
+
   return (
     <div className={styles.painterWrapper}>
       <div className={styles.row}>
@@ -255,10 +269,7 @@ export default function Painter({ mode, maxSize }) {
             className={classNames(styles.labelButton, {
               [styles.selected]: toolMode.value === PaintTools.Center,
             })}
-            onClick={useCallback(
-              () => (toolMode.value = toolMode.value !== PaintTools.Center ? PaintTools.Center : null),
-              [],
-            )}
+            onClick={handleCenter}
           >
             <img
               src={centerIcon}
@@ -412,9 +423,8 @@ export default function Painter({ mode, maxSize }) {
             <>
               <div className={classNames(styles.toolGroup, styles.dashedBorder)}>
                 <Button
-                  disabled
                   className={styles.labelButton}
-                  onClick={useCallback(() => {}, [])}
+                  onClick={handleDelete}
                 >
                   <img
                     src={deleteIcon}
@@ -425,9 +435,8 @@ export default function Painter({ mode, maxSize }) {
               </div>
               <div className={styles.toolGroup}>
                 <Button
-                  disabled
                   className={styles.labelButton}
-                  onClick={useCallback(() => {}, [])}
+                  onClick={handleFlipHorizontal}
                 >
                   <img
                     src={flipHorizontalIcon}
@@ -436,9 +445,8 @@ export default function Painter({ mode, maxSize }) {
                   />
                 </Button>
                 <Button
-                  disabled
                   className={styles.labelButton}
-                  onClick={useCallback(() => {}, [])}
+                  onClick={handleFlipVertical}
                 >
                   <img
                     src={flipVerticalIcon}
@@ -479,6 +487,7 @@ export default function Painter({ mode, maxSize }) {
               outlineWidth: outlineWidth.value,
               outlineColor: outlineColor.value,
               onPickColor: handlePickColor,
+              onToolProxy: handleToolProxy,
             }}
             onSizeChange={handleDrawSizeChange}
             onChange={handleChange}
