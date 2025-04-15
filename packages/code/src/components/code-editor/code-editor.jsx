@@ -36,8 +36,10 @@ const updateContent = (editor, file, modelname) => {
   if (extname && modelname !== extname) {
     modelname = setModel(editor, file);
   }
-  const model = editor.getModel();
-  model.setValue(file.content);
+  if (file.content) {
+    const model = editor.getModel();
+    model.setValue(file.content);
+  }
   return modelname;
 };
 
