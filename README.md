@@ -6,8 +6,8 @@
 
 - [docs](docs/): 说明文档
 - [examples/](examples/): 扩展开发案例（模版）
-  - [blocks-example](examples/blocks-extension/): 图形积木扩展案例
-  - [gui-example](examples/gui-editor/): 编辑器扩展案例
+  - [blocks-example](examples/blocks-example/): 图形积木扩展案例
+  - [editor-example](examples/editor-example/): 编辑器扩展案例
 - [packages/](packages/): 功能子模块，子模块介绍见各自说明文档
   - [blocks/](packages/blocks/): 图形积木编程组件
     - [extensions](packages/blocks/extensions): 图形积木扩展
@@ -27,7 +27,9 @@
 
 ## 开始步骤
 
-1. 克隆 `playgrounds-app` 项目到 `playgrounds-app` 文件夹，并完成一次完整编译。
+1. 安装 [Bun](https://bun.sh/), **Bun is an all-in-one toolkit for JavaScript and TypeScript apps.**
+
+2. 克隆 `playgrounds-app` 项目到 `playgrounds-app` 文件夹，并完成一次完整编译。
 
 ```bash
 $ git clone https://github.com/BlockCodeLab/playgrounds-app.git
@@ -36,7 +38,7 @@ $ bun install
 $ bun run build
 ```
 
-2. 运行服务器，用浏览器打开 `localhost:3000`
+3. 运行服务器，用浏览器打开 `localhost:3000`
 
 ```bash
 $ cd playgrounds-app
