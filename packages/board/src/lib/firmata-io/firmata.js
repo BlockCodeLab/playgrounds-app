@@ -1313,7 +1313,7 @@ class Firmata extends EventEmitter {
     this.once(`I2C-reply-${address}-0`, callback);
   }
 
-  // TODO: Refactor i2cRead and i2cReadOnce
+  // [TODO] Refactor i2cRead and i2cReadOnce
   //      to share most operations.
 
   /**

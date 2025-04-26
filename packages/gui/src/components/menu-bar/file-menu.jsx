@@ -39,7 +39,7 @@ export function FileMenu({ onNew, onOpen, onSave, onThumb, ExtendedMenu }) {
   }, [onSave]);
 
   // 保存到浏览器 IndexedDB
-  // TODO: 保存到服务器，获取 ID
+  // [TODO] 保存到服务器，获取 ID
   const handleSave = useCallback(async () => {
     const data = await getProjectData();
     data.key = key.value;
@@ -69,7 +69,7 @@ export function FileMenu({ onNew, onOpen, onSave, onThumb, ExtendedMenu }) {
   }, [getProjectData]);
 
   // 从计算机打开项目
-  // TODO: 从服务器获取项目
+  // [TODO] 从服务器获取项目
   const handleOpenFromComputer = useCallback(async () => {
     const data = await openProjectFromComputer();
     await onOpen(data);

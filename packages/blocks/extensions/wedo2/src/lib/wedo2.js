@@ -66,7 +66,7 @@ const WeDo2Device = {
  * @readonly
  * @enum {number}
  */
-// TODO: Check for these more accurately at startup?
+// [TODO] Check for these more accurately at startup?
 const WeDo2ConnectID = {
   LED: 6,
   PIEZO: 5,

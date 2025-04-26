@@ -24,7 +24,7 @@ export function mp3Encode(audioBuffer, bitrate, onProgress) {
   // convert audioBuffer to sample buffers
   const buffers = [];
 
-  // TODO: 混合两个通道数据
+  // [TODO] 混合两个通道数据
   let buffer, samples, sample;
   for (let channel = 0; channel < nChannels; channel++) {
     buffer = audioBuffer.getChannelData(channel);

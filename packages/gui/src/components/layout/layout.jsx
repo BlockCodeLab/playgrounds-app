@@ -88,7 +88,7 @@ export function Layout() {
   });
 
   // 底边栏
-  // TODO: 多标签页底边栏
+  // [TODO] 多标签页底边栏
   const PaneContent = app.panes.value?.[0]?.Content;
 
   // 根据侧边栏和底边栏调整标签页样式
