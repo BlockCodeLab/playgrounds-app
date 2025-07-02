@@ -19,7 +19,7 @@
     "build": "playground-build ."
   },
   "dependencies": {
-    "preact": "^10.25.4"
+    "preact": "^10.26.9"
   },
   "devDependencies": {
     "@types/bun": "latest",

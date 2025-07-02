@@ -5,7 +5,7 @@
   "type": "module",
   "module": "./dist/index.js",
   "dependencies": {
-    "esptool-js": "^0.5.4"
+    "esptool-js": "^0.5.5"
   },
   "devDependencies": {
     "@types/bun": "latest"
