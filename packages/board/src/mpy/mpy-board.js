@@ -126,7 +126,9 @@ export class MPYBoard {
 
       this._timer = setTimeout(() => {
         this.serial.off('data', fn);
-        reject(new Error('Timeout waiting for response'));
+        if (this.connected) {
+          reject(new Error('Timeout waiting for response'));
+        }
       }, this.timeout);
 
       this.serial.on('data', fn);

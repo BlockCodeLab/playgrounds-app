@@ -8,6 +8,9 @@ export class Serial extends EventEmitter {
     this._port = port;
     this._reader = null;
     port._serial = this;
+    this._port.ondisconnect = () => {
+      this.emit('disconnect');
+    };
   }
 
   get port() {

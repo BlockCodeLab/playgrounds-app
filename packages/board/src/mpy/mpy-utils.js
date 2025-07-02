@@ -9,6 +9,14 @@ export class MPYUtils {
     return board;
   }
 
+  static async disconnect(board, reset = false) {
+    if (!board.connected) return;
+    if (reset) {
+      await board.hardReset();
+    }
+    await board.disconnect();
+  }
+
   static check(board, timeout = 1000) {
     let controller;
     const checker = new Promise((resolve, reject) => {
@@ -26,8 +34,9 @@ export class MPYUtils {
     });
     return {
       cancel() {
-        return controller();
-        return this;
+        if (controller) {
+          controller();
+        }
       },
       catch(...args) {
         checker.catch(...args);
