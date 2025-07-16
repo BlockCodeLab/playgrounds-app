@@ -1,4 +1,4 @@
-import { MPYBoard } from './mpy-board';
+import { MPYBoard, ESP32BLEMPYBoard } from './mpy-board';
 import { getImageBase64 } from '../lib/image-base64';
 
 export class MPYUtils {
@@ -6,6 +6,13 @@ export class MPYUtils {
     const board = new MPYBoard();
     await board.requestPort(filters);
     await board.connect(options);
+    return board;
+  }
+
+  static async connectBLE() {
+    const board = new ESP32BLEMPYBoard();
+    await board.requestDevice();
+    await board.connect();
     return board;
   }
 

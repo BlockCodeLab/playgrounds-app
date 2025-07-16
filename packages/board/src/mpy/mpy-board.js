@@ -1,6 +1,10 @@
 /* inspired by https://github.com/arduino/micropython.js/blob/main/micropython.js */
 import { sleepMs } from '@blockcode/utils';
 import { Serial } from '@blockcode/core';
+import { ESP32BLESerial } from './ble-serial';
+
+const BLE_SERVICE_UUID = '00000000-8c26-476f-89a7-a108033a69c7';
+const option_service_uuid = '00000001-8c26-476f-89a7-a108033a69c7';
 
 const CTRL_A = '\x01'; // raw repl
 const CTRL_B = '\x02'; // exit raw repl
@@ -11,7 +15,8 @@ const CTRL_F = '\x06'; // safe boot (ctrl-f)
 
 const CMD_CHUNK_SIZE = 512;
 const FILE_CHUNK_SIZE = 80;
-// const BAUD_RATE = 115200;
+const FILE_CHUNK_SIZE_BLE = 32;
+//const BAUD_RATE = 115200;
 const BAUD_RATE = 460800;
 
 const encoder = new TextEncoder();
@@ -33,7 +38,11 @@ function extract(str) {
 export class MPYBoard {
   static fromPort(port) {
     const board = new MPYBoard();
-    board._setSerial(port);
+    if (port._serial) {
+      board._setSerial(port._serial);
+    } else {
+      board._setSerial(new Serial(port));
+    }
     return board;
   }
 
@@ -55,19 +64,19 @@ export class MPYBoard {
     return this._serial;
   }
 
-  _setSerial(port) {
-    if (port._serial) {
-      this._serial = port._serial;
-    } else {
-      this._serial = new Serial(port);
-    }
+  _setSerial(serial) {
+    this._serial = serial;
     this.serial.on('connect', () => (this._connected = true));
     this.serial.on('disconnect', () => (this._connected = false));
   }
 
   requestPort(filters = []) {
     return navigator.serial.requestPort({ filters }).then((port) => {
-      this._setSerial(port);
+       if (port._serial) {
+        this._setSerial(port._serial);
+      } else {
+        this._setSerial(new Serial(port));
+      }
     });
   }
 
@@ -423,6 +432,106 @@ export class MPYBoard {
       const bytes = hexArray.slice(i, i + FILE_CHUNK_SIZE).map((h) => `\\x${h}`);
       out += await this.execRaw(`w(b"${bytes.join('')}")`);
       progress(parseInt(((i + FILE_CHUNK_SIZE) / hexArray.length) * 100));
+    }
+    out += await this.execRaw(`f.close()`);
+    out += await this.exitRawRepl();
+    progress(100);
+    return out;
+  }
+}
+
+export class ESP32BLEMPYBoard extends MPYBoard {
+  static fromGATTServer(gattServer) {
+    const board = new ESP32BLEMPYBoard();
+    if (gattServer.device._serial) {
+      board._setSerial(gattServer.device._serial);
+    } else {
+      const serial = new ESP32BLESerial(gattServer);
+      board._setSerial(serial);
+    }
+    return board;
+  }
+
+  get type() {
+    return 'ble';
+  }
+
+  requestPort() {
+    return this.requestDevice();
+  }
+
+  requestDevice() {
+    const filters = [{ services: [BLE_SERVICE_UUID] }];
+    return navigator.bluetooth.requestDevice({ filters,optionalServices: ['00000001-8c26-476f-89a7-a108033a69c7']  }).then((device) => {
+      if (device._serial) {
+        this._setSerial(device._serial);
+      } else {
+        const serial = new ESP32BLESerial(device.gatt);
+        this._setSerial(serial);
+     }
+    });
+  }
+
+  get connected() {
+    return this.serial.server.connected;
+  }
+
+  async put(content, dest, progress = function () {}){
+    if (!dest) {
+      throw new Error(`Must specify content and destination path`);
+    }
+
+    let contentUint8;
+    if (typeof content === 'string') {
+      contentUint8 = encoder.encode(fixLineBreak(content));
+    } else if (content instanceof ArrayBuffer) {
+      contentUint8 = new Uint8Array(content);
+    } else if (content instanceof Uint8Array) {
+      contentUint8 = content;
+    } else {
+      throw new Error(`${content} must string, Uint8Array or ArrayBuffer`);
+    }
+
+    // skip same file
+    if (await this.exists(dest)) {
+      const hashBuffer = await crypto.subtle.digest('SHA-256', contentUint8);
+      const hash = Array.from(new Uint8Array(hashBuffer))
+        .map((b) => b.toString(16).padStart(2, '0'))
+        .join('');
+      const result = await this.hash(dest);
+      if (hash === result) {
+        progress(100);
+        return;
+      }
+    }
+
+    const hexArray = Array.from(contentUint8).map((c) => c.toString(16).padStart(2, '0'));
+    let out = '';
+    out += await this.enterRawRepl();
+    // mkdir
+    let destcomps = dest.split('/');
+    destcomps.pop(); // remove filename
+    if (destcomps.length > 0) {
+      out += await this.execRaw(`import os`);
+      const dirs = [];
+      destcomps.reduce((path, dir) => {
+        if (dir === '' || (path !== '' && path.at(-1) !== '/')) path += '/';
+        path += dir;
+        if (path !== '/') dirs.push(path);
+        return path;
+      }, '');
+      for (const dir of dirs) {
+        out += await this.execRaw(`os.mkdir('${dir}')`);
+      }
+    }
+    // write file
+    out += await this.execRaw(`f=open('${dest}','w')`);
+    for (let i = 0; i < hexArray.length; i += FILE_CHUNK_SIZE_BLE) {
+      // const bytes = hexArray.slice(i, i + FILE_CHUNK_SIZE_BLE).map((h) => `0x${h}`);
+      // out += await this.execRaw(`w(bytes([${bytes.join(',')}]))`);
+      const bytes = hexArray.slice(i, i + FILE_CHUNK_SIZE_BLE).map((h) => `\\x${h}`);
+      out += await this.execRaw(`f.write(b"${bytes.join('')}")`);
+      progress(parseInt(((i + FILE_CHUNK_SIZE_BLE) / hexArray.length) * 100));
     }
     out += await this.execRaw(`f.close()`);
     out += await this.exitRawRepl();
