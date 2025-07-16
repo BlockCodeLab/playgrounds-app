@@ -4,7 +4,7 @@ import { Serial } from '@blockcode/core';
 import { ESP32BLESerial } from './ble-serial';
 
 const BLE_SERVICE_UUID = '00000000-8c26-476f-89a7-a108033a69c7';
-const option_service_uuid = '00000001-8c26-476f-89a7-a108033a69c7';
+const OPTION_SERVICE_UUID= '00000001-8c26-476f-89a7-a108033a69c7';
 
 const CTRL_A = '\x01'; // raw repl
 const CTRL_B = '\x02'; // exit raw repl
@@ -462,7 +462,7 @@ export class ESP32BLEMPYBoard extends MPYBoard {
 
   requestDevice() {
     const filters = [{ services: [BLE_SERVICE_UUID] }];
-    return navigator.bluetooth.requestDevice({ filters,optionalServices: ['00000001-8c26-476f-89a7-a108033a69c7']  }).then((device) => {
+    return navigator.bluetooth.requestDevice({ filters,optionalServices: [OPTION_SERVICE_UUID]  }).then((device) => {
       if (device._serial) {
         this._setSerial(device._serial);
       } else {
