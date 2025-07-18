@@ -26,13 +26,16 @@ import { unifyLocale } from '../../lib/unify-locale';
 import blocksConfig from './blocks-config';
 
 import { Text, ContextMenu } from '@blockcode/core';
+import { CodeEditor } from '@blockcode/code';
 import { DataMonitor } from '../data-monitor/data-monitor';
 import { DataPromptModal } from '../data-prompt-modal/data-prompt-modal';
 import { MyBlockPromptModal } from '../myblock-prompt-modal/myblock-prompt-modal';
 import { ExtensionsLibrary } from '../extensions-library/extensions-library';
 import styles from './blocks-editor.module.css';
 
-import extensionIcon from './icon-extension.svg';
+import extensionIcon from './icons/icon-extension.svg';
+import hideIcon from './icons/icon-hide.svg';
+import showIcon from './icons/icon-show.svg';
 
 // 支持更新的事件
 const supportedEvents = new Set([
@@ -95,24 +98,24 @@ const updateScratchBlocksMsgs = (enableMultiTargets, enableVariableTypes) => {
       },
       enableMultiTargets
         ? {
-            CONTROL_STOP_OTHER: translate('blocks.control.stopOtherInTarget', 'other scripts in sprite'),
-          }
+          CONTROL_STOP_OTHER: translate('blocks.control.stopOtherInTarget', 'other scripts in sprite'),
+        }
         : {
-            CONTROL_STOP_OTHER: translate('blocks.control.stopOther', 'other scripts'),
-          },
+          CONTROL_STOP_OTHER: translate('blocks.control.stopOther', 'other scripts'),
+        },
       enableVariableTypes
         ? {
-            NEW_LIST: translate('blocks.dataPrompt.makeArray', 'Make a Array'),
-            LIST_ALREADY_EXISTS: translate('blocks.dataPrompt.arrayExists', 'A array named "%1" already exists.'),
-            LIST_MODAL_TITLE: translate('blocks.dataPrompt.newArray', 'New Array'),
-            NEW_LIST_TITLE: translate('blocks.dataPrompt.arrayTitle', 'New array name:'),
-          }
+          NEW_LIST: translate('blocks.dataPrompt.makeArray', 'Make a Array'),
+          LIST_ALREADY_EXISTS: translate('blocks.dataPrompt.arrayExists', 'A array named "%1" already exists.'),
+          LIST_MODAL_TITLE: translate('blocks.dataPrompt.newArray', 'New Array'),
+          NEW_LIST_TITLE: translate('blocks.dataPrompt.arrayTitle', 'New array name:'),
+        }
         : {
-            NEW_LIST: translate('blocks.dataPrompt.makeList', 'Make a List'),
-            LIST_ALREADY_EXISTS: translate('blocks.dataPrompt.listExists', 'A list named "%1" already exists.'),
-            LIST_MODAL_TITLE: translate('blocks.dataPrompt.newList', 'New List'),
-            NEW_LIST_TITLE: translate('blocks.dataPrompt.listTitle', 'New list name:'),
-          },
+          NEW_LIST: translate('blocks.dataPrompt.makeList', 'Make a List'),
+          LIST_ALREADY_EXISTS: translate('blocks.dataPrompt.listExists', 'A list named "%1" already exists.'),
+          LIST_MODAL_TITLE: translate('blocks.dataPrompt.newList', 'New List'),
+          NEW_LIST_TITLE: translate('blocks.dataPrompt.listTitle', 'New list name:'),
+        },
     ),
   ).forEach(([key, value]) => (ScratchBlocks.Msg[key] = value));
 };
@@ -127,6 +130,7 @@ export function BlocksEditor({
   enableLocalVariable,
   enableCloudVariables,
   enableProcedureReturns,
+  enableCodePreview,
   enableMonitor,
   disableGenerateCode,
   disableSensingBlocks,
@@ -151,6 +155,10 @@ export function BlocksEditor({
   const dataPrompt = useSignal(null);
 
   const myBlockPrompt = useSignal(null);
+
+  const toolboxStyles = useSignal(null);
+
+  const codePreviewVisible = useSignal(enableCodePreview);
 
   const extensionsLibraryVisible = useSignal(false);
 
@@ -516,6 +524,16 @@ export function BlocksEditor({
       // 缩放工作区
       ref.resizeObserver = new ResizeObserver(() => {
         ref.workspace && ScratchBlocks.svgResize(ref.workspace);
+
+        // 缩放控制工具栏位置
+        const toolbox = document.querySelector('.blocklyZoom');
+        if (toolbox) {
+          const transform = toolbox.getAttribute('transform');
+          toolboxStyles.value = {
+            transform: transform.replace(/(\d+)/g, '$1px'),
+          };
+        }
+
         onResize?.();
       });
       ref.resizeObserver.observe(ref.current);
@@ -720,62 +738,88 @@ export function BlocksEditor({
   }, [variableTypes]);
 
   return (
-    <div className={styles.blocksEditorWrapper}>
-      <div
-        ref={ref}
-        className={styles.blocksEditor}
-      />
+    <>
+      <div className={styles.editorPreviewWrapper}>
+        <div className={styles.blocksEditorWrapper}>
+          <div
+            ref={ref}
+            className={styles.blocksEditor}
+          />
 
-      <DataMonitor offset={monitorOffset} />
+          <DataMonitor offset={monitorOffset} />
 
-      <ContextMenu
-        menuItems={extensionStatusMenu.value?.menuItems}
-        position={extensionStatusMenu.value?.position}
-      />
+          <ContextMenu
+            menuItems={extensionStatusMenu.value?.menuItems}
+            position={extensionStatusMenu.value?.position}
+          />
 
-      {!disableExtensionButton && (
-        <div className={classNames('scratchCategoryMenu', styles.extensionButton)}>
-          <button
-            className={styles.addButton}
-            title={
-              <Text
-                id="blocks.extensions.addExtension"
-                defaultMessage="Add Extension"
-              />
-            }
-            onClick={useCallback(() => (extensionsLibraryVisible.value = true), [])}
+          {!disableExtensionButton && (
+            <div className={classNames('scratchCategoryMenu', styles.extensionButton)}>
+              <button
+                className={styles.addButton}
+                title={
+                  <Text
+                    id="blocks.extensions.addExtension"
+                    defaultMessage="Add Extension"
+                  />
+                }
+                onClick={useCallback(() => (extensionsLibraryVisible.value = true), [])}
+              >
+                <img
+                  src={extensionIcon}
+                  title="Add Extension"
+                />
+              </button>
+            </div>
+          )}
+
+          {dataPrompt.value && (
+            <DataPromptModal
+              title={dataPrompt.value.title}
+              label={dataPrompt.value.message}
+              defaultValue={dataPrompt.value.defaultValue}
+              enableLocalVariable={enableLocalVariable}
+              showListMessage={dataPrompt.value.varType === ScratchBlocks.LIST_VARIABLE_TYPE}
+              showVariableOptions={dataPrompt.value.showVariableOptions}
+              showCloudOption={dataPrompt.value.showCloudOption}
+              onSubmit={handleDataPromptSubmit}
+              onClose={handleClosePrompt}
+            />
+          )}
+
+          {myBlockPrompt.value && (
+            <MyBlockPromptModal
+              mutator={myBlockPrompt.value.mutator}
+              enableTypes={variableTypes}
+              enableWarp={enableMyBlockWarp}
+              onSubmit={handleMyBlockPromptSubmit}
+              onClose={handleClosePrompt}
+            />
+          )}
+        </div>
+
+        {enableCodePreview && (
+          <div
+            className={styles.toolboxWrapper}
+            style={toolboxStyles.value}
           >
             <img
-              src={extensionIcon}
-              title="Add Extension"
+              width={36}
+              height={36}
+              src={codePreviewVisible.value ? showIcon : hideIcon}
+              onClick={useCallback(() => (codePreviewVisible.value = !codePreviewVisible.value), [])}
             />
-          </button>
-        </div>
-      )}
+          </div>
+        )}
 
-      {dataPrompt.value && (
-        <DataPromptModal
-          title={dataPrompt.value.title}
-          label={dataPrompt.value.message}
-          defaultValue={dataPrompt.value.defaultValue}
-          enableLocalVariable={enableLocalVariable}
-          showListMessage={dataPrompt.value.varType === ScratchBlocks.LIST_VARIABLE_TYPE}
-          showVariableOptions={dataPrompt.value.showVariableOptions}
-          showCloudOption={dataPrompt.value.showCloudOption}
-          onSubmit={handleDataPromptSubmit}
-          onClose={handleClosePrompt}
-        />
-      )}
-
-      {myBlockPrompt.value && (
-        <MyBlockPromptModal
-          mutator={myBlockPrompt.value.mutator}
-          enableTypes={variableTypes}
-          enableWarp={enableMyBlockWarp}
-          onSubmit={handleMyBlockPromptSubmit}
-          onClose={handleClosePrompt}
-        />
-      )}
+        {codePreviewVisible.value && (
+          <CodeEditor
+            readOnly
+            className={styles.codePreview}
+            options={{ fontSize: 13 }}
+          />
+        )}
+      </div>
 
       {extensionsLibraryVisible.value && (
         <ExtensionsLibrary
@@ -784,6 +828,6 @@ export function BlocksEditor({
           onClose={useCallback(() => (extensionsLibraryVisible.value = false), [])}
         />
       )}
-    </div>
+    </>
   );
 }

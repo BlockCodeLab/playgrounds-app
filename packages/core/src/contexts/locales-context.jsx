@@ -47,11 +47,11 @@ export function setLanguage(val) {
 }
 
 // 将默认语言字符串翻译成当前语言
-export function translate(id, options) {
-  if (typeof options === 'string') {
-    options = { defaultMessage: options };
-  }
-  return translator.value.translate(id, options);
+export function translate(id, defaultMessage, options = {}) {
+  return translator.value.translate(id, {
+    defaultMessage,
+    ...options,
+  });
 }
 
 // 检查是否为需要翻译的字符串

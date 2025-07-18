@@ -1,6 +1,8 @@
 blocks.tabs.blocks: 積木
 blocks.tabs.code: 程式
 
+blocks.alert.manualCoding: 警告：手動編寫的代碼在離開「代碼」頁後將被還原。
+
 blocks.panes.monitor: 監視器
 
 blocks.extensions.addExtension: 添加擴展

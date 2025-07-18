@@ -1,6 +1,8 @@
 blocks.tabs.blocks: Blocks
 blocks.tabs.code: Code
 
+blocks.alert.manualCoding: "Warning: Manual coding will be reverted when leaving Code tab."
+
 blocks.panes.monitor: Monitor
 
 blocks.extensions.addExtension: Add Extension

@@ -1,45 +1,59 @@
-import { useEffect, useMemo } from 'preact/hooks';
+import { useEffect, useCallback } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
-import { useProjectContext, Dropdown } from '@blockcode/core';
-import styles from './code-review.module.css';
+import { useAppContext, useProjectContext, setAlert, delAlert, Text } from '@blockcode/core';
+import { CodeEditor } from '@blockcode/code';
 
-export function CodeReview() {
-  const { file, modified } = useProjectContext();
+let modifiedAlertId;
 
-  const type = useSignal('content');
+const hideAlert = () => delAlert('manual-coding');
 
-  const typeItems = useMemo(
-    () =>
-      ['content', 'script'].map((label) => ({
-        label: label === 'content' ? 'Device' : 'Emulator',
-        onClick: () => (type.value = label),
-      })),
-    [],
-  );
+const showAlert = () =>
+  setAlert({
+    id: 'manual-coding',
+    mode: 'warn',
+    message: (
+      <Text
+        id="blocks.alert.manualCoding"
+        defaultMessage="Warning: Manual coding will be reverted when leaving Code tab."
+      />
+    ),
+    onClose: hideAlert,
+  });
+
+export function CodeReview({
+  onRegisterCompletionItems,
+}) {
+  const { tabIndex } = useAppContext();
+
+  const { modified } = useProjectContext();
+
+  const modifiedAlerted = useSignal(false);
 
   useEffect(() => {
-    if (!file.value.content && type.value === 'content') {
-      type.value = 'script';
+    if (tabIndex.value === 1) {
+      if (!modifiedAlerted.value) {
+        modifiedAlerted.value = true;
+        showAlert();
+      }
+    } else {
+      modifiedAlerted.value = false;
     }
-    if (!file.value.script && type.value === 'script') {
-      type.value = 'content';
-    }
-  }, [file.value]);
+  }, [modified.value]);
 
-  const lines = useMemo(() => file.value?.[type]?.split?.('\n'), [type.value, file.value, modified.value]);
+  useEffect(() => {
+    return () => {
+      hideAlert();
+    };
+  }, []);
 
   return (
-    <div className={styles.codeReview}>
-      <pre>
-        {lines?.map?.((line) => (
-          <span>{line}</span>
-        ))}
-      </pre>
-      {file.value.script && file.value.content && (
-        <div className={styles.changer}>
-          <Dropdown items={typeItems}>{type.value === 'content' ? 'Device' : 'Emulator'}</Dropdown>
-        </div>
-      )}
-    </div>
+    <CodeEditor
+      options={{
+        minimap: {
+          enabled: true,
+        },
+      }}
+      onRegisterCompletionItems={onRegisterCompletionItems}
+    />
   );
 }
