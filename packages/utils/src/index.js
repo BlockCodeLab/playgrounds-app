@@ -10,8 +10,6 @@ export { default as Konva } from 'konva';
 
 export { default as localForage } from 'localforage';
 
-export { default as mime } from 'mime';
-
 export { default as UPNG } from 'upng-js';
 
 export { saveSvg, saveSvgAsPng, svgAsDataUri } from 'save-svg-as-png';
@@ -29,6 +27,8 @@ export { flatChildren } from './lib/flat-children';
 export { KonvaUtils, computeConvexHulls } from './lib/konva-utils';
 
 export { MathUtils } from './lib/math-utils';
+
+export { mime } from './lib/mime';
 
 export { nanoid, nanoidLooks } from './lib/nanoid';
 
