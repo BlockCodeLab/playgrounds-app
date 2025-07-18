@@ -163,6 +163,8 @@ proto['operator_mathop'] = function (block) {
     code += `math.exp(num(${numCode}))`;
   } else if (operatorValue === '10 ^') {
     code += `math.pow(10, num(${numCode}))`;
+  } else if (operatorValue === 'abs') {
+    code += `abs(num(${numCode}))`;
   } else {
     code += `math.${operatorValue}(num(${numCode}))`;
   }

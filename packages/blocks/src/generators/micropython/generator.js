@@ -20,13 +20,23 @@ export class MicroPythonGenerator extends PythonGenerator {
     }
   }
 
+  finish(code) {
+    let mainCode = '';
+    mainCode += 'async def main():\n';
+    mainCode += `${this.INDENT}coros = []\n`;
+    mainCode += `${this.INDENT}for task in _tasks__:\n`;
+    mainCode += `${this.INDENT}${this.INDENT}coros.append(task())\n`;
+    mainCode += `${this.INDENT}await asyncio.gather(*coros)\n`;
+    mainCode += 'asyncio.run(main())\n';
+    return super.finish(code) + '\n\n' + mainCode;
+  }
+
   onDefinitions() {
     // 导入默认支持库
-    this.definitions_['import_time'] = 'import time';
     this.definitions_['import_asyncio'] = 'import asyncio';
+    this.definitions_['import_time'] = 'import time';
 
     // 全局变量
-    this.definitions_['asyncio_coros'] = '_coros__ = []';
     this.definitions_['asyncio_tasks'] = '_tasks__ = []';
     this.definitions_['running_times'] = '_times__ = time.ticks_ms()';
   }

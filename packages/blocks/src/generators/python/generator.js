@@ -256,9 +256,10 @@ export class PythonGenerator extends ScratchBlocks.Generator {
       }
     }
 
+    const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
+    let nextCode = this.blockToCode(nextBlock);
+
     if (block.startHat_) {
-      const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-      let nextCode = this.blockToCode(nextBlock);
       if (nextCode) {
         nextCode = this.prefixLines(nextCode, this.INDENT);
         code = code.replace(`\n${this.PASS}`, `\n${nextCode}`);
@@ -267,10 +268,10 @@ export class PythonGenerator extends ScratchBlocks.Generator {
     }
 
     if (block.parentBlock_) {
-      const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-      const nextCode = this.blockToCode(nextBlock);
       return commentCode + code + nextCode;
     }
+
+    return '';
   }
 
   /**
