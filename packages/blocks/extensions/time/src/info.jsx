@@ -17,7 +17,7 @@ export default {
   ),
   image: featureImage,
   icon: iconImage,
-  tags: ['device', 'data'],
+  tags: ['data'],
   internetRequired: true,
 };
 

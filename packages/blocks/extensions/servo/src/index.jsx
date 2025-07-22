@@ -32,7 +32,7 @@ export default {
       ),
       inputs: {
         PIN: {
-          type: 'number',
+          type: 'integer',
           defaultValue: 1,
         },
         ANGLE: {
@@ -41,9 +41,9 @@ export default {
         },
       },
       mpy(block) {
-        const pinCode = this.valueToCode(block, 'PIN', this.ORDER_NONE) || '0';
-        const angleCode = this.valueToCode(block, 'ANGLE', this.ORDER_NONE) || '0';
-        const code = `servo.set_angle(num(${pinCode}), num(${angleCode}))\n`;
+        const pin = this.valueToCode(block, 'PIN', this.ORDER_NONE) || 0;
+        const angleCode = this.valueToCode(block, 'ANGLE', this.ORDER_NONE) || 90;
+        const code = `servo.set_angle(${pin}, ${angleCode})\n`;
         return code;
       },
     },
@@ -57,7 +57,7 @@ export default {
       ),
       inputs: {
         PIN: {
-          type: 'number',
+          type: 'integer',
           defaultValue: 1,
         },
         ANGLE: {
@@ -66,9 +66,9 @@ export default {
         },
       },
       mpy(block) {
-        const pinCode = this.valueToCode(block, 'PIN', this.ORDER_NONE) || '0';
-        const angleCode = this.valueToCode(block, 'ANGLE', this.ORDER_NONE) || '0';
-        const code = `servo.set_angle(num(${pinCode}), num(${angleCode}), angle=90)\n`;
+        const pin = this.valueToCode(block, 'PIN', this.ORDER_NONE) || 0;
+        const angleCode = this.valueToCode(block, 'ANGLE', this.ORDER_NONE) || 0;
+        const code = `servo.set_angle(${pin}, ${angleCode}, angle=90)\n`;
         return code;
       },
     },
@@ -82,12 +82,10 @@ export default {
       ),
       inputs: {
         PIN: {
-          type: 'number',
+          type: 'integer',
           defaultValue: 1,
         },
         ROTATE: {
-          type: 'number',
-          defaultValue: '1',
           menu: [
             [
               <Text
@@ -114,9 +112,9 @@ export default {
         },
       },
       mpy(block) {
-        const pinCode = this.valueToCode(block, 'PIN', this.ORDER_NONE) || '0';
-        const rotateCode = block.getFieldValue('ROTATE') || '0';
-        const code = `servo.set_motor(num(${pinCode}), num(${rotateCode}))\n`;
+        const pin = this.valueToCode(block, 'PIN', this.ORDER_NONE) || 0;
+        const rotate = block.getFieldValue('ROTATE') || '1';
+        const code = `servo.set_motor(${pin}, ${rotate})\n`;
         return code;
       },
     },
