@@ -29,7 +29,9 @@ export function FileMenu({ onNew, onOpen, onSave, onThumb, ExtendedMenu }) {
   const { meta, key, name, files, assets } = useProjectContext();
 
   const getProjectData = useCallback(async () => {
-    const data = await onSave(files.value, assets.value, meta.value);
+    // 移除扩展附件，因为每次重载扩展会自动加载
+    const filteredAssets = assets.value.filter((asset) => !asset.id.startsWith('lib/'));
+    const data = await onSave(files.value, filteredAssets, meta.value);
     data.meta = Object.assign(data.meta ?? {}, {
       editor: meta.value.editor,
       version: meta.value.version,
