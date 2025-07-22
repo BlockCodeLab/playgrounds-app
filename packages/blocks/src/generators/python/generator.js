@@ -167,22 +167,26 @@ export class PythonGenerator extends ScratchBlocks.Generator {
     // Convert the definitions dictionary into a list.
     const imports = [];
     const definitions = [];
+    const variables = [];
     for (let name in this.definitions_) {
       if (name === 'variables') continue;
       const def = this.definitions_[name];
       if (def.match(/^(from\s+\S+\s+)?import\s+\S+/)) {
         imports.push(def);
-      } else {
+      } else if (def.startsWith('def ') || def.startsWith('@_tasks__.')) {
         definitions.push(def);
+      } else {
+        variables.push(def);
       }
     }
-    definitions.push(this.definitions_['variables']);
+    variables.push(this.definitions_['variables']);
     // Clean up temporary data.
     delete this.definitions_;
     delete this.functionNames_;
     this.variableDB_.reset();
-    const allDefs = imports.join('\n') + '\n\n' + definitions.join('\n\n');
-    return allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n\n\n') + code;
+
+    const allDefs = imports.join('\n') + '\n\n' + variables.join('\n') + '\n\n' + definitions.join('\n');
+    return allDefs.replace(/\n\n+/g, '\n\n') + '\n' + code;
   }
 
   /**

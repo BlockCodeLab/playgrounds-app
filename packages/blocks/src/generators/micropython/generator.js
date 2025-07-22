@@ -28,7 +28,7 @@ export class MicroPythonGenerator extends PythonGenerator {
     mainCode += `${this.INDENT}${this.INDENT}coros.append(task())\n`;
     mainCode += `${this.INDENT}await asyncio.gather(*coros)\n`;
     mainCode += 'asyncio.run(main())\n';
-    return super.finish(code) + '\n\n' + mainCode;
+    return super.finish(code) + '\n' + mainCode;
   }
 
   onDefinitions() {
@@ -47,9 +47,5 @@ export class MicroPythonGenerator extends PythonGenerator {
     code += `async def ${funcName}():\n`;
     code += branchCode;
     return code;
-  }
-
-  addLoopTrap(branchCode, id) {
-    return super.addLoopTrap(branchCode, id);
   }
 }

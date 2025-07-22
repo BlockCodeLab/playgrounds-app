@@ -39,7 +39,7 @@ class Generator extends BaseGenerator {
       branch = this.prefixLines(this.INFINITE_LOOP_TRAP.replace(/%1/g, "'" + id + "'"), this.INDENT) + branch;
     }
     if (this.STATEMENT_PREFIX) {
-      branch += this.prefixLines(this.STATEMENT_PREFIX.replace(/%1/g, "'" + id + "'"), this.INDENT);
+      branch += this.prefixLines(branch, this.INDENT);
     }
     return branch;
   }
