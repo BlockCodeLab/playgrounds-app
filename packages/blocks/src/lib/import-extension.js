@@ -14,7 +14,7 @@ export async function importExtension(extId) {
       const content = await fetch(file.uri).then((res) => res.arrayBuffer());
       assets.push(
         Object.assign(file, {
-          id: `ext/${escape(extId)}/${file.name}`,
+          id: `lib/${escape(extId)}/${file.name}`,
           content,
         }),
       );
