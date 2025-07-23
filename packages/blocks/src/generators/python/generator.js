@@ -173,7 +173,7 @@ export class PythonGenerator extends ScratchBlocks.Generator {
       const def = this.definitions_[name];
       if (def.match(/^(from\s+\S+\s+)?import\s+\S+/)) {
         imports.push(def);
-      } else if (def.startsWith('def ') || def.startsWith('@_tasks__.')) {
+      } else if (def.startsWith('def ') || def.startsWith('async def ') || def.startsWith('@_tasks__.')) {
         definitions.push(def);
       } else {
         variables.push(def);

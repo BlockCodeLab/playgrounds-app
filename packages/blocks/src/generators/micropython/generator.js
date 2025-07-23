@@ -24,8 +24,7 @@ export class MicroPythonGenerator extends PythonGenerator {
     let mainCode = '';
     mainCode += 'async def main():\n';
     mainCode += `${this.INDENT}coros = []\n`;
-    mainCode += `${this.INDENT}for task in _tasks__:\n`;
-    mainCode += `${this.INDENT}${this.INDENT}coros.append(task())\n`;
+    mainCode += `${this.INDENT}for task in _tasks__: coros.append(task())\n`;
     mainCode += `${this.INDENT}await asyncio.gather(*coros)\n`;
     mainCode += 'asyncio.run(main())\n';
     return super.finish(code) + '\n' + mainCode;
