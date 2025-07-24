@@ -98,24 +98,24 @@ const updateScratchBlocksMsgs = (enableMultiTargets, enableVariableTypes) => {
       },
       enableMultiTargets
         ? {
-          CONTROL_STOP_OTHER: translate('blocks.control.stopOtherInTarget', 'other scripts in sprite'),
-        }
+            CONTROL_STOP_OTHER: translate('blocks.control.stopOtherInTarget', 'other scripts in sprite'),
+          }
         : {
-          CONTROL_STOP_OTHER: translate('blocks.control.stopOther', 'other scripts'),
-        },
+            CONTROL_STOP_OTHER: translate('blocks.control.stopOther', 'other scripts'),
+          },
       enableVariableTypes
         ? {
-          NEW_LIST: translate('blocks.dataPrompt.makeArray', 'Make a Array'),
-          LIST_ALREADY_EXISTS: translate('blocks.dataPrompt.arrayExists', 'A array named "%1" already exists.'),
-          LIST_MODAL_TITLE: translate('blocks.dataPrompt.newArray', 'New Array'),
-          NEW_LIST_TITLE: translate('blocks.dataPrompt.arrayTitle', 'New array name:'),
-        }
+            NEW_LIST: translate('blocks.dataPrompt.makeArray', 'Make a Array'),
+            LIST_ALREADY_EXISTS: translate('blocks.dataPrompt.arrayExists', 'A array named "%1" already exists.'),
+            LIST_MODAL_TITLE: translate('blocks.dataPrompt.newArray', 'New Array'),
+            NEW_LIST_TITLE: translate('blocks.dataPrompt.arrayTitle', 'New array name:'),
+          }
         : {
-          NEW_LIST: translate('blocks.dataPrompt.makeList', 'Make a List'),
-          LIST_ALREADY_EXISTS: translate('blocks.dataPrompt.listExists', 'A list named "%1" already exists.'),
-          LIST_MODAL_TITLE: translate('blocks.dataPrompt.newList', 'New List'),
-          NEW_LIST_TITLE: translate('blocks.dataPrompt.listTitle', 'New list name:'),
-        },
+            NEW_LIST: translate('blocks.dataPrompt.makeList', 'Make a List'),
+            LIST_ALREADY_EXISTS: translate('blocks.dataPrompt.listExists', 'A list named "%1" already exists.'),
+            LIST_MODAL_TITLE: translate('blocks.dataPrompt.newList', 'New List'),
+            NEW_LIST_TITLE: translate('blocks.dataPrompt.listTitle', 'New list name:'),
+          },
     ),
   ).forEach(([key, value]) => (ScratchBlocks.Msg[key] = value));
 };
@@ -466,7 +466,9 @@ export function BlocksEditor({
           media: './assets/blocks-media/',
         }),
       );
-      ref.workspace.procedureReturnsEnabled_ = enableProcedureReturns;
+      if (enableProcedureReturns) {
+        ref.workspace.procedureReturnsEnabled_ = variableTypes ? 2 : 1;
+      }
 
       // 绑定工作区事件
       ref.workspace.addChangeListener((e) => {

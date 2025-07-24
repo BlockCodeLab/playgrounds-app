@@ -393,7 +393,7 @@ export function makeToolboxXML(categoriesXML = [], options = {}) {
   const myBlocksXML = myBlocks();
   const monitorXML = monitor(!options.enableMonitor);
 
-  const everything = [eventsXML, controlXML, sensingXML, operatorsXML, monitorXML, variablesXML, myBlocksXML].filter(
+  const everything = [eventsXML, controlXML, sensingXML, operatorsXML, variablesXML, myBlocksXML, monitorXML].filter(
     (s) => s && s.trim(),
   );
 

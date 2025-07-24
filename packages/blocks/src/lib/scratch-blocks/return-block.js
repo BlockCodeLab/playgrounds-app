@@ -143,18 +143,18 @@ ScratchBlocks.Procedures.flyoutCategory = function (workspace) {
       '</value>' +
       '</block>';
     const returnStringBlock = ScratchBlocks.Xml.textToDom(returnStringText);
-    xmlList.push(returnStringBlock);
+
+    let shadowValue = '<shadow type="text">' + '<field name="TEXT"/>' + '</shadow>';
+    if (workspace.procedureReturnsEnabled_ === 2) {
+      xmlList.push(returnStringBlock);
+      shadowValue = '<shadow type="math_number">' + '<field name="NUM">1</field>' + '</shadow>';
+    }
 
     // 返回值积木
     const returnText =
-      '<block type="procedures_return">' +
-      '<value name="VALUE">' +
-      '<shadow type="math_number">' +
-      '<field name="NUM">1</field>' +
-      '</shadow>' +
-      '</value>' +
-      '</block>';
+      '<block type="procedures_return">' + '<value name="VALUE">' + shadowValue + '</value>' + '</block>';
     const returnBlock = ScratchBlocks.Xml.textToDom(returnText);
+
     xmlList.push(returnBlock);
 
     // 分割线
