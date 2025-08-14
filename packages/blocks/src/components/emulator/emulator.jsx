@@ -9,6 +9,15 @@ export function Emulator({ id, zoom, width, height, onRuntime }) {
   const { splashVisible } = useAppContext();
 
   useEffect(() => {
+    if (ref.stage) {
+      ref.stage.width(width);
+      ref.stage.height(height);
+      ref.stage.offsetX(-width / 2);
+      ref.stage.offsetY(height / 2);
+    }
+  }, [width, height]);
+
+  useEffect(() => {
     if (splashVisible.value) {
       setAppState('running', false);
     }

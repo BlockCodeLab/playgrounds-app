@@ -20,9 +20,7 @@ const showAlert = () =>
     onClose: hideAlert,
   });
 
-export function CodeReview({
-  onRegisterCompletionItems,
-}) {
+export function CodeReview({ onRegisterCompletionItems }) {
   const { tabIndex } = useAppContext();
 
   const { modified } = useProjectContext();
@@ -30,7 +28,7 @@ export function CodeReview({
   const modifiedAlerted = useSignal(false);
 
   useEffect(() => {
-    if (tabIndex.value === 1) {
+    if (tabIndex.value !== 0) {
       if (!modifiedAlerted.value) {
         modifiedAlerted.value = true;
         showAlert();
@@ -40,11 +38,7 @@ export function CodeReview({
     }
   }, [modified.value]);
 
-  useEffect(() => {
-    return () => {
-      hideAlert();
-    };
-  }, []);
+  useEffect(() => hideAlert, []);
 
   return (
     <CodeEditor

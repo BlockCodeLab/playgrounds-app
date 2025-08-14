@@ -30,8 +30,9 @@ ScratchBlocks.ContextMenu.blockCommentOption = function (block) {
       bbox.height += 1;
       block.svgGroup_.getBBox = () => bbox;
       if (block.startHat_) {
-        options.top = -17;
+        options.top = -22;
         options.left = -1;
+        bbox.height += 5;
       }
       saveSvgAsPng(block.svgGroup_, nanoid(), options);
     },
