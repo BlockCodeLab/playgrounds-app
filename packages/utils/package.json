@@ -5,6 +5,7 @@
   "type": "module",
   "module": "./dist/index.js",
   "dependencies": {
+    "balloons-js": "^0.0.3",
     "classnames": "^2.5.1",
     "crypto-js": "^4.2.0",
     "html2canvas": "^1.4.1",
