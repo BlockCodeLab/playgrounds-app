@@ -24,7 +24,7 @@ def write_us(pin, us):
 
 
 def set_angle(pin, degrees=0, angle=180):
-    degrees = (-degrees + (angle / 2) + 360) % 360
+    degrees = max(0, min(degrees, angle))
     total_range = MAX_US - MIN_US
     us = MIN_US + total_range * degrees / angle
     write_us(pin, us)

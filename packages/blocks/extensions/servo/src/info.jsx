@@ -3,7 +3,6 @@ import featureImage from './feature.png';
 import iconImage from './icon.png';
 
 export default {
-  beta: true,
   image: featureImage,
   icon: iconImage,
   name: (
