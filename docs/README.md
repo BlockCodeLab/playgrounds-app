@@ -1,12 +1,8 @@
 ## 介绍
 
-这是一款全新的、强大的、开放的图形化编程平台，灵感源自 MIT 的 [Scratch](https://scratch.mit.edu) 应用和 
-Microsoft 的 [MakeCode](https://microsoft.com/makecode) 项目。平台基于同源的底层技术（Scratch-Blocks/Google Blockly），
-但上层应用架构经过全新开发，所有组件均采用异步加载机制，实现即用即载。在硬件对接与编程支持方面，平台表现出更强大的能力，
-支持多种编程方式——实时编程、脚本编程和下载编程，能够满足不同应用场景和项目技术需求。
+这是一款全新的、强大的、开放的图形化编程平台，灵感源自 MIT 的 [Scratch](https://scratch.mit.edu) 应用和 Microsoft 的 [MakeCode](https://microsoft.com/makecode) 项目。平台基于同源的底层技术（Scratch-Blocks/Google Blockly），但上层应用架构经过全新开发，所有组件均采用异步加载机制，实现即用即载。在硬件对接与编程支持方面，平台表现出更强大的能力，支持多种编程方式——实时编程、脚本编程和下载编程，能够满足不同应用场景和项目技术需求。
 
-平台整合了多种图形化编程工具和应用工具，提供从开发到教学的一站式服务，用户无需离开平台即可满足日常创客项目的所有工具需求。
-这不仅大幅提升了工作效率和便捷性，也为广大创客和教育工作者带来了愉悦的使用体验。
+平台整合了多种图形化编程工具和应用工具，提供从开发到教学的一站式服务，用户无需离开平台即可满足日常创客项目的所有工具需求。这不仅大幅提升了工作效率和便捷性，也为广大创客和教育工作者带来了愉悦的使用体验。
 
 ## 特性
 
@@ -44,8 +40,8 @@ Microsoft 的 [MakeCode](https://microsoft.com/makecode) 项目。平台基于�
 
 国内用户请通过[百度网盘](https://pan.baidu.com/s/1yr7Q-6PFuaimyv_noXxJ_w?pwd=ahj3)加速下载。
 
-[1]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.5/BlockCodePlaygrounds-win-x64-1.0.5.zip
-[2]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.5/BlockCodePlaygrounds-win-x86-1.0.5.zip
-[3]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.5/BlockCodePlaygrounds-win7-1.0.5.zip
-[4]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.5/BlockCodePlaygrounds-macos-apple-silicon-1.0.5.zip
-[5]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.5/BlockCodePlaygrounds-macos-intel-1.0.5.zip
+[1]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.6/BlockCodePlaygrounds-win-x64-1.0.6.zip
+[2]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.6/BlockCodePlaygrounds-win-x86-1.0.6.zip
+[3]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.6/BlockCodePlaygrounds-win7-1.0.6.zip
+[4]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.6/BlockCodePlaygrounds-macos-apple-silicon-1.0.6.zip
+[5]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.6/BlockCodePlaygrounds-macos-intel-1.0.6.zip

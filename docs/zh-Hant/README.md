@@ -1,12 +1,8 @@
 ## 介紹
 
-這是一款全新的、強大的、開放的圖形化編程平台，靈感源自 MIT 的 [Scratch](https://scratch.mit.edu) 應用和 
-Microsoft 的 [MakeCode](https://microsoft.com/makecode) 項目。平台基於同源的底層技術（Scratch-Blocks/Google Blockly），
-但上層應用架構經過全新開發，所有組件均採用異步加載機制，實現即用即載。在硬件對接與編程支持方面，平台表現出更強大的能力，
-支持多種編程方式——實時編程、腳本編程和下載編程，能夠滿足不同應用場景和項目技術需求。
+這是一款全新的、強大的、開放的圖形化編程平台，靈感源自 MIT 的 [Scratch](https://scratch.mit.edu) 應用和 Microsoft 的 [MakeCode](https://microsoft.com/makecode) 項目。平台基於同源的底層技術（Scratch-Blocks/Google Blockly），但上層應用架構經過全新開發，所有組件均採用異步加載機制，實現即用即載。在硬件對接與編程支持方面，平台表現出更強大的能力，支持多種編程方式——實時編程、腳本編程和下載編程，能夠滿足不同應用場景和項目技術需求。
 
-平台整合了多種圖形化編程工具和應用工具，提供從開發到教學的一站式服務，用戶無需離開平台即可滿足日常創客項目的所有工具需求。
-這不僅大幅提升了工作效率和便捷性，也為廣大創客和教育工作者帶來了愉悅的使用體驗。
+平台整合了多種圖形化編程工具和應用工具，提供從開發到教學的一站式服務，用戶無需離開平台即可滿足日常創客項目的所有工具需求。這不僅大幅提升了工作效率和便捷性，也為廣大創客和教育工作者帶來了愉悅的使用體驗。
 
 ## 特性
 
@@ -42,8 +38,8 @@ Microsoft 的 [MakeCode](https://microsoft.com/makecode) 項目。平台基於�
 
 <!-- select:end -->
 
-[1]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.5/BlockCodePlaygrounds-win-x64-1.0.5.zip
-[2]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.5/BlockCodePlaygrounds-win-x86-1.0.5.zip
-[3]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.5/BlockCodePlaygrounds-win7-1.0.5.zip
-[4]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.5/BlockCodePlaygrounds-macos-apple-silicon-1.0.5.zip
-[5]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.5/BlockCodePlaygrounds-macos-intel-1.0.5.zip
+[1]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.6/BlockCodePlaygrounds-win-x64-1.0.6.zip
+[2]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.6/BlockCodePlaygrounds-win-x86-1.0.6.zip
+[3]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.6/BlockCodePlaygrounds-win7-1.0.6.zip
+[4]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.6/BlockCodePlaygrounds-macos-apple-silicon-1.0.6.zip
+[5]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.0.6/BlockCodePlaygrounds-macos-intel-1.0.6.zip

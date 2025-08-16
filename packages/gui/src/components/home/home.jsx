@@ -414,7 +414,7 @@ export function Home({ onOpenEditor, onOpenProject }) {
                   </div>
                   <div className={styles.aboutVersionRow}></div>
                   {editors.value
-                    .filter((item) => !item.preview && !item.disabled)
+                    .filter((item) => !item.disabled)
                     .map((item) => (
                       <div className={styles.aboutVersionRow}>
                         <div>

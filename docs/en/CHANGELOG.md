@@ -1,8 +1,18 @@
 ## CHANGELOG
 
+### v1.0.6
+
+- Released ESP32 Editor v0.1.0 Beta
+- Updated Scratch Arcade Editor to v1.1.0
+  - Added deletion and flipping operations for costumes
+- Added hardware sound support (stage)
+- Added ESP32 Showcase Projects
+- Optimized compatibility issues
+- Fixed some bugs
+
 ### v1.0.5
 
-- Released Arduino Editor v0.5.0 Beta
+- Released Arduino Editor v0.1.0 Beta
 - Updated Scratch Arcade Editor to v1.0.6
   - Added image resizing feature in the costume editor
 - Added right-click menu function to export block images
@@ -17,7 +27,7 @@
 - Added WebSocket extension
 - Added translation extension
 - Updated Scratch Arcade editor to v1.0.5
-- Improved compatibility 
+- Improved compatibility
 - Fixed several bugs
 
 ### v1.0.1
