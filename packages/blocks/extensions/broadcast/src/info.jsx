@@ -17,7 +17,7 @@ export default {
       defaultMessage="Broadcast the messages via the ESP-Now."
     />
   ),
-  tags: ['runtime', 'communication'],
+  tags: ['arcade', 'communication'],
 };
 
 addLocalesMessages({

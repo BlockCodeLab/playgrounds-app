@@ -33,5 +33,5 @@ export default {
       defaultMessage="Use key-value to manage your data."
     />
   ),
-  tags: ['device', 'emulator', 'data'],
+  tags: ['device', 'scratch', 'data'],
 };

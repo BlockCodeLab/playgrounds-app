@@ -32,6 +32,6 @@ export default {
       defaultMessage="Connect to WebSocket server."
     />
   ),
-  tags: ['runtime', 'emulator', 'data'],
+  tags: ['arcade', 'scratch', 'data'],
   internetRequired: true,
 };

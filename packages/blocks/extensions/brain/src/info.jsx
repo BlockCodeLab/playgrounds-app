@@ -41,6 +41,6 @@ export default {
       defaultMessage="iFLYTEK Spark"
     />
   ),
-  tags: ['emulator', 'ai', 'llm'],
+  tags: ['device', 'scratch', 'ai', 'llm'],
   internetRequired: true,
 };

@@ -42,7 +42,6 @@ export default {
       defaultMessage="Han Haoyu"
     />
   ),
-  // 过滤条件设置
-  tags: ['emulator'],
+  tags: ['scratch'],
   bluetoothRequired: true,
 };

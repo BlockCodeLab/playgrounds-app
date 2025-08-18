@@ -34,5 +34,5 @@ export default {
       defaultMessage="Bring words to life."
     />
   ),
-  tags: ['arcade', 'emulator'],
+  tags: ['arcade', 'scratch'],
 };

@@ -32,6 +32,6 @@ export default {
       defaultMessage="Request network data via HTTP."
     />
   ),
-  tags: ['runtime', 'emulator', 'data'],
+  tags: ['arcade', 'scratch', 'data'],
   internetRequired: true,
 };

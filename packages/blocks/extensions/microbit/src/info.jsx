@@ -43,6 +43,6 @@ export default {
       defaultMessage="Koji Yokokawa"
     />
   ),
-  tags: ['runtime', 'emulator'],
+  tags: ['arcade', 'scratch'],
   bluetoothRequired: true,
 };

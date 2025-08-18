@@ -12,7 +12,7 @@ export default {
   icon: iconImage,
   name: (
     <Text
-      id="extension.mqtt.name"
+      id="blocks.mqtt.name"
       defaultMessage="MQTT"
     />
   ),
