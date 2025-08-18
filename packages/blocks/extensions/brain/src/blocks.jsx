@@ -28,8 +28,12 @@ export const blocks = [
       return code;
     },
     mpy(block) {
+      const model = this.quote_(getUserConfig('SparkAI.Model') ?? 'lite');
+      const apiPassword = this.quote_(getUserConfig('SparkAI.APIPassword') ?? APIPASSWORD);
+      this.definitions_['my_brain'] = `my_brain = brain.Brain(${apiPassword}, ${model})`;
+
       const prompt = this.valueToCode(block, 'PROMPT', this.ORDER_NONE) || '';
-      const code = `brain.set_prompt((target.id if 'target' in dir() else 'default'), ${prompt})\n`;
+      const code = `my_brain.add_prompt(${prompt})\n`;
       return code;
     },
   },
@@ -60,8 +64,10 @@ export const blocks = [
     mpy(block) {
       const model = this.quote_(getUserConfig('SparkAI.Model') ?? 'lite');
       const apiPassword = this.quote_(getUserConfig('SparkAI.APIPassword') ?? APIPASSWORD);
+      this.definitions_['my_brain'] = `my_brain = brain.Brain(${apiPassword}, ${model})`;
+
       const question = this.valueToCode(block, 'QUESTION', this.ORDER_NONE) || '""';
-      const code = `await brain.ask_spark((target.id if 'target' in dir() else 'default'), ${question}, ${apiPassword}, ${model})\n`;
+      const code = `await my_brain.ask(${question})\n`;
       return code;
     },
   },
@@ -79,8 +85,11 @@ export const blocks = [
       return [code, this.ORDER_FUNCTION_CALL];
     },
     mpy(block) {
-      const code = `brain.get_answer(target.id if 'target' in dir() else 'default')`;
-      return [code, this.ORDER_FUNCTION_CALL];
+      const model = this.quote_(getUserConfig('SparkAI.Model') ?? 'lite');
+      const apiPassword = this.quote_(getUserConfig('SparkAI.APIPassword') ?? APIPASSWORD);
+      this.definitions_['my_brain'] = `my_brain = brain.Brain(${apiPassword}, ${model})`;
+
+      return ['my_brain.result', this.ORDER_MEMBER];
     },
   },
   '---',
@@ -97,7 +106,11 @@ export const blocks = [
       return code;
     },
     mpy(block) {
-      const code = `brain.clear(target.id if 'target' in dir() else 'default')\n`;
+      const model = this.quote_(getUserConfig('SparkAI.Model') ?? 'lite');
+      const apiPassword = this.quote_(getUserConfig('SparkAI.APIPassword') ?? APIPASSWORD);
+      this.definitions_['my_brain'] = `my_brain = brain.Brain(${apiPassword}, ${model})`;
+
+      const code = `my_brain.clear()\n`;
       return code;
     },
   },

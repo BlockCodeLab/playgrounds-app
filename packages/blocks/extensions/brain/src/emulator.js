@@ -1,6 +1,6 @@
 import { fetchSpark, getUserConfig } from '@blockcode/utils';
 
-const MAX_HISTORY = 4;
+const MAX_HISTORY = 6;
 
 const SPARK_URL = 'https://spark-api-open.xf-yun.com/v1/chat/completions';
 
@@ -92,7 +92,7 @@ export function emulator(runtime) {
         // 初始提示词设置
         {
           role: 'system',
-          content: `现在开始你的回答不能超过100字。${prompts.join('；')}。`,
+          content: `你的话不多，擅长总结归纳，回总是简明扼要。。${prompts.join('；')}。`,
         },
         // 历史记录
         this.getHistory(target),
