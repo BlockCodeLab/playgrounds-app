@@ -22,7 +22,7 @@ export class MicroPythonGenerator extends PythonGenerator {
 
   finish(code) {
     let mainCode = '# Start!\n';
-    mainCode += 'coros = map(lambda task: task(), _tasks__)\n';
+    mainCode += 'coros = map(lambda t: t(), _tasks__)\n';
     mainCode += 'asyncio.run(asyncio.gather(*coros))\n';
     return super.finish(code) + '\n' + mainCode;
   }

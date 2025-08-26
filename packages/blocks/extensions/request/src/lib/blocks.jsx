@@ -1,6 +1,6 @@
 import { Text } from '@blockcode/core';
 
-export const blocks = [
+export const blocks = (meta) => [
   {
     id: 'request',
     text: (
@@ -31,7 +31,15 @@ export const blocks = [
     mpy(block) {
       const method = this.quote_(block.getFieldValue('MOTHOD')) || '"GET"';
       const url = this.valueToCode(block, 'URL', this.ORDER_NONE) || '""';
-      const code = `await request.afetch(str(${method}), str(${url}))\n`;
+      let code = '';
+      code += `await request.fetch(str(${method}), str(${url})`;
+
+      // Scratch Arcade 的事件
+      if (meta.editor === '@blockcode/gui-arcade') {
+        code += ', lambda: runtime.fire("REQUEST_SUCCESS"), lambda: runtime.fire("REQUEST_FAILS")';
+      }
+
+      code += ')\n';
       return code;
     },
     emu(block) {

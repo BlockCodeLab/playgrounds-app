@@ -42,36 +42,36 @@ export const blocks = [
       return [code, this.ORDER_FUNCTION_CALL];
     },
   },
-  {
-    id: 'language',
-    text: (
-      <Text
-        id="blocks.translate.language"
-        defaultMessage="language"
-      />
-    ),
-    output: 'string',
-    emu(block) {
-      return ['runtime.extensions.translate.language', this.ORDER_MEMBER];
-    },
-    mpy(block) {
-      return ['translate.get_language()', this.ORDER_FUNCTION_CALL];
-    },
-  },
+  // {
+  //   id: 'language',
+  //   text: (
+  //     <Text
+  //       id="blocks.translate.language"
+  //       defaultMessage="language"
+  //     />
+  //   ),
+  //   output: 'string',
+  //   emu(block) {
+  //     return ['runtime.extensions.translate.language', this.ORDER_MEMBER];
+  //   },
+  //   mpy(block) {
+  //     return ['translate.get_language()', this.ORDER_FUNCTION_CALL];
+  //   },
+  // },
 ];
 
 export const menus = {
   languageMenu: {
     inputMode: true,
     type: 'string',
-    defaultValue: 'english',
+    defaultValue: 'English',
     items: [
       [
         <Text
           id="blocks.translate.english"
           defaultMessage="English"
         />,
-        'english',
+        'English',
       ],
       [
         <Text

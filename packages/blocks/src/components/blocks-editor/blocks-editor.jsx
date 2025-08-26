@@ -59,16 +59,16 @@ export const loadedExtensions = new Map();
 const wrapToolboxXml = (xml) => `<xml style="display:none">\n${xml}\n</xml>`;
 
 // 更新积木栏XML
-const updateToolboxXml = (buildinExtensions, options) =>
+const updateToolboxXml = (buildinExtensions, options, meta) =>
   Array.from(loadedExtensions.values()).reduce(
     // 将外部扩展的xml合并到主xml中
-    (xml, extObj) => xml + loadExtension(extObj, options),
+    (xml, extObj) => xml + loadExtension(extObj, options, meta),
     // 将默认扩展的xml合并到主xml中
     makeToolboxXML(
       buildinExtensions?.map((extObj) => ({
         id: extObj.id,
         order: extObj.order,
-        xml: loadExtension(extObj, options),
+        xml: loadExtension(extObj, options, meta),
       })),
       options,
     ),
@@ -204,7 +204,7 @@ export function BlocksEditor({
   //
   const updateWorkspace = useCallback(() => {
     const buildinExtensions = onBuildinExtensions?.();
-    const xml = updateToolboxXml(buildinExtensions, options);
+    const xml = updateToolboxXml(buildinExtensions, options, meta.value);
     if (ref.workspace?.toolbox_) {
       updateWorkspaceToolbox(ref.workspace, wrapToolboxXml(xml));
     }
@@ -360,7 +360,7 @@ export function BlocksEditor({
 
       // 更新积木栏
       const buildinExtensions = onBuildinExtensions?.();
-      const xml = updateToolboxXml(buildinExtensions, options);
+      const xml = updateToolboxXml(buildinExtensions, options, meta.value);
       updateWorkspaceToolbox(ref.workspace, wrapToolboxXml(xml));
 
       // 清除撤销记录
@@ -404,7 +404,7 @@ export function BlocksEditor({
       const projData = await preloadProjectBlocks(meta.value, files.value);
 
       for (const [extId, extObj] of projData.extensions) {
-        loadExtension(extObj, options);
+        loadExtension(extObj, options, meta.value);
         loadedExtensions.set(extId, extObj);
       }
 

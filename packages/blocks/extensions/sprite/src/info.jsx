@@ -33,5 +33,5 @@ export default {
       defaultMessage="Make the sprite come alive."
     />
   ),
-  tags: ['arcade', 'scratch'],
+  tags: ['scratch'],
 };

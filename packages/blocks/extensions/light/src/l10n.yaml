@@ -9,7 +9,7 @@ en:
 
 zh-Hans:
   blocks.light.name: 灯光
-  blocks.light.led: 将引脚 [PIN] 的 LED 灯 [STATE]
+  blocks.light.led: "[STATE] 引脚 [PIN] 的 LED 灯"
   blocks.light.led.off: 关闭
   blocks.light.led.on: 开启
   blocks.light.ledToggle: 切换引脚 [PIN] 的 LED 灯状态
@@ -18,7 +18,7 @@ zh-Hans:
 
 zh-Hant:
   blocks.light.name: 燈光
-  blocks.light.led: 將引腳 [PIN] 的 LED 燈 [STATE]
+  blocks.light.led: "[STATE] 引腳 [PIN] 的 LED 燈"
   blocks.light.led.off: 關閉
   blocks.light.led.on: 開啟
   blocks.light.ledToggle: 切換引腳 [PIN] 的 LED 燈狀態

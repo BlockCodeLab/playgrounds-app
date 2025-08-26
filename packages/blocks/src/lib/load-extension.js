@@ -31,7 +31,7 @@ const FieldNames = {
   note: 'NOTE',
 };
 
-export function loadExtension(extObj, options) {
+export function loadExtension(extObj, options, meta) {
   const extId = extObj.id;
   const extName = maybeTranslate(extObj.name);
   const { generator, emulator } = options;
@@ -81,11 +81,13 @@ export function loadExtension(extObj, options) {
 
   extObj.menus = extObj.menus || {};
 
-  categoryXML += extObj.blocks
+  const blocks = typeof extObj.blocks === 'function' ? extObj.blocks(meta) : extObj.blocks;
+
+  categoryXML += blocks
     .filter((block, index) => {
       // 不显示排在最后的空白分割线
       if (block === '---') {
-        return index < extObj.blocks.length - 1;
+        return index < blocks.length - 1;
       }
       // block.hidden 不用于过滤，只用于是否需要显示在积木栏
       return true;
@@ -426,10 +428,12 @@ export function loadExtension(extObj, options) {
     if (generator) {
       generator[menuBlockId] = (block) => {
         let value = block.getFieldValue(menuName) || menu.defaultValue;
-        if (['text', 'string'].includes(menu.type)) {
-          value = generator.quote_(value);
+        if (menu.type === 'integer') {
+          value = parseInt(value);
         } else if (menu.type === 'number') {
           value = Number(value);
+        } else {
+          value = generator.quote_(value);
         }
         return [value, generator.ORDER_ATOMIC];
       };
@@ -437,10 +441,12 @@ export function loadExtension(extObj, options) {
     if (emulator) {
       emulator[menuBlockId] = (block) => {
         let value = block.getFieldValue(menuName) || menu.defaultValue;
-        if (['text', 'string'].includes(menu.type)) {
-          value = generator.quote_(value);
+        if (menu.type === 'integer') {
+          value = parseInt(value);
         } else if (menu.type === 'number') {
           value = Number(value);
+        } else {
+          value = generator.quote_(value);
         }
         return [value, emulator.ORDER_ATOMIC];
       };

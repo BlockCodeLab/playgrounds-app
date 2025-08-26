@@ -1,5 +1,5 @@
 en:
-  blocks.broadcast.name: ESP-Now Broadcast
+  blocks.broadcast.name: Broadcast
   blocks.broadcast.setGroup: set broadcast group [ID]
   blocks.broadcast.send: broadcast message [MESSAGE]
   blocks.broadcast.sendName: broadcast label [NAME] message [MESSAGE]
@@ -16,7 +16,7 @@ en:
   blocks.broadcast.receivedSerial: serial number
 
 zh-Hans:
-  blocks.broadcast.name: ESP-Now 无线广播
+  blocks.broadcast.name: 无线广播
   blocks.broadcast.setGroup: 将广播组设为 [ID]
   blocks.broadcast.send: 广播消息 [MESSAGE]
   blocks.broadcast.sendName: 广播主题为 [NAME] 的 [MESSAGE] 消息
@@ -33,7 +33,7 @@ zh-Hans:
   blocks.broadcast.receivedSerial: 序列号
 
 zh-Hant:
-  blocks.broadcast.name: ESP-Now 無線廣播
+  blocks.broadcast.name: 無線廣播
   blocks.broadcast.setGroup: 將廣播組設為 [ID]
   blocks.broadcast.send: 廣播消息 [MESSAGE]
   blocks.broadcast.sendName: 廣播名為 [NAME] 的 [MESSAGE] 消息

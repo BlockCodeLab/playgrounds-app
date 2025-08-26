@@ -42,6 +42,6 @@ export default {
       defaultMessage="iFLYTEK Spark"
     />
   ),
-  tags: ['arcade', 'scratch'],
+  tags: ['scratch'],
   bluetoothRequired: true,
 };

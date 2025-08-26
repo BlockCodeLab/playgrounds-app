@@ -18,6 +18,7 @@ addLocalesMessages({
 });
 
 export default {
+  beta: true,
   image: featureImage,
   icon: iconImage,
   name: (
@@ -32,6 +33,6 @@ export default {
       defaultMessage="Connect to WebSocket server."
     />
   ),
-  tags: ['arcade', 'scratch', 'data'],
+  tags: ['scratch'],
   internetRequired: true,
 };

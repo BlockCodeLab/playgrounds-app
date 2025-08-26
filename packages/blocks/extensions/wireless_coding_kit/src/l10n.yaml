@@ -1,0 +1,71 @@
+en:
+  blocks.wirelesscodingkit.name: Wireless Coding Kit
+  blocks.wirelesscodingkit.led: set [PORT] LED [STATE]
+  blocks.wirelesscodingkit.statuOn: on
+  blocks.wirelesscodingkit.statuOff: off
+  blocks.wirelesscodingkit.ledToggle: toggle [PORT] LED
+  blocks.wirelesscodingkit.buttonPressed: "[PORT] button is pressed?"
+  blocks.wirelesscodingkit.sound: "[PORT] is sound?"
+  blocks.wirelesscodingkit.soundValue: "[PORT] sound value"
+  blocks.wirelesscodingkit.rotaryPotentiometer: "[PORT] rotary potentiometer value"
+  blocks.wirelesscodingkit.photosensitive: "[PORT] photosensitive value"
+  blocks.wirelesscodingkit.temperature: "[PORT] temperature(℃)"
+  blocks.wirelesscodingkit.humidity: "[PORT] humidity(%)"
+  blocks.wirelesscodingkit.distance: "[PORT] distance(cm)"
+  blocks.wirelesscodingkit.buzzer: set [PORT] buzzer [STATE]
+  blocks.wirelesscodingkit.segmentDigit: set 4-digit 7-segment display a digit [DIGIT] at [POS]
+  blocks.wirelesscodingkit.segmentNumber: set 4-digit 7-segment display numbers [NUMBER]
+  blocks.wirelesscodingkit.segmentColon: set 4-digit 7-segment display the colon [STATE]
+  blocks.wirelesscodingkit.segmentClear: clear 4-digit 7-segment display
+  blocks.wirelesscodingkit.motor: set [PORT] motor [DIR] speed to [PERCENT]%
+  blocks.wirelesscodingkit.motorForward: forward
+  blocks.wirelesscodingkit.motorReverse: reverse
+  blocks.wirelesscodingkit.stopMotor: stop [PORT] motor
+
+zh-Hans:
+  blocks.wirelesscodingkit.name: 无线编程套装
+  blocks.wirelesscodingkit.led: "[STATE] [PORT] 的 LED 灯"
+  blocks.wirelesscodingkit.statuOn: 开启
+  blocks.wirelesscodingkit.statuOff: 关闭
+  blocks.wirelesscodingkit.ledToggle: 切换 [PORT] 的 LED 灯状态
+  blocks.wirelesscodingkit.buttonPressed: "[PORT] 的按键被按下？"
+  blocks.wirelesscodingkit.sound: "[PORT] 有声音？"
+  blocks.wirelesscodingkit.soundValue: "[PORT] 的声音大小"
+  blocks.wirelesscodingkit.rotaryPotentiometer: "[PORT] 的旋转电位器值"
+  blocks.wirelesscodingkit.photosensitive: "[PORT] 的光线强度"
+  blocks.wirelesscodingkit.temperature: "[PORT] 的温度（℃）"
+  blocks.wirelesscodingkit.humidity: "[PORT] 的湿度（%）"
+  blocks.wirelesscodingkit.distance: "[PORT] 的距离（cm）"
+  blocks.wirelesscodingkit.buzzer: "[STATE] [PORT] 的有源蜂鸣器"
+  blocks.wirelesscodingkit.segmentDigit: 将四位数码管第 [POS] 个数字设为 [DIGIT]
+  blocks.wirelesscodingkit.segmentNumber: 将四位数码管数字设为 [NUMBER]
+  blocks.wirelesscodingkit.segmentColon: 将四位数码管冒号设为 [STATE]
+  blocks.wirelesscodingkit.segmentClear: 清除四位数码管
+  blocks.wirelesscodingkit.motor: 将 [PORT] 电机 [DIR] 速度设为 [PERCENT]%
+  blocks.wirelesscodingkit.motorForward: 正转
+  blocks.wirelesscodingkit.motorReverse: 反转
+  blocks.wirelesscodingkit.stopMotor: 停止 [PORT] 电机
+
+zh-Hant:
+  blocks.wirelesscodingkit.name: 無線編程套裝
+  blocks.wirelesscodingkit.led: "[STATE] [PORT] 的 LED 燈"
+  blocks.wirelesscodingkit.statuOn: 開啟
+  blocks.wirelesscodingkit.statuOff: 關閉
+  blocks.wirelesscodingkit.ledToggle: 切換 [PORT] 的 LED 燈狀態
+  blocks.wirelesscodingkit.buttonPressed: "[PORT] 的按鍵被按下？"
+  blocks.wirelesscodingkit.sound: "[PORT] 有聲音？"
+  blocks.wirelesscodingkit.soundValue: "[PORT] 的聲音大小"
+  blocks.wirelesscodingkit.rotaryPotentiometer: "[PORT] 的旋轉電位器值"
+  blocks.wirelesscodingkit.photosensitive: "[PORT] 的光線強度"
+  blocks.wirelesscodingkit.temperature: "[PORT] 的溫度（℃）"
+  blocks.wirelesscodingkit.humidity: "[PORT] 的濕度（%）"
+  blocks.wirelesscodingkit.distance: "[PORT] 的距離（cm）"
+  blocks.wirelesscodingkit.buzzer: "[STATE] [PORT] 的有源蜂鳴器"
+  blocks.wirelesscodingkit.segmentDigit: 將四位數碼管第 [POS] 個數字設為 [DIGIT]
+  blocks.wirelesscodingkit.segmentNumber: 將四位數碼管數字設為 [NUMBER]
+  blocks.wirelesscodingkit.segmentColon: 將四位數碼管冒號設為 [STATE]
+  blocks.wirelesscodingkit.segmentClear: 清除四位數碼管
+  blocks.wirelesscodingkit.motor: 將 [PORT] 電機 [DIR] 速度設為 [PERCENT]%
+  blocks.wirelesscodingkit.motorForward: 正轉
+  blocks.wirelesscodingkit.motorReverse: 反轉
+  blocks.wirelesscodingkit.stopMotor: 停止 [PORT] 電機

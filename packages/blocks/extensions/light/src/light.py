@@ -38,8 +38,7 @@ def is_led_on(pin):
 def get_brightness(pin):
     adc = pins.get(pin)
     if not adc:
-        adc = ADC(Pin(pin))
+        adc = ADC(Pin(pin), atten=ADC.ATTN_11DB)
         pins.setdefault(pin, adc)
-    adc.atten(ADC.ATTN_11DB)
     value = adc.read() * 1000 // 4095
-    return min(max(value, 0), 1000)
+    return min(max(0, value), 1000)

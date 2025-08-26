@@ -2,7 +2,7 @@ import { getUserConfig } from '@blockcode/utils';
 import { Text } from '@blockcode/core';
 import { APIPASSWORD } from './emulator';
 
-export const blocks = [
+export const blocks = (meta) => [
   {
     id: 'addPrompt',
     text: (

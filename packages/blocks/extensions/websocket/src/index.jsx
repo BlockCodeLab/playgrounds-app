@@ -1,10 +1,12 @@
 import { addLocalesMessages, Text } from '@blockcode/core';
-import { emulator } from './emulator';
-import { blocks } from './blocks';
+import { emulator } from './lib/emulator';
+import { blocks } from './lib/blocks';
+import websocketFile from './lib/websocket.py';
+import aiohttpFile from './lib/aiohttp.py';
+import aiohttpWsFile from './lib/aiohttp_ws.py';
 
 import translations from './l10n.yaml';
 import iconImage from './icon.svg';
-import websocketFile from './websocket.py';
 
 addLocalesMessages(translations);
 
@@ -21,6 +23,16 @@ export default {
       name: 'websocket',
       type: 'text/x-python',
       uri: websocketFile,
+    },
+    {
+      name: '_aiohttp/__init__',
+      type: 'text/x-python',
+      uri: aiohttpFile,
+    },
+    {
+      name: '_aiohttp/aiohttp_ws',
+      type: 'text/x-python',
+      uri: aiohttpWsFile,
     },
   ],
   emulator,

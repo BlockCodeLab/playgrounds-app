@@ -1,4 +1,4 @@
-import { addLocalesMessages, translate } from '@blockcode/core';
+import { addLocalesMessages, Text } from '@blockcode/core';
 
 import translations from './l10n.yaml';
 import iconImage from './icon.png';
@@ -8,7 +8,12 @@ addLocalesMessages(translations);
 
 export default {
   icon: iconImage,
-  name: translate('blocks.light.name', 'Light'),
+  name: (
+    <Text
+      id="blocks.light.name"
+      defaultMessage="Light"
+    />
+  ),
   files: [
     {
       name: 'light',
@@ -19,7 +24,12 @@ export default {
   blocks: [
     {
       id: 'setLED',
-      text: translate('blocks.light.led', 'set PIN [PIN] LED [STATE]'),
+      text: (
+        <Text
+          id="blocks.light.led"
+          defaultMessage="set PIN [PIN] LED [STATE]"
+        />
+      ),
       inputs: {
         PIN: {
           type: 'integer',
@@ -30,8 +40,20 @@ export default {
           type: 'integer',
           defaultValue: '1',
           menu: [
-            [translate('blocks.light.led.on', 'on'), '1'],
-            [translate('blocks.light.led.off', 'off'), '0'],
+            [
+              <Text
+                id="blocks.light.led.on"
+                defaultMessage="on"
+              />,
+              '1',
+            ],
+            [
+              <Text
+                id="blocks.light.led.off"
+                defaultMessage="off"
+              />,
+              '0',
+            ],
           ],
         },
       },
@@ -44,7 +66,12 @@ export default {
     },
     {
       id: 'toggleLED',
-      text: translate('blocks.light.ledToggle', 'toggle PIN [PIN] LED'),
+      text: (
+        <Text
+          id="blocks.light.ledToggle"
+          defaultMessage="toggle PIN [PIN] LED"
+        />
+      ),
       inputs: {
         PIN: {
           type: 'integer',
@@ -59,7 +86,12 @@ export default {
     },
     {
       id: 'isLEDOn',
-      text: translate('blocks.light.ledIsOn', 'PIN [PIN] LED is on?'),
+      text: (
+        <Text
+          id="blocks.light.ledIsOn"
+          defaultMessage="PIN [PIN] LED is on?"
+        />
+      ),
       inputs: {
         PIN: {
           type: 'integer',
@@ -76,7 +108,12 @@ export default {
     '---',
     {
       id: 'getBrightness',
-      text: translate('blocks.light.brightness', 'PIN [PIN] ambient light brightness'),
+      text: (
+        <Text
+          id="blocks.light.brightness"
+          defaultMessage="PIN [PIN] ambient light brightness"
+        />
+      ),
       inputs: {
         PIN: {
           type: 'integer',

@@ -17,7 +17,7 @@ export default {
       defaultMessage="Draw with your sprites."
     />
   ),
-  tags: ['arcade', 'scratch'],
+  tags: ['scratch', 'stage'],
 };
 
 addLocalesMessages({

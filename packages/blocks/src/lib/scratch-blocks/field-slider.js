@@ -16,6 +16,7 @@ import { ScratchBlocks } from './scratch-blocks';
 class FieldSlider extends ScratchBlocks.FieldNumber {
   constructor(opt_value, opt_min, opt_max, opt_precision, opt_validator) {
     super(opt_value, opt_min, opt_max, opt_precision, opt_validator);
+    this.addArgType('slider');
 
     this.min_ = opt_min;
     this.max_ = opt_max;

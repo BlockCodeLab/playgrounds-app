@@ -20,7 +20,7 @@ const showAlert = () =>
     onClose: hideAlert,
   });
 
-export function CodeReview({ onRegisterCompletionItems }) {
+export function CodeReview({ keyName, readOnly, onRegisterCompletionItems }) {
   const { tabIndex } = useAppContext();
 
   const { modified } = useProjectContext();
@@ -28,7 +28,7 @@ export function CodeReview({ onRegisterCompletionItems }) {
   const modifiedAlerted = useSignal(false);
 
   useEffect(() => {
-    if (tabIndex.value !== 0) {
+    if (!readOnly && tabIndex.value !== 0) {
       if (!modifiedAlerted.value) {
         modifiedAlerted.value = true;
         showAlert();
@@ -36,7 +36,7 @@ export function CodeReview({ onRegisterCompletionItems }) {
     } else {
       modifiedAlerted.value = false;
     }
-  }, [modified.value]);
+  }, [readOnly, modified.value]);
 
   useEffect(() => hideAlert, []);
 
@@ -47,6 +47,8 @@ export function CodeReview({ onRegisterCompletionItems }) {
           enabled: true,
         },
       }}
+      keyName={keyName}
+      readOnly={readOnly}
       onRegisterCompletionItems={onRegisterCompletionItems}
     />
   );

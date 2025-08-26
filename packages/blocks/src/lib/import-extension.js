@@ -12,12 +12,18 @@ export async function importExtension(extId) {
     const assets = [];
     for (const file of extObj.files) {
       const content = await fetch(file.uri).then((res) => res.arrayBuffer());
-      assets.push(
-        Object.assign(file, {
-          id: `lib/${escape(extId)}/${file.name}`,
-          content,
-        }),
-      );
+      // python 库文件
+      if (file.type === 'text/x-python') {
+        assets.push(
+          Object.assign(file, {
+            id:
+              file.name[0] === '_'
+                ? `lib/${file.name}` // _filename 公共文件
+                : `lib/${escape(extId)}/${file.name}`,
+            content,
+          }),
+        );
+      }
     }
     batch(() => {
       for (const asset of assets) {

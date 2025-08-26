@@ -10,18 +10,18 @@ import styles from './code-editor.module.css';
 
 let completionProvider;
 
-const setModel = (editor, file) => {
+const setModel = (editor, file, keyName = 'content') => {
   const extname = mime.getExtension(file.type ?? 'text/plain');
   const fileUri = monaco.Uri.file(`${editor.getId()}/${file.id}.${extname}`);
   const modelId = fileUri.toString();
   let model = monaco.editor.getModel(modelId);
   if (!model) {
-    model = monaco.editor.createModel(file.content, undefined, fileUri);
+    model = monaco.editor.createModel(file[keyName], undefined, fileUri);
     model;
     model.onDidChangeContent(() => {
       if (editor.getRawOptions().readOnly) return;
       const content = model.getValue();
-      setFile({ content });
+      setFile({ [keyName]: content });
     });
   }
   const oldModel = editor.getModel();
@@ -30,20 +30,20 @@ const setModel = (editor, file) => {
   return extname;
 };
 
-const updateContent = (editor, file, modelname) => {
+const updateContent = (editor, modelname, file, keyName = 'content') => {
   if (!editor || !file) return;
   const extname = mime.getExtension(file.type ?? 'text/plain');
   if (extname && modelname !== extname) {
-    modelname = setModel(editor, file);
+    modelname = setModel(editor, file, keyName);
   }
-  if (file.content) {
+  if (file[keyName]) {
     const model = editor.getModel();
-    model.setValue(file.content);
+    model.setValue(file[keyName]);
   }
   return modelname;
 };
 
-export function CodeEditor({ className, options, readOnly, onLoad, onRegisterCompletionItems }) {
+export function CodeEditor({ className, keyName, options, readOnly, onLoad, onRegisterCompletionItems }) {
   const { language } = useLocalesContext();
 
   const { file, modified } = useProjectContext();
@@ -73,20 +73,20 @@ export function CodeEditor({ className, options, readOnly, onLoad, onRegisterCom
 
   // 切换文件时更新
   useEffect(() => {
-    modelname.value = updateContent(ref.editor, file.value, modelname.value);
-  }, [file.value]);
+    modelname.value = updateContent(ref.editor, modelname.value, file.value, keyName);
+  }, [keyName, file.value]);
 
   // 只读时自动更新
   useEffect(() => {
     if (!readOnly) return;
-    modelname.value = updateContent(ref.editor, file.value, modelname.value);
-  }, [readOnly, modified.value]);
+    modelname.value = updateContent(ref.editor, modelname.value, file.value, keyName);
+  }, [readOnly, keyName, modified.value]);
 
   useEffect(async () => {
     if (ref.current) {
       ref.editor = await createEditor(ref.current, options);
       if (file.value) {
-        modelname.value = setModel(ref.editor, file.value);
+        modelname.value = setModel(ref.editor, file.value, keyName);
       }
       if (onLoad) {
         onLoad(ref.editor);

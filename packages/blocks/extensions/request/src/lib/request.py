@@ -1,52 +1,28 @@
-import aiohttp
+import _aiohttp as aiohttp
 import asyncio
-
-try:
-    from scratch import runtime
-except Exception:
-    from blocks import runtime
-
-REQUEST_FAILS = "REQUEST_FAILS"
-REQUEST_SUCCESS = "REQUEST_SUCCESS"
 
 option = {}
 status = 0
 data = None
 
 
-async def fetch_raw(method, url):
+async def fetch(method, url, on_success=None, on_fails=None):
     global option, data, status
     data = None
     async with aiohttp.ClientSession() as client:
-        try:
-            async with client.request(method, url, **option) as resp:
-                status = resp.status
-                if status == 200:
-                    content_type = resp.headers.get("Content-Type", "text/plain")
-                    if content_type.startswith("application/json"):
-                        data = await resp.json()
-                    else:
-                        data = await resp.text()
-                    runtime.fire(REQUEST_SUCCESS)
-                    option = {}
+        async with client.request(method, url, **option) as response:
+            status = response.status
+            if status == 200:
+                content_type = response.headers.get("Content-Type", "text/plain")
+                if content_type.startswith("application/json"):
+                    data = await response.json()
                 else:
-                    runtime.fire(REQUEST_FAILS)
-        except Exception:
-            runtime.fire(REQUEST_FAILS)
-
-
-def fetch(method, url):
-    if runtime.wifi_connected:
-        asyncio.create_task(fetch_raw(method, url))
-    else:
-        runtime.fire(REQUEST_FAILS)
-
-
-async def afetch(method, url):
-    if runtime.wifi_connected:
-        await fetch_raw(method, url)
-    else:
-        runtime.fire(REQUEST_FAILS)
+                    data = await response.text()
+                if on_success:
+                    on_success()
+                option = {}
+            elif on_fails:
+                on_fails()
 
 
 def get_text():
@@ -90,7 +66,7 @@ def set_body(key, value):
     option["json"][key] = value
 
 
-_CHARACTERS_EXCEPT = (
+CHARACTERS_EXCEPT = (
     b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.!~*'()"
 )
 
@@ -99,7 +75,7 @@ def encode_uri_component(value, encode="utf-8"):
     data = value.encode(encode)
     new_value = ""
     for i in data:
-        if i in _CHARACTERS_EXCEPT:
+        if i in CHARACTERS_EXCEPT:
             new_value += chr(int(i))
         else:
             new_value += f"%{int(i):x}"

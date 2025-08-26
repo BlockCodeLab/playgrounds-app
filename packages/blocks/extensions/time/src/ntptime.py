@@ -1,6 +1,5 @@
 from micropython import const
-from worker import Worker
-from machine import RTC
+import _thread as threading
 import asyncio
 import ntptime
 import time
@@ -9,11 +8,10 @@ HOUR_SECONDS = const(60 * 60)
 DAY_SECONDS = const(24 * 60 * 60)
 
 timezone = 8
-time_worker = Worker(ntptime.settime)
 
 
 async def async_world_time():
-    time_worker.start()
+    threading.start_new_thread(ntptime.settime, ())
     await asyncio.sleep(ntptime.timeout + 0.1)
 
 

@@ -1,11 +1,14 @@
 import { getUserConfig, setUserConfig } from '@blockcode/utils';
 import { addLocalesMessages, openPromptModal, Text } from '@blockcode/core';
-import { emulator } from './emulator';
-import { blocks, menus } from './blocks';
+import { emulator } from './lib/emulator';
+import { blocks, menus } from './lib/blocks';
+import translateFile from './lib/translate.py';
+import aiohttpFile from './lib/aiohttp.py';
+import aiohttpWsFile from './lib/aiohttp_ws.py';
+import sparkaiFile from './lib/sparkai.py';
 
 import translations from './l10n.yaml';
 import iconImage from './icon.png';
-import translateFile from './translate.py';
 
 addLocalesMessages(translations);
 
@@ -22,6 +25,21 @@ export default {
       name: 'translate',
       type: 'text/x-python',
       uri: translateFile,
+    },
+    {
+      name: '_aiohttp/__init__',
+      type: 'text/x-python',
+      uri: aiohttpFile,
+    },
+    {
+      name: '_aiohttp/aiohttp_ws',
+      type: 'text/x-python',
+      uri: aiohttpWsFile,
+    },
+    {
+      name: '_sparkai',
+      type: 'text/x-python',
+      uri: sparkaiFile,
     },
   ],
   emulator,

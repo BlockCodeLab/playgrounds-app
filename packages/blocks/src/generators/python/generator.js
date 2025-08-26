@@ -210,12 +210,12 @@ export class PythonGenerator extends ScratchBlocks.Generator {
     // string = string.replace(/\\/g, '\\\\').replace(/\n/g, '\\\n').replace(/\%/g, '\\%');
 
     // Follow the CPython behaviour of repr() for a non-byte string.
-    let quote = "'";
-    if (string.indexOf("'") !== -1) {
-      if (string.indexOf('"') === -1) {
-        quote = '"';
+    let quote = '"';
+    if (string.indexOf('"') !== -1) {
+      if (string.indexOf("'") === -1) {
+        quote = "'";
       } else {
-        string = string.replace(/'/g, "\\'");
+        string = string.replace(/"/g, '\\"');
       }
     }
     return quote + string + quote;

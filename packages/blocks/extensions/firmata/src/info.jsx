@@ -42,6 +42,6 @@ export default {
       defaultMessage="Han Haoyu"
     />
   ),
-  tags: ['scratch'],
+  tags: ['scratch', 'firmata'],
   bluetoothRequired: true,
 };
