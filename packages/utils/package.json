@@ -11,7 +11,7 @@
     "html2canvas": "^1.4.1",
     "jszip": "^3.10.1",
     "keymirror": "^0.1.1",
-    "konva": "^9.3.20",
+    "konva": "^9.3.22",
     "localforage": "^1.10.0",
     "mime": "^4.0.7",
     "nanoid": "^5.1.5",
