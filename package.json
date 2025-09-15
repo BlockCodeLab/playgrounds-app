@@ -35,6 +35,13 @@
     "make:mac": "bun run make -- arm64,x64 --platform darwin",
     "make:win": "bun run make -- x64,ia32 --platform win32"
   },
+  "dependencies": {
+    "@elysiajs/node": "^1.4.0",
+    "arduino-webcli": "git+https://github.com/BlockCodeLab/arduino-webcli.git"
+  },
+  "trustedDependencies": [
+    "arduino-webcli"
+  ],
   "devDependencies": {
     "@electron-forge/cli": "^7.8.3",
     "@electron-forge/maker-zip": "^7.8.3",

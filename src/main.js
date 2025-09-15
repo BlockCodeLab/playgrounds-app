@@ -42,9 +42,16 @@ const createWindow = () => {
     mainWindow.webContents.openDevTools();
   }
 
-app.whenReady().then(() => {
-  ipcMain.on('serial:cancel', () => serial.cancel());
-  ipcMain.on('serial:connect', (event, portId) => serial.connect(portId));
+  // 启动 arduino 编译服务
+  try {
+    arduinoService({
+      adapter: node(),
+      arduinoCliPath: app.isPackaged
+        ? resolve(process.resourcesPath, 'arduino')
+        : resolve(process.cwd(), 'arduino', `${process.platform}_${process.arch}`),
+    });
+  } catch (err) {}
+};
 
 app.whenReady().then(() => createWindow());
 
