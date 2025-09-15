@@ -1,5 +1,5 @@
 import { translate } from '@blockcode/core';
-import { ScratchBlocks } from './scratch-blocks';
+import { ScratchBlocks, DataCategoryFunctions } from './scratch-blocks';
 
 // 静态类型变量/列表积木
 const DATA_BLOCKS = [
@@ -14,13 +14,34 @@ const DATA_BLOCKS = [
   'data_itemnumoflist',
   'data_lengthoflist',
   'data_listcontainsitem',
+  'data_listcontents',
+  'data_variable',
 ];
 
-// 禁用显示/隐藏变量/列表的积木
-ScratchBlocks.DataCategory.addShowVariable = () => {};
-ScratchBlocks.DataCategory.addHideVariable = () => {};
-ScratchBlocks.DataCategory.addShowList = () => {};
-ScratchBlocks.DataCategory.addHideList = () => {};
+// 限制显示/隐藏变量/列表的积木
+ScratchBlocks.DataCategory.enableShowOrHideVariable_ = false;
+ScratchBlocks.DataCategory.enableShowOrHideList_ = false;
+DataCategoryFunctions.addShowVariable = (xmlList, variable) => {
+  if (ScratchBlocks.DataCategory.enableShowOrHideVariable_) {
+    ScratchBlocks.DataCategory.addBlock(xmlList, variable, 'data_showvariable', 'VARIABLE');
+  }
+};
+DataCategoryFunctions.addHideVariable = (xmlList, variable) => {
+  if (ScratchBlocks.DataCategory.enableShowOrHideVariable_) {
+    ScratchBlocks.DataCategory.addBlock(xmlList, variable, 'data_hidevariable', 'VARIABLE');
+  }
+};
+DataCategoryFunctions.addShowList = (xmlList, variable) => {
+  if (ScratchBlocks.DataCategory.enableShowOrHideList_) {
+    ScratchBlocks.DataCategory.addBlock(xmlList, variable, 'data_showlist', 'LIST');
+  }
+};
+DataCategoryFunctions.addHideList = (xmlList, variable) => {
+  if (ScratchBlocks.DataCategory.enableShowOrHideList_) {
+    ScratchBlocks.DataCategory.addBlock(xmlList, variable, 'data_hidelist', 'LIST');
+  }
+};
+ScratchBlocks.restoreBlocks();
 
 // 备份设置变量/列表的积木
 for (const key of DATA_BLOCKS) {

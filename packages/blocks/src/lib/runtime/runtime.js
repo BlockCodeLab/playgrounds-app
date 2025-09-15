@@ -20,6 +20,13 @@ class EmulatorEvents extends EventEmitter {
 }
 
 export class Runtime extends EventEmitter {
+  static get MonitorMode() {
+    return {
+      Monitor: 0, // 只显示数值
+      Label: 1, // 带标签显示
+    };
+  }
+
   static get currentRuntime() {
     return Runtime._currentRuntime;
   }

@@ -13,6 +13,8 @@ import {
   setAlert,
   delAlert,
   setFile,
+  setMeta,
+  themeColors,
 } from '@blockcode/core';
 
 import { ScratchBlocks } from '../../lib/scratch-blocks';
@@ -23,6 +25,7 @@ import { preloadProjectBlocks } from '../../lib/preload-project-blocks';
 import { importExtension } from '../../lib/import-extension';
 import { loadExtension } from '../../lib/load-extension';
 import { unifyLocale } from '../../lib/unify-locale';
+import { Runtime } from '../../lib/runtime/runtime';
 import blocksConfig from './blocks-config';
 
 import { Text, ContextMenu } from '@blockcode/core';
@@ -306,22 +309,25 @@ export function BlocksEditor({
 
   // 工作区发生变化时产生新的代码
   //
-  const handleChange = useCallback(() => {
-    if (!file.value) return;
+  const handleChange = useCallback(
+    (force = false) => {
+      if (!file.value) return;
 
-    const xmlDom = ScratchBlocks.Xml.workspaceToDom(ref.workspace);
-    const xml = ScratchBlocks.Xml.domToText(xmlDom);
+      const xmlDom = ScratchBlocks.Xml.workspaceToDom(ref.workspace);
+      const xml = ScratchBlocks.Xml.domToText(xmlDom);
 
-    // 积木发生变化
-    if (xml !== file.value.xml) {
-      const data = { xml, xmlDom };
-      const codes = generateCodes(fileIndex.value);
-      if (codes) {
-        Object.assign(data, codes);
+      // 积木发生变化
+      if (force || xml !== file.value.xml) {
+        const data = { xml, xmlDom };
+        const codes = generateCodes(fileIndex.value);
+        if (codes) {
+          Object.assign(data, codes);
+        }
+        setFile(data);
       }
-      setFile(data);
-    }
-  }, [generateCodes]);
+    },
+    [generateCodes],
+  );
 
   // 切换文件时更新工具栏，加载积木
   //
@@ -470,9 +476,78 @@ export function BlocksEditor({
         ref.workspace.procedureReturnsEnabled_ = variableTypes ? 2 : 1;
       }
 
+      // 设置可监测的积木
+      const setMonitor = (config, isGlobal = false) => {
+        const monitors = meta.value.monitors ?? {};
+        const groupId = isGlobal ? 'data' : fileId.value;
+        const blockId = config.id;
+        const monitor = monitors[groupId] ?? {};
+        monitor[blockId] = monitor[blockId] ?? config;
+        monitor[blockId].visible = config.visible;
+        monitor[blockId].label = config.label;
+        monitor[blockId].value = config.value;
+        monitor[blockId].mode = Runtime.MonitorMode.Monitor;
+        monitors[groupId] = monitor;
+        setMeta({ monitors });
+      };
+
       // 绑定工作区事件
       ref.workspace.addChangeListener((e) => {
         if (splashVisible.value) return;
+
+        // 创建变量后添加积木前选项框
+        if (e.type === ScratchBlocks.Events.VAR_CREATE && !meta.value.monitors?.data?.[e.varId]) {
+          batch(() => {
+            const config = {
+              id: e.varId,
+              visible: true,
+              color: themeColors.blocks.variables.primary,
+              name: e.isLocal ? file.value.name : false,
+              label: e.varName,
+              value: 0,
+            };
+            setMonitor(config, true);
+            handleChange(true);
+          });
+          return;
+        }
+
+        if (
+          (e.type === ScratchBlocks.Events.VAR_DELETE || e.type === ScratchBlocks.Events.VAR_RENAME) &&
+          meta.value.monitors?.data?.[e.varId]
+        ) {
+          const monitors = meta.value.monitors ?? {};
+          const monitor = monitors.data ?? {};
+          if (e.type === ScratchBlocks.Events.VAR_DELETE) {
+            monitor[e.varId].visible = false;
+          } else {
+            monitor[e.varId].label = e.newName;
+          }
+          monitors.data = monitor;
+          batch(() => {
+            setMeta({ monitors });
+            handleChange(true);
+          });
+          return;
+        }
+
+        // 点击积木前选项框
+        if (e.type === ScratchBlocks.Events.UI && e.element === 'checkboxclick') {
+          batch(() => {
+            const block = ref.workspace.getBlockById(e.blockId);
+            const config = {
+              id: e.blockId,
+              visible: e.newValue,
+              color: block.colour_,
+              name: block.category_ === 'sensing' ? false : file.value.name,
+              label: block.inputList[0]?.fieldRow[0]?.text_,
+              value: 0,
+            };
+            setMonitor(config, block.category_ === 'data' || block.category_ === 'sensing');
+            handleChange(e.oldValue !== e.newValue);
+          });
+          return;
+        }
 
         // 复制拖拽的积木块
         if (ref.workspace.isDragging()) {

@@ -5,6 +5,19 @@ import { nanoid } from '@blockcode/utils';
 import { maybeTranslate } from './locales-context';
 import { uniqueName } from '../lib/unique-name';
 
+// 修改类型
+export const ModifyTypes = {
+  Saved: 0,
+  Rename: 1,
+  AddFile: 2,
+  SetFile: 3,
+  DelFile: 4,
+  AddAsset: 5,
+  SetAsset: 6,
+  DelAsset: 7,
+  SetMeta: 8,
+};
+
 // 项目元数据
 // editor: 编辑器ID
 // version: 编辑器版本
@@ -16,7 +29,10 @@ export function setMeta(key, value) {
   if (typeof key === 'string') {
     key = { [key]: value };
   }
-  meta.value = Object.assign({}, meta.value ?? {}, key);
+  batch(() => {
+    meta.value = Object.assign({}, meta.value ?? {}, key);
+    setModified(ModifyTypes.SetMeta);
+  });
 }
 
 // 项目唯一ID和本地Key
@@ -27,18 +43,6 @@ const key = signal(null); // 本地储存唯一标识
 // 项目修改标签
 //
 const modified = signal(0);
-
-// 修改类型
-export const ModifyTypes = {
-  Saved: 0,
-  Rename: 1,
-  AddFile: 2,
-  SetFile: 3,
-  DelFile: 4,
-  AddAsset: 5,
-  SetAsset: 6,
-  DelAsset: 7,
-};
 
 // 根据修改类型设置
 export function setModified(type = ModifyTypes.Saved) {

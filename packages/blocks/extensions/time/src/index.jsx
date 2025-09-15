@@ -153,7 +153,6 @@ export default {
         />
       ),
       output: 'number',
-      monitoring: false,
       emu(block) {
         const code = 'runtime.extensions.time.getDays()';
         return [code, this.ORDER_FUNCTION_CALL];

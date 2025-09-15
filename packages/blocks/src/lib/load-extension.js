@@ -180,7 +180,7 @@ export function loadExtension(extObj, options, meta) {
             blockJson.output = block.output === 'number' ? 'Number' : 'String';
             blockJson.outputShape = ScratchBlocks.OUTPUT_SHAPE_ROUND;
           }
-          // blockJson.checkboxInFlyout = block.monitoring !== false;
+          blockJson.checkboxInFlyout = block.monitoring !== false;
         } else {
           blockJson.previousStatement = null;
           blockJson.nextStatement = null;
@@ -217,7 +217,7 @@ export function loadExtension(extObj, options, meta) {
 
         // 积木参数项
         if (block.inputs) {
-          // blockJson.checkboxInFlyout = false;
+          blockJson.checkboxInFlyout = false;
           blockJson.args0 = [].concat(
             blockJson.args0 || [],
             Object.entries(block.inputs).map(([name, arg]) => {

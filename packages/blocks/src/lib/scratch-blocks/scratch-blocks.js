@@ -8,9 +8,22 @@ export const ScratchBlocks = module.exports;
 // 添加字典类型变量类型
 ScratchBlocks.DICTIONARY_VARIABLE_TYPE = 'dictionary';
 
-// 禁用积木前的选项框
+// 限制积木前的选项框
+ScratchBlocks.Block.visibleCheckboxInFlyout_ = false; // 默认不可显示
 ScratchBlocks.Block.prototype.setCheckboxInFlyout = function (hasCheckbox) {
-  this.checkboxInFlyout_ = false;
+  this.checkboxInFlyout_ = ScratchBlocks.Block.visibleCheckboxInFlyout_ && hasCheckbox;
+};
+
+// 点击选项框
+ScratchBlocks.VerticalFlyout.prototype.checkboxClicked_ = function (checkboxObj) {
+  return function (e) {
+    ScratchBlocks.mainWorkspace.fireChangeListener(
+      new ScratchBlocks.Events.Ui(checkboxObj.block, 'checkboxclick', checkboxObj.clicked, !checkboxObj.clicked),
+    );
+    this.setCheckboxState(checkboxObj.block.id, !checkboxObj.clicked);
+    e.stopPropagation();
+    e.preventDefault();
+  }.bind(this);
 };
 
 // 注册监测积木颜色
@@ -27,7 +40,7 @@ ScratchBlocks.Extensions.register(
 
 // 备份变量列表自动添加的积木
 // 有些情况下会改变这些积木
-const DataCategoryFunctions = {};
+export const DataCategoryFunctions = {};
 for (const key in ScratchBlocks.DataCategory) {
   if (key.startsWith('add')) {
     DataCategoryFunctions[key] = ScratchBlocks.DataCategory[key];
@@ -44,4 +57,7 @@ ScratchBlocks.restoreBlocks = () => {
   for (const key in DataCategoryFunctions) {
     ScratchBlocks.DataCategory[key] = DataCategoryFunctions[key];
   }
+  ScratchBlocks.Block.visibleCheckboxInFlyout_ = false;
+  ScratchBlocks.DataCategory.enableShowOrHideVariable_ = false;
+  ScratchBlocks.DataCategory.enableShowOrHideList_ = false;
 };
