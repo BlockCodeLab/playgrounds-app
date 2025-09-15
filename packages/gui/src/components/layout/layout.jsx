@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useErrorBoundary } from 'preact/hooks';
 import { batch, useComputed, useSignal, useSignalEffect } from '@preact/signals';
-import { classNames } from '@blockcode/utils';
+import { classNames, keyMirror } from '@blockcode/utils';
 import {
   useAppContext,
   useLocalesContext,
@@ -35,6 +35,11 @@ import { UserStorage } from '../user-storage/user-storage';
 import styles from './layout.module.css';
 
 import getEditors from '../../lib/get-editors';
+
+const DeviceType = keyMirror({
+  Bluetooth: null,
+  SerialPort: null,
+});
 
 // 关闭项目和布局
 const closeProjectAndLayout = () =>
@@ -98,24 +103,49 @@ export function Layout() {
     [styles.tabPanelNoBottom]: !PaneContent,
   });
 
-  // Electron 串口扫描
+  // Electron 蓝牙/串口扫描
   //
   const foundDevices = useSignal(null);
   useEffect(() => {
-    window.electron?.serial.onScan((devices) => {
-      foundDevices.value = devices;
-    });
+    if (window.electron) {
+      window.electron.serial.onScan((devices) => {
+        foundDevices.value = devices && {
+          devices,
+          type: DeviceType.SerialPort,
+        };
+      });
+      window.electron.bluetooth.onScan((devices) => {
+        foundDevices.value = devices && {
+          devices,
+          type: DeviceType.Bluetooth,
+        };
+      });
+    }
   }, []);
 
   const handleConnectionSearch = () => {};
 
   const handleConnectionClose = useCallback(() => {
-    window.electron?.serial.cancel();
-    foundDevices.value = null;
+    if (window.electron) {
+      if (foundDevices.value.type === DeviceType.SerialPort) {
+        window.electron.serial.cancel();
+      }
+      if (foundDevices.value.type === DeviceType.Bluetooth) {
+        window.electron.bluetooth.cancel();
+      }
+      foundDevices.value = null;
+    }
   }, []);
 
   const handleConnectionConnect = useCallback((portId) => {
-    window.electron?.serial.connect(portId);
+    if (window.electron) {
+      if (foundDevices.value.type === DeviceType.SerialPort) {
+        window.electron.serial.connect(portId);
+      }
+      if (foundDevices.value.type === DeviceType.Bluetooth) {
+        window.electron.bluetooth.connect(portId);
+      }
+    }
   }, []);
 
   // 获取所有编辑器的名称
@@ -292,7 +322,7 @@ export function Layout() {
       handleOpenEditor(projData.meta.editor, projData);
       return;
     }
-    openProjectViaEditor(projData, meta.value?.editor);
+    openProjectViaEditor(projData, meta.value.editor);
   }, []);
 
   return (
@@ -367,9 +397,9 @@ export function Layout() {
 
       {foundDevices.value && (
         <ConnectionModal
-          title={meta.value?.deviceName}
-          icon={meta.value?.deviceIcon}
-          devices={foundDevices.value}
+          title={meta.value.deviceName}
+          icon={meta.value.deviceIcon}
+          devices={foundDevices.value.devices}
           onClose={handleConnectionClose}
           onConnect={handleConnectionConnect}
         />

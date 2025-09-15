@@ -1,4 +1,5 @@
-// 定义串口通讯的连接窗口
+import { ipcMain } from 'electron';
+
 class SerialPort {
   constructor() {
     this._portList = null;
@@ -50,6 +51,9 @@ class SerialPort {
       };
       mainWindow.webContents.send('serial:scan', this.portList);
     });
+
+    ipcMain.on('serial:cancel', () => this.cancel());
+    ipcMain.on('serial:connect', (event, portId) => this.connect(portId));
   }
 
   cancel() {

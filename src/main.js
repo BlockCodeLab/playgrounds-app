@@ -1,6 +1,9 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
 import { dirname, resolve } from 'node:path';
+import { app, BrowserWindow } from 'electron';
+import { arduinoService } from 'arduino-webcli';
+import { node } from '@elysiajs/node';
 import { serial } from './lib/serial';
+import { bluetooth } from './lib/bluetooth';
 import './lib/menu';
 
 const isMac = process.platform === 'darwin';
@@ -25,6 +28,7 @@ const createWindow = () => {
   const mainWindow = new BrowserWindow(winConfig);
 
   serial.setBrowserWindow(mainWindow);
+  bluetooth.setBrowserWindow(mainWindow);
 
   mainWindow.on('enter-full-screen', () => {
     mainWindow.webContents.send('window:fullscreen', true);
@@ -33,19 +37,15 @@ const createWindow = () => {
     mainWindow.webContents.send('window:fullscreen', false);
   });
 
+  mainWindow.loadFile(resolve(__dirname, 'index.html'));
   if (DEBUG) {
-    mainWindow.loadFile(resolve(__dirname, 'index.html'));
     mainWindow.webContents.openDevTools();
-  } else {
-    mainWindow.loadFile(resolve(__dirname, 'index.html'));
   }
-};
 
 app.whenReady().then(() => {
   ipcMain.on('serial:cancel', () => serial.cancel());
   ipcMain.on('serial:connect', (event, portId) => serial.connect(portId));
 
-  createWindow();
-});
+app.whenReady().then(() => createWindow());
 
 app.on('window-all-closed', () => app.quit());
