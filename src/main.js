@@ -47,8 +47,8 @@ const createWindow = () => {
     arduinoService({
       adapter: node(),
       arduinoCliPath: app.isPackaged
-        ? resolve(process.resourcesPath, 'arduino')
-        : resolve(process.cwd(), 'arduino', `${process.platform}_${process.arch}`),
+        ? resolve(process.resourcesPath, 'arduino_cli')
+        : resolve(process.cwd(), 'arduino_cli', `${process.platform}_${process.arch}`),
     });
   } catch (err) {}
 };

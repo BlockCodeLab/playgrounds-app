@@ -4,7 +4,7 @@ import { Text, Library } from '@blockcode/core';
 
 import getExtensions from '../../lib/get-extensions';
 
-export function ExtensionsLibrary({ onSelect, onClose, onFilter }) {
+export function ExtensionsLibrary({ tags, onSelect, onClose, onFilter }) {
   const data = useSignal([]);
 
   const handleFilter = useCallback(
@@ -62,6 +62,7 @@ export function ExtensionsLibrary({ onSelect, onClose, onFilter }) {
     <Library
       featured
       filterable
+      tags={tags}
       items={data.value}
       filterPlaceholder={
         <Text
