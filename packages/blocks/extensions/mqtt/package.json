@@ -12,15 +12,10 @@
       "import": "./dist/info.js"
     }
   },
-  "scripts": {
-    "build": "playground-build ."
-  },
   "dependencies": {
-    "mqtt": "^5.10.4",
     "preact": "^10.26.9"
   },
   "devDependencies": {
-    "@types/bun": "latest",
-    "playground-build": "git+https://github.com/BlockCodeLab/playground-build.git"
+    "@types/bun": "latest"
   }
 }

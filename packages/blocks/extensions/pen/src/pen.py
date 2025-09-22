@@ -29,6 +29,7 @@ def stamp(target):
         angle = 0
         if target.direction < 0:
             scale_x = -scale_x
+    alpha = target.alpha
     stage.add_paint(
         PEN_PAINT,
         lambda disp: disp.blit(
@@ -43,6 +44,7 @@ def stamp(target):
             scale_x=scale_x,
             scale_y=scale_y,
             key=0x0000,
+            alpha=alpha,
         ),
     )
     runtime.request_render()

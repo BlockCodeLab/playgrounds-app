@@ -14,7 +14,7 @@ export function emulator(runtime, Konva) {
     if (!renderer || !pen) return;
 
     const pos = target.position();
-    if (Math.floor(pen.x) === Math.floor(pos.x) && Math.floor(pen.x) === Math.floor(pos.y)) return;
+    if (Math.floor(pen.x) === Math.floor(pos.x) && Math.floor(pen.y) === Math.floor(pos.y)) return;
 
     const line = new Konva.Line({
       points: [pen.x, pen.y, pos.x, pos.y],
