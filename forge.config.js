@@ -46,8 +46,8 @@ module.exports = {
     },
     // 将 arduino-cli 复制到 resources 文件夹
     packageAfterCopy: async (forgeConfig, buildPath, electronVersion, platform, arch) => {
-      const assetsDir = resolve(__dirname, `arduino/${platform}_${arch}`);
-      const resourcesDir = resolve(buildPath, '../arduino');
+      const assetsDir = resolve(__dirname, `arduino_cli/${platform}_${arch}`);
+      const resourcesDir = resolve(buildPath, '../arduino_cli');
       copydir(assetsDir, resourcesDir);
     },
   },
