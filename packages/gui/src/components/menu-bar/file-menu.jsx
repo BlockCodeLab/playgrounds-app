@@ -29,12 +29,20 @@ export function FileMenu({ onNew, onOpen, onSave, onThumb, ExtendedMenu }) {
   const { meta, key, name, files, assets } = useProjectContext();
 
   const getProjectData = useCallback(async () => {
+    // 过滤删除的监控
+    for (let index in meta.value.monitors) {
+      const monitor = meta.value.monitors[index];
+      if (monitor.deleting) {
+        meta.value.monitors.splice(index, 1);
+      }
+    }
     // 移除扩展附件，因为每次重载扩展会自动加载
     const filteredAssets = assets.value?.filter?.((asset) => asset.internal || !asset.id.startsWith('lib/'));
     const data = await onSave(files.value, filteredAssets, meta.value);
     data.meta = Object.assign(data.meta ?? {}, {
       editor: meta.value.editor,
       version: meta.value.version,
+      monitors: meta.value.monitors,
     });
     data.name = name.value;
     return data;

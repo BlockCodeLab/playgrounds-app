@@ -1,3 +1,4 @@
+import { ScratchBlocks } from '../../lib/scratch-blocks';
 import { JavaScriptGenerator } from '../javascript';
 
 export class EmulatorGenerator extends JavaScriptGenerator {
@@ -15,10 +16,34 @@ export class EmulatorGenerator extends JavaScriptGenerator {
     // 获取用户定义
     this.onDefinitions?.();
 
-    // 获取变量定义
+    // 获取用户变量定义
     if (this.onVariableDefinitions) {
-      delete this.definitions_['variables'];
       this.onVariableDefinitions(workspace);
+      return;
+    }
+
+    // 默认变量定义
+    const defvars = [];
+    const variables = workspace.getAllVariables();
+    for (let i = 0; i < variables.length; i++) {
+      const variable = variables[i];
+      if (variable.type === ScratchBlocks.BROADCAST_MESSAGE_VARIABLE_TYPE) {
+        continue;
+      }
+
+      // 全部和局部变量
+      const varName = variable.getId();
+      let varValue = '0';
+      if (variable.type === ScratchBlocks.LIST_VARIABLE_TYPE) {
+        varValue = '[]';
+      } else if (variable.type === ScratchBlocks.DICTIONARY_VARIABLE_TYPE) {
+        varValue = '{}';
+      }
+      defvars.push(`runtime.setVariable('${varName}', ${varValue})`);
+    }
+
+    if (defvars.length) {
+      this.definitions_['variables'] = defvars.join('\n');
     }
   }
 

@@ -130,15 +130,20 @@ export class JavaScriptGenerator extends ScratchBlocks.Generator {
    */
   finish(code) {
     // Convert the definitions dictionary into a list.
-    let definitions = [];
+    const definitions = [];
+    const varDefinitions = [];
     for (let name in this.definitions_) {
-      definitions.push(this.definitions_[name]);
+      if (name == 'variables') {
+        varDefinitions.push(this.definitions_[name]);
+      } else {
+        definitions.push(this.definitions_[name]);
+      }
     }
     // Clean up temporary data.
     delete this.definitions_;
     delete this.functionNames_;
     this.variableDB_.reset();
-    return definitions.join('\n') + '\n\n' + code;
+    return definitions.join('\n') + '\n\n' + varDefinitions.join('\n') + '\n\n' + code;
   }
 
   /**

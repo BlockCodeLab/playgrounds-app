@@ -1,7 +1,6 @@
 import { EventEmitter } from 'node:events';
 import { nanoid, sleep, sleepMs, MathUtils, getUserLanguage } from '@blockcode/utils';
-import { setAppState } from '@blockcode/core';
-import { MonitorTypes } from '../monitor-types';
+import { setAppState, setMeta } from '@blockcode/core';
 import { AbortController } from './abort-controller';
 import { Tone } from './tone';
 
@@ -35,9 +34,6 @@ export class Runtime extends EventEmitter {
     super();
     Runtime._currentRuntime = this;
 
-    // 文件库
-    this._files = null;
-
     // 合成音乐
     this._tone = new Tone({ type: 'square' });
 
@@ -59,6 +55,9 @@ export class Runtime extends EventEmitter {
     // 所有中断控制器
     this._abortControllers = [];
 
+    // 监视器
+    this._monitors = {};
+
     // 附加数据
     this._data = new Map();
 
@@ -67,9 +66,6 @@ export class Runtime extends EventEmitter {
 
     // 侦测阀值
     this._thresholds = new Map();
-
-    // 监视器
-    this._monitors = new Map();
 
     // 扩展
     this._extensions = new Map();
@@ -117,8 +113,8 @@ export class Runtime extends EventEmitter {
     return getUserLanguage();
   }
 
-  get files() {
-    return this._files;
+  get monitors() {
+    return this._monitors;
   }
 
   get tone() {
@@ -161,10 +157,6 @@ export class Runtime extends EventEmitter {
     return this._extensionsProxy;
   }
 
-  binding(files) {
-    this._files = files;
-  }
-
   reset() {
     // 正在运行
     this._running = false;
@@ -187,9 +179,6 @@ export class Runtime extends EventEmitter {
     // 侦测阀值
     this._thresholds.clear();
 
-    // 清空所有监视器
-    this._monitors.clear();
-
     // 重置模拟器
     this._events.reset();
   }
@@ -208,6 +197,95 @@ export class Runtime extends EventEmitter {
 
   hasData(key) {
     return this._data.has(key);
+  }
+
+  // 变量和列表
+  //
+  // 设置变量值
+  setVariable(name, value) {
+    if (!this.running) return;
+    this.setData(name, value);
+    this.setMonitorValueById(name, value);
+  }
+
+  // 获取变量值
+  getVariable(name) {
+    return this.getData(name);
+  }
+
+  // 增加变量值
+  incVariable(name, value) {
+    const oldValue = MathUtils.toNumber(this.getVariable(name));
+    const addValue = MathUtils.toNumber(value);
+    this.setVariable(name, oldValue + addValue);
+  }
+
+  // 向列表尾添加值
+  pushValueToList(name, value) {
+    const list = this.getVariable(name);
+    if (Array.isArray(list)) {
+      list.push(value);
+      this.setVariable(name, list);
+    }
+  }
+
+  // 向列表添加值
+  insertValueToList(name, index, value) {
+    const list = this.getVariable(name);
+    if (Array.isArray(list)) {
+      list.splice(index, 0, value);
+      this.setVariable(name, list);
+    }
+  }
+
+  setValueToList(name, index, value) {
+    const list = this.getVariable(name);
+    if (Array.isArray(list)) {
+      list[index] = value;
+      this.setVariable(name, list);
+    }
+  }
+
+  delAllFromList(name) {
+    const list = this.getVariable(name);
+    if (Array.isArray(list)) {
+      list.length = 0;
+      this.setVariable(name, list);
+    }
+  }
+
+  delValueFromList(name, index) {
+    const list = this.getVariable(name);
+    if (Array.isArray(list)) {
+      list.splice(index, 1);
+      this.setVariable(name, list);
+    }
+  }
+
+  getValueFromList(name, index) {
+    const list = this.getVariable(name);
+    if (Array.isArray(list)) {
+      return list[index] ?? '';
+    }
+    return '';
+  }
+
+  getLengthOfList(name) {
+    const list = this.getVariable(name);
+    if (Array.isArray(list)) {
+      return list.length;
+    }
+    return 0;
+  }
+
+  findValueFromList(name, value) {
+    const list = this.getVariable(name);
+    if (Array.isArray(list)) {
+      const index = list.indexOf(value);
+      if (index === -1) return 0;
+      return MathUtils.indexToSerial(index, list.length);
+    }
+    return 0;
   }
 
   uid() {
@@ -304,6 +382,8 @@ export class Runtime extends EventEmitter {
         this._thresholds.set(key, isGreater);
       }
     }
+    // 更新计时器监测
+    this.setMonitorValueById('sensing_timer', this.times);
   }
 
   async _handleStart() {
@@ -359,25 +439,122 @@ export class Runtime extends EventEmitter {
     return sleepMs(0);
   }
 
-  // 监视
-  //
+  // 更新监测
+  updateMonitors(newMonitors) {
+    this._monitors = newMonitors;
+    if (!this.monitors) return;
 
-  _updateMonitorData(type, id, target, label, color, value) {
-    this._monitors.set(id, {
-      type,
-      target,
-      label,
-      color,
-      value,
-    });
-    setAppState('monitors', Array.from(this._monitors.values()));
+    let x = -this.stage.width() / 2 + 10;
+    let y = this.stage.height() / 2 - 10;
+    let maxWidth = 0;
+    for (const monitor of this.monitors) {
+      const labelId = monitor.groupId !== 'data' ? btoa(`${monitor.groupId}.${monitor.id}`) : btoa(monitor.id);
+      let monitorLabel = this.boardLayer.findOne(`#${labelId}`);
+      if (!monitorLabel) {
+        const label = new Konva.Label({
+          id: labelId,
+          scaleY: this.stage.scaleY(),
+          opacity: 0.9,
+          draggable: true,
+          x: monitor.x ?? x,
+          y: monitor.y ?? y,
+          monitor,
+        });
+        label.add(
+          new Konva.Tag({
+            fill: monitor.color,
+            cornerRadius: 5,
+          }),
+        );
+        label.add(
+          new Konva.Text({
+            fontFamily: 'Helvetica',
+            fontSize: monitor.mode === Runtime.MonitorMode.Monitor ? 12 : 16,
+            padding: 4,
+            fill: 'white',
+            text:
+              monitor.mode === Runtime.MonitorMode.Monitor
+                ? (monitor.name ? `${monitor.name}: ` : '') + `${monitor.label}: 0`
+                : '0',
+          }),
+        );
+        // 拖拽改动位置
+        label.on('dragend', () => {
+          const monitors = this.monitors;
+          const monitor = label.getAttr('monitor');
+          monitor.x = label.x();
+          monitor.y = label.y();
+          const index = monitors.findIndex((m) => m.groupId === monitor.groupId && m.id === monitor.id);
+          monitors[index] = monitor;
+          setMeta({ monitors });
+        });
+        // 单击改变样式
+        label.on('pointerclick', () => {
+          const monitors = this.monitors;
+          const monitor = label.getAttr('monitor');
+          monitor.mode = (monitor.mode + 1) % 2;
+          const index = monitors.findIndex((m) => m.groupId === monitor.groupId && m.id === monitor.id);
+          monitors[index] = monitor;
+          setMeta({ monitors });
+          this.setMonitorValue(label);
+        });
+        // 可见性改变
+        label.on('visibleChange', ({ newVal }) => {
+          const monitors = this.monitors;
+          const monitor = label.getAttr('monitor');
+          if (monitor.visible !== newVal) {
+            monitor.visible = newVal;
+            const index = monitors.findIndex((m) => m.groupId === monitor.groupId && m.id === monitor.id);
+            monitors[index] = monitor;
+            setMeta({ monitors });
+          }
+        });
+        this.boardLayer.add(label);
+        monitorLabel = label;
+      }
+      monitorLabel.setAttrs({
+        visible: monitor.visible,
+        label: monitor.label,
+        monitor,
+      });
+      this.setMonitorValue(monitorLabel);
+      maxWidth = monitorLabel.width() > maxWidth ? monitorLabel.width() : maxWidth;
+      y -= 24;
+      if (y < -this.stage.height() / 2 + 30) {
+        y = 110;
+        x += Math.round(maxWidth + 3);
+      }
+    }
   }
 
-  // 监测数值变化
-  monitorValue(id, target, label, color, value) {
-    if (!this.running) return;
-    this._updateMonitorData(MonitorTypes.Value, id, target, label, color, value);
+  setMonitorValue(label, value = 0) {
+    if (label) {
+      const monitor = label.getAttr('monitor');
+      if (monitor.mode === Runtime.MonitorMode.Monitor) {
+        label.getText().setAttrs({
+          fontSize: 12,
+          text: (monitor.name ? `${monitor.name}: ` : '') + `${monitor.label}: ${value}`,
+        });
+      } else {
+        label.getText().setAttrs({
+          fontSize: 16,
+          text: `${value}`,
+        });
+      }
+    }
   }
 
-  // 监测数据折线图
+  setMonitorValueById(id, value) {
+    const label = this.boardLayer.findOne(`#${btoa(id)}`);
+    this.setMonitorValue(label, value);
+  }
+
+  setMonitorVisible(label, visible) {
+    label?.setVisible?.(visible);
+  }
+
+  setMonitorVisibleById(id, visible) {
+    const label = this.boardLayer.findOne(`#${btoa(id)}`);
+    this.setMonitorVisible(label, visible);
+  }
 }

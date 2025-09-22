@@ -43,6 +43,26 @@ DataCategoryFunctions.addHideList = (xmlList, variable) => {
 };
 ScratchBlocks.restoreBlocks();
 
+// 将列表名字居中
+ScratchBlocks.Blocks['data_listcontents'] = {
+  init() {
+    this.jsonInit({
+      message0: '%1',
+      lastDummyAlign0: 'CENTRE',
+      args0: [
+        {
+          type: 'field_variable_getter',
+          text: '',
+          name: 'LIST',
+          variableType: ScratchBlocks.LIST_VARIABLE_TYPE,
+        },
+      ],
+      category: ScratchBlocks.Categories.dataLists,
+      extensions: ['contextMenu_getListBlock', 'colours_data_lists', 'output_string'],
+    });
+  },
+};
+
 // 备份设置变量/列表的积木
 for (const key of DATA_BLOCKS) {
   ScratchBlocks.Blocks[`#${key}`] = ScratchBlocks.Blocks[key];

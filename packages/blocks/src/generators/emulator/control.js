@@ -26,7 +26,7 @@ proto['control_forever'] = function (block) {
   branchCode = this.addLoopTrap(branchCode, block.id);
 
   let code = '';
-  code = 'while (true) {\n;';
+  code = 'while (true) {\n';
   code += branchCode;
   code += '}\n';
   return code;

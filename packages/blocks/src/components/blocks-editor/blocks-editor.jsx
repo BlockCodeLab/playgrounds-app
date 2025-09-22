@@ -30,7 +30,6 @@ import blocksConfig from './blocks-config';
 
 import { Text, ContextMenu } from '@blockcode/core';
 import { CodeEditor } from '@blockcode/code';
-import { DataMonitor } from '../data-monitor/data-monitor';
 import { DataPromptModal } from '../data-prompt-modal/data-prompt-modal';
 import { MyBlockPromptModal } from '../myblock-prompt-modal/myblock-prompt-modal';
 import { ExtensionsLibrary } from '../extensions-library/extensions-library';
@@ -138,7 +137,6 @@ export function BlocksEditor({
   disableGenerateCode,
   disableSensingBlocks,
   disableExtensionButton,
-  monitorOffset,
   variableTypes,
   extensionTags,
   onBuildinExtensions,
@@ -179,6 +177,22 @@ export function BlocksEditor({
     }),
     [generator, emulator, enableCloneBlocks, enableStringBlocks, enableMonitor, disableSensingBlocks],
   );
+
+  // 允许变量监控，显示积木前的选择框
+  ScratchBlocks.Block.visibleCheckboxInFlyout_ = enableMonitor;
+
+  // 设置积木前的选项框
+  useEffect(() => {
+    if (!meta.value.monitors) return;
+    if (enableMonitor && !splashVisible.value) {
+      const flyout = ScratchBlocks.getMainWorkspace().getFlyout();
+      for (const monitor of meta.value.monitors) {
+        if (['data', fileId.value].includes(monitor.groupId)) {
+          flyout.setCheckboxState(monitor.id, monitor.visible);
+        }
+      }
+    }
+  }, [enableMonitor, fileId.value, meta.value, splashVisible.value]);
 
   // 变量设置确认
   //
@@ -478,17 +492,17 @@ export function BlocksEditor({
       }
 
       // 设置可监测的积木
-      const setMonitor = (config, isGlobal = false) => {
-        const monitors = meta.value.monitors ?? {};
-        const groupId = isGlobal ? 'data' : fileId.value;
+      const setMonitor = (config, isData = false) => {
+        const monitors = meta.value.monitors ?? [];
+        const groupId = isData ? 'data' : fileId.value;
         const blockId = config.id;
-        const monitor = monitors[groupId] ?? {};
-        monitor[blockId] = monitor[blockId] ?? config;
-        monitor[blockId].visible = config.visible;
-        monitor[blockId].label = config.label;
-        monitor[blockId].value = config.value;
-        monitor[blockId].mode = Runtime.MonitorMode.Monitor;
-        monitors[groupId] = monitor;
+        let index = monitors.findIndex((monitor) => monitor.groupId === groupId && monitor.id === blockId);
+        if (index === -1) {
+          index = monitors.push({ groupId, ...config }) - 1;
+        }
+        monitors[index].visible = config.visible;
+        monitors[index].label = config.label;
+        monitors[index].mode = Runtime.MonitorMode.Monitor;
         setMeta({ monitors });
       };
 
@@ -497,34 +511,36 @@ export function BlocksEditor({
         if (splashVisible.value) return;
 
         // 创建变量后添加积木前选项框
-        if (e.type === ScratchBlocks.Events.VAR_CREATE && !meta.value.monitors?.data?.[e.varId]) {
+        const varMonitorIndex = meta.value.monitors?.findIndex?.(
+          (monitor) => monitor.groupId === 'data' && monitor.id === e.varId,
+        );
+        if (e.type === ScratchBlocks.Events.VAR_CREATE && varMonitorIndex === -1) {
+          const config = {
+            id: e.varId,
+            visible: true,
+            color: themeColors.blocks.variables.primary,
+            name: enableMultiTargets && e.isLocal ? file.value.name : false,
+            label: e.varName,
+          };
           batch(() => {
-            const config = {
-              id: e.varId,
-              visible: true,
-              color: themeColors.blocks.variables.primary,
-              name: e.isLocal ? file.value.name : false,
-              label: e.varName,
-              value: 0,
-            };
             setMonitor(config, true);
             handleChange(true);
           });
           return;
         }
-
         if (
           (e.type === ScratchBlocks.Events.VAR_DELETE || e.type === ScratchBlocks.Events.VAR_RENAME) &&
-          meta.value.monitors?.data?.[e.varId]
+          varMonitorIndex !== -1
         ) {
-          const monitors = meta.value.monitors ?? {};
-          const monitor = monitors.data ?? {};
+          const monitors = meta.value.monitors;
+          const monitor = monitors[varMonitorIndex];
           if (e.type === ScratchBlocks.Events.VAR_DELETE) {
-            monitor[e.varId].visible = false;
+            monitor.visible = false;
+            monitor.deleting = true;
           } else {
-            monitor[e.varId].label = e.newName;
+            monitor.label = e.newName;
           }
-          monitors.data = monitor;
+          monitors[varMonitorIndex] = monitor;
           batch(() => {
             setMeta({ monitors });
             handleChange(true);
@@ -534,16 +550,15 @@ export function BlocksEditor({
 
         // 点击积木前选项框
         if (e.type === ScratchBlocks.Events.UI && e.element === 'checkboxclick') {
+          const block = ref.workspace.getBlockById(e.blockId);
+          const config = {
+            id: e.blockId,
+            visible: e.newValue,
+            color: block.colour_,
+            name: enableMultiTargets && block.category_ !== 'sensing' ? file.value.name : false,
+            label: block.inputList[0].fieldRow[2]?.text_ ?? block.inputList[0].fieldRow[0]?.text_,
+          };
           batch(() => {
-            const block = ref.workspace.getBlockById(e.blockId);
-            const config = {
-              id: e.blockId,
-              visible: e.newValue,
-              color: block.colour_,
-              name: block.category_ === 'sensing' ? false : file.value.name,
-              label: block.inputList[0]?.fieldRow[0]?.text_,
-              value: 0,
-            };
             setMonitor(config, block.category_ === 'data' || block.category_ === 'sensing');
             handleChange(e.oldValue !== e.newValue);
           });
@@ -823,8 +838,6 @@ export function BlocksEditor({
             ref={ref}
             className={styles.blocksEditor}
           />
-
-          <DataMonitor offset={monitorOffset} />
 
           <ContextMenu
             menuItems={extensionStatusMenu.value?.menuItems}

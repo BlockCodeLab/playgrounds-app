@@ -180,7 +180,7 @@ export function loadExtension(extObj, options, meta) {
             blockJson.output = block.output === 'number' ? 'Number' : 'String';
             blockJson.outputShape = ScratchBlocks.OUTPUT_SHAPE_ROUND;
           }
-          blockJson.checkboxInFlyout = block.monitoring !== false;
+          blockJson.checkboxInFlyout = block.monitoring === true;
         } else {
           blockJson.previousStatement = null;
           blockJson.nextStatement = null;
