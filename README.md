@@ -32,6 +32,7 @@
 ```bash
 $ git clone https://github.com/BlockCodeLab/playgrounds-app.git
 $ cd playgrounds-app
+$ git submodule update --init --recursive
 $ bun install
 $ bun run build
 ```

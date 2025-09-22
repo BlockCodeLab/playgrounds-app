@@ -2,12 +2,13 @@
 
 ## 第三方库
 
+- balloons-js
 - classnames
 - crypto-js
-- firmata-io
 - html2canvas
 - jszip
 - keymirror
+- konva
 - localforage
 - mime
 - nanoid
