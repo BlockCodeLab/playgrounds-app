@@ -72,8 +72,8 @@ export function renameProject(value) {
 const files = signal(null);
 // 当前编辑的项目文件
 const fileId = signal(null);
-const fileIndex = computed(() => files.value?.findIndex?.((f) => f.id === fileId.value) ?? -1);
-const file = computed(() => files.value?.find?.((f) => f.id === fileId.value) ?? null);
+const fileIndex = computed(() => files.value?.findIndex((f) => f.id === fileId.value) ?? -1);
+const file = computed(() => files.value?.find((f) => f.id === fileId.value) ?? null);
 
 export function openFile(id) {
   fileId.value = id;
@@ -149,8 +149,8 @@ export function delFile(id) {
 const assets = signal(null);
 // 当前编辑的资源文件
 const assetId = signal(null);
-const assetIndex = computed(() => assets.value?.findIndex?.((f) => f.id === assetId.value) ?? -1);
-const asset = computed(() => assets.value?.find?.((f) => f.id === assetId.value) ?? null);
+const assetIndex = computed(() => assets.value?.findIndex((f) => f.id === assetId.value) ?? -1);
+const asset = computed(() => assets.value?.find((f) => f.id === assetId.value) ?? null);
 
 export function openAsset(id) {
   assetId.value = id;
@@ -225,9 +225,9 @@ export function openProject(res) {
     id.value = res.id;
     key.value = res.key ?? nanoid();
     name.value = maybeTranslate(res.name);
-    files.value = res.files?.map?.(nameTranslateMapper());
+    files.value = res.files?.map(nameTranslateMapper()) ?? [];
     fileId.value = res.fileId;
-    assets.value = res.assets?.map?.(nameTranslateMapper());
+    assets.value = res.assets?.map(nameTranslateMapper()) ?? [];
     assetId.value = res.assetId;
   });
 }

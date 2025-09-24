@@ -66,7 +66,7 @@ export function CodeEditor({ className, keyName, options, readOnly, onLoad, onRe
     if (!completionItems) return;
 
     // 取消之前的自动完成设置
-    completionProvider?.dispose?.();
+    completionProvider?.dispose();
     // 设置当前语言的自动完成设置
     completionProvider = await registerCompletionProvider(languageId, completionItems);
   }, [ref.editor, modelname.value, language.value, onRegisterCompletionItems]);

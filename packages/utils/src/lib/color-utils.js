@@ -1,4 +1,21 @@
-export class Color {
+export class ColorUtils {
+  static rgbToRgb565(rgb) {
+    const r5 = rgb.r >> 3;
+    const g6 = rgb.g >> 2;
+    const b5 = rgb.b >> 3;
+    return (r5 << 11) | (g6 << 5) | b5;
+  }
+
+  static rgb565ToRgb(rgb565) {
+    const r = (rgb565 >> 11) & 0x1f; // Extract 5 bits for red
+    const g = (rgb565 >> 5) & 0x3f; // Extract 6 bits for green
+    const b = rgb565 & 0x1f; // Extract 5 bits for blue
+    const r8 = (r << 3) | (r >> 2);
+    const g8 = (g << 2) | (g >> 4);
+    const b8 = (b << 3) | (b >> 2);
+    return { r: r8, g: g8, b: b8 };
+  }
+
   static decimalToHex(decimal) {
     if (decimal < 0) {
       decimal += 0xffffff + 1;
@@ -30,7 +47,7 @@ export class Color {
   }
 
   static rgbToHex(rgb) {
-    return Color.decimalToHex(Color.rgbToDecimal(rgb));
+    return ColorUtils.decimalToHex(ColorUtils.rgbToDecimal(rgb));
   }
 
   static rgbToDecimal(rgb) {
@@ -38,7 +55,7 @@ export class Color {
   }
 
   static hexToDecimal(hex) {
-    return Color.rgbToDecimal(Color.hexToRgb(hex));
+    return ColorUtils.rgbToDecimal(ColorUtils.hexToRgb(hex));
   }
 
   static hsvToRgb(hsv) {
@@ -128,7 +145,9 @@ export class Color {
       b: fraction0 * rgb0.b + fraction1 * rgb1.b,
     };
   }
+}
 
+export class Color {
   constructor(color, clear = false) {
     this._clear = clear;
     this._color = color;
@@ -159,30 +178,30 @@ export class Color {
 
   get rgb() {
     if (this._type === 'rgb') return this._color;
-    if (this._type === 'decimal') return Color.decimalToRgb(this._color);
-    if (this._type === 'hsv') return Color.hsvToRgb(this._color);
-    if (this._type === 'hex') return Color.hexToRgb(this._color);
+    if (this._type === 'decimal') return ColorUtils.decimalToRgb(this._color);
+    if (this._type === 'hsv') return ColorUtils.hsvToRgb(this._color);
+    if (this._type === 'hex') return ColorUtils.hexToRgb(this._color);
   }
 
   get hsv() {
     if (this._type === 'hsv') return this._color;
-    if (this._type === 'decimal') return Color.rgbToHsv(Color.decimalToRgb(this._color));
-    if (this._type === 'rgb') return Color.rgbToHsv(this._color);
-    if (this._type === 'hex') return Color.rgbToHsv(Color.hexToRgb(this._color));
+    if (this._type === 'decimal') return ColorUtils.rgbToHsv(ColorUtils.decimalToRgb(this._color));
+    if (this._type === 'rgb') return ColorUtils.rgbToHsv(this._color);
+    if (this._type === 'hex') return ColorUtils.rgbToHsv(ColorUtils.hexToRgb(this._color));
   }
 
   get hex() {
     if (this._type === 'hex') return this._color;
-    if (this._type === 'decimal') return Color.decimalToHex(this._color);
-    if (this._type === 'rgb') return Color.rgbToHex(this._color);
-    if (this._type === 'hsv') return Color.rgbToHex(Color.hsvToRgb(this._color));
+    if (this._type === 'decimal') return ColorUtils.decimalToHex(this._color);
+    if (this._type === 'rgb') return ColorUtils.rgbToHex(this._color);
+    if (this._type === 'hsv') return ColorUtils.rgbToHex(ColorUtils.hsvToRgb(this._color));
   }
 
   get decimal() {
     if (this._type === 'decimal') this._color;
-    if (this._type === 'rgb') return Color.rgbToDecimal(this._color);
-    if (this._type === 'hsv') return Color.rgbToDecimal(Color.hsvToRgb(this._color));
-    if (this._type === 'hex') return Color.hexToDecimal(this._color);
+    if (this._type === 'rgb') return ColorUtils.rgbToDecimal(this._color);
+    if (this._type === 'hsv') return ColorUtils.rgbToDecimal(ColorUtils.hsvToRgb(this._color));
+    if (this._type === 'hex') return ColorUtils.hexToDecimal(this._color);
   }
 
   toRGBColor() {

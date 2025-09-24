@@ -28,7 +28,7 @@ export function IconSelector({
   return (
     <div className={classNames(styles.iconSelectorWrapper, className)}>
       <div className={styles.itemsWrapper}>
-        {items?.map?.((item, i) =>
+        {items?.map((item, i) =>
           item.__hidden__ ? null : (
             <IconSelectorItem
               checked={i === selectedIndex || item.id === selectedId}

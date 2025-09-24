@@ -15,7 +15,7 @@ const oldProjectStorage = localForage.createInstance({
 export function parseOldProject(project) {
   project.meta = {
     editor: `@blockcode/gui-${project.editor.package}`,
-    extensions: project.editor.extensions?.map?.((extId) => `@blockcode/blocks-${extId}`),
+    extensions: project.editor.extensions?.map((extId) => `@blockcode/blocks-${extId}`),
     version: '0.0.0',
   };
   project.files = project.fileList.map((file) => {

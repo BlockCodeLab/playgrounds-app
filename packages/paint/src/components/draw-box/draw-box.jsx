@@ -103,7 +103,7 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
         child.remove();
       }
     }
-    tool.value?.cancel?.();
+    tool.value?.cancel();
   }, []);
 
   // 键盘控制
@@ -212,7 +212,7 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
       }
       batch(() => {
         toolOptions.onToolProxy(null);
-        tool.value?.setup?.(ref.drawLayer, toolOptions, updateImage);
+        tool.value?.setup(ref.drawLayer, toolOptions, updateImage);
       });
     }
   }, [toolOptions, clearSelector, updateCenter, updateImage]);

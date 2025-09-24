@@ -1,3 +1,4 @@
+import { mime } from '@blockcode/utils';
 import { MPYBoard, ESP32BLEMPYBoard } from './mpy-board';
 import { getImageBase64 } from '../lib/image-base64';
 
@@ -135,14 +136,21 @@ export class MPYUtils {
 
     for (const file of files) {
       let { id: filePath, content } = file;
+      // 根据类型处理
       if (file.type) {
-        if (file.type === 'text/x-python' && !filePath.endsWith('.py')) {
-          filePath += '.py';
-        } else if (file.type.startsWith('image/') && !content) {
-          content = await getImageBase64(file.type, file.data);
+        // 添加后缀名
+        const extname = '.' + mime.getExtension(file.type);
+        if (!filePath.endsWith(extname)) {
+          filePath += extname;
+        }
+        // 从数据生成内容
+        if (!content) {
+          if (file.type.startsWith('image/')) {
+            content = await getImageBase64(file.type, file.data);
+          }
         }
       }
-      await board.put(content || '', filePath, reporter);
+      await board.put(content ?? '', filePath, reporter);
       finished += 1 / files.length;
     }
     progress(100);

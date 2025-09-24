@@ -19,7 +19,7 @@ function getTokens(code) {
 // 注册自动完成设置
 export async function registerCompletionProvider(languageId, completionItems) {
   // 载入语言模型
-  const language = await allLanguages.find((lang) => lang.id === languageId)?.loader?.();
+  const language = await allLanguages.find((lang) => lang.id === languageId)?.loader();
 
   const provider = monaco.languages.registerCompletionItemProvider(languageId, {
     provideCompletionItems(model, pos) {
@@ -62,7 +62,7 @@ export async function registerCompletionProvider(languageId, completionItems) {
 
       // 语言关键词
       let keywords = [];
-      if (language?.language?.keywords) {
+      if (language?.language.keywords) {
         keywords = language.language.keywords
           .filter((key) => key !== word.word && !customItems.find((item) => item.label.label === key))
           .map((key) => ({
