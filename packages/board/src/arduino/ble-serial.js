@@ -15,13 +15,11 @@ export class BLESerial extends BLE {
 
   async open() {
     await super.open();
-    setTimeout(async () => {
-      await this.startNotifications(SERVICE_UUID, SERIAL_UUID);
-      await sleepMs(100);
-      await this.sendATMessage('AT+BAUD=3');
-      await this.sendATMessage('AT+BLEUSB=3');
-      await this.sendATMessage('AT+ALL');
-    });
+    await this.startNotifications(SERVICE_UUID, SERIAL_UUID);
+    await sleepMs(100);
+    await this.sendATMessage('AT+BAUD=3');
+    await this.sendATMessage('AT+BLEUSB=3');
+    await this.sendATMessage('AT+ALL');
   }
 
   sendATMessage(message) {

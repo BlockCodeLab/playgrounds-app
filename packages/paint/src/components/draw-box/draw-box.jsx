@@ -103,7 +103,7 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
         child.remove();
       }
     }
-    tool.value?.cancel();
+    tool.value?.cancel?.();
   }, []);
 
   // 键盘控制
