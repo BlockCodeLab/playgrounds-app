@@ -7,6 +7,7 @@ import { bluetooth } from './lib/bluetooth';
 import './lib/menu';
 
 const isMac = process.platform === 'darwin';
+const isAppleSilicon = isMac && process.arch === 'arm64';
 
 const __dirname = dirname(require.resolve('./main.js'));
 const winConfig = {
@@ -42,7 +43,10 @@ const createWindow = () => {
     mainWindow.webContents.openDevTools();
   }
 
-  // 启动 arduino 编译服务
+  // Apple Silicon 芯片跳过 Arduino 编译服务
+  if (isAppleSilicon) return;
+
+  // 启动 Arduino 编译服务
   try {
     arduinoService({
       adapter: node(),

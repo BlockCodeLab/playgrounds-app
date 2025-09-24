@@ -1,6 +1,13 @@
-import { contextBridge, ipcRenderer } from 'electron/renderer';
+import { contextBridge, ipcRenderer, process } from 'electron/renderer';
 
 contextBridge.exposeInMainWorld('electron', {
+  get compileOffline() {
+    if (process.platform === 'darwin' && process.arch === 'arm64') {
+      return false;
+    }
+    return true;
+  },
+
   get bluetooth() {
     return {
       onScan(callback) {
@@ -14,6 +21,7 @@ contextBridge.exposeInMainWorld('electron', {
       },
     };
   },
+
   get serial() {
     return {
       onScan(callback) {
@@ -27,6 +35,7 @@ contextBridge.exposeInMainWorld('electron', {
       },
     };
   },
+
   onChangeFullscreen(callback) {
     ipcRenderer.on('window:fullscreen', (event, value) => callback(value));
   },

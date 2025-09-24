@@ -46,6 +46,10 @@ module.exports = {
     },
     // 将 arduino-cli 复制到 resources 文件夹
     packageAfterCopy: async (forgeConfig, buildPath, electronVersion, platform, arch) => {
+      // Apple Silicon 芯片跳过复制
+      if (process.platform === 'darwin' && process.arch === 'arm64') {
+        return;
+      }
       const assetsDir = resolve(__dirname, `arduino_cli/${platform}_${arch}`);
       const resourcesDir = resolve(buildPath, '../arduino_cli');
       copydir(assetsDir, resourcesDir);
