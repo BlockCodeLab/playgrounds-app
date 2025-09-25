@@ -1,0 +1,6 @@
+[submodule "packages/blocks"]
+	path = packages/blocks
+	url = https://github.com/BlockCodeLab/playgrounds-blocks.git
+[submodule "packages/gui"]
+	path = packages/gui
+	url = https://github.com/BlockCodeLab/playgrounds-gui.git
