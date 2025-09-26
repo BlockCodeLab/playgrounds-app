@@ -16,6 +16,8 @@ export { default as UPNG } from 'upng-js';
 
 export { saveSvg, saveSvgAsPng, svgAsDataUri } from 'save-svg-as-png';
 
+export { ScriptController } from './lib/script-controller';
+
 export { Base64Utils } from './lib/base64-utils';
 
 export { ColorUtils, Color } from './lib/color-utils';
