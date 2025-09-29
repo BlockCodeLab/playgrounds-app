@@ -1,4 +1,5 @@
 import { EventEmitter } from 'node:events';
+import { nanoid } from '@blockcode/utils';
 
 const userscripts = [];
 
@@ -31,9 +32,11 @@ export class ScriptController {
   }
 
   execute(userscript, ...args) {
+    userscript.id = nanoid();
+    userscript.scripter = this;
     return new Promise(async (resolve) => {
-      const abort = (id) => {
-        if (id === userscript.id) return;
+      const abort = (skipId) => {
+        if (skipId === userscript.id) return; // 跳过中断
         userscript.aborted = true;
         this.signal.off('abort', abort);
         resolve();
