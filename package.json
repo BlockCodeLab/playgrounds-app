@@ -5,8 +5,7 @@
   "description": "The BlockCode Playgrounds application.",
   "author": {
     "name": "Yeqin Gong",
-    "email": "gon@gyeq.in",
-    "url": "http://gon.gyeq.in/"
+    "email": "yeqin.gong@qq.com"
   },
   "main": "dist/main.js",
   "scripts": {
@@ -31,22 +30,23 @@
     "prepackage": "BUN_ENV=production playground-build . && bun run release",
     "package": "bun x electron-forge package",
     "premake": "bun run prepackage",
-    "make": "bun x electron-forge make --arch",
-    "make:mac": "bun run make -- arm64,x64 --platform darwin",
-    "make:win": "bun run make -- x64,ia32 --platform win32"
+    "make": "bun x electron-forge make",
+    "make:mac": "bun run make -- --platform darwin --arch arm64,x64",
+    "make:win": "bun run make -- --platform win32 --arch x64,ia32"
   },
   "dependencies": {
-    "@elysiajs/node": "^1.4.0",
+    "@elysiajs/node": "^1.4.1",
     "arduino-webcli": "git+https://github.com/BlockCodeLab/arduino-webcli.git"
   },
   "trustedDependencies": [
-    "arduino-webcli"
+    "arduino-webcli",
+    "electron"
   ],
   "devDependencies": {
     "@electron-forge/cli": "^7.9.0",
     "@electron-forge/maker-zip": "^7.9.0",
     "@types/bun": "latest",
-    "electron": "^37.5.0",
+    "electron": "^38.2.0",
     "gh-pages": "^6.3.0",
     "mkdirp": "^3.0.1",
     "playground-build": "git+https://github.com/BlockCodeLab/playground-build.git",
