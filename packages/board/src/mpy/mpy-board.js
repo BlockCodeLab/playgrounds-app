@@ -4,7 +4,7 @@ import { Serial } from '@blockcode/core';
 import { ESP32BLESerial } from './ble-serial';
 
 const BLE_SERVICE_UUID = '00000000-8c26-476f-89a7-a108033a69c7';
-const OPTION_SERVICE_UUID= '00000001-8c26-476f-89a7-a108033a69c7';
+const OPTION_SERVICE_UUID = '00000001-8c26-476f-89a7-a108033a69c7';
 
 const CTRL_A = '\x01'; // raw repl
 const CTRL_B = '\x02'; // exit raw repl
@@ -72,7 +72,7 @@ export class MPYBoard {
 
   requestPort(filters = []) {
     return navigator.serial.requestPort({ filters }).then((port) => {
-       if (port._serial) {
+      if (port._serial) {
         this._setSerial(port._serial);
       } else {
         this._setSerial(new Serial(port));
@@ -462,13 +462,13 @@ export class ESP32BLEMPYBoard extends MPYBoard {
 
   requestDevice() {
     const filters = [{ services: [BLE_SERVICE_UUID] }];
-    return navigator.bluetooth.requestDevice({ filters,optionalServices: [OPTION_SERVICE_UUID]  }).then((device) => {
+    return navigator.bluetooth.requestDevice({ filters, optionalServices: [OPTION_SERVICE_UUID] }).then((device) => {
       if (device._serial) {
         this._setSerial(device._serial);
       } else {
         const serial = new ESP32BLESerial(device.gatt);
         this._setSerial(serial);
-     }
+      }
     });
   }
 
@@ -476,7 +476,7 @@ export class ESP32BLEMPYBoard extends MPYBoard {
     return this.serial.server.connected;
   }
 
-  async put(content, dest, progress = function () {}){
+  async put(content, dest, progress = function () {}) {
     if (!dest) {
       throw new Error(`Must specify content and destination path`);
     }

@@ -22,7 +22,7 @@ export function putUserAllConfig(config = {}) {
 }
 
 export function getUserAllConfig() {
-  const config = {};
+  const config = Object.create(null);
   const keyId = `user:`;
   let i, key;
   for (i = 0; i < localStorage.length; i++) {
@@ -61,7 +61,7 @@ export function putEditorAllConfig(editor, config = {}) {
 }
 
 export function getEditorAllConfig(editor) {
-  const config = {};
+  const config = Object.create(null);
   const keyId = `${editor}:`;
   let i, key;
   for (i = 0; i < localStorage.length; i++) {

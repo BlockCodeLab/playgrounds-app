@@ -3,11 +3,11 @@ import Latin1 from 'crypto-js/enc-latin1';
 import { ESPLoader, Transport } from 'esptool-js';
 
 export class ESPTool {
-  static async connect(filters) {
+  static async connect(filters, baudrate = 921600) {
     const device = await navigator.serial.requestPort({ filters });
     const esploader = new ESPLoader({
+      baudrate,
       transport: new Transport(device, true),
-      baudrate: 921600,
     });
 
     // const chip = await esploader.main();
@@ -67,12 +67,12 @@ export class ESPTool {
       eraseAll = false;
     }
     const flashOptions = {
+      eraseAll,
       fileArray: files,
       flashSize: 'keep',
-      eraseAll: eraseAll,
       compress: true,
       reportProgress: (fileIndex, written, total) => {
-        progress(((written / total) * 100).toFixed(1));
+        progress(parseInt((written / total) * 100));
       },
       calculateMD5Hash: (image) => MD5(Latin1.parse(image)),
     };

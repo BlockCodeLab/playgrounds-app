@@ -19,7 +19,7 @@ export function hideSplash() {
 // 通知消息
 //
 const alerts = signal([]);
-const alertsConfigs = {};
+const alertsConfigs = Object.create(null);
 
 // 添加消息配置模版
 export function addAlertConfig(name, alertConfig) {
