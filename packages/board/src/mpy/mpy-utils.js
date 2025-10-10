@@ -126,12 +126,13 @@ export class MPYUtils {
     await board.exitRawRepl();
   }
 
-  static async write(board, files, progress) {
+  static async write(board, files, progress, fixed = parseInt) {
     await board.stop();
 
     let finished = 0;
     const reporter = (x) => {
-      progress(((finished + (1 / files.length) * (x / 100)) * 100).toFixed(1));
+      const value = (finished + (1 / files.length) * (x / 100)) * 100;
+      progress(fixed(value));
     };
 
     for (const file of files) {
