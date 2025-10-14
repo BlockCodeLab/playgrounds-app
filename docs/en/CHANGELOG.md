@@ -1,5 +1,18 @@
 ## CHANGELOG
 
+### v1.1.0
+
+- Updated Scratch Arcade Editor to v1.1.1
+  - Added joystick/directional pad toggle
+- Updated Arduino Editor to v0.2.0
+  - Added offline compilation for Arduino
+- Updated Block Editor
+  - Added variable monitoring (show/hide)
+  - Added Wireless Programming Kit extension (beta)
+  - Optimized simulator logic for improved performance
+- Enhanced compatibility for certain extensions
+- Fixed various bugs
+
 ### v1.0.6
 
 - Released ESP32 Editor v0.1.0 Beta

@@ -176,3 +176,6 @@ dist
 
 # bun
 bun.lock*
+
+#zed
+.zed/
