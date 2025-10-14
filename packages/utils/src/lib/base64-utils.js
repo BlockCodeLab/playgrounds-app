@@ -1,3 +1,5 @@
+const encoder = new TextEncoder();
+
 export class Base64Utils {
   static base64ToUint8Array(base64) {
     const binaryString = atob(base64);
@@ -22,5 +24,10 @@ export class Base64Utils {
       binary += String.fromCharCode(bytes[i]);
     }
     return btoa(binary);
+  }
+
+  static stringToBase64(str) {
+    const buffer = encoder.encode(str).buffer;
+    return Base64Utils.arrayBufferToBase64(buffer);
   }
 }

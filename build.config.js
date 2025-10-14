@@ -6,5 +6,6 @@ export default {
   entrypoints: [resolve(srcDir, 'main.js'), resolve(srcDir, 'preload.js')],
   target: 'node',
   format: 'cjs',
+  minify: process.env.BUN_ENV === 'production',
   external: ['electron'],
 };

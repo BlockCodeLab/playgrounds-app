@@ -1,11 +1,17 @@
-import { contextBridge, ipcRenderer, process } from 'electron/renderer';
+import { contextBridge, ipcRenderer } from 'electron/renderer';
+
+const checkArduinoCompile = ipcRenderer.sendSync('check:arduino:compile');
 
 contextBridge.exposeInMainWorld('electron', {
-  get compileOffline() {
-    if (process.platform === 'darwin' && process.arch === 'arm64') {
-      return false;
-    }
-    return true;
+  get arduinoCompile() {
+    return (
+      checkArduinoCompile &&
+      ((body) =>
+        new Promise((resolve) => {
+          ipcRenderer.on('arduino:compile:reply', (event, data) => resolve(data));
+          ipcRenderer.send('arduino:compile', body);
+        }))
+    );
   },
 
   get bluetooth() {

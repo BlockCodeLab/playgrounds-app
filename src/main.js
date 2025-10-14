@@ -1,13 +1,11 @@
 import { dirname, resolve } from 'node:path';
 import { app, BrowserWindow } from 'electron';
-import { arduinoService } from 'arduino-webcli';
-import { node } from '@elysiajs/node';
 import { serial } from './lib/serial';
 import { bluetooth } from './lib/bluetooth';
+import { arduinoService } from './lib/arduino-service';
 import './lib/menu';
 
 const isMac = process.platform === 'darwin';
-const isAppleSilicon = isMac && process.arch === 'arm64';
 
 const __dirname = dirname(require.resolve('./main.js'));
 const winConfig = {
@@ -43,18 +41,8 @@ const createWindow = () => {
     mainWindow.webContents.openDevTools();
   }
 
-  // Apple Silicon 芯片跳过 Arduino 编译服务
-  if (isAppleSilicon) return;
-
   // 启动 Arduino 编译服务
-  try {
-    arduinoService({
-      adapter: node(),
-      arduinoCliPath: app.isPackaged
-        ? resolve(process.resourcesPath, 'arduino_cli')
-        : resolve(process.cwd(), 'arduino_cli', `${process.platform}_${process.arch}`),
-    });
-  } catch (err) {}
+  arduinoService();
 };
 
 app.whenReady().then(() => createWindow());

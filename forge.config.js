@@ -1,31 +1,30 @@
-const { resolve } = require('node:path');
-const { copydir } = require('./scripts/copy');
+const arduinoConfig = require('./packages/gui/editors/arduino/forge.config');
 
 module.exports = {
   packagerConfig: {
     name: 'BlockCode Playgrounds',
     icon: 'public/icon',
     appCopyright: 'Copyright(c) BlockCode Lab, 2023-2025.',
-    asar: true,
+    // asar: true,
     ignore: [
-      '/.zed/',
-      '/arduino/',
-      '/docs/',
-      '/examples/',
-      '/packages/',
-      '/node_modules/',
-      '/public/',
-      '/scripts/',
-      '/src/',
-      '/.editorconfig',
-      '/.gitignore',
-      '/.gitmodules',
-      '/.prettierrc',
-      '/bun.lock',
-      '/build.config.js',
-      '/forge.config.js',
-      '/jsconfig.json',
-      '/README.md',
+      '/\\.zed($|/)',
+      '/arduino_cli($|/)',
+      '/docs($|/)',
+      '/examples($|/)',
+      '/node_modules($|/)',
+      '/packages($|/)',
+      '/public($|/)',
+      '/scripts($|/)',
+      '/src($|/)',
+      '/\\.editorconfig$',
+      '/\\.gitignore$',
+      '/\\.gitmodules$',
+      '/\\.prettierrc$',
+      '/build\\.config\\.js$',
+      '/bun\\.lock$',
+      '/forge.config\\.js$',
+      '/jsconfig\\.json$',
+      '/README\\.md$',
     ],
   },
   makers: [
@@ -34,25 +33,16 @@ module.exports = {
     },
   ],
   hooks: {
-    readPackageJson: async (forgeConfig, packageJson) => {
+    ...arduinoConfig.hooks,
+    readPackageJson: (forgeConfig, packageJson) => {
       delete packageJson.scripts;
       delete packageJson.workspaces;
       for (const dep in packageJson.devDependencies) {
-        if (!dep.includes('electron')) {
+        if (dep !== 'electron') {
           delete packageJson.devDependencies[dep];
         }
       }
       return packageJson;
-    },
-    // 将 arduino-cli 复制到 resources 文件夹
-    packageAfterCopy: async (forgeConfig, buildPath, electronVersion, platform, arch) => {
-      // Apple Silicon 芯片跳过复制
-      if (process.platform === 'darwin' && process.arch === 'arm64') {
-        return;
-      }
-      const assetsDir = resolve(__dirname, `arduino_cli/${platform}_${arch}`);
-      const resourcesDir = resolve(buildPath, '../arduino_cli');
-      copydir(assetsDir, resourcesDir);
     },
   },
 };
