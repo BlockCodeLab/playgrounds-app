@@ -3,6 +3,7 @@ import { Serial } from '@blockcode/core';
 import { bufferEqual } from '../lib/buffer-equal';
 import { mergeUint8Arrays } from '../lib/merge-uint8-arrays';
 import { BLESerial } from './ble-serial';
+import deviceFilters from './device-filters.yaml';
 
 // STK500 协议常量
 const Resp_STK_INSYNC = 0x14;
@@ -20,7 +21,6 @@ const Resp_STK_NOSYNC = 0x15;
 const Cmnd_STK_READ_PAGE = 0x74;
 const OK_RESPONSE = [Resp_STK_INSYNC, Resp_STK_OK];
 
-const USB_VENDOR_ID = 9025;
 const BLE_SERVICE_UUID = '0000ffe0-0000-1000-8000-00805f9b34fb';
 
 const BLE_CHUNK_SIZE = 60;
@@ -67,8 +67,7 @@ export class ArduinoBoard {
   }
 
   requestPort() {
-    const filters = [{ usbVendorId: USB_VENDOR_ID }];
-    return navigator.serial.requestPort({ filters }).then((port) => {
+    return navigator.serial.requestPort({ filters: deviceFilters }).then((port) => {
       if (port._serial) {
         this._setSerial(port._serial);
       } else {
