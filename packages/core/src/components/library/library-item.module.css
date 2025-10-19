@@ -154,6 +154,10 @@
   padding-bottom: 0.25rem;
 }
 
+.featured-description a {
+  color: var(--theme-primary);
+}
+
 .featured-metadata {
   width: 100%;
   padding: 0 1.25rem 1rem 1.25rem;

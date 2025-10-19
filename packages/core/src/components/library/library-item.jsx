@@ -8,6 +8,12 @@ import iconMicroPython from './icons/icon-micropython.svg';
 import iconBluetooth from './icons/icon-bluetooth.svg';
 import iconInternet from './icons/icon-internet.svg';
 
+const openUri = (uri) => (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  window.open(uri, '_blank');
+};
+
 export function LibraryItem(props) {
   return props.featured ? (
     <div
@@ -54,7 +60,20 @@ export function LibraryItem(props) {
         <div className={styles.featuredText}>
           <span className={styles.libraryItemName}>{props.name}</span>
           <br />
-          <span className={styles.featuredDescription}>{props.description}</span>
+          <span className={styles.featuredDescription}>
+            {props.description}
+            <br />
+            {props.uri ? (
+              <a onClick={openUri(props.uri)}>
+                <Text
+                  id="core.library.readmore"
+                  defaultMessage="Read more..."
+                />
+              </a>
+            ) : (
+              ''
+            )}
+          </span>
         </div>
       )}
       {(props.blocksRequired ||

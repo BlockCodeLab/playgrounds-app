@@ -166,6 +166,7 @@ export function Library({ items, title, filterable, filterPlaceholder, emptyMess
                 name={item.name}
                 title={item.title}
                 description={item.description}
+                uri={item.uri}
                 author={item.author}
                 copyright={item.copyright}
                 bluetoothRequired={item.bluetoothRequired}
