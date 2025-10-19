@@ -9,7 +9,7 @@ class SerialPort {
     if (!this._portList) return;
     return this._portList.map((port) => ({
       id: port.portId,
-      name: port.displayName,
+      name: `${port.displayName} [${port.portName}]`,
     }));
   }
 
