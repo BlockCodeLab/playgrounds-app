@@ -38,7 +38,7 @@
 
 <!-- select:end -->
 
-国内用户请通过[百度网盘](https://pan.baidu.com/s/1yr7Q-6PFuaimyv_noXxJ_w?pwd=ahj3)加速下载。
+国内用户请通过[百度网盘](https://pan.baidu.com/s/1TfC8zsTF9CK7p2sBnPnNng?pwd=sytt)加速下载。
 
 [1]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.1.0/BlockCodePlaygrounds-win-x64-1.1.0.zip
 [2]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.1.0/BlockCodePlaygrounds-win-x86-1.1.0.zip
