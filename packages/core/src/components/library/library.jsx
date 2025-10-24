@@ -33,16 +33,12 @@ export function Library({ items, title, filterable, filterPlaceholder, emptyMess
         return item.eegg === queryStr || nameStr === queryStr;
       }
 
-      if (!item.tags) {
-        return true;
-      }
-
       if (tag.value !== 'all') {
-        return item.tags.includes(tag.value);
+        return item.tags ? item.tags.includes(tag.value) : true;
       }
 
       // 无搜索关键词
-      if (query.length === 0) {
+      if (queryStr.length === 0) {
         return true;
       }
 
