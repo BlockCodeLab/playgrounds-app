@@ -1,9 +1,12 @@
-import { readdirSync, statSync } from 'node:fs';
+import { readdirSync, statSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { app, ipcMain } from 'electron';
 
 const getEditorsInfo = () => {
   const path = resolve(app.getPath('home'), 'BlockCode/editors');
+  if (!existsSync(path)) {
+    return {};
+  }
   const extensions = readdirSync(path);
   return Object.fromEntries(
     extensions

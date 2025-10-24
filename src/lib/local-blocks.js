@@ -1,9 +1,12 @@
-import { readdirSync, statSync } from 'node:fs';
+import { readdirSync, statSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { app, ipcMain } from 'electron';
 
 const getBlocksInfo = () => {
   const path = resolve(app.getPath('home'), 'BlockCode/blocks');
+  if (!existsSync(path)) {
+    return {};
+  }
   const extensions = readdirSync(path);
   return Object.fromEntries(
     extensions
