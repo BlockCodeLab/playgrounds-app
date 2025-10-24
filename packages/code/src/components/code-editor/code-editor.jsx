@@ -1,6 +1,6 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
-import { useRef, useCallback, useEffect } from 'preact/hooks';
+import { useRef, useEffect } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
 import { mime, classNames } from '@blockcode/utils';
 import { useLocalesContext, useProjectContext, setFile } from '@blockcode/core';
@@ -104,6 +104,6 @@ export function CodeEditor({ className, keyName, options, readOnly, onLoad, onRe
     <div
       ref={ref}
       className={classNames(styles.editorWrapper, className)}
-    ></div>
+    />
   );
 }

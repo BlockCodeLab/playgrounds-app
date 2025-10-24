@@ -6,6 +6,7 @@ export class BLE extends EventEmitter {
     super();
     this._server = server;
     this.device._ble = this;
+    this.setMaxListeners(0);
   }
 
   get server() {

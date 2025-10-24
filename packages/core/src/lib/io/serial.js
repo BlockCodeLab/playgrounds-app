@@ -11,6 +11,7 @@ export class Serial extends EventEmitter {
     this._port.ondisconnect = () => {
       this.emit('disconnect');
     };
+    this.setMaxListeners(0);
   }
 
   get port() {
