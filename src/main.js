@@ -1,8 +1,10 @@
 import { dirname, resolve } from 'node:path';
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, globalShortcut } from 'electron';
 import { serial } from './lib/serial';
 import { bluetooth } from './lib/bluetooth';
 import { arduinoService } from './lib/arduino-service';
+import { readLoaclBlocks } from './lib/local-blocks';
+import { readLoaclEditors } from './lib/local-editors';
 import './lib/menu';
 
 const isMac = process.platform === 'darwin';
@@ -26,6 +28,13 @@ if (isMac) {
 const createWindow = () => {
   const mainWindow = new BrowserWindow(winConfig);
 
+  // 注册重载快捷键
+  globalShortcut.register('CommandOrControl+R', () => {
+    if (mainWindow) {
+      mainWindow.reload();
+    }
+  });
+
   serial.setBrowserWindow(mainWindow);
   bluetooth.setBrowserWindow(mainWindow);
 
@@ -40,6 +49,10 @@ const createWindow = () => {
   if (DEBUG) {
     mainWindow.webContents.openDevTools();
   }
+
+  // 读取本地扩展
+  readLoaclBlocks();
+  readLoaclEditors();
 
   // 启动 Arduino 编译服务
   arduinoService();

@@ -3,6 +3,14 @@ import { contextBridge, ipcRenderer } from 'electron/renderer';
 const checkArduinoCompile = ipcRenderer.sendSync('check:arduino:compile');
 
 contextBridge.exposeInMainWorld('electron', {
+  get localBlocks() {
+    return ipcRenderer.sendSync('local:blocks');
+  },
+
+  get localEditors() {
+    return ipcRenderer.sendSync('local:editors');
+  },
+
   get arduinoCompile() {
     return (
       checkArduinoCompile &&
