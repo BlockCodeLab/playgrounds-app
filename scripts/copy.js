@@ -1,10 +1,9 @@
 import { dirname, extname, resolve } from 'node:path';
-import { readdirSync, existsSync } from 'node:fs';
-import { mkdirp } from 'mkdirp';
+import { readdirSync, existsSync, mkdirSync } from 'node:fs';
 
 export function copyfile(from, to) {
   if (!existsSync(from)) return;
-  mkdirp.sync(dirname(to));
+  mkdirSync(dirname(to), { recursive: true });
   return Bun.write(to, Bun.file(from));
 }
 
