@@ -7,18 +7,18 @@ const getEditorsInfo = () => {
   if (!existsSync(path)) {
     return {};
   }
-  const extensions = readdirSync(path);
+  const editors = readdirSync(path);
   return Object.fromEntries(
-    extensions
-      .filter((extdir) => statSync(resolve(path, extdir)).isDirectory())
-      .map((extdir) => {
-        const info = require(resolve(path, extdir, 'package.json'));
+    editors
+      .filter((editorDir) => existsSync(resolve(path, editorDir, 'package.json')))
+      .map((editorDir) => {
+        const info = require(resolve(path, editorDir, 'package.json'));
         return [
           info.name,
           {
             id: info.name,
-            main: resolve(path, extdir, info.exports['.'].import),
-            info: resolve(path, extdir, info.exports['./info'].import),
+            main: resolve(path, editorDir, info.exports['.'].import),
+            info: resolve(path, editorDir, info.exports['./info'].import),
           },
         ];
       }),

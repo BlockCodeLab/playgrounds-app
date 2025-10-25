@@ -26,10 +26,6 @@
   max-width: 220px;
 }
 
-.library-item-featured {
-  align-self: stretch;
-}
-
 .library-item:hover {
   border-width: 2px;
   border-color: var(--theme-primary);
@@ -114,6 +110,7 @@
 }
 
 .featured-item {
+  align-self: stretch;
   flex-basis: 300px;
   max-width: 300px;
   height: auto;

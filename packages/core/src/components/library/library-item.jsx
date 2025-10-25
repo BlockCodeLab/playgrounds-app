@@ -15,11 +15,52 @@ const openUri = (uri) => (e) => {
 };
 
 export function LibraryItem(props) {
-  return props.featured ? (
+  if (props.custom) {
+    return (
+      <div
+        className={classNames(styles.libraryItem, props.className, {
+          [styles.disabled]: props.disabled,
+          [styles.large]: props.large && !props.featured,
+          [styles.featuredItem]: props.featured && !props.large,
+        })}
+        onClick={!props.disabled && props.onSelect}
+      >
+        {props.custom}
+      </div>
+    );
+  }
+
+  if (!props.featured) {
+    return (
+      <div
+        className={classNames(styles.libraryItem, props.className, {
+          [styles.large]: props.large,
+        })}
+        onClick={!props.disabled && props.onSelect}
+      >
+        <div className={styles.libraryItemImageContainerWrapper}>
+          <div className={styles.libraryItemImageContainer}>
+            <img
+              className={styles.libraryItemImage}
+              onPointerEnter={props.onMouseEnter}
+              onPointerLeave={props.onMouseLeave}
+              src={props.image}
+            />
+          </div>
+        </div>
+        <span className={styles.libraryItemName}>{props.name}</span>
+        {(props.copyright || props.author) && (
+          <span className={styles.libraryItemDetial}>{props.copyright ? `© ${props.copyright}` : props.author}</span>
+        )}
+      </div>
+    );
+  }
+
+  return (
     <div
-      className={classNames(styles.libraryItem, styles.featuredItem, {
+      className={classNames(styles.libraryItem, props.className, {
         [styles.disabled]: props.disabled,
-        [styles.libraryItemFeatured]: props.featured,
+        [styles.featuredItem]: props.featured,
       })}
       onClick={!props.disabled && props.onSelect}
     >
@@ -125,28 +166,6 @@ export function LibraryItem(props) {
             )}
           </div>
         </div>
-      )}
-    </div>
-  ) : (
-    <div
-      className={classNames(styles.libraryItem, {
-        [styles.large]: props.large,
-      })}
-      onClick={props.onSelect}
-    >
-      <div className={styles.libraryItemImageContainerWrapper}>
-        <div className={styles.libraryItemImageContainer}>
-          <img
-            className={styles.libraryItemImage}
-            onPointerEnter={props.onMouseEnter}
-            onPointerLeave={props.onMouseLeave}
-            src={props.image}
-          />
-        </div>
-      </div>
-      <span className={styles.libraryItemName}>{props.name}</span>
-      {(props.copyright || props.author) && (
-        <span className={styles.libraryItemDetial}>{props.copyright ? `© ${props.copyright}` : props.author}</span>
       )}
     </div>
   );

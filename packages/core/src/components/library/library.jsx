@@ -26,9 +26,15 @@ export function Library({ items, title, filterable, filterPlaceholder, emptyMess
         return false;
       }
 
-      // 隐藏彩蛋，只有搜索全称才显示
+      // 类型的彩蛋
+      if (item.eeggTag) {
+        return item.eeggTag === tag.value;
+      }
+
       const queryStr = query.value.toLowerCase();
-      const nameStr = maybeTranslate(item.name).toLowerCase();
+      const nameStr = maybeTranslate(item.name || '').toLowerCase();
+
+      // 隐藏彩蛋，只有搜索全称才显示
       if (item.eegg) {
         return item.eegg === queryStr || nameStr === queryStr;
       }
@@ -42,7 +48,7 @@ export function Library({ items, title, filterable, filterPlaceholder, emptyMess
         return true;
       }
 
-      if (item.id && item.id.toLowerCase().includes(queryStr)) {
+      if (item.id?.toLowerCase().includes(queryStr)) {
         return true;
       }
       if (nameStr.includes(queryStr)) {
@@ -155,6 +161,8 @@ export function Library({ items, title, filterable, filterPlaceholder, emptyMess
                 id={item.id ?? index}
                 large={large}
                 featured={featured}
+                custom={item.custom}
+                className={item.className}
                 disabled={item.disabled}
                 beta={item.beta || item.preview}
                 icon={item.icon}
