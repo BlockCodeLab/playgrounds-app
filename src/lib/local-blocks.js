@@ -1,7 +1,8 @@
-import { readdirSync, statSync, existsSync, readFileSync, mkdirSync, writeFileSync } from 'node:fs';
+import JSZip from 'jszip';
+import { readdirSync, existsSync, readFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { app, ipcMain, dialog } from 'electron';
-import JSZip from 'jszip';
+import { escape } from './escape';
 
 const localBlocksPath = resolve(app.getPath('home'), 'BlockCode/blocks');
 
@@ -29,12 +30,13 @@ const getBlocksInfo = (path) => {
 
 export const readLoaclBlocks = () => {
   ipcMain.on('local:blocks', (event) => {
-    event.returnValue = getBlocksInfo(localBlocksPath);
+    try {
+      event.returnValue = getBlocksInfo(localBlocksPath);
+    } catch (err) {
+      event.returnValue = {};
+    }
   });
 };
-
-// 过滤字符
-const escape = (name) => name.replaceAll(/[^a-z0-9]/gi, '_').replace(/^_/, '');
 
 //
 // 将用户扩展添加到本地

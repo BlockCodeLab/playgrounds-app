@@ -1,9 +1,10 @@
-import { readdirSync, statSync, existsSync } from 'node:fs';
+import { readdirSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { app, ipcMain } from 'electron';
 
-const getEditorsInfo = () => {
-  const path = resolve(app.getPath('home'), 'BlockCode/editors');
+const localEditorsPath = resolve(app.getPath('home'), 'BlockCode/editors');
+
+const getEditorsInfo = (path) => {
   if (!existsSync(path)) {
     return {};
   }
@@ -27,6 +28,10 @@ const getEditorsInfo = () => {
 
 export const readLoaclEditors = () => {
   ipcMain.on('local:editors', (event) => {
-    event.returnValue = getEditorsInfo();
+    try {
+      event.returnValue = getEditorsInfo(localEditorsPath);
+    } catch (err) {
+      event.returnValue = {};
+    }
   });
 };

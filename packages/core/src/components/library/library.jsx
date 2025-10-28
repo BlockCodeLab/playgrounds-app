@@ -40,7 +40,7 @@ export function Library({ items, title, filterable, filterPlaceholder, emptyMess
       }
 
       if (tag.value !== 'all') {
-        return item.tags ? item.tags.includes(tag.value) : true;
+        return item.tags ? item.tags.includes(tag.value) : false;
       }
 
       // 无搜索关键词

@@ -5,6 +5,7 @@ import { bluetooth } from './lib/bluetooth';
 import { arduinoService } from './lib/arduino-service';
 import { readLoaclBlocks } from './lib/local-blocks';
 import { readLoaclEditors } from './lib/local-editors';
+import { readLoaclTutorials } from './lib/local-tutorials';
 import './lib/menu';
 
 const isMac = process.platform === 'darwin';
@@ -50,9 +51,10 @@ const createWindow = () => {
     mainWindow.webContents.openDevTools();
   }
 
-  // 读取本地扩展
+  // 读取本地资源
   readLoaclBlocks();
   readLoaclEditors();
+  readLoaclTutorials();
 
   // 启动 Arduino 编译服务
   arduinoService();

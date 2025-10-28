@@ -141,6 +141,13 @@ export function addTabs(tabs) {
   tabs.value = state.tabs.value.concat(tabs);
 }
 
+// 添加教程
+export function addLessons(lessons) {
+  tutorials.value = Object.assign(tutorials.value, {
+    lessons: Object.assign(lessons, tutorials.value.lessons),
+  });
+}
+
 // 设置应用状态
 export function setAppState(state, value) {
   if (typeof state === 'string') {

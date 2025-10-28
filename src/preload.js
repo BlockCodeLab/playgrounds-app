@@ -15,6 +15,10 @@ contextBridge.exposeInMainWorld('electron', {
     return ipcRenderer.sendSync('local:editors');
   },
 
+  getLocalTutorials(editorOrBlockId, lang) {
+    return ipcRenderer.sendSync('local:tutorials', editorOrBlockId, lang);
+  },
+
   get arduinoCompile() {
     return (
       checkArduinoCompile &&
