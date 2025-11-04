@@ -24,16 +24,16 @@ window.MonacoEnvironment = {
   getWorker: (_, label) => {
     switch (label) {
       case 'css':
-        return new Worker('/assets/workers/css-worker.js', { type: 'module' });
+        return new Worker('/monaco-editor/workers/css-worker.js', { type: 'module' });
       case 'html':
-        return new Worker('/assets/workers/html-worker.js', { type: 'module' });
+        return new Worker('/monaco-editor/workers/html-worker.js', { type: 'module' });
       case 'json':
-        return new Worker('/assets/workers/json-worker.js', { type: 'module' });
+        return new Worker('/monaco-editor/workers/json-worker.js', { type: 'module' });
       case 'javascript':
       case 'typescript':
-        return new Worker('/assets/workers/ts-worker.js', { type: 'module' });
+        return new Worker('/monaco-editor/workers/ts-worker.js', { type: 'module' });
       default:
-        return new Worker('/assets/workers/editor-worker.js', { type: 'module' });
+        return new Worker('/monaco-editor/workers/editor-worker.js', { type: 'module' });
     }
   },
 };

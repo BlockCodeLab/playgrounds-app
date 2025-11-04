@@ -2,14 +2,12 @@ import http from 'node:http';
 import handler from 'serve-handler';
 
 import { cwd, argv } from 'node:process';
-import { dirname, basename, join, relative, resolve } from 'node:path';
-import { readdirSync, existsSync, watch, watchFile } from 'node:fs';
-import { emptyDirSync } from 'fs-extra';
+import { basename, join, relative, resolve } from 'node:path';
+import { readdirSync, existsSync, rmdirSync, mkdirSync, watch, watchFile } from 'node:fs';
 import { copyfile, copydir } from './copy.js';
 import { workspaces } from '../package.json';
 
 const DIST_DIR = 'dist';
-const ASSETS_DIR = 'assets';
 const INDEX_HTML = 'index.html';
 
 const distDir = resolve(cwd(), DIST_DIR);
@@ -19,8 +17,9 @@ const isDev = Bun.env.BUN_ENV !== 'production';
 const isWatch = argv[2] === 'watch';
 const isClean = argv[2] === 'clean';
 
-if (isClean) {
-  emptyDirSync(distDir);
+if (isClean && existsSync(distDir)) {
+  rmdirSync(distDir, { recursive: true, force: true });
+  mkdirSync(distDir, { recursive: true });
 }
 
 if (isWatch) {
@@ -116,9 +115,13 @@ const watchAndCopydir = (src, dist) => {
       }
 
       // 复制资源
-      path = resolve(dir.parentPath, dir.name, DIST_DIR, ASSETS_DIR);
-      if (!existsSync(path)) continue;
-      watchAndCopydir(path, resolve(distDir, ASSETS_DIR));
+      // DIST_DIR 路径下的所有文件夹
+      readdirSync(resolve(dir.parentPath, dir.name, DIST_DIR), { withFileTypes: true })
+        .filter((d) => d.isDirectory())
+        .forEach((res) => {
+          const path = resolve(dir.parentPath, dir.name, DIST_DIR, res.name);
+          watchAndCopydir(path, resolve(distDir, res.name));
+        });
     }
   }
 
