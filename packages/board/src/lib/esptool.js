@@ -1,5 +1,4 @@
-import MD5 from 'crypto-js/md5';
-import Latin1 from 'crypto-js/enc-latin1';
+import { crypto } from '@blockcode/utils';
 import { ESPLoader, Transport } from 'esptool-js';
 
 export class ESPTool {
@@ -74,7 +73,7 @@ export class ESPTool {
       reportProgress: (fileIndex, written, total) => {
         progress(parseInt((written / total) * 100));
       },
-      calculateMD5Hash: (image) => MD5(Latin1.parse(image)),
+      calculateMD5Hash: (image) => crypto.MD5(crypto.Latin1.parse(image)),
     };
     await esploader.writeFlash(flashOptions);
     progress(100);

@@ -22,6 +22,8 @@ export { Base64Utils } from './lib/base64-utils';
 
 export { ColorUtils, Color } from './lib/color-utils';
 
+export { crypto } from './lib/crypto';
+
 export { exportFile } from './lib/export-file';
 
 export { fetchSpark } from './lib/fetch-spark';
