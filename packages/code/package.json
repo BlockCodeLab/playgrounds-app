@@ -5,9 +5,9 @@
   "type": "module",
   "module": "./dist/index.js",
   "dependencies": {
-    "@preact/signals": "^2.2.1",
+    "@preact/signals": "^2.3.2",
     "monaco-editor": "^0.46.0",
-    "preact": "^10.26.9"
+    "preact": "^10.27.2"
   },
   "devDependencies": {
     "@types/bun": "latest"

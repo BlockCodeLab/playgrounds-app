@@ -1,7 +1,6 @@
 {
   // 图形积木扩展ID，用于识别扩展
-  // 官方扩展ID格式： @blockcode/blocks-{Name}
-  // 推荐社区扩展ID格式：@{Your ID}/{Name}
+  // 推荐扩展ID格式：@{Your ID}/{Name}
   "name": "@example/blocks",
   "private": "true",
   "version": "0.1.0",
@@ -19,7 +18,7 @@
     "build": "playground-build ."
   },
   "dependencies": {
-    "preact": "^10.26.9"
+    "preact": "^10.27.2"
   },
   "devDependencies": {
     "@types/bun": "latest",

@@ -1,7 +1,6 @@
 {
   // 编辑器扩展ID，用于识别扩展
-  // 官方编辑器ID格式： @blockcode/gui-{Name}
-  // 推荐社区编辑器ID格式：@{Your ID}/{Name}
+  // 推荐编辑器ID格式：@{Your ID}/{Name}
   "name": "@example/editor",
   "private": "true",
   "version": "0.1.0",
@@ -19,8 +18,8 @@
     "build": "playground-build ."
   },
   "dependencies": {
-    "@preact/signals": "^2.2.1",
-    "preact": "^10.26.9"
+    "@preact/signals": "^2.3.2",
+    "preact": "^10.27.2"
   },
   "devDependencies": {
     "@types/bun": "latest",

@@ -13,9 +13,9 @@
     "keymirror": "^0.1.1",
     "konva": "^9.3.22",
     "localforage": "^1.10.0",
-    "mime": "^4.0.7",
-    "nanoid": "^5.1.5",
-    "preact": "^10.26.9",
+    "mime": "^4.1.0",
+    "nanoid": "^5.1.6",
+    "preact": "^10.27.2",
     "save-svg-as-png": "^1.4.17",
     "upng-js": "^2.1.0"
   },
