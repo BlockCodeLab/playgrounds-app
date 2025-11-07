@@ -136,7 +136,8 @@ export class MPYUtils {
     };
 
     for (const file of files) {
-      let { id: filePath, content } = file;
+      let { name: filePath, content } = file;
+      filePath = filePath ?? file.id;
       // 根据类型处理
       if (file.type) {
         // 添加后缀名
