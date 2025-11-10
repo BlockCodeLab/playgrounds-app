@@ -5,7 +5,7 @@ import{addLocalesMessages as l,Text as n}from"@blockcode/core";var h={en:{"block
 `,e+=`  dht.measure()
 `,e+=`  return dht.temperature()
 `,this.definitions_.def_get_temperature=e,[`get_temperature(${t})`,this.ORDER_FUNCTION_CALL]}},{id:"humidity11",text:o(n,{id:"blocks.dht.humidity11",defaultMessage:"pin [PIN] DHT11 humidity"}),output:"number",inputs:{PIN:{type:"integer",defaultValue:"1"}},ino(d){let i=this.valueToCode(d,"PIN",this.ORDER_NONE);this.definitions_.include_dht='#include "dht.h"',this.definitions_.variable_dht="dht _dht;";let t="";return t+=`int getHumidity(int pin, bool dht22) {
-`,temCode+=`  dht22 ? _dht.read22(pin) : _dht.read11(pin);
+`,t+=`  dht22 ? _dht.read22(pin) : _dht.read11(pin);
 `,t+=`  return _dht.humidity;
 `,t+="}",this.definitions_.declare_getHumidity="int getHumidity(int pin, bool dht22 = false);",this.definitions_.getHumidity=t,[`getHumidity(${i})`,this.ORDER_FUNCTION_CALL]},mpy(d){let i=this.valueToCode(d,"PIN",this.ORDER_NONE),t=`pin_${i}`;this.definitions_.import_pin="from machine import Pin",this.definitions_.import_dht11="from dht import DHT11",this.definitions_[t]=`${t} = DHT11(Pin(${i}))`;let e="";return e+=`def get_humidity(dht):
 `,e+=`  dht.measure()
@@ -17,7 +17,7 @@ import{addLocalesMessages as l,Text as n}from"@blockcode/core";var h={en:{"block
 `,e+=`  dht.measure()
 `,e+=`  return dht.temperature()
 `,this.definitions_.def_get_temperature=e,[`get_temperature(${t})`,this.ORDER_FUNCTION_CALL]}},{id:"humidity22",text:o(n,{id:"blocks.dht.humidity22",defaultMessage:"pin [PIN] DHT22 humidity"}),output:"number",inputs:{PIN:{type:"integer",defaultValue:"1"}},ino(d){let i=this.valueToCode(d,"PIN",this.ORDER_NONE);this.definitions_.include_dht='#include "dht.h"',this.definitions_.variable_dht="dht _dht;";let t="";return t+=`int getHumidity(int pin, bool dht22) {
-`,temCode+=`  dht22 ? _dht.read22(pin) : _dht.read11(pin);
+`,t+=`  dht22 ? _dht.read22(pin) : _dht.read11(pin);
 `,t+=`  return _dht.humidity;
 `,t+="}",this.definitions_.declare_getHumidity="int getHumidity(int pin, bool dht22 = false);",this.definitions_.getHumidity=t,[`getHumidity(${i}, true)`,this.ORDER_FUNCTION_CALL]},mpy(d){let i=this.valueToCode(d,"PIN",this.ORDER_NONE),t=`pin_${i}`;this.definitions_.import_pin="from machine import Pin",this.definitions_.import_dht22="from dht import DHT22",this.definitions_[t]=`${t} = DHT22(Pin(${i}))`;let e="";return e+=`def get_humidity(dht):
 `,e+=`  dht.measure()
