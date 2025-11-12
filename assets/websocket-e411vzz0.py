@@ -1,6 +1,7 @@
-import _aiohttp as aiohttp
 import asyncio
 import json
+
+import aiohttp
 
 WEBSOCKET_CONNECTED = "WEBSOCKET_CONNECTED"
 WEBSOCKET_RECEIVED = "WEBSOCKET_RECEIVED"

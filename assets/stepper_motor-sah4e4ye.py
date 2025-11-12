@@ -4,9 +4,7 @@ import time
 from machine import Pin
 from micropython import const
 
-FULL_ROTATION = (
-    4075.7728395061727 / 8
-)  # http://www.jangeox.be/2013/10/stepper-motor-28byj-48_25.html
+FULL_ROTATION = const(4096 / 8)
 
 
 class StepperMotor:
