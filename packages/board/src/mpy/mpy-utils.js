@@ -136,14 +136,13 @@ export class MPYUtils {
     };
 
     for (const file of files) {
-      let { name: filePath, content } = file;
-      filePath = filePath ?? file.id;
+      let { filename, content } = file;
       // 根据类型处理
       if (file.type) {
         // 添加后缀名
         const extname = '.' + mime.getExtension(file.type);
-        if (!filePath.endsWith(extname)) {
-          filePath += extname;
+        if (!filename.endsWith(extname)) {
+          filename += extname;
         }
         // 从数据生成内容
         if (!content) {
@@ -152,7 +151,7 @@ export class MPYUtils {
           }
         }
       }
-      await board.put(content ?? '', filePath, reporter);
+      await board.put(content ?? '', filename, reporter);
       finished += 1 / files.length;
     }
     progress(100);
