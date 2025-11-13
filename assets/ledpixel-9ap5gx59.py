@@ -36,6 +36,23 @@ class LedPixel(NeoPixel):
         for i in range(256):
             self._gamma_table[i] = int(pow(i / 255.0, gamma) * 255.0 + 0.5)
 
+    def wheel(self, pos):
+        pos = pos % 256
+        sector = pos / 255.0 * 6  # 分成6个60度扇区
+
+        if sector < 1:
+            return (255, int(sector * 255), 0)
+        elif sector < 2:
+            return (int((2 - sector) * 255), 255, 0)
+        elif sector < 3:
+            return (0, 255, int((sector - 2) * 255))
+        elif sector < 4:
+            return (0, int((4 - sector) * 255), 255)
+        elif sector < 5:
+            return (int((sector - 4) * 255), 0, 255)
+        else:
+            return (255, 0, int((6 - sector) * 255))
+
     def set_led(self, index, brightness, color):
         r, g, b = color
         brightness = max(0, min(brightness, 10)) / 10
