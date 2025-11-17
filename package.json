@@ -35,23 +35,18 @@
     "make:win": "bun run make -- --platform win32 --arch ia32,x64"
   },
   "dependencies": {
-    "arduino-webcli": "git+https://github.com/BlockCodeLab/arduino-webcli.git",
     "jszip": "^3.10.1"
   },
   "trustedDependencies": [
-    "arduino-webcli",
     "electron"
   ],
   "devDependencies": {
     "@electron-forge/cli": "^7.10.2",
     "@electron-forge/maker-zip": "^7.10.2",
-    "@preact/signals": "^2.3.2",
-    "@preact/signals-core": "^1.12.1",
     "@types/bun": "latest",
-    "electron": "^38.5.0",
+    "electron": "^38.7.0",
     "gh-pages": "^6.3.0",
     "playground-build": "git+https://github.com/BlockCodeLab/playground-build.git",
-    "preact": "^10.27.2",
     "serve-handler": "^6.1.6"
   },
   "workspaces": [

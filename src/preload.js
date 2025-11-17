@@ -1,8 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron/renderer';
+import { readServices } from './lib/read-services' with { type: 'macro' };
 
-const checkArduinoCompile = ipcRenderer.sendSync('check:arduino:compile');
-
-contextBridge.exposeInMainWorld('electron', {
+const electronObj = {
   loadBlocksZip() {
     return ipcRenderer.invoke('local:blocks:select');
   },
@@ -17,17 +16,6 @@ contextBridge.exposeInMainWorld('electron', {
 
   getLocalTutorials(editorOrBlockId, lang) {
     return ipcRenderer.sendSync('local:tutorials', editorOrBlockId, lang);
-  },
-
-  get arduinoCompile() {
-    return (
-      checkArduinoCompile &&
-      ((body) =>
-        new Promise((resolve) => {
-          ipcRenderer.on('arduino:compile:reply', (event, data) => resolve(data));
-          ipcRenderer.send('arduino:compile', body);
-        }))
-    );
   },
 
   get bluetooth() {
@@ -61,4 +49,19 @@ contextBridge.exposeInMainWorld('electron', {
   onChangeFullscreen(callback) {
     ipcRenderer.on('window:fullscreen', (event, value) => callback(value));
   },
-});
+};
+
+// 载入扩展服务
+const services = readServices();
+(async () => {
+  for (const { preload } of services) {
+    if (preload) {
+      const { default: getService } = await import(preload);
+      const service = getService(ipcRenderer);
+      Object.assign(electronObj, service);
+    }
+  }
+
+  // 添加 window.electron
+  contextBridge.exposeInMainWorld('electron', electronObj);
+})();

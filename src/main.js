@@ -1,14 +1,16 @@
 import { dirname, resolve } from 'node:path';
 import { app, BrowserWindow, globalShortcut } from 'electron';
+import { readServices } from './lib/read-services' with { type: 'macro' };
 import { serial } from './lib/serial';
 import { bluetooth } from './lib/bluetooth';
-import { arduinoService } from './lib/arduino-service';
 import { readLoaclBlocks } from './lib/local-blocks';
 import { readLoaclEditors } from './lib/local-editors';
 import { readLoaclTutorials } from './lib/local-tutorials';
 import './lib/menu';
 
 const isMac = process.platform === 'darwin';
+
+const services = readServices();
 
 const __dirname = dirname(require.resolve('./main.js'));
 const winConfig = {
@@ -26,14 +28,15 @@ if (isMac) {
   winConfig.trafficLightPosition = { x: 8, y: 16 };
 }
 
-const createWindow = () => {
+const createWindow = async () => {
   const mainWindow = new BrowserWindow(winConfig);
 
   // 注册重载快捷键
-  globalShortcut.register('CommandOrControl+R', () => {
-    if (mainWindow) {
-      mainWindow.reload();
-    }
+  // globalShortcut.register('CommandOrControl+R', () => {
+  //   mainWindow.reload();
+  // });
+  globalShortcut.register('CommandOrControl+Shift+I', () => {
+    mainWindow.webContents.openDevTools();
   });
 
   serial.setBrowserWindow(mainWindow);
@@ -47,17 +50,19 @@ const createWindow = () => {
   });
 
   mainWindow.loadFile(resolve(__dirname, 'index.html'));
-  if (DEBUG) {
-    mainWindow.webContents.openDevTools();
-  }
 
   // 读取本地资源
   readLoaclBlocks();
   readLoaclEditors();
   readLoaclTutorials();
 
-  // 启动 Arduino 编译服务
-  arduinoService();
+  // 启动扩展服务
+  for (const { service } of services) {
+    if (service) {
+      const { default: startService } = await import(service);
+      startService();
+    }
+  }
 };
 
 app.whenReady().then(() => createWindow());
