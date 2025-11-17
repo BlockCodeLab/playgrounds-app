@@ -42,6 +42,8 @@ export { saveProjectToComputer, openProjectFromComputer, openProjectFromURL } fr
 
 export { getBinaryCache, setBinaryCache } from './lib/binary-cache';
 
+export { scratchblocks } from './lib/scratchblocks';
+
 export {
   isDesktop,
   isMac,
