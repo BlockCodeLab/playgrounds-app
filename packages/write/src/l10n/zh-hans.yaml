@@ -1,0 +1,29 @@
+write.tabs.editor: 写作
+write.tabs.preview: 预览
+
+write.blocks.h1: 标题1
+write.blocks.h2: 标题2
+write.blocks.h3: 标题3
+write.blocks.link: 链接
+write.blocks.image: 图片
+write.blocks.code: 代码
+write.blocks.codeInline: 行内代码
+write.blocks.list: 无序列表
+write.blocks.order: 有序列表
+write.blocks.todo: 任务列表
+write.blocks.table: 表格
+write.blocks.quote: 引用
+write.blocks.line: 分割线
+write.blocks.math: 公式
+write.blocks.mathInline: 行内公式
+write.blocks.chart: 图表
+write.blocks.scratch: Scratch 脚本
+write.blocks.mindmap: 脑图
+write.blocks.flowchart: 流程图
+write.blocks.sequence: 时序图
+write.blocks.classDiagram: 类图
+write.blocks.stateMachine: 状态图
+write.blocks.ganttChart: 甘特图
+write.blocks.timeline: 时间线
+write.blocks.gitGraph: Git 图
+write.blocks.musicalStaff: 五线谱

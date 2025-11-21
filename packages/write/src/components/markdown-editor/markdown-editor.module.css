@@ -1,0 +1,72 @@
+.editor-wrapper {
+  display: flex;
+  height: 100%;
+
+  --toolbox-width: calc(80px + var(--space) * 2);
+}
+
+.toolbox-wrapper {
+  background: var(--ui-white);
+  border-left: 1px solid var(--ui-black-transparent);
+  width: var(--toolbox-width);
+  overflow-y: auto;
+}
+
+.markdown-wrapper {
+  width: calc(100% - var(--toolbox-width));
+}
+
+.markdown-wrapper :global(.vditor) {
+  border: 0 !important;
+}
+
+.markdown-wrapper :global(.vditor-toolbar--hide) {
+  display: none;
+}
+
+.markdown-wrapper :global(.vditor-reset) {
+  background: var(--ui-white);
+}
+
+.markdown-wrapper :global(.vditor-outline) {
+  border-right: 1px solid var(--ui-black-transparent);
+  background-color: var(--ui-white);
+}
+
+.markdown-wrapper :global(.vditor-outline__title) {
+  display: none;
+}
+
+.markdown-wrapper :global(.vditor-panel) {
+  overflow: hidden;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 0px 0.5rem;
+  transform: translate(-4px, -8px);
+}
+
+.markdown-wrapper :global(.vditor-panel .vditor-icon) {
+  width: 30px;
+  height: 30px;
+  padding: var(--space);
+}
+
+.markdown-wrapper :global(.vditor-panel .vditor-icon:hover) {
+  color: var(--ui-white);
+  background-color: var(--theme-primary);
+}
+
+.markdown-wrapper :global(.vditor-panel .vditor-input) {
+  padding: var(--space) calc(var(--space) / 2);
+}
+
+.markdown-wrapper :global(.vditor-panel .vditor-tooltipped::before) {
+  display: none !important;
+}
+
+.markdown-wrapper :global(.vditor-panel .vditor-tooltipped::after) {
+  display: none !important;
+}
+
+:global(.vditor-content .language-scratch) {
+  padding: var(--space) !important;
+  text-align: center;
+}

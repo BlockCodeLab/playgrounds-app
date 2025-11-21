@@ -1,0 +1,16 @@
+{
+  "name": "@blockcode/write",
+  "private": "true",
+  "version": "1.0.0",
+  "type": "module",
+  "module": "./dist/index.js",
+  "dependencies": {
+    "@preact/signals": "^2.3.2",
+    "preact": "^10.27.2",
+    "vditor": "^3.11.2"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "bun-copy-plugin": "^0.2.1"
+  }
+}

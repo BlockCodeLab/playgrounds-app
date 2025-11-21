@@ -1,0 +1,29 @@
+write.tabs.editor: 寫作
+write.tabs.preview: 預覽
+
+write.blocks.h1: 標題1
+write.blocks.h2: 標題2
+write.blocks.h3: 標題3
+write.blocks.link: 鏈接
+write.blocks.image: 圖片
+write.blocks.code: 代碼
+write.blocks.codeInline: 行內代碼
+write.blocks.list: 無序列表
+write.blocks.order: 有序列表
+write.blocks.todo: 任務列表
+write.blocks.table: 表格
+write.blocks.quote: 引用
+write.blocks.line: 分割線
+write.blocks.math: 公式
+write.blocks.mathInline: 行內公式
+write.blocks.chart: 圖表
+write.blocks.scratch: Scratch 腳本
+write.blocks.mindmap: 腦圖
+write.blocks.flowchart: 流程圖
+write.blocks.sequence: 時序圖
+write.blocks.classDiagram: 類圖
+write.blocks.stateMachine: 狀態圖
+write.blocks.ganttChart: 甘特圖
+write.blocks.timeline: 時間線
+write.blocks.gitGraph: Git 圖
+write.blocks.musicalStaff: 五線譜

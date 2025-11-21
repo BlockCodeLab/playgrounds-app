@@ -1,0 +1,15 @@
+.tool {
+  padding: calc(var(--space) / 3);
+  height: auto;
+  width: 80px;
+
+  --tool-width: 2.5rem;
+}
+
+.tool div {
+  height: var(--tool-width);
+}
+
+.tool div div {
+  height: var(--tool-width);
+}

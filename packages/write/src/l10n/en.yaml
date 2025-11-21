@@ -1,0 +1,29 @@
+write.tabs.editor: Write
+write.tabs.preview: Preview
+
+write.blocks.h1: H1
+write.blocks.h2: H2
+write.blocks.h3: H3
+write.blocks.link: Link
+write.blocks.image: Image
+write.blocks.code: Code
+write.blocks.codeInline: Code Inline
+write.blocks.list: List
+write.blocks.order: Order List
+write.blocks.todo: Todo List
+write.blocks.table: Table
+write.blocks.quote: Quote
+write.blocks.line: Line
+write.blocks.math: Math
+write.blocks.mathInline: Math Inline
+write.blocks.chart: Chart
+write.blocks.scratch: Scratch Code
+write.blocks.mindmap: Mindmap
+write.blocks.flowchart: Flowchart
+write.blocks.sequence: Sequence
+write.blocks.classDiagram: Class Diagram
+write.blocks.stateMachine: State Machine
+write.blocks.ganttChart: Gantt Chart
+write.blocks.timeline: Timeline
+write.blocks.gitGraph: Git Graph
+write.blocks.musicalStaff: Musical Staff
