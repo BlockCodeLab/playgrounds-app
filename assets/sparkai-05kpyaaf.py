@@ -1,4 +1,4 @@
-import _aiohttp as aiohttp
+import aiohttp
 
 SPARKAI_URL = "https://spark-api-open.xf-yun.com/v1/chat/completions"
 # for test, free version
