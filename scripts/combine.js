@@ -75,7 +75,8 @@ const watchAndCopydir = (src, dist) => {
   const runtimeFile = `preact/jsx-${isDev ? 'dev-' : ''}runtime`;
   imports.preact = './preact/index.mjs';
   imports['preact/hooks'] = './preact/hooks.mjs';
-  imports[runtimeFile] = `./${runtimeFile}.mjs`;
+  imports['preact/jsx-runtime'] = `./${runtimeFile}.mjs`;
+  imports['preact/jsx-dev-runtime'] = `./${runtimeFile}.mjs`;
   imports['@preact/signals'] = './preact/signals.mjs';
   imports['@preact/signals-core'] = './preact/signals-core.mjs';
 
