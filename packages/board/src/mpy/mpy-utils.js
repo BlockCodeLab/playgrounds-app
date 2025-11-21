@@ -17,10 +17,12 @@ export class MPYUtils {
     return board;
   }
 
-  static async disconnect(board, reset = false) {
+  static async disconnect(board, reset) {
     if (!board.connected) return;
-    if (reset) {
+    if (reset === true) {
       await board.hardReset();
+    } else if (reset !== false) {
+      await board.reset();
     }
     await board.disconnect();
   }

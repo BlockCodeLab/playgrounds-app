@@ -1,7 +1,8 @@
 import { sleepMs } from '@blockcode/utils';
 import { BLE } from '@blockcode/core';
 
-const SERVICE_UUID = '00000001-8c26-476f-89a7-a108033a69c7';
+export const BLE_SERVICE_UUID = '00000000-8c26-476f-89a7-a108033a69c7';
+export const SERVICE_UUID = '00000001-8c26-476f-89a7-a108033a69c7';
 const FILE_CHAR = '00000002-8c26-476f-89a7-a108033a69c7';
 const STDIO_CHAR = '00000003-8c26-476f-89a7-a108033a69c7';
 

@@ -48,7 +48,7 @@ export function LibraryItem(props) {
             />
           </div>
         </div>
-        <span className={styles.libraryItemName}>{props.name}</span>
+        {props.name && <span className={styles.libraryItemName}>{props.name}</span>}
         {(props.copyright || props.author) && (
           <span className={styles.libraryItemDetial}>{props.copyright ? `© ${props.copyright}` : props.author}</span>
         )}
