@@ -1,7 +1,6 @@
 import asyncio
 from random import randint
 
-from machine import Pin
 from micropython import const
 from neopixel import NeoPixel
 
@@ -22,7 +21,7 @@ class LedPixel(NeoPixel):
     LIGHT_WHEEL = const(10)
 
     def __init__(self, pin, num_pixels):
-        super().__init__(Pin(pin, Pin.OUT), num_pixels)
+        super().__init__(pin, num_pixels)
         self.set_gamma(_DEFAULT_GAMMA)
         self._last_effect = LedPixel.NO_EFFECT
         self._last_leds = []
