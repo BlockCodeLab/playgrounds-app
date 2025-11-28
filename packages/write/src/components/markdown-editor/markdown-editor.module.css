@@ -26,6 +26,7 @@
 
 .markdown-wrapper :global(.vditor-reset) {
   background: var(--ui-white);
+  padding-bottom: 30vh !important;
 }
 
 .markdown-wrapper :global(.vditor-outline) {

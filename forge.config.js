@@ -89,8 +89,10 @@ module.exports = {
     // mutating hooks
 
     async postMake(forgeConfig, makeResults) {
-      makeResults = Object.assign(
-        ...(await Promise.all(modulesConfig.map((config) => config.hooks?.postMake?.(forgeConfig, makeResults)))),
+      makeResults = [].concat(
+        ...(
+          await Promise.all(modulesConfig.map((config) => config.hooks?.postMake?.(forgeConfig, makeResults)))
+        ).filter(Boolean),
       );
       return makeResults;
     },
