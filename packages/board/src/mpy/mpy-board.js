@@ -67,6 +67,14 @@ export class MPYBoard {
     this.serial.on('disconnect', () => (this._connected = false));
   }
 
+  on(...args) {
+    this.serial?.on(...args);
+  }
+
+  off(...args) {
+    this.serial?.off(...args);
+  }
+
   requestPort(filters = []) {
     return navigator.serial.requestPort({ filters }).then((port) => {
       if (port._serial) {

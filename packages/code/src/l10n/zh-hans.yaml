@@ -1,2 +1,10 @@
 code.tabs.code: 代码
 code.tabs.terminal: 终端
+
+code.terminalMode.repl: REPL
+code.terminalMode.hex: HEX
+code.terminalMode.text: 文本
+code.terminalSend: 发送
+code.terminalSendChar: 发送 {char}
+code.terminalSendEnter: 末尾加回车发送
+code.terminalHexError: HEX 格式错误。

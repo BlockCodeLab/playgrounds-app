@@ -2,8 +2,7 @@
   border: 1px solid var(--ui-black-transparent);
   border-radius: calc(var(--space) / 2);
   overflow: visible;
-  min-width: 3.5rem;
-  padding: 0.5rem;
+  padding: var(--space);
   font-size: 0.8rem;
   color: var(--blocks-monitor-primary);
   display: flex;
@@ -40,6 +39,9 @@
 .dropdown-icon {
   width: 0.5rem;
   height: 0.5rem;
+}
+
+.dropdown-icon:last-child:not(:first-child) {
   margin-left: 0.5rem;
 }
 

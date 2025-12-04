@@ -2,13 +2,20 @@ import { useCallback, useId } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
 import { Input } from './input';
 
-export function BufferedInput({ value, type, forceFocus, onSubmit, ...props }) {
+export function BufferedInput({ value, type, forceFocus, autoClear, enterSubmit, onSubmit, ...props }) {
   const bufferedValue = useSignal(null);
 
-  const handleFocus = useCallback((e) => {
-    e.target.setSelectionRange(0, 0);
-    e.target.select();
-  }, []);
+  const handleFocus = useCallback(
+    (e) => {
+      e.target.setSelectionRange(0, 0);
+      e.target.select();
+      if (autoClear) {
+        bufferedValue.value = null;
+        e.target.value = '';
+      }
+    },
+    [autoClear],
+  );
 
   const handleFlush = useCallback(
     (e) => {
@@ -18,8 +25,11 @@ export function BufferedInput({ value, type, forceFocus, onSubmit, ...props }) {
         onSubmit(isNumeric ? Number(bufferedValue.value) : bufferedValue.value, e);
       }
       bufferedValue.value = null;
-      if (e && forceFocus) {
+      if (forceFocus) {
         e.target.focus();
+      }
+      if (autoClear) {
+        e.target.value = '';
       }
     },
     [type, forceFocus, onSubmit],
@@ -29,9 +39,12 @@ export function BufferedInput({ value, type, forceFocus, onSubmit, ...props }) {
     (e) => {
       if (e.key === 'Enter') {
         e.target.blur();
+        if (enterSubmit) {
+          handleFlush(e);
+        }
       }
     },
-    [handleFlush],
+    [enterSubmit],
   );
 
   const handleChange = useCallback((e) => (bufferedValue.value = e.target.value), []);
@@ -41,7 +54,7 @@ export function BufferedInput({ value, type, forceFocus, onSubmit, ...props }) {
       {...props}
       value={bufferedValue.value === null ? value : bufferedValue.value}
       onFocus={handleFocus}
-      onBlur={handleFlush}
+      onBlur={enterSubmit ? null : handleFlush}
       onChange={handleChange}
       onInput={handleChange}
       onKeyPress={handleKeyPress}

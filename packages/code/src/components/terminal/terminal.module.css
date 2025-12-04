@@ -1,0 +1,55 @@
+.terminal-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.terminal {
+  flex: 1;
+  padding: 4px;
+}
+
+.terminal :global(.xterm-viewport) {
+  inset: auto;
+}
+
+.input-wrapper {
+  display: flex;
+  padding: var(--space);
+  width: 100%;
+  align-items: center
+}
+
+.input {
+  flex: 1;
+  margin: 0 var(--space);
+  border-radius: calc(var(--space) / 2);
+}
+
+.button-wrapper {
+  display: flex;
+}
+
+.send-button, .dropdown-button {
+  background: var(--theme-primary);
+  border: var(--theme-primary);
+  color: var(--ui-white);
+}
+
+.send-button {
+  border-radius: calc(var(--space) / 2) 0 0 calc(var(--space) / 2);
+}
+
+.dropdown-button {
+  border-radius: 0 calc(var(--space) / 2) calc(var(--space) / 2) 0;
+  border-left: 1px solid var(--ui-black-transparent);
+  padding: var(--space);
+}
+
+.dropdown-icon {
+  filter: brightness(100);
+}
+
+.icon {
+  width: 20px;
+}

@@ -1,2 +1,10 @@
 code.tabs.code: Code
 code.tabs.terminal: Terminal
+
+code.terminalMode.repl: REPL
+code.terminalMode.hex: HEX
+code.terminalMode.text: Text
+code.terminalSend: Send
+code.terminalSendChar: Send {char}
+code.terminalSendEnter: Send with Enter
+code.terminalHexError: HEX data format error.

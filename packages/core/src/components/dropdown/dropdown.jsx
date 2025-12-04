@@ -2,6 +2,7 @@ import { useEffect, useRef, useId } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
 import { classNames } from '@blockcode/utils';
 import { createPopper } from '@popperjs/core/lib/popper-lite';
+import offsetModifier from '@popperjs/core/lib/modifiers/offset';
 
 import { Menu, MenuItem, MenuSection } from '../menu/menu';
 import styles from './dropdown.module.css';
@@ -18,6 +19,7 @@ const mapMenuItems = (menuItems) =>
         disabled={item.disabled}
         className={item.className}
         style={item.style}
+        hotkey={item.hotkey}
         onClick={item.onClick}
       >
         {item.label}
@@ -25,7 +27,7 @@ const mapMenuItems = (menuItems) =>
     ),
   );
 
-export function Dropdown({ className, items, children }) {
+export function Dropdown({ className, iconClassName, items, placement, children }) {
   const ref = useRef(null);
 
   const ctxRef = useRef(null);
@@ -36,10 +38,27 @@ export function Dropdown({ className, items, children }) {
 
   useEffect(() => {
     if (ref.current && ctxRef.current) {
-      const dropdownForElement = ctxRef.current.previousElementSibling;
-
       const popper = createPopper(ref.current, ctxRef.current, {
-        placement: 'bottom-start',
+        placement: placement || 'bottom-start',
+        modifiers: [
+          offsetModifier,
+          {
+            name: 'offset',
+            options: {
+              offset({ placement }) {
+                const rect = ctxRef.current?.firstChild.getBoundingClientRect();
+                switch (placement) {
+                  case 'bottom-start':
+                    return [0, 0];
+                  case 'top-end':
+                    return [-rect.width, rect.height];
+                  default:
+                    return [];
+                }
+              },
+            },
+          },
+        ],
       });
 
       const hide = (e) => {
@@ -70,7 +89,7 @@ export function Dropdown({ className, items, children }) {
           document.addEventListener('pointerdown', hide);
         });
       };
-      dropdownForElement.addEventListener('pointerup', show);
+      ctxRef.current.previousElementSibling.addEventListener('pointerup', show);
     }
   }, [ref, ctxRef]);
 
@@ -84,8 +103,8 @@ export function Dropdown({ className, items, children }) {
       >
         {children}
         <img
-          className={classNames(styles.dropdownIcon, {
-            [styles.aretUp]: isOpen.value,
+          className={classNames(styles.dropdownIcon, iconClassName, {
+            [styles.caretUp]: isOpen.value,
           })}
           draggable={false}
           src={dropdownIcon}
