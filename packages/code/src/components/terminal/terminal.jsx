@@ -2,6 +2,7 @@ import '@xterm/xterm/css/xterm.css';
 
 import { useRef, useEffect, useCallback } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
+import { keyMirror } from '@blockcode/utils';
 import {
   useAppContext,
   translate,
@@ -24,18 +25,24 @@ import sendIcon from './icon-send.svg';
 const webglAddon = new WebglAddon();
 const fitAddon = new FitAddon();
 
-export function Terminal({ disabledREPL, options, mode }) {
+const InputModes = keyMirror({
+  REPL: null,
+  Text: null,
+  HEX: null,
+});
+
+export function Terminal({ disabledREPL, options }) {
   const ref = useRef(null);
   const inputRef = useRef(null);
 
   const { appState } = useAppContext();
 
-  const terminalMode = useSignal(['repl', 'text', 'hex'].includes(mode) ? mode : 'text');
+  const terminalMode = useSignal(disabledREPL ? InputModes.Text : InputModes.REPL);
 
   const handleModeChange = useCallback((mode) => {
     terminalMode.value = mode;
     if (ref.xterm) {
-      if (mode === 'repl') {
+      if (mode === InputModes.REPL) {
         ref.xterm.focus();
         ref.xterm.options.cursorStyle = 'block';
         ref.xterm.options.cursorBlink = !!appState.value?.currentDevice;
@@ -50,29 +57,25 @@ export function Terminal({ disabledREPL, options, mode }) {
     }
   }, []);
 
-  const handleTermData = useCallback((data) => {
-    ref.xterm?.write(data);
-  }, []);
+  const handleTermData = useCallback((data) => ref.xterm?.write(data), []);
 
   const bindDevice = useCallback(() => {
     const device = appState.value?.currentDevice;
     const xterm = ref.xterm;
-    if (device) {
-      if (xterm) {
-        xterm.onData((data) => device.serial.write(data));
-        device.on('data', handleTermData);
-      } else {
+    if (device && xterm) {
+      const dataEvent = xterm.onData((data) => device.serial.write(data));
+      device.on('data', handleTermData);
+      device.on('disconnect', () => {
+        dataEvent.dispose();
         device.off('data', handleTermData);
-      }
-    } else if (xterm) {
-      xterm.onData(() => null);
+      });
     }
   }, []);
 
   const wrapSendValue = useCallback(
     (value) => () => {
       appState.value.currentDevice?.serial.write(value);
-      if (terminalMode.value === 'repl') {
+      if (terminalMode.value === InputModes.REPL) {
         ref.xterm.focus();
       }
     },
@@ -82,11 +85,11 @@ export function Terminal({ disabledREPL, options, mode }) {
   const handleSubmit = useCallback((value, crlf) => {
     if (!value) return;
 
-    if (terminalMode.value === 'repl') {
+    if (terminalMode.value === InputModes.REPL) {
       crlf = true;
     }
 
-    if (terminalMode.value === 'hex') {
+    if (terminalMode.value === InputModes.HEX) {
       const hex = value.replace(/\s+/g, '');
       if (/^[0-9A-Fa-f]+$/.test(hex) && hex.length % 2 === 0) {
         const data = [];
@@ -126,14 +129,14 @@ export function Terminal({ disabledREPL, options, mode }) {
   }, []);
 
   useEffect(() => {
-    bindDevice();
     if (!appState.value?.currentDevice) return;
     if (!ref.xterm) return;
-    if (terminalMode.value === 'repl') {
+    if (terminalMode.value === InputModes.REPL) {
       ref.xterm.focus();
       ref.xterm.options.cursorStyle = 'block';
       ref.xterm.options.cursorBlink = true;
     }
+    bindDevice();
   }, [appState.value?.currentDevice]);
 
   useEffect(() => {
@@ -150,6 +153,12 @@ export function Terminal({ disabledREPL, options, mode }) {
       ref.resizeObserver = new ResizeObserver(() => fitAddon.fit());
       ref.resizeObserver.observe(ref.current);
 
+      if (terminalMode.value === InputModes.REPL) {
+        ref.xterm.focus();
+        ref.xterm.options.cursorStyle = 'block';
+        ref.xterm.options.cursorBlink = !!appState.value?.currentDevice;
+        ref.xterm.options.disableStdin = false;
+      }
       bindDevice();
     }
     return () => {
@@ -157,7 +166,6 @@ export function Terminal({ disabledREPL, options, mode }) {
         ref.xterm.clear();
         ref.xterm.dispose();
         ref.xterm = null;
-        bindDevice();
       }
     };
   }, []);
@@ -175,15 +183,15 @@ export function Terminal({ disabledREPL, options, mode }) {
             items={[
               !disabledREPL && {
                 title: translate('code.terminalMode.repl', 'REPL'),
-                value: 'repl',
+                value: InputModes.REPL,
               },
               {
                 title: translate('code.terminalMode.hex', 'HEX'),
-                value: 'hex',
+                value: InputModes.HEX,
               },
               {
                 title: translate('code.terminalMode.text', 'Text'),
-                value: 'text',
+                value: InputModes.Text,
               },
             ].filter(Boolean)}
             value={terminalMode.value}
@@ -195,15 +203,15 @@ export function Terminal({ disabledREPL, options, mode }) {
           autoClear
           enterSubmit
           ref={inputRef}
-          disabled={terminalMode.value === 'repl' || !appState.value?.currentDevice}
-          forceFocus={terminalMode.value !== 'repl'}
+          disabled={terminalMode.value === InputModes.REPL || !appState.value?.currentDevice}
+          forceFocus={terminalMode.value !== InputModes.REPL}
           className={styles.input}
           onSubmit={handleSubmit}
         />
 
         <div className={styles.buttonWrapper}>
           <Button
-            disabled={terminalMode.value === 'repl' || !appState.value?.currentDevice}
+            disabled={terminalMode.value === InputModes.REPL || !appState.value?.currentDevice}
             className={styles.sendButton}
             onClick={handleSend}
           >
@@ -252,7 +260,7 @@ export function Terminal({ disabledREPL, options, mode }) {
                 {
                   label: translate('code.terminalSendEnter', 'Send with Enter'),
                   hotkey: [Keys.CONTROL, Keys.ENTER],
-                  disabled: terminalMode.value === 'repl' || !appState.value?.currentDevice,
+                  disabled: terminalMode.value === InputModes.REPL || !appState.value?.currentDevice,
                   onClick: handleSendEnter,
                 },
               ],

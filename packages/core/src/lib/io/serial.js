@@ -63,6 +63,7 @@ export class Serial extends EventEmitter {
   }
 
   close() {
+    this.emit('disconnect');
     return new Promise((resolve, reject) => {
       if (this._reader) {
         this._reader

@@ -18,7 +18,8 @@ export class ESPTool {
   }
 
   static async disconnect(esploader) {
-    await esploader.transport?.disconnect();
+    await esploader.transport.disconnect();
+    await esploader.transport.device.disconnect();
   }
 
   static check(esploader, timeout = 1000) {
@@ -27,7 +28,7 @@ export class ESPTool {
       controller = resolve;
       const check = () => {
         setTimeout(() => {
-          if (esploader.transport?.getInfo()) {
+          if (esploader.transport.getInfo()) {
             check();
           } else {
             reject('disconnected');
