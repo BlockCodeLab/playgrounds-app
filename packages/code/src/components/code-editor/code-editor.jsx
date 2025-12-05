@@ -8,8 +8,6 @@ import { createEditor } from '../../lib/create-monaco';
 import { registerCompletionProvider } from '../../lib/register-completion-provider';
 import styles from './code-editor.module.css';
 
-let completionProvider;
-
 const setModel = (editor, file, keyName = 'content') => {
   const extname = mime.getExtension(file.type ?? 'text/plain');
   const fileUri = monaco.Uri.file(`${editor.getId()}/${file.id}.${extname}`);
@@ -52,6 +50,8 @@ export function CodeEditor({ className, keyName, options, readOnly, onLoad, onRe
 
   const modelname = useSignal(null);
 
+  const completionProvider = useSignal(null);
+
   useEffect(() => {
     if (!ref.editor) return;
     ref.editor.updateOptions({ readOnly });
@@ -66,9 +66,9 @@ export function CodeEditor({ className, keyName, options, readOnly, onLoad, onRe
     if (!completionItems) return;
 
     // 取消之前的自动完成设置
-    completionProvider?.dispose();
+    completionProvider.value?.dispose();
     // 设置当前语言的自动完成设置
-    completionProvider = await registerCompletionProvider(languageId, completionItems);
+    completionProvider.value = await registerCompletionProvider(languageId, completionItems);
   }, [ref.editor, modelname.value, language.value, onRegisterCompletionItems]);
 
   // 切换文件时更新

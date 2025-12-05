@@ -17,6 +17,7 @@ export default {
     theme: {
       current: 'light',
     },
+    mode: 'editor',
   },
   // 自定义wysiwyg模式下的工具栏
   customWysiwygToolbar(/* type, element */) {},

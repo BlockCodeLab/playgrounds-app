@@ -9,12 +9,12 @@ import 'monaco-editor/esm/vs/editor/contrib/tokenization/browser/tokenization';
 
 /* register languages */
 import 'monaco-editor/esm/vs/language/json/monaco.contribution';
-import 'monaco-editor/esm/vs/language/typescript/monaco.contribution';
+// import 'monaco-editor/esm/vs/language/typescript/monaco.contribution';
 import 'monaco-editor/esm/vs/basic-languages/ini/ini.contribution';
-import 'monaco-editor/esm/vs/basic-languages/javascript/javascript.contribution';
+// import 'monaco-editor/esm/vs/basic-languages/javascript/javascript.contribution';
 import 'monaco-editor/esm/vs/basic-languages/markdown/markdown.contribution';
 import 'monaco-editor/esm/vs/basic-languages/python/python.contribution';
-import 'monaco-editor/esm/vs/basic-languages/typescript/typescript.contribution';
+// import 'monaco-editor/esm/vs/basic-languages/typescript/typescript.contribution';
 import 'monaco-editor/esm/vs/basic-languages/xml/xml.contribution';
 import 'monaco-editor/esm/vs/basic-languages/cpp/cpp.contribution';
 
@@ -23,15 +23,15 @@ import './define-theme';
 window.MonacoEnvironment = {
   getWorker: (_, label) => {
     switch (label) {
-      case 'css':
-        return new Worker('/monaco-editor/workers/css-worker.js', { type: 'module' });
-      case 'html':
-        return new Worker('/monaco-editor/workers/html-worker.js', { type: 'module' });
+      // case 'css':
+      //   return new Worker('/monaco-editor/workers/css-worker.js', { type: 'module' });
+      // case 'html':
+      //   return new Worker('/monaco-editor/workers/html-worker.js', { type: 'module' });
       case 'json':
         return new Worker('/monaco-editor/workers/json-worker.js', { type: 'module' });
-      case 'javascript':
-      case 'typescript':
-        return new Worker('/monaco-editor/workers/ts-worker.js', { type: 'module' });
+      // case 'javascript':
+      // case 'typescript':
+      //   return new Worker('/monaco-editor/workers/ts-worker.js', { type: 'module' });
       default:
         return new Worker('/monaco-editor/workers/editor-worker.js', { type: 'module' });
     }

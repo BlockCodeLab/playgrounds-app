@@ -87,8 +87,6 @@ secondary = '#FF4D6A'
 tertiary = '#FF3355'
 quaternary = '#FF3355'
 
-[blocks.monitor]
-primary = '#855CD6'
-secondary = '#7547D1'
-tertiary = '#7547D1'
-quaternary = '#7547D1'
+[blocks.debug]
+primary = '#29BEB8'
+secondary = '#3AA8A4'

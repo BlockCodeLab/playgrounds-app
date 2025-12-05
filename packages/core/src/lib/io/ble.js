@@ -1,5 +1,5 @@
 import { EventEmitter } from 'node:events';
-import { base64ToUint8Array } from '@blockcode/utils';
+import { Base64Utils } from '@blockcode/utils';
 
 export class BLE extends EventEmitter {
   constructor(server) {
@@ -98,7 +98,7 @@ export class BLE extends EventEmitter {
   }
 
   write(serviceId, characteristicId, message, encoding = null, withResponse = null) {
-    const data = encoding === 'base64' ? base64ToUint8Array(message) : message;
+    const data = encoding === 'base64' ? Base64Utils.base64ToUint8Array(message) : message;
     return this._server
       .getPrimaryService(serviceId)
       .then((service) => service.getCharacteristic(characteristicId))
