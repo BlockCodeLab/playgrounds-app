@@ -6,6 +6,8 @@ export const isLinux = /Linux/i.test(navigator.platform || navigator.userAgent);
 
 export const isDesktop = /Win|Mac|Linux/i.test(navigator.platform || navigator.userAgent);
 
+export const isElectron = 'electron' in window;
+
 export const sleep = (s) => new Promise((resolve) => setTimeout(resolve, s * 1000));
 
 export const sleepMs = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

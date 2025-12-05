@@ -1,4 +1,5 @@
 import { Text } from '@blockcode/core';
+import { Terminal } from '../terminal/terminal';
 
 import terminalIcon from './icon-terminal.svg';
 
@@ -10,4 +11,5 @@ export const terminalTab = {
       defaultMessage="Terminal"
     />
   ),
+  Content: Terminal,
 };

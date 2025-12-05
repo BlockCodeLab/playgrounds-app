@@ -1,4 +1,5 @@
 import { Text } from '@blockcode/core';
+import { CodeEditor } from '../code-editor/code-editor';
 
 import codeIcon from './icon-code.svg';
 
@@ -10,4 +11,5 @@ export const codeTab = {
       defaultMessage="Code"
     />
   ),
+  Content: CodeEditor,
 };

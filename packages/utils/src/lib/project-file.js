@@ -18,7 +18,7 @@ export async function saveProjectToComputer(projectJson) {
   zip.file('project.json', JSON.stringify(projectJson));
 
   const blob = await zip.generateAsync({ type: 'blob' });
-  exportFile(blob, `${projectJson.name ?? 'BlockCode Project'}.bcp`);
+  return exportFile(blob, `${projectJson.name ?? 'BlockCode Project'}.bcp`);
 }
 
 export function openProjectFromComputer() {

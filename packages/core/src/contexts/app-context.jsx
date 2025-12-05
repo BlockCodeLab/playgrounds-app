@@ -1,7 +1,7 @@
 import { createContext } from 'preact';
 import { useContext } from 'preact/hooks';
 import { batch, signal } from '@preact/signals';
-import { isMac, nanoid } from '@blockcode/utils';
+import { isElectron, isMac, nanoid } from '@blockcode/utils';
 import { clearHotkeys } from '../lib/io/hotkey';
 
 // Splash 可见
@@ -170,10 +170,10 @@ export function closeUserStorage() {
 
 // Electron MacOS 菜单栏缩进样式（避开交通灯）
 //
-const macosMenuBarStyled = signal(isMac && window.electron);
+const macosMenuBarStyled = signal(isMac && isElectron);
 
 export function setMacosMenuBarStyled(val) {
-  if (isMac && window.electron) {
+  if (isMac && isElectron) {
     macosMenuBarStyled.value = val;
   }
 }
