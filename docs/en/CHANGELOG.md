@@ -1,5 +1,49 @@
 ## CHANGELOG
 
+### v1.2.0
+
+- Added Markdown Editor v0.1.0
+  - Basic document editing
+
+- Added iot:bit Editor v0.1.0
+  - Added Terminal page
+  - Added Soft Reset menu item
+  - Adapted extensions
+
+- Updated Scratch Arcade Editor to v1.1.2
+  - Optimized code conversion
+
+- Updated Arduino Editor to v0.3.0
+  - Added offline compilation extension service
+  - Optimized code conversion
+
+- Updated ESP32 Editor to v0.1.5
+  - Added Terminal page
+  - Added Soft Reset menu item
+  - Optimized code conversion
+
+- Updated Code Editor
+  - Added Terminal emulator
+
+- Updated Block Editor
+  - Added MAX7219 LED Matrix extension
+  - Added TM1637 Time Display extension
+  - Added TM1650 Four-Digit Display extension
+  - Added VK16K33 Four-Digit Display extension
+  - Added LED Light extension
+  - Added DHT Temperature & Humidity extension
+  - Added Temperature extension
+  - Added Buzzer extension
+  - Added Analog Input extension
+  - Updated Servo extension
+  - Optimized block-to-code conversion and comments
+  - Improved compatibility of some extensions
+
+- Added local block extensions and editor loading
+- Added local tutorial loading
+- Optimized "Save to Local" path selection
+- Fixed several bugs
+
 ### v1.1.0
 
 - Updated Scratch Arcade Editor to v1.1.1
