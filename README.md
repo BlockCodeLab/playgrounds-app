@@ -19,6 +19,7 @@
   - [paint](packages/paint/): 像素风格画图组件
   - [sound](packages/sound/): 声音编辑组件
   - [utils](packages/utils/): 工具和第三方公共引用库
+  - [write](packages/write/): Markdown 文字编辑组件
 - [public](public/): 静态文件，包含 LOGO、图片、HTML 等
 - [scripts](scripts/): 编译打包脚本
 - [src](src/): 基于 Electron 的 windows/macos/linux 跨平台的应用程序
