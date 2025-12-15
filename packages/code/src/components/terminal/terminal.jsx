@@ -31,13 +31,13 @@ const InputModes = keyMirror({
   HEX: null,
 });
 
-export function Terminal({ disabledREPL, options }) {
+export function Terminal({ miniMode, disabledREPL, options }) {
   const ref = useRef(null);
   const inputRef = useRef(null);
 
   const { appState } = useAppContext();
 
-  const terminalMode = useSignal(disabledREPL ? InputModes.Text : InputModes.REPL);
+  const terminalMode = useSignal(miniMode || disabledREPL ? InputModes.Text : InputModes.REPL);
 
   const handleModeChange = useCallback((mode) => {
     terminalMode.value = mode;
@@ -45,7 +45,7 @@ export function Terminal({ disabledREPL, options }) {
       if (mode === InputModes.REPL) {
         ref.xterm.focus();
         ref.xterm.options.cursorStyle = 'block';
-        ref.xterm.options.cursorBlink = !!appState.value?.currentDevice;
+        ref.xterm.options.cursorBlink = !!appState.value?.device;
         ref.xterm.options.disableStdin = false;
         inputRef.current.base.value = '';
       } else {
@@ -60,7 +60,7 @@ export function Terminal({ disabledREPL, options }) {
   const handleTermData = useCallback((data) => ref.xterm?.write(data), []);
 
   const bindDevice = useCallback(() => {
-    const device = appState.value?.currentDevice;
+    const device = appState.value?.device;
     const xterm = ref.xterm;
     if (device && xterm) {
       const dataEvent = xterm.onData((data) => device.serial.write(data));
@@ -74,7 +74,7 @@ export function Terminal({ disabledREPL, options }) {
 
   const wrapSendValue = useCallback(
     (value) => () => {
-      appState.value.currentDevice?.serial.write(value);
+      appState.value.device?.serial.write(value);
       if (terminalMode.value === InputModes.REPL) {
         ref.xterm.focus();
       }
@@ -113,7 +113,7 @@ export function Terminal({ disabledREPL, options }) {
     } else if (crlf === true) {
       value += '\r\n';
     }
-    appState.value?.currentDevice?.serial.write(value, typeof value === 'string' ? 'text' : 'binary');
+    appState.value?.device?.serial.write(value, typeof value === 'string' ? 'text' : 'binary');
   }, []);
 
   const handleSend = useCallback((value) => {
@@ -129,7 +129,7 @@ export function Terminal({ disabledREPL, options }) {
   }, []);
 
   useEffect(() => {
-    if (!appState.value?.currentDevice) return;
+    if (!appState.value?.device) return;
     if (!ref.xterm) return;
     if (terminalMode.value === InputModes.REPL) {
       ref.xterm.focus();
@@ -137,7 +137,7 @@ export function Terminal({ disabledREPL, options }) {
       ref.xterm.options.cursorBlink = true;
     }
     bindDevice();
-  }, [appState.value?.currentDevice]);
+  }, [appState.value?.device]);
 
   useEffect(() => {
     if (ref.current) {
@@ -156,7 +156,7 @@ export function Terminal({ disabledREPL, options }) {
       if (terminalMode.value === InputModes.REPL) {
         ref.xterm.focus();
         ref.xterm.options.cursorStyle = 'block';
-        ref.xterm.options.cursorBlink = !!appState.value?.currentDevice;
+        ref.xterm.options.cursorBlink = !!appState.value?.device;
         ref.xterm.options.disableStdin = false;
       }
       bindDevice();
@@ -178,7 +178,7 @@ export function Terminal({ disabledREPL, options }) {
       />
 
       <div className={styles.inputWrapper}>
-        <div>
+        {!miniMode && (
           <ToggleButtons
             items={[
               !disabledREPL && {
@@ -197,13 +197,13 @@ export function Terminal({ disabledREPL, options }) {
             value={terminalMode.value}
             onChange={handleModeChange}
           />
-        </div>
+        )}
 
         <BufferedInput
           autoClear
           enterSubmit
           ref={inputRef}
-          disabled={terminalMode.value === InputModes.REPL || !appState.value?.currentDevice}
+          disabled={terminalMode.value === InputModes.REPL || !appState.value?.device}
           forceFocus={terminalMode.value !== InputModes.REPL}
           className={styles.input}
           onSubmit={handleSubmit}
@@ -211,7 +211,7 @@ export function Terminal({ disabledREPL, options }) {
 
         <div className={styles.buttonWrapper}>
           <Button
-            disabled={terminalMode.value === InputModes.REPL || !appState.value?.currentDevice}
+            disabled={terminalMode.value === InputModes.REPL || !appState.value?.device}
             className={styles.sendButton}
             onClick={handleSend}
           >
@@ -229,30 +229,30 @@ export function Terminal({ disabledREPL, options }) {
             className={styles.dropdownButton}
             iconClassName={styles.dropdownIcon}
             items={[
-              [
+              !miniMode && [
                 {
                   label: translate('code.terminalSendChar', 'Send {char}', { char: 'Ctrl+A' }),
-                  disabled: !appState.value?.currentDevice,
+                  disabled: !appState.value?.device,
                   onClick: wrapSendValue(String.fromCharCode(1)),
                 },
                 {
                   label: translate('code.terminalSendChar', 'Send {char}', { char: 'Ctrl+B' }),
-                  disabled: !appState.value?.currentDevice,
+                  disabled: !appState.value?.device,
                   onClick: wrapSendValue(String.fromCharCode(2)),
                 },
                 {
                   label: translate('code.terminalSendChar', 'Send {char}', { char: 'Ctrl+C' }),
-                  disabled: !appState.value?.currentDevice,
+                  disabled: !appState.value?.device,
                   onClick: wrapSendValue(String.fromCharCode(3)),
                 },
                 {
                   label: translate('code.terminalSendChar', 'Send {char}', { char: 'Ctrl+D' }),
-                  disabled: !appState.value?.currentDevice,
+                  disabled: !appState.value?.device,
                   onClick: wrapSendValue(String.fromCharCode(4)),
                 },
                 {
                   label: translate('code.terminalSendChar', 'Send {char}', { char: 'Ctrl+E' }),
-                  disabled: !appState.value?.currentDevice,
+                  disabled: !appState.value?.device,
                   onClick: wrapSendValue(String.fromCharCode(5)),
                 },
               ],
@@ -260,11 +260,11 @@ export function Terminal({ disabledREPL, options }) {
                 {
                   label: translate('code.terminalSendEnter', 'Send with Enter'),
                   hotkey: [Keys.CONTROL, Keys.ENTER],
-                  disabled: terminalMode.value === InputModes.REPL || !appState.value?.currentDevice,
+                  disabled: terminalMode.value === InputModes.REPL || !appState.value?.device,
                   onClick: handleSendEnter,
                 },
               ],
-            ]}
+            ].filter(Boolean)}
           />
         </div>
       </div>
