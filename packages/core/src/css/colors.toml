@@ -69,6 +69,11 @@ secondary = '#46B946'
 tertiary = '#389438'
 quaternary = '#389438'
 
+[blocks.text]
+primary = '#46B963'
+secondary = '#3FA662'
+tertiary = '#389457'
+
 [blocks.variables]
 primary = '#FF8C1A'
 secondary = '#FF8000'
@@ -89,4 +94,5 @@ quaternary = '#FF3355'
 
 [blocks.debug]
 primary = '#29BEB8'
-secondary = '#3AA8A4'
+secondary = '#24A9A4'
+tertiary = '#3AA8A4'

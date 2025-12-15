@@ -12,7 +12,6 @@ export async function exportFile(data, suggestedName, options = {}) {
       await writable.close();
       return { success: true, fileHandle };
     } catch (err) {
-      console.log(err);
       if (err.name === 'AbortError') {
         return { success: false, error: err.name };
       } else {

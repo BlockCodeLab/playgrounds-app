@@ -38,7 +38,7 @@
   --blocks-motion-primary: token('blocks.motion.primary');
   --blocks-looks-primary: token('blocks.looks.primary');
   --blocks-sounds-primary: token('blocks.sounds.primary');
-  --blocks-event-primary: token('blocks.event.primary');
+  --blocks-event-primary: token('blocks.events.primary');
   --blocks-control-primary: token('blocks.control.primary');
   --blocks-sensing-primary: token('blocks.sensing.primary');
   --blocks-operators-primary: token('blocks.operators.primary');

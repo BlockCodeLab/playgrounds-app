@@ -55,7 +55,7 @@ export function translate(id, defaultMessage, options = {}) {
 }
 
 // 检查是否为需要翻译的字符串
-export function maybeTranslate(message) {
+export function maybeTranslate(message, options = {}) {
   if (!message?.props) {
     return message;
   }
@@ -65,7 +65,7 @@ export function maybeTranslate(message) {
       .map((child) => maybeTranslate(child))
       .join('');
   }
-  return translate(message.props.id, message.props);
+  return translate(message.props.id, message.props.defaultMessage, Object.assign(message.props, options));
 }
 
 // 本地化上下文组件

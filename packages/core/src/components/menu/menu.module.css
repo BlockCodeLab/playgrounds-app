@@ -6,7 +6,7 @@
   background: var(--ui-white);
   padding: 0;
   margin: 0;
-  max-width: 260px;
+  /*max-width: 260px;*/
   overflow: hidden;
   color: var(--text-primary);
   box-shadow: 0 var(--space) var(--space) 0 var(--ui-black-transparent);
@@ -33,6 +33,7 @@
 .content {
   display: flex;
   flex: 1;
+  padding-right: calc(var(--space) * 2);
 }
 
 .hotkey {
@@ -53,4 +54,10 @@
 
 .menu-section:not(:first-child) {
   border-top: 1px solid var(--ui-black-transparent);
+}
+
+.menu-section-title {
+  font-weight: normal;
+  font-size: var(--small-font-size);
+  padding: var(--space) calc(var(--space) + 2px) 0;
 }

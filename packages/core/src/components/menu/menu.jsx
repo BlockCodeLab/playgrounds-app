@@ -54,14 +54,19 @@ export function MenuItem({ className, style, disabled, label, href, hotkey, onCl
   );
 }
 
-export function MenuSection({ disabled, children }) {
+export function MenuSection({ disabled, title, titleClassName, children }) {
   return (
     <>
+      {title && (
+        <li className={classNames(styles.menuSection, styles.menuSectionTitle, titleClassName)}>
+          <div className={styles.content}>{title}</div>
+        </li>
+      )}
       {flatChildren(children).map(
         (child, index) =>
           child &&
           cloneElement(child, {
-            className: classNames(child.props.className, { [styles.menuSection]: index === 0 }),
+            className: classNames(child.props.className, { [styles.menuSection]: !title && index === 0 }),
             disabled: child.props.disabled || disabled,
             key: index,
           }),

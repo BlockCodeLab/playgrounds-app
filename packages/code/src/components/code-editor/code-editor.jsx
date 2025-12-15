@@ -15,7 +15,6 @@ const setModel = (editor, file, keyName = 'content') => {
   let model = monaco.editor.getModel(modelId);
   if (!model) {
     model = monaco.editor.createModel(file[keyName], undefined, fileUri);
-    model;
     model.onDidChangeContent(() => {
       if (editor.getRawOptions().readOnly) return;
       const content = model.getValue();
