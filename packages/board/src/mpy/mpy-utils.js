@@ -28,14 +28,13 @@ export class MPYUtils {
   }
 
   static check(board, timeout = 1000) {
-    let controller;
     const checker = new Promise((resolve, reject) => {
-      controller = resolve;
+      checker.cancel = resolve;
       const check = () => {
         setTimeout(() => {
           if (board.connected) {
             check();
-          } else {
+          } else if (checker.cancel) {
             reject('disconnected');
           }
         }, timeout);
@@ -44,9 +43,7 @@ export class MPYUtils {
     });
     return {
       cancel() {
-        if (controller) {
-          controller();
-        }
+        checker.cancel?.();
       },
       catch(...args) {
         checker.catch(...args);

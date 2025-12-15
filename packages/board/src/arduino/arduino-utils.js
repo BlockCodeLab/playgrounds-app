@@ -37,41 +37,6 @@ export class ArduinoUtils {
     return firmata;
   }
 
-  static check(board, timeout = 1000) {
-    let controller;
-    const checker = new Promise((resolve, reject) => {
-      controller = resolve;
-      const check = () => {
-        setTimeout(() => {
-          if (board.connected) {
-            check();
-          } else {
-            reject('disconnected');
-          }
-        }, timeout);
-      };
-      check();
-    });
-    return {
-      cancel() {
-        return controller();
-        return this;
-      },
-      catch(...args) {
-        checker.catch(...args);
-        return this;
-      },
-      then(...args) {
-        checker.then(...args);
-        return this;
-      },
-      finally(...args) {
-        checker.finally(...args);
-        return this;
-      },
-    };
-  }
-
   static bindingTransport(board) {
     const transport = new FirmataTransport(board);
     return transport;

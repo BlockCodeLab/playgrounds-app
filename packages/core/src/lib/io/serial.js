@@ -9,7 +9,7 @@ export class Serial extends EventEmitter {
     this._reader = null;
     port._serial = this;
     this._port.ondisconnect = () => {
-      this.emit('disconnect');
+      this.emit('disconnect', new Error('Unexpectedly disconnected'));
     };
     this.setMaxListeners(0);
   }
@@ -62,8 +62,10 @@ export class Serial extends EventEmitter {
     });
   }
 
-  close() {
-    this.emit('disconnect');
+  close(enableEvent = true) {
+    if (enableEvent) {
+      this.emit('disconnect');
+    }
     return new Promise((resolve, reject) => {
       if (this._reader) {
         this._reader

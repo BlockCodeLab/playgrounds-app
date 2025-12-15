@@ -4,13 +4,13 @@ import { ESPLoader, Transport } from 'esptool-js';
 export class ESPTool {
   static async connect(filters, baudrate = 921600) {
     const device = await navigator.serial.requestPort({ filters });
+    const transport = new Transport(device);
     const esploader = new ESPLoader({
       baudrate,
-      transport: new Transport(device, true),
+      transport,
     });
 
-    // const chip = await esploader.main();
-
+    // await esploader.main();
     // Temporarily broken
     // await esploader.flashId();
 
@@ -19,45 +19,10 @@ export class ESPTool {
 
   static async disconnect(esploader) {
     await esploader.transport.disconnect();
-    await esploader.transport.device.disconnect();
-  }
-
-  static check(esploader, timeout = 1000) {
-    let controller;
-    const checker = new Promise((resolve, reject) => {
-      controller = resolve;
-      const check = () => {
-        setTimeout(() => {
-          if (esploader.transport.getInfo()) {
-            check();
-          } else {
-            reject('disconnected');
-          }
-        }, timeout);
-      };
-      check();
-    });
-
-    return {
-      cancel() {
-        return controller();
-      },
-      catch(...args) {
-        checker.catch(...args);
-        return this;
-      },
-      then(...args) {
-        checker.then(...args);
-        return this;
-      },
-      finally(...args) {
-        checker.finally(...args);
-        return this;
-      },
-    };
   }
 
   static async eraseFlash(esploader) {
+    await esploader.main();
     await esploader.eraseFlash();
   }
 
@@ -76,6 +41,7 @@ export class ESPTool {
       },
       calculateMD5Hash: (image) => crypto.MD5(crypto.Latin1.parse(image)),
     };
+    await esploader.main();
     await esploader.writeFlash(flashOptions);
     progress(100);
   }

@@ -30,14 +30,22 @@ export class BLE extends EventEmitter {
   }
 
   open() {
+    this._manualDisconnect = false;
     return new Promise((resolve) => {
       this.server
         .connect()
         .then(() => {
-          this.device.addEventListener('gattserverdisconnected', () => {
-            this.emit('disconnect');
+          const listener = (e) => {
+            this.device.removeEventListener('gattserverdisconnected', listener);
+            let err;
+            if (this._manualDisconnect !== true) {
+              err = new Error('Unexpectedly disconnected');
+            }
+            this.emit('disconnect', err);
             this.close();
-          });
+            this._manualDisconnect = false;
+          };
+          this.device.addEventListener('gattserverdisconnected', listener);
           this.emit('connect');
           resolve();
         })
@@ -48,6 +56,7 @@ export class BLE extends EventEmitter {
   }
 
   close() {
+    this._manualDisconnect = true;
     this.server.disconnect();
   }
 
@@ -117,6 +126,7 @@ export class BLE extends EventEmitter {
   }
 
   handleDisconnectError(err) {
+    console.log(err);
     this.emit('error', err);
     this.close();
   }

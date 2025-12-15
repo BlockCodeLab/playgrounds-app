@@ -25,7 +25,7 @@ const BLE_SERVICE_UUID = '0000ffe0-0000-1000-8000-00805f9b34fb';
 
 const BLE_CHUNK_SIZE = 60;
 const PAGE_SIZE = 128;
-const BAUD_RATE = 57600;
+const BAUD_RATE = 4800;
 
 export class ArduinoBoard {
   static fromPort(port) {
@@ -66,6 +66,14 @@ export class ArduinoBoard {
     this.serial.on('disconnect', () => (this._connected = false));
   }
 
+  on(...args) {
+    this.serial?.on(...args);
+  }
+
+  off(...args) {
+    this.serial?.off(...args);
+  }
+
   requestPort() {
     return navigator.serial.requestPort({ filters: deviceFilters }).then((port) => {
       if (port._serial) {
@@ -102,8 +110,8 @@ export class ArduinoBoard {
     return this._connected;
   }
 
-  disconnect() {
-    return this.serial.close();
+  disconnect(enableEvent) {
+    return this.serial.close(enableEvent);
   }
 
   get deviceInfo() {
@@ -233,7 +241,7 @@ export class ArduinoBoard {
 
   async put(data, progress) {
     // 重新以 115200 速率连接
-    await this.disconnect();
+    await this.disconnect(false);
     await this.connect({ baudRate: 115200 });
     await sleepMs(100);
 
@@ -250,7 +258,7 @@ export class ArduinoBoard {
     await this.leaveProgMode();
 
     await sleepMs(100);
-    await this.disconnect();
+    await this.disconnect(false);
     await sleepMs(100);
     await this.connect();
     await sleepMs(100);
