@@ -3,6 +3,7 @@ import keyMirror from 'keymirror';
 const Config = keyMirror({
   Language: null,
   DockReversed: null,
+  AutoDisplayPanel: null,
 });
 
 // 用户配置
@@ -41,6 +42,16 @@ export function setUserLanguage(language) {
 
 export function getUserLanguage() {
   return getUserConfig(Config.Language);
+}
+
+// 自动显示面板
+//
+export function setAutoDisplayPanel(flag) {
+  setUserConfig(Config.AutoDisplayPanel, flag);
+}
+
+export function getAutoDisplayPanel() {
+  return getUserConfig(Config.AutoDisplayPanel);
 }
 
 // 编辑器配置

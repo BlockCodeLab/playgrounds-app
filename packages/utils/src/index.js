@@ -68,4 +68,6 @@ export {
   getEditorAllConfig,
   setDockReversed,
   getDockReversed,
+  setAutoDisplayPanel,
+  getAutoDisplayPanel,
 } from './lib/user-config';
