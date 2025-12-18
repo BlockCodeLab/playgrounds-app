@@ -7,3 +7,7 @@ core.library.requires: Requires
 core.library.programming: Programming
 core.library.collaboration: Collaboration with
 core.library.readmore: Read more...
+
+core.box.shrink: Shrink
+core.box.expand: Expand
+core.box.close: Close
