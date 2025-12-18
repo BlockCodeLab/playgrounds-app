@@ -22,12 +22,12 @@
   justify-content: space-between;
 }
 
-.menu-item.disabled {
-  filter: opacity(0.5);
-}
-
 .menu-item.disabled:hover {
   background: transparent;
+}
+
+.menu-item.disabled .content {
+  filter: opacity(0.5);
 }
 
 .content {

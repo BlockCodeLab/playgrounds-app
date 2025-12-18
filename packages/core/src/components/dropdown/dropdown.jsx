@@ -51,7 +51,7 @@ export function Dropdown({ className, iconClassName, items, placement, children 
                   case 'bottom-start':
                     return [0, 0];
                   case 'top-end':
-                    return [-rect.width, rect.height];
+                    return rect ? [-rect.width, rect.height] : [];
                   default:
                     return [];
                 }
