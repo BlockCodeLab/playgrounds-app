@@ -25,7 +25,7 @@ const BLE_SERVICE_UUID = '0000ffe0-0000-1000-8000-00805f9b34fb';
 
 const BLE_CHUNK_SIZE = 60;
 const PAGE_SIZE = 128;
-const BAUD_RATE = 4800;
+const BAUD_RATE = 115200;
 
 export class ArduinoBoard {
   static fromPort(port) {
@@ -240,11 +240,9 @@ export class ArduinoBoard {
   }
 
   async put(data, progress) {
-    // 重新以 115200 速率连接
     await this.disconnect(false);
-    await this.connect({ baudRate: 115200 });
+    await this.connect();
     await sleepMs(100);
-
     await this.serial.setSignals({
       dataTerminalReady: true,
       requestToSend: true,
@@ -327,8 +325,6 @@ export class ArduinoBLEBoard extends ArduinoBoard {
   }
 
   async put(data, progress) {
-    await this.serial.sendATMessage('AT+BAUD=4');
-
     await this.serial.sendATMessage('AT+TARGE_RESET');
     await sleepMs(100);
 
@@ -337,10 +333,5 @@ export class ArduinoBLEBoard extends ArduinoBoard {
     await this.getUniversal();
     await this.upload(data, progress);
     await this.leaveProgMode();
-
-    await sleepMs(100);
-    await this.serial.sendATMessage('AT+BAUD=3');
-    await sleepMs(100);
-    await this.serial.sendATMessage('AT+BLEUSB=3');
   }
 }

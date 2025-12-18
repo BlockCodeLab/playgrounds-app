@@ -17,7 +17,14 @@ export class BLESerial extends BLE {
     await super.open();
     await this.startNotifications(SERVICE_UUID, SERIAL_UUID);
     await sleepMs(100);
-    await this.sendATMessage('AT+BAUD=3');
+    /*
+      0: 9600
+      1: 19200
+      2: 38400
+      3: 57600
+      4: 115200
+    */
+    await this.sendATMessage('AT+BAUD=4');
     await this.sendATMessage('AT+BLEUSB=3');
     await this.sendATMessage('AT+ALL');
   }
