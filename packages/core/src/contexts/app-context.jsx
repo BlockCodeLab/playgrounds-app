@@ -101,6 +101,8 @@ const panes = signal(null);
 const tutorials = signal(null);
 // 应用状态，记录如模拟器运行、设备连接等
 const appState = signal(null);
+// 日志
+const logs = signal(null);
 
 // 初始化布局
 export function openLayout(cfg) {
@@ -128,6 +130,7 @@ export function closeLayout() {
     panes.value = null;
     tutorials.value = null;
     appState.value = null;
+    logs.value = null;
   });
 }
 
@@ -155,6 +158,32 @@ export function setAppState(state, value) {
   }
   appState.value = Object.assign({}, appState.value ?? {}, state);
 }
+
+// 记录
+export const logger = {
+  log(text) {
+    const date = new Date();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+    logs.value = this.logs.concat(`\x1b[38;5;252m[${hours}:${minutes}:${seconds}]\x1b[0m${text}`);
+  },
+  info(text) {
+    this.log(`\x1b[36m${text}\x1b[0m`);
+  },
+  warn(text) {
+    this.log(`⚠️\x1b[33m${text}\x1b[0m`);
+  },
+  error(text) {
+    this.log(`❌\x1b[31m${text}\x1b[0m`);
+  },
+  success(text) {
+    this.log(`✅\x1b[32m${text}\x1b[0m`);
+  },
+  get logs() {
+    return logs.value ?? [];
+  },
+};
 
 // 用户项目库可见
 //

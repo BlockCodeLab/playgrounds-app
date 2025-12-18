@@ -31,6 +31,7 @@ export {
   openUserStorage,
   closeUserStorage,
   setMacosMenuBarStyled,
+  logger,
 } from './contexts/app-context';
 
 export {
@@ -58,6 +59,8 @@ export {
 export { DateTime, Numeric, Text } from '@eo-locale/preact';
 
 export { ActionButton } from './components/action-button/action-button';
+
+export { Box } from './components/box/box';
 
 export { BufferedInput } from './components/forms/buffered-input';
 
