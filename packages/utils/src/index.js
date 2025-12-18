@@ -70,4 +70,6 @@ export {
   getDockReversed,
   setAutoDisplayPanel,
   getAutoDisplayPanel,
+  setCompactBlock,
+  getCompactBlock,
 } from './lib/user-config';

@@ -4,7 +4,17 @@ const Config = keyMirror({
   Language: null,
   DockReversed: null,
   AutoDisplayPanel: null,
+  CompactBlock: null,
 });
+
+const getItemValue = (key) => {
+  const value = localStorage.getItem(key);
+  try {
+    return JSON.parse(value);
+  } catch (err) {
+    return null;
+  }
+};
 
 // 用户配置
 //
@@ -13,7 +23,7 @@ export function setUserConfig(key, value) {
 }
 
 export function getUserConfig(key) {
-  return localStorage.getItem(`user:${key}`);
+  return getItemValue(`user:${key}`);
 }
 
 export function putUserAllConfig(config = {}) {
@@ -44,14 +54,14 @@ export function getUserLanguage() {
   return getUserConfig(Config.Language);
 }
 
-// 自动显示面板
+// 紧凑积木
 //
-export function setAutoDisplayPanel(flag) {
-  setUserConfig(Config.AutoDisplayPanel, flag);
+export function setCompactBlock(flag) {
+  setUserConfig(Config.CompactBlock, flag);
 }
 
-export function getAutoDisplayPanel() {
-  return getUserConfig(Config.AutoDisplayPanel);
+export function getCompactBlock() {
+  return getUserConfig(Config.CompactBlock) === 'true';
 }
 
 // 编辑器配置
@@ -62,7 +72,7 @@ export function setEditorConfig(editor, key, value) {
 }
 
 export function getEditorConfig(editor, key) {
-  return localStorage.getItem(`${editor}:${key}`);
+  return getItemValue(`${editor}:${key}`);
 }
 
 export function putEditorAllConfig(editor, config = {}) {
@@ -92,4 +102,14 @@ export function setDockReversed(editor, flag) {
 
 export function getDockReversed(editor) {
   return getEditorConfig(editor, Config.DockReversed);
+}
+
+// 自动显示面板
+//
+export function setAutoDisplayPanel(editor, flag) {
+  setEditorConfig(editor, Config.AutoDisplayPanel, flag);
+}
+
+export function getAutoDisplayPanel(editor) {
+  return getEditorConfig(editor, Config.AutoDisplayPanel);
 }
