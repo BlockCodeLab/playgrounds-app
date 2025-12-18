@@ -8,3 +8,4 @@ code.terminalSend: 發送
 code.terminalSendChar: 發送 {char}
 code.terminalSendEnter: 末尾加回車發送
 code.terminalHexError: HEX 格式錯誤。
+code.terminalWaitforConnect: 正在等待連接設備…

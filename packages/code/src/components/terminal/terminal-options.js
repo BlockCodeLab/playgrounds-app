@@ -1,6 +1,8 @@
 import { isMac, isWin32 } from '@blockcode/utils';
 
 export const defaultOptions = {
+  cols: 20,
+  rows: 10,
   disableStdin: true,
   convertEol: true,
   cursorBlink: false,

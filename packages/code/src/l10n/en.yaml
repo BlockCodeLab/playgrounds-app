@@ -8,3 +8,4 @@ code.terminalSend: Send
 code.terminalSendChar: Send {char}
 code.terminalSendEnter: Send with Enter
 code.terminalHexError: HEX data format error.
+code.terminalWaitforConnect: Waiting for device connection...
