@@ -61,7 +61,7 @@ export function MarkdownEditor({ options, customRenders, onLoad, onInput }) {
       ref.vditor = null;
       window.currentVditor = null;
     };
-  }, [ref]);
+  }, []);
 
   return (
     <div className={styles.editorWrapper}>

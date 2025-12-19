@@ -97,7 +97,7 @@ export function ContextMenu({ menuItems, className, position, children }) {
     return () => {
       ref.popper = null;
     };
-  }, [ref]);
+  }, []);
 
   return (
     <>

@@ -66,7 +66,7 @@ export function Tooltip({ content, className, placement, offset, clickable, chil
       }
     }
     return () => {};
-  }, [ref]);
+  }, []);
 
   return (
     <>

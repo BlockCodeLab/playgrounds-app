@@ -46,7 +46,7 @@ export function Dropdown({ className, iconClassName, items, placement, children 
             name: 'offset',
             options: {
               offset({ placement }) {
-                const rect = ctxRef.current?.firstChild.getBoundingClientRect();
+                const rect = ctxRef.current?.firstChild?.getBoundingClientRect();
                 switch (placement) {
                   case 'bottom-start':
                     return [0, 0];

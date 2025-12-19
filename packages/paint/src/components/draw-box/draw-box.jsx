@@ -431,7 +431,7 @@ export function DrawBox({ zoom, maxSize, toolOptions, onSizeChange, onChange }) 
       ref.stage.destroy();
       ref.stage = null;
     };
-  }, [ref]);
+  }, []);
 
   return (
     <div className={styles.drawBox}>

@@ -14,9 +14,6 @@ import { defaultOptions } from './terminal-options';
 import styles from './terminal.module.css';
 import sendIcon from './icon-send.svg';
 
-const webglAddon = new WebglAddon();
-const fitAddon = new FitAddon();
-
 const InputModes = keyMirror({
   REPL: null,
   Text: null,
@@ -174,6 +171,9 @@ export function Terminal({ compactMode, textValue, disabledREPL, options }) {
       const theme = Object.assign({}, defaultOptions.theme, options?.theme);
       const xterm = new Xterm(Object.assign({}, defaultOptions, options, { theme }));
       xterm.open(ref.current);
+
+      const webglAddon = new WebglAddon();
+      const fitAddon = new FitAddon();
       xterm.loadAddon(webglAddon);
       xterm.loadAddon(fitAddon);
 
@@ -207,7 +207,7 @@ export function Terminal({ compactMode, textValue, disabledREPL, options }) {
         ref.xterm = null;
       }
     };
-  }, [ref]);
+  }, []);
 
   return (
     <div className={styles.terminalWrapper}>

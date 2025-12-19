@@ -202,7 +202,7 @@ export function Wave() {
         ref.ws.destroy();
       }
     };
-  }, [ref]);
+  }, []);
 
   return (
     <div

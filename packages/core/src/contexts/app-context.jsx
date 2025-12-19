@@ -172,13 +172,13 @@ export const logger = {
     this.log(`\x1b[36m${text}\x1b[0m`);
   },
   warn(text) {
-    this.log(`⚠️\x1b[33m${text}\x1b[0m`);
+    this.log(`⚠️ \x1b[33m${text}\x1b[0m`);
   },
   error(text) {
-    this.log(`❌\x1b[31m${text}\x1b[0m`);
+    this.log(`❌ \x1b[31m${text}\x1b[0m`);
   },
   success(text) {
-    this.log(`✅\x1b[32m${text}\x1b[0m`);
+    this.log(`✅ \x1b[32m${text}\x1b[0m`);
   },
   get logs() {
     return logs.value ?? [];

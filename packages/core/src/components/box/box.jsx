@@ -14,7 +14,7 @@ export function Box({ header, children, onClose }) {
 
   useEffect(() => {
     if (ref.current) {
-      const box = ref.current.parentElement;
+      const box = ref.current.parentElement.parentElement;
       let posX;
       let posY;
 
@@ -42,15 +42,15 @@ export function Box({ header, children, onClose }) {
         document.addEventListener('pointermove', drag);
       });
     }
-  }, [ref]);
+  }, []);
 
   return (
     <div className={styles.boxWrapper}>
-      <div
-        ref={ref}
-        className={styles.box}
-      >
-        <div className={styles.boxHeader}>
+      <div className={styles.box}>
+        <div
+          ref={ref}
+          className={styles.boxHeader}
+        >
           <div className={styles.headerContent}>{header}</div>
 
           <div className={styles.headerButtonGroup}>

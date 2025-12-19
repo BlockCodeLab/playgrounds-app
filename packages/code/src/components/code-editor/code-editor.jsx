@@ -97,7 +97,7 @@ export function CodeEditor({ className, keyName, options, readOnly, onLoad, onRe
         ref.editor = null;
       }
     };
-  }, [ref]);
+  }, []);
 
   return (
     <div
