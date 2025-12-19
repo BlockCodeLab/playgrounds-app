@@ -2,7 +2,7 @@ import { sleepMs } from '@blockcode/utils';
 import { Serial } from '@blockcode/core';
 import { bufferEqual } from '../lib/buffer-equal';
 import { mergeUint8Arrays } from '../lib/merge-uint8-arrays';
-import { BLESerial } from './ble-serial';
+import { BLESerial, BAUD_RATE_VALUE } from './ble-serial';
 import deviceFilters from './device-filters.yaml';
 
 // STK500 协议常量
@@ -42,6 +42,7 @@ export class ArduinoBoard {
     this._serial = null;
     this._timeout = 5000;
     this._connected = false;
+    this._baudRate = BAUD_RATE;
   }
 
   get type() {
@@ -58,6 +59,10 @@ export class ArduinoBoard {
 
   get serial() {
     return this._serial;
+  }
+
+  get baudRate() {
+    return this._baudRate;
   }
 
   _setSerial(serial) {
@@ -85,12 +90,13 @@ export class ArduinoBoard {
   }
 
   connect(options = {}) {
+    this._baudRate = options.baudRate || BAUD_RATE;
     return new Promise((resolve, reject) => {
       if (this.serial) {
         this.serial
           .open({
-            baudRate: BAUD_RATE,
             ...options,
+            baudRate: this.baudRate,
           })
           .then(resolve)
           .catch((err) => {
@@ -112,6 +118,12 @@ export class ArduinoBoard {
 
   disconnect(enableEvent) {
     return this.serial.close(enableEvent);
+  }
+
+  async reconnect(options = {}) {
+    await this.disconnect(false);
+    await sleepMs(100);
+    await this.connect(options);
   }
 
   get deviceInfo() {
@@ -240,9 +252,12 @@ export class ArduinoBoard {
   }
 
   async put(data, progress) {
-    await this.disconnect(false);
-    await this.connect();
+    const baudRate = this.baudRate;
+
+    // 总是以 115200 重连开始下载
+    await this.reconnect({ baudRate: BAUD_RATE });
     await sleepMs(100);
+
     await this.serial.setSignals({
       dataTerminalReady: true,
       requestToSend: true,
@@ -256,10 +271,7 @@ export class ArduinoBoard {
     await this.leaveProgMode();
 
     await sleepMs(100);
-    await this.disconnect(false);
-    await sleepMs(100);
-    await this.connect();
-    await sleepMs(100);
+    await this.reconnect({ baudRate });
   }
 }
 
@@ -301,6 +313,16 @@ export class ArduinoBLEBoard extends ArduinoBoard {
     return this.serial.server.connected;
   }
 
+  async reconnect(options = {}) {
+    const baudRate = options.baudRate || BAUD_RATE;
+    if (baudRate !== this.baudRate) {
+      const baudValue = BAUD_RATE_VALUE[baudRate] ?? 4;
+      await this.serial.sendATMessage(`AT+BAUD=${baudValue}`);
+      this._baudRate = baudRate;
+    }
+    await this.serial.sendATMessage('AT+TARGE_RESET');
+  }
+
   async loadPage(bytes) {
     const bytes_low = bytes.length & 0xff;
     const bytes_high = bytes.length >> 8;
@@ -325,7 +347,9 @@ export class ArduinoBLEBoard extends ArduinoBoard {
   }
 
   async put(data, progress) {
-    await this.serial.sendATMessage('AT+TARGE_RESET');
+    const baudRate = this.baudRate;
+
+    await this.reconnect({ baudRate: BAUD_RATE });
     await sleepMs(100);
 
     await this.getSync();
@@ -333,5 +357,12 @@ export class ArduinoBLEBoard extends ArduinoBoard {
     await this.getUniversal();
     await this.upload(data, progress);
     await this.leaveProgMode();
+
+    await sleepMs(100);
+    await this.reconnect({ baudRate });
+
+    if (baudRate === BAUD_RATE) return;
+    await sleepMs(100);
+    await this.serial.sendATMessage('AT+BLEUSB=3');
   }
 }

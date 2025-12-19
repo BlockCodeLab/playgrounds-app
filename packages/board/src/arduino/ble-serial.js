@@ -7,24 +7,29 @@ const BLE_AT_UUID = '0000ffe2-0000-1000-8000-00805f9b34fb';
 
 const encoder = new TextEncoder();
 
+export const BAUD_RATE_VALUE = {
+  9600: 0,
+  19200: 1,
+  38400: 2,
+  57600: 3,
+  115200: 4,
+};
+
 export class BLESerial extends BLE {
   constructor(server) {
     super(server);
     this.device._serial = this.device._ble;
   }
 
-  async open() {
+  async open({ baudRate }) {
     await super.open();
     await this.startNotifications(SERVICE_UUID, SERIAL_UUID);
     await sleepMs(100);
-    /*
-      0: 9600
-      1: 19200
-      2: 38400
-      3: 57600
-      4: 115200
-    */
-    await this.sendATMessage('AT+BAUD=4');
+
+    const baudValue = BAUD_RATE_VALUE[baudRate] ?? 4;
+    await this.sendATMessage(`AT+BAUD=${baudValue}`);
+
+    await sleepMs(100);
     await this.sendATMessage('AT+BLEUSB=3');
     await this.sendATMessage('AT+ALL');
   }

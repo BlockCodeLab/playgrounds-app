@@ -29,7 +29,7 @@ export class ArduinoUtils {
       throw new Error('Invalid device');
     }
 
-    await board.connect();
+    await board.connect({ baudRate: 57600 });
     await sleepMs(2000);
 
     const transport = new Transport(board);
