@@ -19,7 +19,7 @@ export const defaultOptions = {
     cursor: '#f8f8f8',
     foreground: '#f8f8f8',
     background: '#2d2e2c',
-    selection: '#5da5d5',
+    selectionBackground: '#8abbff',
     black: '#1e1e1d',
     brightblack: '#262625',
     red: '#ce5c5c',

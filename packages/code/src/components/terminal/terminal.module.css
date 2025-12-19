@@ -10,7 +10,7 @@
 }
 
 .terminal :global(.xterm-viewport) {
-  inset: auto;
+  scrollbar-width: none;
 }
 
 .input-wrapper {
