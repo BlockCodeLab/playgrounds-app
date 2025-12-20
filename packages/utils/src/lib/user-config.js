@@ -12,7 +12,7 @@ const getItemValue = (key) => {
   try {
     return JSON.parse(value);
   } catch (err) {
-    return null;
+    return value;
   }
 };
 
