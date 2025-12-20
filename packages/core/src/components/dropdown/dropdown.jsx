@@ -78,12 +78,18 @@ export function Dropdown({ className, iconClassName, menuClassName, items, place
         }));
         document.removeEventListener('click', hide);
         document.removeEventListener('pointerdown', hide);
+        setTimeout(() => {
+          if (!ref.current.dataset.show) {
+            ref.current.dataset.hidden = true;
+          }
+        }, 200);
       };
 
       const show = (e) => {
         isOpen.value = true;
 
         ref.current.dataset.show = true;
+        delete ref.current.dataset.hidden;
         popper.setOptions((options) => ({
           ...options,
           modifiers: [...options.modifiers, { name: 'eventListeners', enabled: true }],

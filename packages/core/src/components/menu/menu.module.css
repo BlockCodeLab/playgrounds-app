@@ -12,7 +12,7 @@
   box-shadow: 0 var(--space) var(--space) 0 var(--ui-black-transparent);
 }
 
-.menu:not(:has(> li > div[data-show])) {
+.menu:has(> li > div[data-hidden]) {
   overflow: hidden;
 }
 

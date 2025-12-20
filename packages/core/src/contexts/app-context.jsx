@@ -90,6 +90,7 @@ export function closePromptModal() {
 
 // 菜单
 const menuItems = signal(null);
+const barItems = signal(null);
 // 标签页
 const tabs = signal(null);
 const tabIndex = signal(-1);
@@ -108,6 +109,7 @@ const logs = signal(null);
 export function openLayout(cfg) {
   batch(() => {
     menuItems.value = cfg.menuItems;
+    barItems.value = cfg.barItems;
     tabs.value = cfg.tabs;
     tabIndex.value = cfg.tabIndex ?? 0;
     docks.value = cfg.docks;
@@ -124,6 +126,7 @@ export function closeLayout() {
     alerts.value.length = 0;
     prompt.value = null;
     menuItems.value = null;
+    barItems.value = null;
     tabs.value = null;
     tabIndex.value = -1;
     docks.value = null;
@@ -221,6 +224,7 @@ export function AppProvider({ children }) {
         alerts,
         prompt,
         menuItems,
+        barItems,
         tabs,
         tabIndex,
         docks,
