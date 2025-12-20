@@ -1,5 +1,32 @@
 ## CHANGELOG
 
+### v1.3.0
+
+- Updated Scratch Arcade Editor to v1.1.3
+  - Added community group QR code
+
+- Updated iot:bit Editor to v0.1.1
+  - Updated blocks
+
+- Updated ESP32 Editor to v0.2.0
+  - Added support for NULLLAB ESP32S3 CAM board
+  - Updated blocks
+
+- Updated Arduino Editor to v0.4.0
+  - Added serial debugging page
+  - Added baud rate selection for serial communication
+  - Added log information
+  - Updated blocks
+
+- Updated Code Editor
+  - Optimized terminal connection
+
+- Added log and serial panel
+- Added View menu
+- Added code editing mode menu item
+- Optimized local save path selection
+- Fixed several issues
+
 ### v1.2.0
 
 - Added Markdown Editor v0.1.0
