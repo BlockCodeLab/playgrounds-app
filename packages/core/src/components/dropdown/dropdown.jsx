@@ -27,18 +27,20 @@ const mapMenuItems = (menuItems) =>
     ),
   );
 
-export function Dropdown({ className, iconClassName, items, placement, children }) {
+export function Dropdown({ className, iconClassName, menuClassName, items, placement, hoverable, children }) {
   const ref = useRef(null);
-
-  const ctxRef = useRef(null);
 
   const dropdownId = useId();
 
   const isOpen = useSignal(false);
 
   useEffect(() => {
-    if (ref.current && ctxRef.current) {
-      const popper = createPopper(ref.current, ctxRef.current, {
+    if (ref.current) {
+      const contentForElement = ref.current.firstChild;
+      const dropdownForElement = ref.current.previousElementSibling;
+      dropdownForElement.setAttribute('aria-describedby', dropdownId);
+
+      const popper = createPopper(dropdownForElement, ref.current, {
         placement: placement || 'bottom-start',
         modifiers: [
           offsetModifier,
@@ -46,15 +48,20 @@ export function Dropdown({ className, iconClassName, items, placement, children 
             name: 'offset',
             options: {
               offset({ placement }) {
-                const rect = ctxRef.current?.firstChild?.getBoundingClientRect();
-                switch (placement) {
-                  case 'bottom-start':
-                    return [0, 0];
-                  case 'top-end':
-                    return rect ? [-rect.width, rect.height] : [];
-                  default:
-                    return [];
+                const contentRect = contentForElement?.getBoundingClientRect();
+                const dropdownRect = dropdownForElement?.getBoundingClientRect();
+                if (contentRect && dropdownRect) {
+                  switch (placement) {
+                    case 'top-end':
+                      return [-contentRect.width, contentRect.height];
+                    case 'right-start':
+                      return [-dropdownRect.height - 16, -24];
+                    case 'bottom-start':
+                    default:
+                      return [0, 0];
+                  }
                 }
+                return [0, 0];
               },
             },
           },
@@ -64,13 +71,11 @@ export function Dropdown({ className, iconClassName, items, placement, children 
       const hide = (e) => {
         isOpen.value = false;
 
-        if (ctxRef.current) {
-          delete ctxRef.current.dataset.show;
-          popper.setOptions((options) => ({
-            ...options,
-            modifiers: [...options.modifiers, { name: 'eventListeners', enabled: false }],
-          }));
-        }
+        delete ref.current.dataset.show;
+        popper.setOptions((options) => ({
+          ...options,
+          modifiers: [...options.modifiers, { name: 'eventListeners', enabled: false }],
+        }));
         document.removeEventListener('click', hide);
         document.removeEventListener('pointerdown', hide);
       };
@@ -78,7 +83,7 @@ export function Dropdown({ className, iconClassName, items, placement, children 
       const show = (e) => {
         isOpen.value = true;
 
-        ctxRef.current.dataset.show = true;
+        ref.current.dataset.show = true;
         popper.setOptions((options) => ({
           ...options,
           modifiers: [...options.modifiers, { name: 'eventListeners', enabled: true }],
@@ -89,14 +94,32 @@ export function Dropdown({ className, iconClassName, items, placement, children 
           document.addEventListener('pointerdown', hide);
         });
       };
-      ctxRef.current.previousElementSibling.addEventListener('pointerup', show);
+
+      if (hoverable) {
+        dropdownForElement.addEventListener('mouseenter', show);
+        dropdownForElement.addEventListener('mouseleave', hide);
+        contentForElement.addEventListener('mouseenter', show);
+        contentForElement.addEventListener('mouseleave', hide);
+      } else {
+        dropdownForElement.addEventListener('pointerup', show);
+      }
+
+      return () => {
+        if (hoverable) {
+          dropdownForElement.removeEventListener('mouseenter', show);
+          dropdownForElement.removeEventListener('mouseleave', hide);
+          contentForElement.removeEventListener('mouseenter', show);
+          contentForElement.removeEventListener('mouseleave', hide);
+        } else {
+          dropdownForElement.removeEventListener('pointerup', show);
+        }
+      };
     }
-  }, [ref, ctxRef]);
+  }, []);
 
   return (
     <>
       <div
-        ref={ref}
         className={classNames(styles.dropdown, className, {
           [styles.open]: isOpen.value,
         })}
@@ -111,7 +134,7 @@ export function Dropdown({ className, iconClassName, items, placement, children 
         />
       </div>
       <div
-        ref={ctxRef}
+        ref={ref}
         id={dropdownId}
         className={styles.dropdownMenuWrapper}
         role="context"
@@ -119,7 +142,7 @@ export function Dropdown({ className, iconClassName, items, placement, children 
         {items && (
           <Menu
             name={dropdownId}
-            className={classNames(styles.dropdownMenu)}
+            className={classNames(menuClassName, styles.dropdownMenu)}
           >
             {mapMenuItems(items)}
           </Menu>

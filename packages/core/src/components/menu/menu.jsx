@@ -1,6 +1,7 @@
 import { cloneElement } from 'preact';
 import { useId, useCallback } from 'preact/hooks';
 import { classNames, isDesktop, flatChildren } from '@blockcode/utils';
+import { Dropdown } from '../dropdown/dropdown';
 import { setHotkey, showHotkey } from '../../lib/io/hotkey';
 import styles from './menu.module.css';
 
@@ -15,10 +16,10 @@ export function Menu({ id, className, children, name }) {
   );
 }
 
-export function MenuItem({ className, style, disabled, label, href, hotkey, onClick, children }) {
+export function MenuItem({ className, menuClassName, style, disabled, label, items, href, hotkey, onClick, children }) {
   const handleClick = useCallback(
     (e = {}) => {
-      if (disabled) return;
+      if (disabled || items) return;
       if (onClick) {
         onClick(e);
         return;
@@ -48,8 +49,24 @@ export function MenuItem({ className, style, disabled, label, href, hotkey, onCl
       onClick={handleClick}
       onPointerDown={useCallback((e) => e.stopPropagation(), [])}
     >
-      <div className={styles.content}>{label || children}</div>
-      {isDesktop && hotkey && <div className={styles.hotkey}>{showHotkey(hotkey)}</div>}
+      {items ? (
+        <Dropdown
+          hoverable
+          placement="right-start"
+          items={items}
+          className={styles.dropdownItem}
+          iconClassName={styles.dropdownIcon}
+          menuClassName={menuClassName}
+          itemClassName={className}
+        >
+          <div className={styles.content}>{label || children}</div>
+        </Dropdown>
+      ) : (
+        <>
+          <div className={styles.content}>{label || children}</div>
+          {isDesktop && hotkey && <div className={styles.hotkey}>{showHotkey(hotkey)}</div>}
+        </>
+      )}
     </li>
   );
 }

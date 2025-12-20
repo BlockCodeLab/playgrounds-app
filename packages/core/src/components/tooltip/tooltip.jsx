@@ -55,17 +55,26 @@ export function Tooltip({ content, className, placement, offset, clickable, chil
         document.addEventListener('pointerdown', clickHide);
       };
 
+      const stopPropagation = (e) => e.stopPropagation();
+
       if (clickable) {
         tooltipForElement.addEventListener('pointerup', show);
-        ref.current.addEventListener('pointerdown', (e) => e.stopPropagation());
+        ref.current.addEventListener('pointerdown', stopPropagation);
       } else {
-        [
-          ['mouseenter', show],
-          ['mouseleave', hide],
-        ].forEach(([event, listener]) => tooltipForElement.addEventListener(event, listener));
+        tooltipForElement.addEventListener('mouseenter', show);
+        tooltipForElement.addEventListener('mouseleave', hide);
       }
+
+      return () => {
+        if (clickable) {
+          tooltipForElement.removeEventListener('pointerup', show);
+          ref.current.removeEventListener('pointerdown', stopPropagation);
+        } else {
+          tooltipForElement.removeEventListener('mouseenter', show);
+          tooltipForElement.removeEventListener('mouseleave', hide);
+        }
+      };
     }
-    return () => {};
   }, []);
 
   return (
@@ -81,7 +90,7 @@ export function Tooltip({ content, className, placement, offset, clickable, chil
         <div
           className={styles.arrow}
           data-popper-arrow
-        ></div>
+        />
       </div>
     </>
   );
