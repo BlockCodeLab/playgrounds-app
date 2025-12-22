@@ -10,11 +10,13 @@
   padding: var(--space) calc(var(--space) * 2.5);
   transition: opacity 0.2s ease-out;
   white-space: nowrap;
+  pointer-events: none;
 }
 
 .tooltip[data-show] {
   opacity: 1;
   z-index: var(--z-index-tooltip);
+  pointer-events: auto;
 }
 
 .arrow,

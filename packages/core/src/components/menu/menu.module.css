@@ -6,14 +6,8 @@
   background: var(--ui-white);
   padding: 0;
   margin: 0;
-  /*max-width: 260px;*/
-  /*overflow: hidden;*/
   color: var(--text-primary);
   box-shadow: 0 var(--space) var(--space) 0 var(--ui-black-transparent);
-}
-
-.menu:has(> li > div[data-hidden]) {
-  overflow: hidden;
 }
 
 .menu-item {

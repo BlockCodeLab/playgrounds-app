@@ -16,11 +16,13 @@
   opacity: 0;
   transition: opacity 0.2s ease-out;
   z-index: -1;
+  pointer-events: none;
 }
 
 .dropdown-menu-wrapper[data-show] {
   opacity: 1;
   z-index: var(--z-index-context-menu);
+  pointer-events: auto;
 }
 
 .dropdown-menu {
