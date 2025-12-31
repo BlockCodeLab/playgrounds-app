@@ -1,5 +1,7 @@
 export { balloons, textBalloons } from 'balloons-js';
 
+export * as changeCase from 'change-case';
+
 export { default as classNames } from 'classnames';
 
 export { default as html2canvas } from 'html2canvas';
