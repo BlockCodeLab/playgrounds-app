@@ -59,6 +59,7 @@
 }
 
 .menu-section-title {
+  display: flex;
   font-weight: normal;
   font-size: var(--small-font-size);
   padding: var(--space) calc(var(--space) + 2px) 0;

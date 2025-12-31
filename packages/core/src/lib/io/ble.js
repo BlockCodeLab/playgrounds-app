@@ -31,28 +31,27 @@ export class BLE extends EventEmitter {
 
   open() {
     this._manualDisconnect = false;
-    return new Promise((resolve) => {
-      this.server
-        .connect()
-        .then(() => {
-          const listener = (e) => {
-            this.device.removeEventListener('gattserverdisconnected', listener);
-            let err;
-            if (this._manualDisconnect !== true) {
-              err = new Error('Unexpectedly disconnected');
-            }
-            this.emit('disconnect', err);
-            this.close();
-            this._manualDisconnect = false;
-          };
-          this.device.addEventListener('gattserverdisconnected', listener);
-          this.emit('connect');
-          resolve();
-        })
-        .catch((err) => {
-          this.handleDisconnectError(err);
-        });
-    });
+    return this.server
+      .connect()
+      .then(() => {
+        const listener = (e) => {
+          this.device.removeEventListener('gattserverdisconnected', listener);
+          let err;
+          if (this._manualDisconnect !== true) {
+            err = new Error('Unexpectedly disconnected');
+          }
+          this.emit('disconnect', err);
+          this.close();
+          this._manualDisconnect = false;
+        };
+        this.device.addEventListener('gattserverdisconnected', listener);
+        this.emit('connect');
+      })
+      .catch((err) => {
+        this.emit('error', err);
+        this.close();
+        throw err;
+      });
   }
 
   close() {
@@ -123,11 +122,5 @@ export class BLE extends EventEmitter {
       .catch((err) => {
         this.emit('error', err);
       });
-  }
-
-  handleDisconnectError(err) {
-    console.log(err);
-    this.emit('error', err);
-    this.close();
   }
 }

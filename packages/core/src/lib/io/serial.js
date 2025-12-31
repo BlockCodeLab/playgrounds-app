@@ -29,37 +29,36 @@ export class Serial extends EventEmitter {
   }
 
   open(options) {
-    return new Promise((resolve, reject) => {
-      this.port
-        .open(options)
-        .then(() => {
-          const reader = this.port.readable.getReader();
-          const readLoop = () => {
-            reader
-              .read()
-              .then(({ value, done }) => {
-                if (value) {
-                  this.emit('data', value);
-                }
-                if (done) {
-                  reader.releaseLock();
-                } else {
-                  readLoop();
-                }
-              })
-              .catch((err) => {
-                this.emit('error', err);
-              });
-          };
-          this._reader = reader;
-          this.emit('connect');
-          readLoop();
-          resolve();
-        })
-        .catch((err) => {
-          this.handleDisconnectError(err);
-        });
-    });
+    return this.port
+      .open(options)
+      .then(() => {
+        const reader = this.port.readable.getReader();
+        const readLoop = () => {
+          reader
+            .read()
+            .then(({ value, done }) => {
+              if (value) {
+                this.emit('data', value);
+              }
+              if (done) {
+                reader.releaseLock();
+              } else {
+                readLoop();
+              }
+            })
+            .catch((err) => {
+              this.emit('error', err);
+            });
+        };
+        this._reader = reader;
+        this.emit('connect');
+        readLoop();
+      })
+      .catch((err) => {
+        this.emit('error', err);
+        this.close();
+        throw err;
+      });
   }
 
   close(enableEvent = true) {
@@ -72,16 +71,25 @@ export class Serial extends EventEmitter {
           .cancel()
           .then(() => this.port.close())
           .then(resolve)
-          .catch(reject);
+          .catch((err) => {
+            this.emit('error', err);
+            reject(err);
+          });
       } else {
-        this.port.close().then(resolve).catch(reject);
+        this.port
+          .close()
+          .then(resolve)
+          .catch((err) => {
+            this.emit('error', err);
+            reject();
+          });
       }
       this._reader = null;
     });
   }
 
   write(data, encoding = 'text') {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const writer = this.port.writable.getWriter();
       data = encoding === 'text' ? encoder.encode(data) : data;
       writer
@@ -98,10 +106,5 @@ export class Serial extends EventEmitter {
 
   setSignals(options) {
     this.port.setSignals(options);
-  }
-
-  handleDisconnectError(err) {
-    this.emit('error', err);
-    this.close();
   }
 }
