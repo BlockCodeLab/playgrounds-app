@@ -1,5 +1,21 @@
 ## CHANGELOG
 
+### v1.3.1
+
+- Updated Arduino editor to v0.5.0
+  - Optimized compilation
+  - Improved certain blocks
+
+- Updated iot:bit editor to v0.2.0
+  - Added simulator (basic feature simulation; more features will be gradually added later)
+
+- Updated block editor
+  - Added key input extension
+  - Updated WS2812 RGB light extension for Arduino compatibility
+  - Optimized code conversion
+
+- Fixed several bugs
+
 ### v1.3.0
 
 - Updated Scratch Arcade Editor to v1.1.3
