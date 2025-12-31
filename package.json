@@ -43,10 +43,13 @@
   "devDependencies": {
     "@electron-forge/cli": "^7.10.2",
     "@electron-forge/maker-zip": "^7.10.2",
+    "@preact/signals": "^2.5.1",
+    "@preact/signals-core": "^1.12.1",
     "@types/bun": "latest",
-    "electron": "^38.7.2",
+    "electron": "^39.2.7",
     "gh-pages": "^6.3.0",
     "playground-build": "git+https://github.com/BlockCodeLab/playground-build.git",
+    "preact": "^10.28.1",
     "serve-handler": "^6.1.6"
   },
   "workspaces": [
