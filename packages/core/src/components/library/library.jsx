@@ -123,7 +123,7 @@ export function Library({ items, title, filterable, filterPlaceholder, emptyMess
           {tags && (
             <div className={styles.tagWrapper}>
               <TagButton
-                active={tag === 'all'}
+                active={tag.value === 'all'}
                 className={classNames(styles.filterBarItem, styles.tagButton)}
                 onClick={wrapTagClick('all')}
               >
@@ -135,7 +135,7 @@ export function Library({ items, title, filterable, filterPlaceholder, emptyMess
               {tags.map((tagItem, index) => (
                 <TagButton
                   key={index}
-                  active={tag === tagItem.tag.toLowerCase()}
+                  active={tag.value === tagItem.tag.toLowerCase()}
                   className={classNames(styles.filterBarItem, styles.tagButton)}
                   onClick={wrapTagClick(tagItem.tag.toLowerCase())}
                 >

@@ -8,5 +8,5 @@
 }
 
 .active {
-  background: var(--data-primary);
+  background: var(--blocks-variables-primary);
 }

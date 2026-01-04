@@ -149,6 +149,7 @@
   line-height: 1.375rem;
   padding-top: 0.3125rem;
   padding-bottom: 0.25rem;
+  text-wrap: wrap;
 }
 
 .featured-description a {
