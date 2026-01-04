@@ -12,6 +12,8 @@ export const sleep = (s) => new Promise((resolve) => setTimeout(resolve, s * 100
 
 export const sleepMs = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+export const nullObject = (...args) => Object.assign(Object.create(null), ...args);
+
 export function xmlEscape(unsafe) {
   if (typeof unsafe !== 'string') {
     if (Array.isArray(unsafe)) {

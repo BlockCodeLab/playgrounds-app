@@ -46,7 +46,7 @@ export { getBinaryCache, setBinaryCache } from './lib/binary-cache';
 
 export { scratchblocks } from './lib/scratchblocks';
 
-export { isElectron, isDesktop, isMac, isWin32, isLinux, sleep, sleepMs, xmlEscape } from './lib/simples';
+export { isElectron, isDesktop, isMac, isWin32, isLinux, sleep, sleepMs, nullObject, xmlEscape } from './lib/simples';
 
 export {
   delProject,

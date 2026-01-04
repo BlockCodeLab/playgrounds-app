@@ -1,7 +1,7 @@
 import { createContext } from 'preact';
 import { useContext } from 'preact/hooks';
 import { batch, signal } from '@preact/signals';
-import { isElectron, isMac, nanoid } from '@blockcode/utils';
+import { isElectron, isMac, nanoid, nullObject } from '@blockcode/utils';
 import { clearHotkeys } from '../lib/io/hotkey';
 
 // Splash 可见
@@ -38,7 +38,7 @@ export function setAlert(...args) {
 
   // 从配置模版获取消息配置
   if (name && alertsConfigs[name]) {
-    alert = Object.assign({}, alertsConfigs[name], alert ?? {});
+    alert = nullObject(alertsConfigs[name], alert ?? {});
   }
   if (!alert) return;
 
@@ -149,7 +149,7 @@ export function addTabs(tabs) {
 
 // 添加教程
 export function addLessons(lessons) {
-  tutorials.value = Object.assign(tutorials.value, {
+  tutorials.value = Object.assign({}, tutorials.value ?? {}, {
     lessons: Object.assign(lessons, tutorials.value.lessons),
   });
 }

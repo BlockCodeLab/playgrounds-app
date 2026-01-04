@@ -3,6 +3,7 @@ import { useContext } from 'preact/hooks';
 import { computed, effect, signal } from '@preact/signals';
 import { Translator } from '@eo-locale/core';
 import { TranslationsProvider } from '@eo-locale/preact';
+import { nullObject } from '@blockcode/utils';
 import {
   getCurrentLanguage,
   putCurrentLanguage,
@@ -18,18 +19,20 @@ import zhHans from '../l10n/zh-hans.yaml';
 import zhHant from '../l10n/zh-hant.yaml';
 
 const locales = signal([
-  createLocale('en', en),
-  createLocale('zh-Hans', zhHans),
-  createLocale('zh-Hant', zhHant),
+  createLocale('en', nullObject(en)),
+  createLocale('zh-Hans', nullObject(zhHans)),
+  createLocale('zh-Hant', nullObject(zhHant)),
   // ...
 ]);
 
 // 增加多语种字符串
 export function addLocalesMessages(messages) {
-  locales.value = locales.value.map((locale) => ({
-    language: locale.language,
-    messages: Object.assign(locale.messages, messages[locale.language] ?? {}),
-  }));
+  locales.value = locales.value.map((locale) =>
+    nullObject({
+      language: locale.language,
+      messages: nullObject(locale.messages, messages[locale.language] ?? {}),
+    }),
+  );
 }
 
 // 当前语言及语言方向

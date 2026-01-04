@@ -44,6 +44,5 @@
   --blocks-operators-primary: token('blocks.operators.primary');
   --blocks-variables-primary: token('blocks.variables.primary');
   --blocks-lists-primary: token('blocks.lists.primary');
-  --blocks-monitor-primary: token('blocks.monitor.primary');
   --blocks-myblocks-primary: token('blocks.myblocks.primary');
 }

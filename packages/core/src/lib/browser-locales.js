@@ -1,4 +1,4 @@
-import { setUserLanguage, getUserLanguage } from '@blockcode/utils';
+import { setUserLanguage, getUserLanguage, nullObject } from '@blockcode/utils';
 
 const { DisplayNames, Locale } = window.Intl;
 
@@ -13,12 +13,12 @@ export function isRtlByLanguage(lang) {
   return textInfo && textInfo.direction === 'rtl';
 }
 
-const unifiedLanguages = {
+const unifiedLanguages = nullObject({
   'zh-CN': 'zh-Hans',
   'zh-TW': 'zh-Hant',
   'zh-HK': 'zh-Hant',
   'zh-MO': 'zh-Hant',
-};
+});
 
 export function getCurrentLanguage() {
   // 从 LocalStorage 或浏览器获取当前语种
