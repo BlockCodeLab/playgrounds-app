@@ -1,6 +1,7 @@
-from micropython import const
-import _sparkai as sparkai
 import random
+
+import sparkai
+from micropython import const
 
 ALPHABET = "qwertyuiopasdfghjklzxcvbnm1234567890"
 MAX_HISTORY = const(6)
@@ -25,7 +26,7 @@ class Brain:
         self.prompts.append(f"{prompt}")
 
     def add_history(self, role, content):
-        self.history.append({"role": "user", "content": f"{content}"})
+        self.history.append({"role": role, "content": content})
         if len(self.history) > MAX_HISTORY:
             self.history.pop(0)
 

@@ -1,7 +1,8 @@
-import network
-import aioespnow
 import asyncio
 import time
+
+import aioespnow
+import network
 
 try:
     from scratch import runtime, when_start
@@ -10,7 +11,6 @@ except Exception:
 
 
 PEER = b"\xff" * 6
-PING = bytes("PING", "utf-8")
 RECEIVE_MESSAGE = "RECEIVE_MESSAGE"
 
 running = False
@@ -39,7 +39,6 @@ async def server(e):
             received[name]["timestamp"] = time.ticks_ms()
             received[name]["serialnumber"] += 1
             runtime.fire(f"{RECEIVE_MESSAGE}:{name}")
-        await runtime.next_tick()
 
 
 @when_start
@@ -70,8 +69,8 @@ async def send_raw(msg):
 
 
 def send(msg, name=None):
-    msg = (options['group'], name, msg) if name else (options['group'], msg)
-    asyncio.create_task(send_raw(bytes(':'.join(msg), "utf-8")))
+    msg = (options["group"], name, msg) if name else (options["group"], msg)
+    asyncio.create_task(send_raw(bytes(":".join(msg), "utf-8")))
 
 
 def set_group(value):
