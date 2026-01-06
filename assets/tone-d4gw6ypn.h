@@ -1,6 +1,4 @@
-#ifndef TONE_H
-#define TONE_H
-
+#pragma once
 #include <Arduino.h>
 
 class Tone {
@@ -31,5 +29,3 @@ public:
   int getBpm() const { return _bpm; }
   int getTicks() const { return _ticks; }
 };
-
-#endif

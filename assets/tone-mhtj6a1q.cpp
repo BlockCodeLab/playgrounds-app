@@ -1,4 +1,4 @@
-#include "Tone.h"
+#include "tone.h"
 
 #define ARTICULATION_MS (10)
 
