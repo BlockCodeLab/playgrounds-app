@@ -13,6 +13,12 @@
   scrollbar-width: none;
 }
 
+.terminal :global(.xterm-scrollable-element .scrollbar),
+.terminal :global(.xterm-scrollable-element .slider) {
+  width: 6px!important;
+  border-radius: 3px!important;
+}
+
 .input-wrapper {
   display: flex;
   padding: var(--space);
