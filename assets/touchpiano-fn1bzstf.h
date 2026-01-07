@@ -20,13 +20,14 @@ typedef struct {
 
 class TouchPiano {
 private:
-  uint8_t SCLPin, SDOPin;
+  uint8_t SCLPin_, SDOPin_;
+  uint16_t last_keycode_ = PIANO_RELEASED;
+  uint16_t GetKeyCode(void);
 
 public:
-  TouchPiano(uint8_t SclPin = A5, uint8_t SdoPin = A4);
+  TouchPiano(uint8_t SCLPin = A5, uint8_t SDOPin = A4);
 
-  uint16_t GetKeyCode(void);
   String GetKeyName(void);
   uint8_t GetKey(void);
-  bool PressedKey(uint8_t key);
+  bool PressedKey(uint8_t key) { return GetKey() == key; };
 };

@@ -7,24 +7,24 @@ ST_KEY_MAP piano_keymap[16] = {
     {7, "b", PIANO_KEYCODE_7}, {8, "c5", PIANO_KEYCODE_8},
 };
 
-TouchPiano::TouchPiano(uint8_t SclPin, uint8_t SdoPin)
-    : SCLPin(SclPin), SDOPin(SdoPin) {
-  pinMode(SCLPin, OUTPUT);
-  pinMode(SDOPin, INPUT);
+TouchPiano::TouchPiano(uint8_t SCLPin, uint8_t SDOPin)
+    : SCLPin_(SCLPin), SDOPin_(SDOPin) {
+  pinMode(SCLPin_, OUTPUT);
+  pinMode(SDOPin_, INPUT);
 }
 
 uint16_t TouchPiano::GetKeyCode(void) {
   unsigned int DATA = 0;
-  pinMode(SDOPin, OUTPUT);
-  digitalWrite(SDOPin, HIGH);
+  pinMode(SDOPin_, OUTPUT);
+  digitalWrite(SDOPin_, HIGH);
   delayMicroseconds(93);
-  digitalWrite(SDOPin, LOW);
+  digitalWrite(SDOPin_, LOW);
   delayMicroseconds(10);
-  pinMode(SDOPin, INPUT);
+  pinMode(SDOPin_, INPUT);
   for (int i = 0; i < 16; i++) {
-    digitalWrite(SCLPin, HIGH);
-    digitalWrite(SCLPin, LOW);
-    DATA |= digitalRead(SDOPin) << i;
+    digitalWrite(SCLPin_, HIGH);
+    digitalWrite(SCLPin_, LOW);
+    DATA |= digitalRead(SDOPin_) << i;
   }
   delay(4);
   return DATA & PIANO_RELEASED;
@@ -38,7 +38,7 @@ String TouchPiano::GetKeyName(void) {
     if (keymap[i].keycode == keycode)
       return keymap[i].keyname;
   }
-  return "";
+  return "r"; // rest
 }
 
 uint8_t TouchPiano::GetKey(void) {
@@ -51,5 +51,3 @@ uint8_t TouchPiano::GetKey(void) {
   }
   return 0;
 }
-
-bool TouchPiano::PressedKey(uint8_t key) { return GetKey() == key; }
