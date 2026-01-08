@@ -9,3 +9,4 @@ code.terminalSendChar: 发送 {char}
 code.terminalSendEnter: 末尾加回车发送
 code.terminalHexError: HEX 格式错误。
 code.terminalWaitforConnect: 正在等待连接设备…
+code.terminalClean: 清除

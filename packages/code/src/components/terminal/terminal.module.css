@@ -34,6 +34,7 @@
 
 .button-wrapper {
   display: flex;
+  align-items: stretch;
 }
 
 .send-button, .dropdown-button {
@@ -58,4 +59,8 @@
 
 .icon {
   width: 20px;
+}
+
+.clean-button {
+  margin-left: var(--space);
 }

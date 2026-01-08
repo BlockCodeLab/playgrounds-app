@@ -39,6 +39,13 @@ export function Terminal({ compactMode, textValue, disabledREPL, options }) {
     }
   }, [textValue]);
 
+  useEffect(() => {
+    if (ref.xterm && !appState.value?.terminalCache) {
+      ref.xterm.writeln(''); // newline
+      setTimeout(() => ref.xterm.clear(), 0);
+    }
+  }, [appState.value?.terminalCache]);
+
   const handleModeChange = useCallback((mode) => {
     terminalMode.value = mode;
     if (ref.xterm) {
@@ -146,6 +153,10 @@ export function Terminal({ compactMode, textValue, disabledREPL, options }) {
     inputRef.current.base.blur();
     handleSubmit(inputRef.current.base.value, true);
     inputRef.current.base.focus();
+  }, []);
+
+  const handleClean = useCallback(() => {
+    setAppState('terminalCache', null);
   }, []);
 
   useEffect(() => {
@@ -264,6 +275,7 @@ export function Terminal({ compactMode, textValue, disabledREPL, options }) {
                 defaultMessage="Send"
               />
             </Button>
+
             <Dropdown
               placement="top-end"
               className={styles.dropdownButton}
@@ -306,6 +318,17 @@ export function Terminal({ compactMode, textValue, disabledREPL, options }) {
                 ],
               ].filter(Boolean)}
             />
+
+            <Button
+              disabled={!appState.value?.device}
+              className={styles.cleanButton}
+              onClick={handleClean}
+            >
+              <Text
+                id="code.terminalClean"
+                defaultMessage="Clean"
+              />
+            </Button>
           </div>
         </div>
       )}
