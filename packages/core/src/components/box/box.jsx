@@ -7,7 +7,7 @@ import shrinkIcon from './icons/icon-shrink.svg';
 import expandIcon from './icons/icon-expand.svg';
 import closeIcon from './icons/icon-close.svg';
 
-export function Box({ header, children, onClose }) {
+export function Box({ header, buttons, children, onClose }) {
   const ref = useRef();
 
   const expanded = useSignal(true);
@@ -54,6 +54,19 @@ export function Box({ header, children, onClose }) {
           <div className={styles.headerContent}>{header}</div>
 
           <div className={styles.headerButtonGroup}>
+            {buttons &&
+              buttons.map((button) => (
+                <div
+                  className={styles.headerButton}
+                  onClick={button.onClick}
+                >
+                  <img
+                    className={styles.buttonIcon}
+                    src={button.icon}
+                  />
+                  {button.label}
+                </div>
+              ))}
             <div
               className={styles.headerButton}
               onClick={useCallback(() => (expanded.value = !expanded.value), [])}
