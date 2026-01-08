@@ -16,7 +16,7 @@ export { default as localForage } from 'localforage';
 
 export { default as UPNG } from 'upng-js';
 
-export { saveSvg, saveSvgAsPng, svgAsDataUri } from 'save-svg-as-png';
+export { saveSvg, saveSvgAsPng, svgAsDataUri, svgAsPngUri } from 'save-svg-as-png';
 
 export { ScriptController } from './lib/script-controller';
 
@@ -25,6 +25,8 @@ export { Base64Utils } from './lib/base64-utils';
 export { ColorUtils, Color } from './lib/color-utils';
 
 export { crypto } from './lib/crypto';
+
+export { dataURItoBlob } from './lib/datauri-blob';
 
 export { exportFile } from './lib/export-file';
 
