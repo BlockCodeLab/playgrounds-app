@@ -319,16 +319,18 @@ export function Terminal({ compactMode, textValue, disabledREPL, options }) {
               ].filter(Boolean)}
             />
 
-            <Button
-              disabled={!appState.value?.device}
-              className={styles.cleanButton}
-              onClick={handleClean}
-            >
-              <Text
-                id="code.terminalClean"
-                defaultMessage="Clean"
-              />
-            </Button>
+            {compactMode !== true && (
+              <Button
+                disabled={!appState.value?.device}
+                className={styles.cleanButton}
+                onClick={handleClean}
+              >
+                <Text
+                  id="code.terminalClean"
+                  defaultMessage="Clean"
+                />
+              </Button>
+            )}
           </div>
         </div>
       )}
