@@ -1,20 +1,43 @@
 ## CHANGELOG
 
+### v1.3.2
+
+- Updated the Arduino Editor to v0.5.1
+  - Added a download button in the menu bar
+
+- Updated the Block Editor
+  - Added Infrared Communication extension
+  - Added Matrix Keypad extension
+  - Added Touch Piano extension
+  - Added Ultrasonic Distance Measurement extension
+  - Added block size adjustment
+  - Modified default block size and styling
+
+- Updated the Code Editor
+  - Added terminal clear button
+
+- Added log copy button
+- Added serial window clear button
+- Added menu bar icon button layout
+- Optimized block image export
+- Fixed some bugs
+
 ### v1.3.1
 
 - Updated Arduino editor to v0.5.0
   - Optimized compilation
-  - Improved certain blocks
+  - Improved some blocks
 
 - Updated iot:bit editor to v0.2.0
   - Added simulator (basic feature simulation; more features will be gradually added later)
 
 - Updated block editor
+  - Added code execution blocks
   - Added key input extension
-  - Updated WS2812 RGB light extension for Arduino compatibility
+  - Updated WS2812 LED extension for Arduino compatibility
   - Optimized code conversion
 
-- Fixed several bugs
+- Fixed some bugs
 
 ### v1.3.0
 
@@ -41,7 +64,7 @@
 - Added View menu
 - Added code editing mode menu item
 - Optimized local save path selection
-- Fixed several issues
+- Fixed some issues
 
 ### v1.2.0
 
@@ -85,7 +108,7 @@
 - Added local block extensions and editor loading
 - Added local tutorial loading
 - Optimized "Save to Local" path selection
-- Fixed several bugs
+- Fixed some bugs
 
 ### v1.1.0
 
@@ -128,7 +151,7 @@
 - Added translation extension
 - Updated Scratch Arcade editor to v1.0.5
 - Improved compatibility
-- Fixed several bugs
+- Fixed some bugs
 
 ### v1.0.1
 
