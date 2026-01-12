@@ -76,4 +76,6 @@ export {
   getAutoDisplayPanel,
   setCompactBlock,
   getCompactBlock,
+  setBlockSize,
+  getBlockSize,
 } from './lib/user-config';

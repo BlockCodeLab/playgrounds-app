@@ -45,4 +45,9 @@ export class MathUtils {
     const dy = pos2.y - pos1.y;
     return MathUtils.radToDeg(Math.atan2(dy, dx));
   }
+
+  static round(num, decimals) {
+    const factor = Math.pow(10, decimals);
+    return Math.round((num + Number.EPSILON) * factor) / factor;
+  }
 }

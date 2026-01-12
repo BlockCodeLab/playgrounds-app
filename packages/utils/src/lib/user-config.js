@@ -5,6 +5,7 @@ const Config = keyMirror({
   DockReversed: null,
   AutoDisplayPanel: null,
   CompactBlock: null,
+  BlockSize: null,
 });
 
 const getItemValue = (key) => {
@@ -54,6 +55,16 @@ export function getUserLanguage() {
   return getUserConfig(Config.Language);
 }
 
+// 积木尺寸
+//
+export function setBlockSize(size) {
+  setUserConfig(Config.BlockSize, size);
+}
+
+export function getBlockSize() {
+  return getUserConfig(Config.BlockSize);
+}
+
 // 紧凑积木
 //
 export function setCompactBlock(flag) {
@@ -61,7 +72,7 @@ export function setCompactBlock(flag) {
 }
 
 export function getCompactBlock() {
-  return getUserConfig(Config.CompactBlock) === 'true';
+  return getUserConfig(Config.CompactBlock);
 }
 
 // 编辑器配置
