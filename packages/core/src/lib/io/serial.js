@@ -28,80 +28,57 @@ export class Serial extends EventEmitter {
     return this.port.getInfo();
   }
 
-  open(options) {
-    return this.port
-      .open(options)
-      .then(() => {
-        const reader = this.port.readable.getReader();
-        const readLoop = () => {
-          reader
-            .read()
-            .then(({ value, done }) => {
-              if (value) {
-                this.emit('data', value);
-              }
-              if (done) {
-                reader.releaseLock();
-              } else {
-                readLoop();
-              }
-            })
-            .catch((err) => {
-              this.emit('error', err);
-            });
-        };
-        this._reader = reader;
-        this.emit('connect');
-        readLoop();
-      })
-      .catch((err) => {
-        this.emit('error', err);
-        this.close();
-        throw err;
-      });
+  async readLoop() {
+    try {
+      const { value, done } = await this._reader.read();
+      if (value) {
+        this.emit('data', value);
+      }
+      if (done) {
+        this._reader.releaseLock();
+      } else {
+        this.readLoop();
+      }
+    } catch (err) {
+      this.emit('error', err);
+    }
   }
 
-  close(enableEvent = true) {
+  async open(options) {
+    try {
+      await this.port.open(options);
+    } catch (err) {
+      this.emit('error', err);
+      this.close();
+    }
+
+    this._reader = this.port.readable.getReader();
+    this.emit('connect');
+    this.readLoop();
+  }
+
+  async close(enableEvent = true) {
     if (enableEvent) {
       this.emit('disconnect');
     }
-    return new Promise((resolve, reject) => {
-      if (this._reader) {
-        this._reader
-          .cancel()
-          .then(() => this.port.close())
-          .then(resolve)
-          .catch((err) => {
-            this.emit('error', err);
-            reject(err);
-          });
-      } else {
-        this.port
-          .close()
-          .then(resolve)
-          .catch((err) => {
-            this.emit('error', err);
-            reject();
-          });
-      }
-      this._reader = null;
-    });
+    try {
+      await this._reader?.cancel();
+      await this.port.close();
+    } catch (err) {
+      this.emit('error', err);
+    }
+    this._reader = null;
   }
 
-  write(data, encoding = 'text') {
-    return new Promise((resolve) => {
-      const writer = this.port.writable.getWriter();
-      data = encoding === 'text' ? encoder.encode(data) : data;
-      writer
-        .write(data)
-        .then(() => {
-          writer.releaseLock();
-          resolve();
-        })
-        .catch((err) => {
-          this.emit('error', err);
-        });
-    });
+  async write(data, encoding = 'text') {
+    const writer = this.port.writable.getWriter();
+    data = encoding === 'text' ? encoder.encode(data) : data;
+    try {
+      await writer.write(data);
+      writer.releaseLock();
+    } catch (err) {
+      this.emit('error', err);
+    }
   }
 
   setSignals(options) {

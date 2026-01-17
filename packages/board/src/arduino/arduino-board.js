@@ -89,27 +89,23 @@ export class ArduinoBoard {
     });
   }
 
-  connect(options = {}) {
+  async connect(options = {}) {
     this._baudRate = options.baudRate || BAUD_RATE;
-    return new Promise((resolve, reject) => {
-      if (this.serial) {
-        this.serial
-          .open({
-            ...options,
-            baudRate: this.baudRate,
-          })
-          .then(resolve)
-          .catch((err) => {
-            if (err.name === 'InvalidStateError') {
-              this._connected = true;
-              return resolve();
-            }
-            reject(err);
-          });
+    if (!this.serial) {
+      throw new Error('No device specified');
+    }
+    try {
+      await this.serial.open({
+        ...options,
+        baudRate: this.baudRate,
+      });
+    } catch (err) {
+      if (err.name === 'InvalidStateError') {
+        this._connected = true;
       } else {
-        reject(new Error('No device specified'));
+        throw err;
       }
-    });
+    }
   }
 
   get connected() {
@@ -133,7 +129,7 @@ export class ArduinoBoard {
   readUntil(ending, dataConsumer) {
     return new Promise((resolve, reject) => {
       const queue = [];
-      const fn = (data) => {
+      const ondata = (data) => {
         if (data) {
           for (let i = 0; i < data.length; i++) {
             queue.push(data[i]);
@@ -142,17 +138,17 @@ export class ArduinoBoard {
         }
         if (bufferEqual(ending, queue)) {
           clearTimeout(this._timer);
-          this.serial.off('data', fn);
+          this.serial.off('data', ondata);
           resolve(queue);
         }
       };
 
       this._timer = setTimeout(() => {
-        this.serial.off('data', fn);
+        this.serial.off('data', ondata);
         reject(new Error('Timeout waiting for response'));
       }, this.timeout);
 
-      this.serial.on('data', fn);
+      this.serial.on('data', ondata);
     });
   }
 
@@ -297,16 +293,15 @@ export class ArduinoBLEBoard extends ArduinoBoard {
     return this.requestDevice();
   }
 
-  requestDevice() {
+  async requestDevice() {
     const filters = [{ services: [BLE_SERVICE_UUID] }];
-    return navigator.bluetooth.requestDevice({ filters }).then((device) => {
-      if (device._serial) {
-        this._setSerial(device._serial);
-      } else {
-        const serial = new BLESerial(device.gatt);
-        this._setSerial(serial);
-      }
-    });
+    const device = await navigator.bluetooth.requestDevice({ filters });
+    if (device._serial) {
+      this._setSerial(device._serial);
+    } else {
+      const serial = new BLESerial(device.gatt);
+      this._setSerial(serial);
+    }
   }
 
   get connected() {

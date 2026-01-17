@@ -47,6 +47,7 @@ export class MPYBoard {
     this._serial = null;
     this._timeout = 5000;
     this._connected = false;
+    this._baudRate = BAUD_RATE;
   }
 
   get timeout() {
@@ -59,6 +60,10 @@ export class MPYBoard {
 
   get serial() {
     return this._serial;
+  }
+
+  get baudRate() {
+    return this._baudRate;
   }
 
   _setSerial(serial) {
@@ -75,36 +80,32 @@ export class MPYBoard {
     this.serial?.off(...args);
   }
 
-  requestPort(filters = []) {
-    return navigator.serial.requestPort({ filters }).then((port) => {
-      if (port._serial) {
-        this._setSerial(port._serial);
-      } else {
-        this._setSerial(new Serial(port));
-      }
-    });
+  async requestPort(filters = []) {
+    const port = await navigator.serial.requestPort({ filters });
+    if (port._serial) {
+      this._setSerial(port._serial);
+    } else {
+      this._setSerial(new Serial(port));
+    }
   }
 
-  connect(options = {}) {
-    return new Promise((resolve, reject) => {
-      if (this.serial) {
-        this.serial
-          .open({
-            baudRate: BAUD_RATE,
-            ...options,
-          })
-          .then(resolve)
-          .catch((err) => {
-            if (err.name === 'InvalidStateError') {
-              this._connected = true;
-              return resolve();
-            }
-            reject(err);
-          });
+  async connect(options = {}) {
+    this._baudRate = options.baudRate || BAUD_RATE;
+    if (!this.serial) {
+      throw new Error('No device specified');
+    }
+    try {
+      await this.serial.open({
+        ...options,
+        baudRate: this.baudRate,
+      });
+    } catch (err) {
+      if (err.name === 'InvalidStateError') {
+        this._connected = true;
       } else {
-        reject(new Error('No device specified'));
+        throw err;
       }
-    });
+    }
   }
 
   get connected() {

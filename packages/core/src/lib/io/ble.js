@@ -29,29 +29,27 @@ export class BLE extends EventEmitter {
     };
   }
 
-  open() {
+  handleGattServerDisconnected(e) {
+    this.device.removeEventListener('gattserverdisconnected', this.handleGattServerDisconnected.bind(this));
+    let err;
+    if (this._manualDisconnect !== true) {
+      err = new Error('Unexpectedly disconnected');
+    }
+    this.emit('disconnect', err);
+    this.close();
     this._manualDisconnect = false;
-    return this.server
-      .connect()
-      .then(() => {
-        const listener = (e) => {
-          this.device.removeEventListener('gattserverdisconnected', listener);
-          let err;
-          if (this._manualDisconnect !== true) {
-            err = new Error('Unexpectedly disconnected');
-          }
-          this.emit('disconnect', err);
-          this.close();
-          this._manualDisconnect = false;
-        };
-        this.device.addEventListener('gattserverdisconnected', listener);
-        this.emit('connect');
-      })
-      .catch((err) => {
-        this.emit('error', err);
-        this.close();
-        throw err;
-      });
+  }
+
+  async open() {
+    this._manualDisconnect = false;
+    try {
+      await this.server.connect();
+    } catch (err) {
+      this.emit('error', err);
+      this.close();
+    }
+    this.device.addEventListener('gattserverdisconnected', this.handleGattServerDisconnected.bind(this));
+    this.emit('connect');
   }
 
   close() {
@@ -63,64 +61,55 @@ export class BLE extends EventEmitter {
     return !!this.server?.connected;
   }
 
-  startNotifications(serviceId, characteristicId) {
-    return this._server
-      .getPrimaryService(serviceId)
-      .then((service) => service.getCharacteristic(characteristicId))
-      .then((characteristic) => {
+  handleCharacteristicValueChanged(e) {
+    const dataView = e.target.value;
+    const buffer = new Uint8Array(dataView.buffer);
+    this.emit('data', buffer);
+  }
+
+  async startNotifications(serviceId, characteristicId) {
+    try {
+      const service = await this._server.getPrimaryService(serviceId);
+      const characteristic = await service.getCharacteristic(characteristicId);
+      characteristic.stopNotifications();
+      characteristic.oncharacteristicvaluechanged = this.handleCharacteristicValueChanged.bind(this);
+      characteristic.startNotifications();
+    } catch (err) {
+      this.emit('error', err);
+    }
+  }
+
+  async read(serviceId, characteristicId, optStartNotifications = false) {
+    try {
+      const service = await this._server.getPrimaryService(serviceId);
+      const characteristic = await service.getCharacteristic(characteristicId);
+      if (optStartNotifications) {
         characteristic.stopNotifications();
-        characteristic.oncharacteristicvaluechanged = (event) => {
-          const dataView = event.target.value;
-          const buffer = new Uint8Array(dataView.buffer);
-          this.emit('data', buffer);
-        };
+        characteristic.oncharacteristicvaluechanged = this.handleCharacteristicValueChanged.bind(this);
         characteristic.startNotifications();
-      })
-      .catch((err) => {
-        this.emit('error', err);
-      });
+      }
+      const dataView = await characteristic.readValue();
+      const message = new Uint8Array(dataView.buffer);
+      return { message };
+    } catch (err) {
+      this.emit('error', err);
+    }
   }
 
-  read(serviceId, characteristicId, optStartNotifications = false) {
-    return this._server
-      .getPrimaryService(serviceId)
-      .then((service) => service.getCharacteristic(characteristicId))
-      .then((characteristic) => {
-        if (optStartNotifications) {
-          characteristic.stopNotifications();
-          characteristic.oncharacteristicvaluechanged = (event) => {
-            const dataView = event.target.value;
-            const buffer = new Uint8Array(dataView.buffer);
-            this.emit('data', buffer);
-          };
-          characteristic.startNotifications();
-        }
-        return characteristic.readValue();
-      })
-      .then((dataView) => ({
-        message: new Uint8Array(dataView.buffer),
-      }))
-      .catch((err) => {
-        this.emit('error', err);
-      });
-  }
-
-  write(serviceId, characteristicId, message, encoding = null, withResponse = null) {
+  async write(serviceId, characteristicId, message, encoding = null, withResponse = null) {
     const data = encoding === 'base64' ? Base64Utils.base64ToUint8Array(message) : message;
-    return this._server
-      .getPrimaryService(serviceId)
-      .then((service) => service.getCharacteristic(characteristicId))
-      .then((characteristic) => {
-        if (withResponse && characteristic.writeValueWithResponse) {
-          return characteristic.writeValueWithResponse(data);
-        }
-        if (withResponse === false && characteristic.writeValueWithoutResponse) {
-          return characteristic.writeValueWithoutResponse(data);
-        }
-        return characteristic.writeValue(data);
-      })
-      .catch((err) => {
-        this.emit('error', err);
-      });
+    try {
+      const service = await this._server.getPrimaryService(serviceId);
+      const characteristic = await service.getCharacteristic(characteristicId);
+      if (withResponse && characteristic.writeValueWithResponse) {
+        await characteristic.writeValueWithResponse(data);
+      }
+      if (withResponse === false && characteristic.writeValueWithoutResponse) {
+        await characteristic.writeValueWithoutResponse(data);
+      }
+      await characteristic.writeValue(data);
+    } catch (err) {
+      this.emit('error', err);
+    }
   }
 }
