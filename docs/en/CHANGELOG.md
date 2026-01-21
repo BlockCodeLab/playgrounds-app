@@ -1,15 +1,35 @@
 ## CHANGELOG
 
+### v1.3.3
+
+- Updated the ESP32 Editor to v0.2.1
+  - Added a download button in the menu bar
+
+- Updated the Arduino Editor to v0.5.1
+  - Optimized timer blocks
+
+- Updated the Block Editor
+  - Added Universal Motor Driver extension
+  - Added MD40 Motor Driver extension (Arduino only)
+  - Added DM11 Motor Driver extension (Arduino only)
+  - Added Geekservo Servo extension
+  - Updated Stepper Motor extension to support Arduino
+  - Optimized Keypad extension timer
+
+- Added direct editor access via URL
+- Optimized hardware connection and downloading
+- Fixed some bugs
+
 ### v1.3.2
 
 - Updated the Arduino Editor to v0.5.1
   - Added a download button in the menu bar
 
 - Updated the Block Editor
-  - Added Infrared Communication extension
-  - Added Matrix Keypad extension
-  - Added Touch Piano extension
-  - Added Ultrasonic Distance Measurement extension
+  - Added Infrared Communication extension (Arduino only)
+  - Added Matrix Keypad extension (Arduino only)
+  - Added Touch Piano extension (Arduino only)
+  - Added Ultrasonic Distance Measurement extension (Arduino only)
   - Added block size adjustment
   - Modified default block size and styling
 
