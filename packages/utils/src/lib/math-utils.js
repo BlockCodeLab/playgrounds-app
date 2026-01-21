@@ -50,4 +50,11 @@ export class MathUtils {
     const factor = Math.pow(10, decimals);
     return Math.round((num + Number.EPSILON) * factor) / factor;
   }
+
+  static float(num) {
+    num = `${num}`;
+    if (num === 'NaN') return NaN;
+    if (!num.includes('.')) return `${num}.0`;
+    return num;
+  }
 }
