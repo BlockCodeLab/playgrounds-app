@@ -1,5 +1,24 @@
 ## CHANGELOG
 
+### v1.3.4
+
+- Updated the Arduino Editor to v0.5.2
+  - Added polling and event timer code conversion
+
+- Updated the iot:bit Editor to v0.2.1
+  - Added a download button in the menu bar
+
+- Updated the Markdown Editor to v0.1.1
+  - Added export to .md document
+
+- Updated the Block Editor
+  - Added IO extension (Arduino only)
+  - Added RFID extension (Arduino only)
+  - Added Color Recognition extension (Arduino only)
+  - Fixed NES extension download error
+
+- Fixed some bugs
+
 ### v1.3.3
 
 - Updated the ESP32 Editor to v0.2.1

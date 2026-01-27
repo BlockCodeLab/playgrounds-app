@@ -1,7 +1,7 @@
 {
   "name": "playgrounds-app",
   "private": "true",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "The BlockCode Playgrounds application.",
   "author": {
     "name": "Yeqin Gong",
