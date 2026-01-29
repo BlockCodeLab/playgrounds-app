@@ -35,12 +35,12 @@ Start downloading the macOS version of the application. Please select the versio
 - [Apple Silicon][4]
 - [Intel][5]
 
-If your Apple computer has an M1/M2/M3/M4 chip, please download the [Apple Silicon][4] version (this version requires Rosetta to be enabled for offline Arduino compilation). For all other cases, please download the [Intel][5] version.
+If your Apple computer is equipped with an M-series chip, please download the [Apple Silicon][4] version (offline Arduino compilation is not supported in this version for now); otherwise, please download the [Intel][5] version.
 
 <!-- select:end -->
 
-[1]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.1.0/BlockCodePlaygrounds-win-x64-1.1.0.zip
-[2]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.1.0/BlockCodePlaygrounds-win-x86-1.1.0.zip
-[3]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.1.0/BlockCodePlaygrounds-win7-1.1.0.zip
-[4]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.1.0/BlockCodePlaygrounds-macos-apple-silicon-1.1.0.zip
-[5]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.1.0/BlockCodePlaygrounds-macos-intel-1.1.0.zip
+[1]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.3.4/BlockCodePlaygrounds-win-x64-1.3.4.zip
+[2]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.3.4/BlockCodePlaygrounds-win-x86-1.3.4.zip
+[3]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.3.4/BlockCodePlaygrounds-win7-1.3.4.zip
+[4]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.3.4/BlockCodePlaygrounds-macos-apple-silicon-1.3.4.zip
+[5]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.3.4/BlockCodePlaygrounds-macos-intel-1.3.4.zip

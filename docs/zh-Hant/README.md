@@ -34,12 +34,12 @@
 - [Apple Silicon][4]
 - [Intel][5]
 
-如果您的 Apple 電腦搭載 M1/M2/M3/M4 芯片，請下載 [Apple Silicon][4] 版本（該版本離線 Arduino 編譯需要開啟 Rosetta）；其他情況請下載 [Intel][5] 版本。
+如果您的 Apple 電腦搭載 M 系列芯片，請下載 [Apple Silicon][4] 版本（該版本暫不支持離線 Arduino 編譯）；其他情況請下載 [Intel][5] 版本。
 
 <!-- select:end -->
 
-[1]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.1.0/BlockCodePlaygrounds-win-x64-1.1.0.zip
-[2]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.1.0/BlockCodePlaygrounds-win-x86-1.1.0.zip
-[3]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.1.0/BlockCodePlaygrounds-win7-1.1.0.zip
-[4]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.1.0/BlockCodePlaygrounds-macos-apple-silicon-1.1.0.zip
-[5]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.1.0/BlockCodePlaygrounds-macos-intel-1.1.0.zip
+[1]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.3.4/BlockCodePlaygrounds-win-x64-1.3.4.zip
+[2]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.3.4/BlockCodePlaygrounds-win-x86-1.3.4.zip
+[3]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.3.4/BlockCodePlaygrounds-win7-1.3.4.zip
+[4]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.3.4/BlockCodePlaygrounds-macos-apple-silicon-1.3.4.zip
+[5]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.3.4/BlockCodePlaygrounds-macos-intel-1.3.4.zip
