@@ -1,5 +1,6 @@
-import { contextBridge, ipcRenderer } from 'electron/renderer';
 import { readServices } from './lib/read-services' with { type: 'macro' };
+
+import { contextBridge, ipcRenderer } from 'electron/renderer';
 
 const electronObj = {
   loadBlocksZip() {
@@ -52,8 +53,8 @@ const electronObj = {
 };
 
 // 载入扩展服务
-const services = readServices();
 (async () => {
+  const services = readServices();
   for (const { preload } of services) {
     if (preload) {
       const { default: getService } = await import(preload);

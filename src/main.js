@@ -1,6 +1,7 @@
+import { readServices } from './lib/read-services' with { type: 'macro' };
+
 import { dirname, resolve } from 'node:path';
 import { app, BrowserWindow, globalShortcut } from 'electron';
-import { readServices } from './lib/read-services' with { type: 'macro' };
 import { serial } from './lib/serial';
 import { bluetooth } from './lib/bluetooth';
 import { readLoaclBlocks } from './lib/local-blocks';
@@ -9,8 +10,6 @@ import { readLoaclTutorials } from './lib/local-tutorials';
 import './lib/menu';
 
 const isMac = process.platform === 'darwin';
-
-const services = readServices();
 
 const __dirname = dirname(require.resolve('./main.js'));
 const winConfig = {
@@ -28,7 +27,7 @@ if (isMac) {
   winConfig.trafficLightPosition = { x: 8, y: 16 };
 }
 
-const createWindow = async () => {
+app.whenReady().then(() => {
   const mainWindow = new BrowserWindow(winConfig);
 
   // 注册重载快捷键
@@ -57,14 +56,13 @@ const createWindow = async () => {
   readLoaclTutorials();
 
   // 启动扩展服务
+  const services = readServices();
   for (const { service } of services) {
     if (service) {
-      const { default: startService } = await import(service);
+      const { default: startService } = require(service);
       startService();
     }
   }
-};
-
-app.whenReady().then(() => createWindow());
+});
 
 app.on('window-all-closed', () => app.quit());

@@ -23,6 +23,9 @@ class SerialPort {
 
     mainWindow.webContents.session.on('serial-port-added', (event, port) => {
       const portList = this._portList;
+      if (!portList) {
+        this._portList = [];
+      }
       if (portList.find(({ portId }) => portId == port.portId)) return;
       portList.push(port);
       if (this._callback) {
@@ -32,6 +35,7 @@ class SerialPort {
 
     mainWindow.webContents.session.on('serial-port-removed', (event, port) => {
       const portList = this._portList;
+      if (!portList) return;
       const index = portList.findIndex(({ portId }) => portId == port.portId);
       if (index !== -1) {
         portList.splice(index, 1);
