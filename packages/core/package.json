@@ -8,8 +8,8 @@
     "@eo-locale/core": "^1.7.2",
     "@eo-locale/preact": "^1.7.2",
     "@popperjs/core": "^2.11.8",
-    "@preact/signals": "^2.3.2",
-    "preact": "^10.27.2"
+    "@preact/signals": "^2.6.1",
+    "preact": "^10.28.2"
   },
   "devDependencies": {
     "@types/bun": "latest"

@@ -9,7 +9,7 @@ module.exports = {
   packagerConfig: {
     name: 'BlockCode Playgrounds',
     icon: 'public/icon',
-    appCopyright: 'Copyright(c) BlockCode Lab, 2023-2025.',
+    appCopyright: 'Copyright© BlockCode Lab, 2023-2026.',
     // asar: true,
     ignore: [
       '/\\.zed($|/)',

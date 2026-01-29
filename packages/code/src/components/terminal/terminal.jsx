@@ -183,9 +183,13 @@ export function Terminal({ compactMode, textValue, disabledREPL, options }) {
       const xterm = new Xterm(Object.assign({}, defaultOptions, options, { theme }));
       xterm.open(ref.current);
 
-      const webglAddon = new WebglAddon();
+      // 如果支持 WebGL 则启用
+      try {
+        const webglAddon = new WebglAddon();
+        xterm.loadAddon(webglAddon);
+      } catch (err) {}
+
       const fitAddon = new FitAddon();
-      xterm.loadAddon(webglAddon);
       xterm.loadAddon(fitAddon);
 
       if (typeof textBuffer.value === 'string') {
