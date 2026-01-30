@@ -5,8 +5,6 @@
 
 // long unsigned int time = 0;
 
-byte *gammatable;
-
 float TCS34725::_powf(const float x, const float y) {
   return (float)(pow((double)x, (double)y));
 }
@@ -115,7 +113,7 @@ boolean TCS34725::begin(tcs34725IntegrationTime_t it, tcs34725Gain_t gain) {
     x /= 255;
     x = pow(x, 2.5);
     x *= 255;
-    Serial.println(i);
+    // Serial.println(i);
     gammatable[i] = x;
   }
 

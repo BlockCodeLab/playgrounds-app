@@ -110,4 +110,6 @@ private:
   tcs34725IntegrationTime_t _tcs34725IntegrationTime;
   void disable(void);
   float _powf(const float x, const float y);
+
+  byte *gammatable;
 };

@@ -1,4 +1,5 @@
 #pragma once
+#include <Arduino.h>
 #include <Wire.h>
 #include <stdint.h>
 
@@ -74,4 +75,6 @@ private:
   const IntegrationTime integration_time_ = kIntegrationTime10ms;
   mutable uint64_t last_read_time_ = 0;
   mutable Color color_;
+
+  byte *gammatable;
 };
