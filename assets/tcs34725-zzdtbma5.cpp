@@ -212,6 +212,25 @@ uint16_t TCS34725::getBlueToGamma() {
   return (uint16_t)gammatable[(int)(((fb / fc) * 256))];
 }
 
+uint32_t TCS34725::getColorToGamma() {
+
+  uint16_t r, g, b, c;
+
+  float fr, fg, fb, fc;
+
+  this->getRGBC(&r, &g, &b, &c, false);
+  fr = r;
+  fg = g;
+  fb = b;
+  fc = c;
+
+  r = (uint16_t)gammatable[(int)(((fr / fc) * 256))];
+  g = (uint16_t)gammatable[(int)(((fg / fc) * 256))];
+  b = (uint16_t)gammatable[(int)(((fb / fc) * 256))];
+
+  return ((uint32_t)r << 16) | ((uint32_t)g << 8) | (uint32_t)b;
+}
+
 void TCS34725::getRGBC(uint16_t *r, uint16_t *g, uint16_t *b, uint16_t *c,
                        bool wait) {
 

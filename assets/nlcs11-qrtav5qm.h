@@ -62,6 +62,8 @@ public:
   uint16_t GetGreen() const;
   uint16_t GetBlue() const;
 
+  uint32_t GetColor() const;
+
 private:
   NLCS11(const NLCS11 &) = delete;
   NLCS11 &operator=(const NLCS11 &) = delete;

@@ -81,3 +81,9 @@ uint16_t NLCS11::GetBlue() const {
   GetColor(&color_);
   return color_.b;
 }
+
+uint32_t NLCS11::GetColor() const {
+  GetColor(&color_);
+  return ((uint32_t)color_.r << 16) | ((uint32_t)color_.g << 8) |
+         (uint32_t)color_.b;
+}
