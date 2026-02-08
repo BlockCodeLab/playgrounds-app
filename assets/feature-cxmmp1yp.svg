@@ -18,14 +18,40 @@
             <path id="--4" fill="#d0d9d8" fill-rule="evenodd" stroke="none" d="M 393.458008 233.091599 L 355.71756 233.091599 L 355.71756 148.175568 L 377.732819 148.175568 L 377.732819 193.778625 L 393.458008 193.778625 L 393.458008 233.091599 Z"/>
             <path id="--5" fill="#d0d9d8" fill-rule="evenodd" stroke="none" d="M 443.778625 233.091599 L 406.038177 233.091599 L 406.038177 148.175568 L 428.053436 148.175568 L 428.053436 193.778625 L 443.778625 193.778625 L 443.778625 233.091599 Z"/>
             <path id="path7" fill="#d0d9d8" fill-rule="evenodd" stroke="none" d="M 483.331482 233.091599 L 456.358765 233.091599 L 456.358765 148.175568 L 478.374054 148.175568 L 478.374054 193.778625 L 494.099243 193.778625 L 494.099243 224.38031 C 493.042999 229.357407 488.623322 233.091599 483.331482 233.091599 Z"/>
-            <text id="1" xml:space="preserve" x="118.444656" y="219" font-family="Yuanti SC" font-size="15.725191" font-weight="700" fill="#161817">1</text>
-            <text id="2" xml:space="preserve" x="166.730611" y="219" font-family="Yuanti SC" font-size="15.725191" font-weight="700" fill="#161817">2</text>
-            <text id="3" xml:space="preserve" x="217.675573" y="219" font-family="Yuanti SC" font-size="15.725191" font-weight="700" fill="#161817">3</text>
-            <text id="4" xml:space="preserve" x="267.659847" y="219" font-family="Yuanti SC" font-size="15.725191" font-weight="700" fill="#161817">4</text>
-            <text id="5" xml:space="preserve" x="317.864275" y="219" font-family="Yuanti SC" font-size="15.725191" font-weight="700" fill="#161817">5</text>
-            <text id="6" xml:space="preserve" x="368.91145" y="219" font-family="Yuanti SC" font-size="15.725191" font-weight="700" fill="#161817">6</text>
-            <text id="7" xml:space="preserve" x="419.029389" y="219" font-family="Yuanti SC" font-size="15.725191" font-weight="700" fill="#161817">7</text>
-            <text id="8" xml:space="preserve" x="468.66771" y="219" font-family="Yuanti SC" font-size="15.725191" font-weight="700" fill="#161817">8</text>
+            <text id="1" xml:space="preserve" x="117" y="221" font-family="Yuanti SC" font-size="15.725191" font-weight="700" fill="#161817">1</text>
+            <text id="2" xml:space="preserve" x="166" y="221" font-family="Yuanti SC" font-size="15.725191" font-weight="700" fill="#161817">2</text>
+            <text id="3" xml:space="preserve" x="217" y="221" font-family="Yuanti SC" font-size="15.725191" font-weight="700" fill="#161817">3</text>
+            <text id="4" xml:space="preserve" x="267" y="221" font-family="Yuanti SC" font-size="15.725191" font-weight="700" fill="#161817">4</text>
+            <text id="5" xml:space="preserve" x="317" y="221" font-family="Yuanti SC" font-size="15.725191" font-weight="700" fill="#161817">5</text>
+            <text id="6" xml:space="preserve" x="368" y="221" font-family="Yuanti SC" font-size="15.725191" font-weight="700" fill="#161817">6</text>
+            <text id="7" xml:space="preserve" x="418" y="221" font-family="Yuanti SC" font-size="15.725191" font-weight="700" fill="#161817">7</text>
+            <text id="8" xml:space="preserve" x="468" y="221" font-family="Yuanti SC" font-size="15.725191" font-weight="700" fill="#161817">8</text>
         </g>
+    </g>
+    <g id="g4">
+        <path id="path8" fill="none" stroke="#bebcb8" stroke-width="2.225216" stroke-linecap="round" stroke-linejoin="round" d="M 310.230774 119.32692 L 310.230774 130.634613"/>
+        <path id="path9" fill="none" stroke="#bebcb8" stroke-width="2.225216" stroke-linecap="round" stroke-linejoin="round" d="M 303.230774 119.32692 L 303.230774 130.634613"/>
+        <path id="path10" fill="none" stroke="#bebcb8" stroke-width="2.225216" stroke-linecap="round" stroke-linejoin="round" d="M 296.230774 119.32692 L 296.230774 130.634613"/>
+        <path id="path11" fill="none" stroke="#bebcb8" stroke-width="2.225216" stroke-linecap="round" stroke-linejoin="round" d="M 289.769226 119.32692 L 289.769226 130.634613"/>
+        <path id="path12" fill="#f1ebd3" fill-rule="evenodd" stroke="none" d="M 279 98.865387 L 279 123.096161 L 321 123.096161 L 321 98.865387 Z"/>
+    </g>
+    <g id="g5">
+        <path id="--8" fill="none" stroke="#bebcb8" stroke-width="0.86593" stroke-linecap="round" stroke-linejoin="round" d="M 331 118.01767 L 331 115.077744"/>
+        <path id="--9" fill="none" stroke="#bebcb8" stroke-width="0.86593" stroke-linecap="round" stroke-linejoin="round" d="M 334 118.01767 L 334 115.077744"/>
+        <path id="--10" fill="none" stroke="#bebcb8" stroke-width="0.86593" stroke-linecap="round" stroke-linejoin="round" d="M 337 118.01767 L 337 115.077744"/>
+        <path id="--11" fill="none" stroke="#bebcb8" stroke-width="0.86593" stroke-linecap="round" stroke-linejoin="round" d="M 340.02475 118.01767 L 340.02475 115.077744"/>
+        <path id="--15" fill="none" stroke="#bebcb8" stroke-width="0.86593" stroke-linecap="round" stroke-linejoin="round" d="M 331 134.922256 L 331 131.98233"/>
+        <path id="--14" fill="none" stroke="#bebcb8" stroke-width="0.86593" stroke-linecap="round" stroke-linejoin="round" d="M 334 134.922256 L 334 131.98233"/>
+        <path id="--13" fill="none" stroke="#bebcb8" stroke-width="0.86593" stroke-linecap="round" stroke-linejoin="round" d="M 337 134.922256 L 337 131.98233"/>
+        <path id="--12" fill="none" stroke="#bebcb8" stroke-width="0.86593" stroke-linecap="round" stroke-linejoin="round" d="M 340.02475 134.922256 L 340.02475 131.98233"/>
+        <path id="--23" fill="none" stroke="#bebcb8" stroke-width="0.86593" stroke-linecap="round" stroke-linejoin="round" d="M 343 118.01767 L 343 115.077744"/>
+        <path id="--22" fill="none" stroke="#bebcb8" stroke-width="0.86593" stroke-linecap="round" stroke-linejoin="round" d="M 346 118.01767 L 346 115.077744"/>
+        <path id="--21" fill="none" stroke="#bebcb8" stroke-width="0.86593" stroke-linecap="round" stroke-linejoin="round" d="M 348.991516 118.01767 L 348.991516 115.077744"/>
+        <path id="--20" fill="none" stroke="#bebcb8" stroke-width="0.86593" stroke-linecap="round" stroke-linejoin="round" d="M 352 118.01767 L 352 115.077744"/>
+        <path id="--19" fill="none" stroke="#bebcb8" stroke-width="0.86593" stroke-linecap="round" stroke-linejoin="round" d="M 343 134.922256 L 343 131.98233"/>
+        <path id="--18" fill="none" stroke="#bebcb8" stroke-width="0.86593" stroke-linecap="round" stroke-linejoin="round" d="M 346 134.922256 L 346 131.98233"/>
+        <path id="--17" fill="none" stroke="#bebcb8" stroke-width="0.86593" stroke-linecap="round" stroke-linejoin="round" d="M 348.991516 134.922256 L 348.991516 131.98233"/>
+        <path id="--16" fill="none" stroke="#bebcb8" stroke-width="0.86593" stroke-linecap="round" stroke-linejoin="round" d="M 352 134.922256 L 352 131.98233"/>
+        <path id="path13" fill="#292d2f" fill-rule="evenodd" stroke="none" d="M 329 131.98233 L 355 131.98233 L 355 118.01767 L 329 118.01767 Z"/>
     </g>
 </svg>

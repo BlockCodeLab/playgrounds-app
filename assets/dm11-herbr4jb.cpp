@@ -1,5 +1,7 @@
 #include "dm11.h"
 
+namespace em {
+
 namespace {
 enum MemoryAddress : uint8_t {
   kMemAddrPwmDuty0 = 0x50,
@@ -45,3 +47,5 @@ Dm11::ErrorCode Dm11::PwmDuty(const PwmChannel pwm_channel, uint16_t duty) {
   wire_.write(reinterpret_cast<const uint8_t *>(&duty), sizeof(duty));
   return static_cast<ErrorCode>(wire_.endTransmission());
 }
+
+} // namespace em

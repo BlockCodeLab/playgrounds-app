@@ -2,6 +2,8 @@
 #include <Arduino.h>
 #include <Wire.h>
 
+namespace em {
+
 class Md40 {
 public:
   static constexpr uint8_t kDefaultI2cAddress = 0x16;
@@ -116,6 +118,8 @@ private:
   Motor *motors_[kMotorNum] = {nullptr};
 };
 
+} // namespace em
+
 // 断言
 static inline void AssertFailHandle(const char *expr, const char *function,
                                     const char *file, const int line) {
@@ -134,6 +138,12 @@ static inline void AssertFailHandle(const char *expr, const char *function,
   }
 }
 
-#define ASSERT(expr)                                                           \
-  ((expr) ? (void)0                                                            \
-          : AssertFailHandle(#expr, __PRETTY_FUNCTION__, __FILE__, __LINE__))
+#define EM_CHECK_EQ(a, b)                                                      \
+  ((a) == (b) ? (void)0                                                        \
+              : AssertFailHandle(#a " == " #b, __PRETTY_FUNCTION__, __FILE__,  \
+                                 __LINE__))
+
+#define EM_CHECK_LT(a, b)                                                      \
+  ((a) < (b) ? (void)0                                                         \
+             : AssertFailHandle(#a " < " #b, __PRETTY_FUNCTION__, __FILE__,    \
+                                __LINE__))
