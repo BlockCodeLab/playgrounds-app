@@ -1,5 +1,19 @@
 ## CHANGELOG
 
+### v1.3.5
+
+- Updated the Arduino Editor to v0.5.3
+  - Added support for the NL-16 wireless downloader, enabling ordinary Arduino boards to download programs wirelessly via NL-16
+  - Fixed pin type errors
+
+- Updated the Block Editor
+  - Added MIDI module extension (Arduino only)
+  - Added LCD1602 display extension (Arduino only)
+  - Added OLED monochrome display extension (Arduino only)
+  - Added AI voice assistant extension
+
+- Fixed some bugs
+
 ### v1.3.4
 
 - Updated the Arduino Editor to v0.5.2
