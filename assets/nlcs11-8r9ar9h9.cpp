@@ -1,4 +1,5 @@
-#include <Arduino.h>
+#include <math.h>
+#include <stdlib.h>
 
 #include "nlcs11.h"
 
@@ -21,6 +22,17 @@ NLCS11::ErrorCode NLCS11::Initialize() {
   wire_.write(0x03);
   wire_.write(gain_ << 4 | integration_time_);
   ret = static_cast<ErrorCode>(wire_.endTransmission());
+
+  gammatable = (byte *)malloc(256 * sizeof(byte));
+  for (int i = 0; i < 256; i++) {
+    float x = i;
+    x /= 255;
+    x = pow(x, 2.5);
+    x *= 255;
+    // Serial.println(i);
+    gammatable[i] = x;
+  }
+
   return ret;
 }
 
@@ -60,24 +72,32 @@ bool NLCS11::GetColor(Color *const color) const {
     return false;
   }
 
-  color->r = static_cast<uint16_t>((float)color->r / color->c * 255);
-  color->g = static_cast<uint16_t>((float)color->g / color->c * 255);
-  color->b = static_cast<uint16_t>((float)color->b / color->c * 255);
+  // color->r = static_cast<uint16_t>((float)color->r / color->c * 255);
+  // color->g = static_cast<uint16_t>((float)color->g / color->c * 255);
+  // color->b = static_cast<uint16_t>((float)color->b / color->c * 255);
 
   return true;
 }
 
 uint16_t NLCS11::GetRed() const {
   GetColor(&color_);
-  return color_.r;
+  return (uint16_t)gammatable[(int)(((float)color_.r / color_.c) * 255)];
 }
 
 uint16_t NLCS11::GetGreen() const {
   GetColor(&color_);
-  return color_.g;
+  return (uint16_t)gammatable[(int)(((float)color_.g / color_.c) * 255)];
 }
 
 uint16_t NLCS11::GetBlue() const {
   GetColor(&color_);
-  return color_.b;
+  return (uint16_t)gammatable[(int)(((float)color_.b / color_.c) * 255)];
+}
+
+uint32_t NLCS11::GetColor() const {
+  GetColor(&color_);
+  uint16_t r = (uint16_t)gammatable[(int)(((float)color_.r / color_.c) * 255)];
+  uint16_t g = (uint16_t)gammatable[(int)(((float)color_.g / color_.c) * 255)];
+  uint16_t b = (uint16_t)gammatable[(int)(((float)color_.b / color_.c) * 255)];
+  return ((uint32_t)r << 16) | ((uint32_t)g << 8) | (uint32_t)b;
 }

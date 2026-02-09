@@ -1,5 +1,7 @@
 #include "md40.h"
 
+namespace em {
+
 namespace {
 constexpr uint8_t kMotorStateOffset = 0x20;
 constexpr uint8_t kI2cEndTransmissionSuccess = 0;
@@ -54,12 +56,11 @@ Md40::Md40(const uint8_t i2c_address, TwoWire &wire)
 }
 
 Md40::Motor &Md40::operator[](const uint8_t index) {
-  ASSERT(index < kMotorNum);
+  EM_CHECK_LT(index, kMotorNum);
   return *motors_[index];
 }
 
 void Md40::Init() {
-  wire_.begin();
   for (auto motor : motors_) {
     motor->Reset();
   }
@@ -68,11 +69,12 @@ void Md40::Init() {
 String Md40::firmware_version() {
   wire_.beginTransmission(i2c_address_);
   wire_.write(kMajorVersion);
-  ASSERT(wire_.endTransmission() == kI2cEndTransmissionSuccess);
+  EM_CHECK_EQ(wire_.endTransmission(), kI2cEndTransmissionSuccess);
 
   uint8_t version[3] = {0};
-  ASSERT(wire_.requestFrom(i2c_address_, static_cast<uint8_t>(sizeof(
-                                             version))) == sizeof(version));
+  EM_CHECK_EQ(
+      wire_.requestFrom(i2c_address_, static_cast<uint8_t>(sizeof(version))),
+      sizeof(version));
 
   uint8_t offset = 0;
   while (offset < sizeof(version)) {
@@ -88,9 +90,9 @@ String Md40::firmware_version() {
 uint8_t Md40::device_id() {
   wire_.beginTransmission(i2c_address_);
   wire_.write(kDeviceId);
-  ASSERT(wire_.endTransmission() == kI2cEndTransmissionSuccess);
+  EM_CHECK_EQ(wire_.endTransmission(), kI2cEndTransmissionSuccess);
 
-  ASSERT(wire_.requestFrom(i2c_address_, static_cast<uint8_t>(1)) == 1);
+  EM_CHECK_EQ(wire_.requestFrom(i2c_address_, static_cast<uint8_t>(1)), 1);
 
   while (wire_.available() == 0)
     ;
@@ -101,10 +103,10 @@ uint8_t Md40::device_id() {
 String Md40::name() {
   wire_.beginTransmission(i2c_address_);
   wire_.write(kName);
-  ASSERT(wire_.endTransmission() == kI2cEndTransmissionSuccess);
+  EM_CHECK_EQ(wire_.endTransmission(), kI2cEndTransmissionSuccess);
 
   constexpr uint8_t kLength = 8;
-  ASSERT(wire_.requestFrom(i2c_address_, kLength) == kLength);
+  EM_CHECK_EQ(wire_.requestFrom(i2c_address_, kLength), kLength);
 
   String result;
   while (result.length() < kLength) {
@@ -125,7 +127,7 @@ void Md40::Motor::ExecuteCommand() {
   wire_.write(kCommandExecute);
   wire_.write(0x01);
 
-  ASSERT(wire_.endTransmission() == kI2cEndTransmissionSuccess);
+  EM_CHECK_EQ(wire_.endTransmission(), kI2cEndTransmissionSuccess);
 
   WaitCommandEmptied();
 }
@@ -136,10 +138,11 @@ void Md40::Motor::WaitCommandEmptied() {
     wire_.beginTransmission(i2c_address_);
     wire_.write(kCommandExecute);
 
-    ASSERT(wire_.endTransmission() == kI2cEndTransmissionSuccess);
+    EM_CHECK_EQ(wire_.endTransmission(), kI2cEndTransmissionSuccess);
 
-    ASSERT(wire_.requestFrom(i2c_address_, static_cast<uint8_t>(sizeof(
-                                               result))) == sizeof(result));
+    EM_CHECK_EQ(
+        wire_.requestFrom(i2c_address_, static_cast<uint8_t>(sizeof(result))),
+        sizeof(result));
 
     while (wire_.available() == 0)
       ;
@@ -157,7 +160,7 @@ void Md40::Motor::WriteCommand(const uint8_t command, const uint8_t *data,
   if (data != nullptr && length > 0) {
     wire_.write(data, length);
   }
-  ASSERT(wire_.endTransmission() == kI2cEndTransmissionSuccess);
+  EM_CHECK_EQ(wire_.endTransmission(), kI2cEndTransmissionSuccess);
 }
 
 void Md40::Motor::Reset() {
@@ -182,7 +185,7 @@ void Md40::Motor::SetEncoderMode(const uint16_t ppr,
               sizeof(reduction_ratio));
   wire_.write(static_cast<uint8_t>(phase_relation));
 
-  ASSERT(wire_.endTransmission() == kI2cEndTransmissionSuccess);
+  EM_CHECK_EQ(wire_.endTransmission(), kI2cEndTransmissionSuccess);
 
   ExecuteCommand();
 }
@@ -198,7 +201,7 @@ void Md40::Motor::SetDcMode() {
   wire_.write(0);
   wire_.write(0);
 
-  ASSERT(wire_.endTransmission() == kI2cEndTransmissionSuccess);
+  EM_CHECK_EQ(wire_.endTransmission(), kI2cEndTransmissionSuccess);
 
   ExecuteCommand();
 }
@@ -206,11 +209,12 @@ void Md40::Motor::SetDcMode() {
 float Md40::Motor::speed_pid_p() {
   wire_.beginTransmission(i2c_address_);
   wire_.write(static_cast<uint8_t>(kSpeedP + index_ * kMotorStateOffset));
-  ASSERT(wire_.endTransmission() == kI2cEndTransmissionSuccess);
+  EM_CHECK_EQ(wire_.endTransmission(), kI2cEndTransmissionSuccess);
 
   uint16_t data = 0;
-  ASSERT(wire_.requestFrom(i2c_address_, static_cast<uint8_t>(sizeof(data))) ==
-         sizeof(data));
+  EM_CHECK_EQ(
+      wire_.requestFrom(i2c_address_, static_cast<uint8_t>(sizeof(data))),
+      sizeof(data));
 
   uint8_t offset = 0;
   while (offset < sizeof(data)) {
@@ -235,11 +239,12 @@ void Md40::Motor::set_speed_pid_p(const float value) {
 float Md40::Motor::speed_pid_i() {
   wire_.beginTransmission(i2c_address_);
   wire_.write(static_cast<uint8_t>(kSpeedI + index_ * kMotorStateOffset));
-  ASSERT(wire_.endTransmission() == kI2cEndTransmissionSuccess);
+  EM_CHECK_EQ(wire_.endTransmission(), kI2cEndTransmissionSuccess);
 
   uint16_t data = 0;
-  ASSERT(wire_.requestFrom(i2c_address_, static_cast<uint8_t>(sizeof(data))) ==
-         sizeof(data));
+  EM_CHECK_EQ(
+      wire_.requestFrom(i2c_address_, static_cast<uint8_t>(sizeof(data))),
+      sizeof(data));
 
   uint8_t offset = 0;
   while (offset < sizeof(data)) {
@@ -264,11 +269,12 @@ void Md40::Motor::set_speed_pid_i(const float value) {
 float Md40::Motor::speed_pid_d() {
   wire_.beginTransmission(i2c_address_);
   wire_.write(static_cast<uint8_t>(kSpeedD + index_ * kMotorStateOffset));
-  ASSERT(wire_.endTransmission() == kI2cEndTransmissionSuccess);
+  EM_CHECK_EQ(wire_.endTransmission(), kI2cEndTransmissionSuccess);
 
   uint16_t data = 0;
-  ASSERT(wire_.requestFrom(i2c_address_, static_cast<uint8_t>(sizeof(data))) ==
-         sizeof(data));
+  EM_CHECK_EQ(
+      wire_.requestFrom(i2c_address_, static_cast<uint8_t>(sizeof(data))),
+      sizeof(data));
 
   uint8_t offset = 0;
   while (offset < sizeof(data)) {
@@ -293,11 +299,12 @@ void Md40::Motor::set_speed_pid_d(const float value) {
 float Md40::Motor::position_pid_p() {
   wire_.beginTransmission(i2c_address_);
   wire_.write(static_cast<uint8_t>(kPositionP + index_ * kMotorStateOffset));
-  ASSERT(wire_.endTransmission() == kI2cEndTransmissionSuccess);
+  EM_CHECK_EQ(wire_.endTransmission(), kI2cEndTransmissionSuccess);
 
   uint16_t data = 0;
-  ASSERT(wire_.requestFrom(i2c_address_, static_cast<uint8_t>(sizeof(data))) ==
-         sizeof(data));
+  EM_CHECK_EQ(
+      wire_.requestFrom(i2c_address_, static_cast<uint8_t>(sizeof(data))),
+      sizeof(data));
 
   uint8_t offset = 0;
   while (offset < sizeof(data)) {
@@ -322,11 +329,12 @@ void Md40::Motor::set_position_pid_p(const float value) {
 float Md40::Motor::position_pid_i() {
   wire_.beginTransmission(i2c_address_);
   wire_.write(static_cast<uint8_t>(kPositionI + index_ * kMotorStateOffset));
-  ASSERT(wire_.endTransmission() == kI2cEndTransmissionSuccess);
+  EM_CHECK_EQ(wire_.endTransmission(), kI2cEndTransmissionSuccess);
 
   uint16_t data = 0;
-  ASSERT(wire_.requestFrom(i2c_address_, static_cast<uint8_t>(sizeof(data))) ==
-         sizeof(data));
+  EM_CHECK_EQ(
+      wire_.requestFrom(i2c_address_, static_cast<uint8_t>(sizeof(data))),
+      sizeof(data));
 
   uint8_t offset = 0;
   while (offset < sizeof(data)) {
@@ -351,11 +359,12 @@ void Md40::Motor::set_position_pid_i(const float value) {
 float Md40::Motor::position_pid_d() {
   wire_.beginTransmission(i2c_address_);
   wire_.write(static_cast<uint8_t>(kPositionD + index_ * kMotorStateOffset));
-  ASSERT(wire_.endTransmission() == kI2cEndTransmissionSuccess);
+  EM_CHECK_EQ(wire_.endTransmission(), kI2cEndTransmissionSuccess);
 
   uint16_t data = 0;
-  ASSERT(wire_.requestFrom(i2c_address_, static_cast<uint8_t>(sizeof(data))) ==
-         sizeof(data));
+  EM_CHECK_EQ(
+      wire_.requestFrom(i2c_address_, static_cast<uint8_t>(sizeof(data))),
+      sizeof(data));
 
   uint8_t offset = 0;
   while (offset < sizeof(data)) {
@@ -444,13 +453,13 @@ Md40::Motor::State Md40::Motor::state() {
   wire_.beginTransmission(i2c_address_);
   wire_.write(address);
   wire_.write(0);
-  ASSERT(wire_.endTransmission() == kI2cEndTransmissionSuccess);
+  EM_CHECK_EQ(wire_.endTransmission(), kI2cEndTransmissionSuccess);
 
   wire_.beginTransmission(i2c_address_);
   wire_.write(address);
-  ASSERT(wire_.endTransmission() == kI2cEndTransmissionSuccess);
+  EM_CHECK_EQ(wire_.endTransmission(), kI2cEndTransmissionSuccess);
 
-  ASSERT(wire_.requestFrom(i2c_address_, static_cast<uint8_t>(1)) == 1);
+  EM_CHECK_EQ(wire_.requestFrom(i2c_address_, static_cast<uint8_t>(1)), 1);
 
   while (wire_.available() == 0)
     ;
@@ -464,15 +473,16 @@ int32_t Md40::Motor::speed() {
   wire_.beginTransmission(i2c_address_);
   wire_.write(address);
   wire_.write(0);
-  ASSERT(wire_.endTransmission() == kI2cEndTransmissionSuccess);
+  EM_CHECK_EQ(wire_.endTransmission(), kI2cEndTransmissionSuccess);
 
   wire_.beginTransmission(i2c_address_);
   wire_.write(address);
-  ASSERT(wire_.endTransmission() == kI2cEndTransmissionSuccess);
+  EM_CHECK_EQ(wire_.endTransmission(), kI2cEndTransmissionSuccess);
 
   int32_t data = 0;
-  ASSERT(wire_.requestFrom(i2c_address_, static_cast<uint8_t>(sizeof(data))) ==
-         sizeof(data));
+  EM_CHECK_EQ(
+      wire_.requestFrom(i2c_address_, static_cast<uint8_t>(sizeof(data))),
+      sizeof(data));
 
   uint8_t offset = 0;
   while (offset < sizeof(data)) {
@@ -489,15 +499,16 @@ int32_t Md40::Motor::position() {
   wire_.beginTransmission(i2c_address_);
   wire_.write(address);
   wire_.write(0);
-  ASSERT(wire_.endTransmission() == kI2cEndTransmissionSuccess);
+  EM_CHECK_EQ(wire_.endTransmission(), kI2cEndTransmissionSuccess);
 
   wire_.beginTransmission(i2c_address_);
   wire_.write(address);
-  ASSERT(wire_.endTransmission() == kI2cEndTransmissionSuccess);
+  EM_CHECK_EQ(wire_.endTransmission(), kI2cEndTransmissionSuccess);
 
   int32_t data = 0;
-  ASSERT(wire_.requestFrom(i2c_address_, static_cast<uint8_t>(sizeof(data))) ==
-         sizeof(data));
+  EM_CHECK_EQ(
+      wire_.requestFrom(i2c_address_, static_cast<uint8_t>(sizeof(data))),
+      sizeof(data));
 
   uint8_t offset = 0;
   while (offset < sizeof(data)) {
@@ -515,15 +526,16 @@ int32_t Md40::Motor::pulse_count() {
   wire_.beginTransmission(i2c_address_);
   wire_.write(address);
   wire_.write(0);
-  ASSERT(wire_.endTransmission() == kI2cEndTransmissionSuccess);
+  EM_CHECK_EQ(wire_.endTransmission(), kI2cEndTransmissionSuccess);
 
   wire_.beginTransmission(i2c_address_);
   wire_.write(address);
-  ASSERT(wire_.endTransmission() == kI2cEndTransmissionSuccess);
+  EM_CHECK_EQ(wire_.endTransmission(), kI2cEndTransmissionSuccess);
 
   int32_t data = 0;
-  ASSERT(wire_.requestFrom(i2c_address_, static_cast<uint8_t>(sizeof(data))) ==
-         sizeof(data));
+  EM_CHECK_EQ(
+      wire_.requestFrom(i2c_address_, static_cast<uint8_t>(sizeof(data))),
+      sizeof(data));
 
   uint8_t offset = 0;
   while (offset < sizeof(data)) {
@@ -541,15 +553,16 @@ int16_t Md40::Motor::pwm_duty() {
   wire_.beginTransmission(i2c_address_);
   wire_.write(address);
   wire_.write(0);
-  ASSERT(wire_.endTransmission() == kI2cEndTransmissionSuccess);
+  EM_CHECK_EQ(wire_.endTransmission(), kI2cEndTransmissionSuccess);
 
   wire_.beginTransmission(i2c_address_);
   wire_.write(address);
-  ASSERT(wire_.endTransmission() == kI2cEndTransmissionSuccess);
+  EM_CHECK_EQ(wire_.endTransmission(), kI2cEndTransmissionSuccess);
 
   int16_t data = 0;
-  ASSERT(wire_.requestFrom(i2c_address_, static_cast<uint8_t>(sizeof(data))) ==
-         sizeof(data));
+  EM_CHECK_EQ(
+      wire_.requestFrom(i2c_address_, static_cast<uint8_t>(sizeof(data))),
+      sizeof(data));
 
   uint8_t offset = 0;
   while (offset < sizeof(data)) {
@@ -560,3 +573,5 @@ int16_t Md40::Motor::pwm_duty() {
 
   return data;
 }
+
+} // namespace em

@@ -3,6 +3,8 @@
 #include <Wire.h>
 #include <stdint.h>
 
+namespace em {
+
 class Dm11 {
 public:
   static constexpr uint8_t kDefaultI2cAddress = 0x15;
@@ -43,3 +45,5 @@ private:
   const uint8_t i2c_address_ = kDefaultI2cAddress;
   TwoWire &wire_ = Wire;
 };
+
+} // namespace em

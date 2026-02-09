@@ -102,10 +102,14 @@ public:
   uint16_t getBlue();
   uint16_t getBlueToGamma();
 
+  uint32_t getColorToGamma();
+
 private:
   boolean _tcs34725Initialised;
   tcs34725Gain_t _tcs34725Gain;
   tcs34725IntegrationTime_t _tcs34725IntegrationTime;
   void disable(void);
   float _powf(const float x, const float y);
+
+  byte *gammatable;
 };

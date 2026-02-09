@@ -1,4 +1,5 @@
 #pragma once
+#include <Arduino.h>
 #include <Wire.h>
 #include <stdint.h>
 
@@ -62,6 +63,8 @@ public:
   uint16_t GetGreen() const;
   uint16_t GetBlue() const;
 
+  uint32_t GetColor() const;
+
 private:
   NLCS11(const NLCS11 &) = delete;
   NLCS11 &operator=(const NLCS11 &) = delete;
@@ -72,4 +75,6 @@ private:
   const IntegrationTime integration_time_ = kIntegrationTime10ms;
   mutable uint64_t last_read_time_ = 0;
   mutable Color color_;
+
+  byte *gammatable;
 };
