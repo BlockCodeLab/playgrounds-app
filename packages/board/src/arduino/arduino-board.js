@@ -294,7 +294,7 @@ export class ArduinoBLEBoard extends ArduinoBoard {
   }
 
   async requestDevice() {
-    const filters = [{ services: [BLE_SERVICE_UUID] }];
+    const filters = [{ services: [BLE_SERVICE_UUID] }, { namePrefix: 'NL-16' }];
     const device = await navigator.bluetooth.requestDevice({ filters });
     if (device._serial) {
       this._setSerial(device._serial);
