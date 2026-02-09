@@ -1,10 +1,10 @@
 #include "touchpiano.h"
 
 ST_KEY_MAP piano_keymap[16] = {
-    {1, "c", PIANO_KEYCODE_1}, {2, "d", PIANO_KEYCODE_2},
-    {3, "e", PIANO_KEYCODE_3}, {4, "f", PIANO_KEYCODE_4},
-    {5, "g", PIANO_KEYCODE_5}, {6, "a", PIANO_KEYCODE_6},
-    {7, "b", PIANO_KEYCODE_7}, {8, "c5", PIANO_KEYCODE_8},
+    {1, "c4", PIANO_KEYCODE_1}, {2, "d4", PIANO_KEYCODE_2},
+    {3, "e4", PIANO_KEYCODE_3}, {4, "f4", PIANO_KEYCODE_4},
+    {5, "g4", PIANO_KEYCODE_5}, {6, "a4", PIANO_KEYCODE_6},
+    {7, "b4", PIANO_KEYCODE_7}, {8, "c5", PIANO_KEYCODE_8},
 };
 
 TouchPiano::TouchPiano(uint8_t SCLPin, uint8_t SDOPin)
