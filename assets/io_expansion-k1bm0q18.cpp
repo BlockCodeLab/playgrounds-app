@@ -13,8 +13,6 @@
 IOExpansion::IOExpansion(uint8_t device_i2c_address)
     : device_i2c_address_(device_i2c_address) {}
 
-void IOExpansion::Init() { Wire.begin(); }
-
 bool IOExpansion::SetGpioMode(IOExpansion::GpioPin gpio_pin,
                               IOExpansion::GpioMode mode) {
   Wire.beginTransmission(device_i2c_address_);

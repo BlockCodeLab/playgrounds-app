@@ -28,7 +28,6 @@ MatrixKeypad::MatrixKeypad(const uint8_t i2c_address,
     : i2c_address_(i2c_address), debounce_duration_ms_(debounce_duration_ms) {}
 
 bool MatrixKeypad::Init() {
-  Wire.begin();
   for (uint8_t i = 0; i < 5; i++) {
     Wire.beginTransmission(i2c_address_);
     if (Wire.endTransmission() == 0) {

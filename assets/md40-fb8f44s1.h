@@ -2,6 +2,8 @@
 #include <Arduino.h>
 #include <Wire.h>
 
+#include "em_check.h"
+
 namespace em {
 
 class Md40 {
@@ -119,31 +121,3 @@ private:
 };
 
 } // namespace em
-
-// 断言
-static inline void AssertFailHandle(const char *expr, const char *function,
-                                    const char *file, const int line) {
-  Serial.print(F("\nassert failed: "));
-  Serial.print(function);
-  Serial.print(F(" "));
-  Serial.print(file);
-  Serial.print(F(":"));
-  Serial.print(line);
-  Serial.print(F(" ("));
-  Serial.print(expr);
-  Serial.println(F(")"));
-  Serial.flush();
-  noInterrupts();
-  while (true) {
-  }
-}
-
-#define EM_CHECK_EQ(a, b)                                                      \
-  ((a) == (b) ? (void)0                                                        \
-              : AssertFailHandle(#a " == " #b, __PRETTY_FUNCTION__, __FILE__,  \
-                                 __LINE__))
-
-#define EM_CHECK_LT(a, b)                                                      \
-  ((a) < (b) ? (void)0                                                         \
-             : AssertFailHandle(#a " < " #b, __PRETTY_FUNCTION__, __FILE__,    \
-                                __LINE__))
