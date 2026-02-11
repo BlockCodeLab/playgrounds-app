@@ -92,7 +92,6 @@ boolean TCS34725::begin(tcs34725IntegrationTime_t it, tcs34725Gain_t gain) {
   _tcs34725IntegrationTime = it;
   _tcs34725Gain = gain;
 
-  Wire.begin();
   /* Make sure we're actually connected */
   uint8_t x = readReg(TCS34725_ID);
   if ((x != 0x44) && (x != 0x10)) {
