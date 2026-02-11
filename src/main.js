@@ -1,12 +1,15 @@
 import { readServices } from './lib/read-services' with { type: 'macro' };
 
 import { dirname, resolve } from 'node:path';
-import { app, BrowserWindow, globalShortcut } from 'electron';
+import { app, BrowserWindow, globalShortcut, ipcMain } from 'electron';
 import { serial } from './lib/serial';
 import { bluetooth } from './lib/bluetooth';
 import { readLoaclBlocks } from './lib/local-blocks';
 import { readLoaclEditors } from './lib/local-editors';
 import { readLoaclTutorials } from './lib/local-tutorials';
+
+import * as localPath from './lib/local-path';
+
 import './lib/menu';
 
 const isMac = process.platform === 'darwin';
@@ -49,6 +52,9 @@ app.whenReady().then(() => {
   });
 
   mainWindow.loadFile(resolve(__dirname, 'index.html'));
+
+  ipcMain.on('local:cwd', (event) => (event.returnValue = __dirname));
+  ipcMain.on('local:home', (event) => (event.returnValue = localPath.home));
 
   // 读取本地资源
   readLoaclBlocks();

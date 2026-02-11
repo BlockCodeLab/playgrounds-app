@@ -1,10 +1,10 @@
 import JSZip from 'jszip';
 import { readdirSync, existsSync, readFileSync, mkdirSync, writeFileSync } from 'node:fs';
-import { resolve, dirname } from 'node:path';
-import { app, ipcMain, dialog } from 'electron';
+import { join, dirname } from 'node:path';
+import { ipcMain, dialog } from 'electron';
 import { escape } from './escape';
 
-const localBlocksPath = resolve(app.getPath('home'), 'BlockCode/blocks');
+import * as localPath from './local-path';
 
 const getBlocksInfo = (path) => {
   if (!existsSync(path)) {
@@ -13,15 +13,15 @@ const getBlocksInfo = (path) => {
   const extensions = readdirSync(path);
   return Object.fromEntries(
     extensions
-      .filter((extDir) => existsSync(resolve(path, extDir, 'package.json')))
+      .filter((extDir) => existsSync(join(path, extDir, 'package.json')))
       .map((extDir) => {
-        const info = require(resolve(path, extDir, 'package.json'));
+        const info = require(join(path, extDir, 'package.json'));
         return [
           info.name,
           {
             id: info.name,
-            main: resolve(path, extDir, info.exports['.'].import),
-            info: resolve(path, extDir, info.exports['./info'].import),
+            main: join(path, extDir, info.exports['.'].import),
+            info: join(path, extDir, info.exports['./info'].import),
           },
         ];
       }),
@@ -31,7 +31,7 @@ const getBlocksInfo = (path) => {
 export const readLoaclBlocks = () => {
   ipcMain.on('local:blocks', (event) => {
     try {
-      event.returnValue = getBlocksInfo(localBlocksPath);
+      event.returnValue = getBlocksInfo(localPath.blocks);
     } catch (err) {
       event.returnValue = {};
     }
@@ -72,7 +72,7 @@ ipcMain.handle('local:blocks:select', async () => {
 
     for (const file of files) {
       const fileName = entryName ? file.name.replace(entryName, '') : file.name;
-      const filePath = resolve(localBlocksPath, entryDir, fileName);
+      const filePath = join(localPath.blocks, entryDir, fileName);
 
       // 创建目录
       const dirPath = dirname(filePath);

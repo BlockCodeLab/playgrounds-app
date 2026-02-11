@@ -33,6 +33,7 @@ export function MarkdownEditor({ options, customRenders, onLoad, onInput }) {
       const vditor = new Vditor(ref.current, {
         ...DefaultConfig,
         ...options,
+        cdn: `${window.electron?.cwd() || ''}${DefaultConfig.cdn}`,
         cache: {
           id: `vditor-${file.value.id}`,
         },

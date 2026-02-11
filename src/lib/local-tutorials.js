@@ -1,9 +1,9 @@
 import { existsSync } from 'node:fs';
-import { resolve, join } from 'node:path';
-import { app, ipcMain } from 'electron';
+import { join } from 'node:path';
+import { ipcMain } from 'electron';
 import { escape } from './escape';
 
-const localTutorialsPath = resolve(app.getPath('home'), 'BlockCode/tutorials');
+import * as localPath from './local-path';
 
 const getTutorialsInfo = (path, editorOrBlockId, lang = '') => {
   // 检查语言版本，不存在则使用默认语言版本
@@ -45,7 +45,7 @@ const getTutorialsInfo = (path, editorOrBlockId, lang = '') => {
 export const readLoaclTutorials = () => {
   ipcMain.on('local:tutorials', (event, editorOrBlockId, lang) => {
     try {
-      event.returnValue = getTutorialsInfo(localTutorialsPath, escape(editorOrBlockId), lang);
+      event.returnValue = getTutorialsInfo(localPath.tutorials, escape(editorOrBlockId), lang);
     } catch (err) {
       event.returnValue = null;
     }

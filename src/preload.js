@@ -3,6 +3,14 @@ import { readServices } from './lib/read-services' with { type: 'macro' };
 import { contextBridge, ipcRenderer } from 'electron/renderer';
 
 const electronObj = {
+  cwd() {
+    return ipcRenderer.sendSync('local:cwd');
+  },
+
+  home() {
+    return ipcRenderer.sendSync('local:home');
+  },
+
   loadBlocksZip() {
     return ipcRenderer.invoke('local:blocks:select');
   },

@@ -1,8 +1,8 @@
 import { readdirSync, existsSync } from 'node:fs';
-import { resolve } from 'node:path';
-import { app, ipcMain } from 'electron';
+import { join } from 'node:path';
+import { ipcMain } from 'electron';
 
-const localEditorsPath = resolve(app.getPath('home'), 'BlockCode/editors');
+import * as localPath from './local-path';
 
 const getEditorsInfo = (path) => {
   if (!existsSync(path)) {
@@ -11,15 +11,15 @@ const getEditorsInfo = (path) => {
   const editors = readdirSync(path);
   return Object.fromEntries(
     editors
-      .filter((editorDir) => existsSync(resolve(path, editorDir, 'package.json')))
+      .filter((editorDir) => existsSync(join(path, editorDir, 'package.json')))
       .map((editorDir) => {
-        const info = require(resolve(path, editorDir, 'package.json'));
+        const info = require(join(path, editorDir, 'package.json'));
         return [
           info.name,
           {
             id: info.name,
-            main: resolve(path, editorDir, info.exports['.'].import),
-            info: resolve(path, editorDir, info.exports['./info'].import),
+            main: join(path, editorDir, info.exports['.'].import),
+            info: join(path, editorDir, info.exports['./info'].import),
           },
         ];
       }),
@@ -29,7 +29,7 @@ const getEditorsInfo = (path) => {
 export const readLoaclEditors = () => {
   ipcMain.on('local:editors', (event) => {
     try {
-      event.returnValue = getEditorsInfo(localEditorsPath);
+      event.returnValue = getEditorsInfo(localPath.editors);
     } catch (err) {
       event.returnValue = {};
     }
