@@ -149,8 +149,8 @@ export function addTabs(tabs) {
 
 // 添加教程
 export function addLessons(lessons) {
-  tutorials.value = Object.assign({}, tutorials.value ?? {}, {
-    lessons: Object.assign(lessons, tutorials.value.lessons),
+  tutorials.value = nullObject(tutorials.value ?? {}, {
+    lessons: nullObject(tutorials.value?.lessons ?? {}, lessons),
   });
 }
 

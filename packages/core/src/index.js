@@ -27,6 +27,7 @@ export {
   closeLayout,
   openTab,
   addTabs,
+  addLessons,
   setAppState,
   openUserStorage,
   closeUserStorage,

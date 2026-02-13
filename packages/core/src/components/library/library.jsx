@@ -11,7 +11,19 @@ import { LibraryItem } from './library-item';
 import { TagButton } from './tag-button';
 import styles from './library.module.css';
 
-export function Library({ items, title, filterable, filterPlaceholder, emptyMessage, tags, large, featured, onClose }) {
+export function Library({
+  loading,
+  items,
+  title,
+  filterable,
+  filterPlaceholder,
+  emptyMessage,
+  loadingMessage,
+  tags,
+  large,
+  featured,
+  onClose,
+}) {
   const tag = useSignal('all');
 
   const query = useSignal('');
@@ -182,6 +194,8 @@ export function Library({ items, title, filterable, filterPlaceholder, emptyMess
               />
             </ContextMenu>
           ))
+        ) : loading ? (
+          <div className={styles.spinnerWrapper}>{loadingMessage ?? ''}</div>
         ) : (
           <div className={styles.spinnerWrapper}>{emptyMessage ?? ''}</div>
         )}
