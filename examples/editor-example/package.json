@@ -18,8 +18,8 @@
     "build": "playground-build ."
   },
   "dependencies": {
-    "@preact/signals": "^2.3.2",
-    "preact": "^10.27.2"
+    "@preact/signals": "^2.6.1",
+    "preact": "^10.28.2"
   },
   "devDependencies": {
     "@types/bun": "latest",
