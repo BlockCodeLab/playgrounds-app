@@ -1,5 +1,31 @@
 ## CHANGELOG
 
+### v1.3.6
+
+- Updated the Arduino Editor to v0.5.4
+  - Optimized default projects
+  - Optimized code conversion rules for repeat blocks
+  - Fixed extension pin errors
+
+- Updated the iot:bit Editor to v0.2.2
+  - Optimized default projects
+  - Fixed extension pin errors
+
+- Updated the iot:bit Editor to v0.2.2
+  - Optimized default projects
+  - Fixed simulator display issues
+  - Fixed extension pin errors
+
+- Updated the Markdown Editor to v0.1.2
+  - Fixed offline version startup error
+
+- Updated the Block Editor
+  - Updated AI voice assistant extension tutorial
+
+- Added extension tutorial loading
+- Added Chinese New Year Easter egg
+- Fixed some bugs
+
 ### v1.3.5
 
 - Updated the Arduino Editor to v0.5.3
