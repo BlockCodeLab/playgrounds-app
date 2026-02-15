@@ -7,7 +7,7 @@
   - Optimized code conversion rules for repeat blocks
   - Fixed extension pin errors
 
-- Updated the iot:bit Editor to v0.2.2
+- Updated the ESP32 Editor to v0.2.2
   - Optimized default projects
   - Fixed extension pin errors
 
