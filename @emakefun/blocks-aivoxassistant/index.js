@@ -16,7 +16,7 @@ ${l}}`;let n=this.valueToCode(e,"CMD",this.ORDER_NONE).replace(/\{\S+\}/g,"(%S+)
 `,this.definitions_.assistant_received=i}let a=this.createName("assistant_flag");this.definitions_[a]=`${a} = asyncio.ThreadSafeFlag()`;let l=this.statementToCode(e)||"",s="";s+=`global assistant_matched
 `,s+=`while True:
 `,s+=`  await ${a}.wait()
-`,s+=l;let n=this.valueToCode(e,"CMD",this.ORDER_NONE),t=this.getFunctionName(n);l=this.prefixLines(s,this.INDENT),l=this.addEventTrap(l,"assistant_callback"),s=`@_tasks__.append
+`,s+=l;let n=this.valueToCode(e,"CMD",this.ORDER_NONE),t=this.getDistinctName(n);l=this.prefixLines(s,this.INDENT),l=this.addEventTrap(l,"assistant_callback"),s=`@_tasks__.append
 `,s+=l,this.definitions_[t]=s;let c=n.replace(/\{\S+\}/g,"(\\S+)").replace(/\s+/g,"\\s+");s="",s+=`    assistant_matched = re.match(${c}, cmd)
 `,s+=`    if assistant_matched: ${a}.set(); continue
 `,this.definitions_.assistant_received+=s}},{id:"argument",text:r(m,{id:"blocks.aivoxassistant.argument",defaultMessage:"[TYPE] argument [ARG] of command"}),output:"string",inputs:{TYPE:{menu:A(o)?"ArduinoTypes":"Types"},ARG:{type:"string",defaultValue:"x"}},ino(e){let a=e.getRootBlock();if(e.parentBlock_===a)return"";let l=JSON.parse(this.valueToCode(e,"ARG",this.ORDER_NONE)),s=this.valueToCode(a,"CMD",this.ORDER_NONE),n=e.getFieldValue("TYPE");this.definitions_.include_regexp="#include <Regexp.h>",this.definitions_.variable_commandReg="MatchState cmdRe;";let t="";t+=`String getCommandArgument(uint8_t idx) {
