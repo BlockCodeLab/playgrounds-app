@@ -16,7 +16,7 @@
     "localforage": "^1.10.0",
     "mime": "^4.1.0",
     "nanoid": "^5.1.6",
-    "preact": "^10.28.2",
+    "preact": "^10.28.4",
     "save-svg-as-png": "^1.4.17",
     "scratchblocks": "^3.6.4",
     "upng-js": "^2.1.0"

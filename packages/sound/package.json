@@ -6,8 +6,8 @@
   "module": "./dist/index.js",
   "dependencies": {
     "@breezystack/lamejs": "^1.2.7",
-    "@preact/signals": "^2.6.1",
-    "preact": "^10.28.2",
+    "@preact/signals": "^2.8.1",
+    "preact": "^10.28.4",
     "wavesurfer.js": "^7.12.1"
   },
   "devDependencies": {

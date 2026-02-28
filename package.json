@@ -40,13 +40,13 @@
     "@electron-forge/maker-dmg": "^7.11.1",
     "@electron-forge/maker-squirrel": "^7.11.1",
     "@electron-forge/maker-zip": "^7.11.1",
-    "@preact/signals": "^2.6.1",
-    "@preact/signals-core": "^1.12.2",
+    "@preact/signals": "^2.8.1",
+    "@preact/signals-core": "^1.13.0",
     "@types/bun": "latest",
-    "electron": "^39.4.0",
+    "electron": "^39.7.0",
     "gh-pages": "^6.3.0",
     "playground-build": "git+https://github.com/BlockCodeLab/playground-build.git",
-    "preact": "^10.28.2",
+    "preact": "^10.28.4",
     "serve-handler": "^6.1.6"
   },
   "workspaces": [
