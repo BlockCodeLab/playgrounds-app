@@ -30,6 +30,10 @@ class LedPixel(NeoPixel):
         self.fill((0, 0, 0))
         self.write()
 
+    def clear_leds(self, start, end):
+        self.set_leds(start, end, 100, (0, 0, 0))
+        self.write()
+
     def set_gamma(self, gamma):
         self._gamma_table = bytearray(256)
         for i in range(256):
@@ -54,11 +58,15 @@ class LedPixel(NeoPixel):
 
     def set_led(self, index, brightness, color):
         r, g, b = color
-        brightness = max(0, min(brightness, 10)) / 10
+        brightness = max(0, min(brightness, 100)) / 100
         r = self._gamma_table[round(r * brightness)]
         g = self._gamma_table[round(g * brightness)]
         b = self._gamma_table[round(b * brightness)]
         self[index] = (r, g, b)
+
+    def set_leds(self, start, end, brightness, color):
+        for i in range(start, end + 1):
+            self.set_led(i, brightness, color)
 
     async def rainbow_cycle(self):
         self._last_effect = LedPixel.RAINBOW_CYCLE
