@@ -83,11 +83,17 @@ public:
   // 清空所有LED
   void clear();
 
-  // 填充所有LED为指定颜色，亮度等级设为10（最大）
+  // 清空多个LEDs
+  void clearPixels(uint16_t start, uint16_t end);
+
+  // 填充所有LED为指定颜色，亮度等级设为100（最大）
   void fill(cRGB color);
 
-  // 设置单个LED（brightness为1~10等级，内部映射到25~255）
+  // 设置单个LED（brightness为1~100等级，内部映射到3~255）
   void setPixel(uint16_t index, uint8_t brightness, cRGB color);
+
+  // 设置多个LEDs（brightness为1~100等级，内部映射到3~255）
+  void setPixels(uint16_t start, uint16_t end, uint8_t brightness, cRGB color);
 
   // 获取LED的当前颜色（原始颜色，未应用亮度）
   cRGB getPixelColor(uint16_t index) const;

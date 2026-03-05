@@ -456,13 +456,11 @@ void LedPixel::setHSV(uint16_t hue, uint8_t sat, uint8_t val) {
   setHSV(0, hue, sat, val);
 }
 
-// 亮度等级（1~10）映射到实际亮度（0~255）
+// 亮度等级（0~100）映射到实际亮度（0~255）
 uint8_t LedPixel::levelToActual(uint8_t level) const {
   if (level == 0)
     return 0;
-  // 原LedPixel中映射：1->25, 2->51, 3->76, 4->102, 5->127, 6->153, 7->178,
-  // 8->204, 9->229, 10->255 使用线性映射公式：map(level, 1, 10, 25, 255)
-  return (uint16_t(level - 1) * (255 - 25) / (10 - 1) + 25);
+  return (uint16_t(level - 1) * (255 - 3) / (100 - 1) + 3);
 }
 
 // 将所有LED的亮度衰减指定量（实际亮度值减少amount，不低于0）
@@ -500,6 +498,11 @@ void LedPixel::begin() {
 // 清空所有LED
 void LedPixel::clear() { fill(0x000000); }
 
+void LedPixel::clearPixels(uint16_t start, uint16_t end) {
+  setPixels(start, end, 100, 0x000000);
+  show();
+}
+
 // 填充所有LED为指定颜色，亮度等级设为10
 void LedPixel::fill(cRGB color) {
   uint8_t actual = levelToActual(10);
@@ -514,7 +517,7 @@ void LedPixel::fill(cRGB color) {
   show();
 }
 
-// 设置单个LED（brightness为1~10等级）
+// 设置单个LED（brightness为1~100等级）
 void LedPixel::setPixel(uint16_t index, uint8_t brightness, cRGB color) {
   if (index >= count_led)
     return;
@@ -524,6 +527,21 @@ void LedPixel::setPixel(uint16_t index, uint8_t brightness, cRGB color) {
   uint8_t g = (color >> 8) & 0xFF;
   uint8_t b = color & 0xFF;
   setColorAt(index, r, g, b); // setColorAt自动调用updatePixel
+}
+
+// 设置多个LED（brightness为1~100等级）
+void LedPixel::setPixels(uint16_t start, uint16_t end, uint8_t brightness,
+                         cRGB color) {
+  if (start >= count_led || end >= count_led)
+    return;
+  uint8_t actual = levelToActual(brightness);
+  uint8_t r = (color >> 16) & 0xFF;
+  uint8_t g = (color >> 8) & 0xFF;
+  uint8_t b = color & 0xFF;
+  for (uint16_t i = start; i <= end; i++) {
+    setBrightnessAt(i + 1, actual); // setBrightnessAt使用1-based索引
+    setColorAt(i, r, g, b);         // setColorAt自动调用updatePixel
+  }
 }
 
 // 获取LED的当前颜色（原始颜色，未应用亮度）
