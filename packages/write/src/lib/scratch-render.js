@@ -1,4 +1,5 @@
 import { scratchblocks } from '@blockcode/utils';
+import './stylefix.css';
 
 const DefaultOptions = {
   style: 'scratch3',

@@ -186,7 +186,7 @@ export const blocks = [
     ),
     image: icons.mindmap,
     content:
-      '```mindmap\n  root((mindmap))\n    Origins\n      Long history\n      ::icon(fa fa-book)\n      Popularisation\n        British popular psychology author Tony Buzan\n    Research\n      On effectiveness<br/>and features\n      On Automatic creation\n        Uses\n            Creative techniques\n            Strategic planning\n            Argument mapping\n    Tools\n      Pen and paper\n      Mermaid',
+      '```mindmap\n- 教程\n- 语法指导\n  - 普通内容\n  - 提及用户\n  - 表情符号 Emoji\n    - 一些表情例子\n  - 大标题 - Heading 3\n    - Heading 4\n      - Heading 5\n        - Heading 6\n  - 图片\n  - 代码块\n    - 普通\n    - 语法高亮支持\n      - 演示 Go 代码高亮\n      - 演示 Java 高亮\n  - 有序、无序、任务列表\n    - 无序列表\n    - 有序列表\n    - 任务列表\n  - 表格\n  - 隐藏细节\n  - 段落\n  - 链接引用\n  - 数学公式\n  - 脑图\n  - 流程图\n  - 时序图\n  - 甘特图\n  - 图表\n  - 五线谱\n  - Graphviz\n  - 多媒体\n  - 脚注\n- 快捷键',
   },
   {
     title: (
