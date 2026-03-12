@@ -11,7 +11,7 @@ class Tts20 {
 public:
   static constexpr uint8_t kDefaultI2cAddress = 0x40;
 
-  Tts20(const uint8_t i2c_address = kDefaultI2cAddress, TwoWire &wire = Wire);
+  Tts20(const uint8_t i2c_address, TwoWire &wire = Wire);
 
   void Init();
   String firmware_version();

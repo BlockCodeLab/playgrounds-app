@@ -29,11 +29,7 @@ constexpr uint8_t kMemAddrRxBufferData = 0x56;
 constexpr uint8_t kMemAddrRxBufferOverflow = 0x96;
 
 // Wire library buffer capacity constant
-#if defined(ESP32)
-constexpr uint8_t kWireBufferCapacity = 128;
-#else
 constexpr uint8_t kWireBufferCapacity = 32;
-#endif
 
 } // namespace
 
