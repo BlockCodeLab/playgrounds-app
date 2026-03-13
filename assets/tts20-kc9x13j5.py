@@ -5,7 +5,7 @@ MicroPython 驱动，用于 TTS20 语音合成模块（I2C接口）。
 
 import time
 
-from machine import I2C
+from machine import I2C, Pin
 
 # 常量定义
 CMD_CLEAR_RX_BUFFER = 1 << 0  # 清除接收缓冲区的命令
@@ -40,16 +40,17 @@ class TTS20:
 
     """TTS20 语音合成模块驱动类。"""
 
-    def __init__(i2c: I2C, self, i2c_address: int = DefaultI2cAddress):
+    def __init__(self, scl: int, sda: int, i2c_address: int = DefaultI2cAddress):
         """
         初始化 TTS20 驱动。
 
-        :param i2c_address: 模块的 7 位 I2C 地址。
         :param i2c: 已配置好的 machine.I2C 对象。
+        :param i2c_address: 模块的 7 位 I2C 地址。
         """
         self.addr = i2c_address
-        self.i2c = i2c
+        self.i2c = I2C(1, scl=Pin(scl), sda=Pin(sda), freq=100000)
         self.rx_buffer_capacity = 0  # 将在 init() 中获取
+        self.init()
 
     def init(self) -> None:
         """
