@@ -1,5 +1,28 @@
 ## CHANGELOG
 
+### v1.3.7
+
+- Updated the ESP32 Editor to v0.2.3
+  - Optimized string conversion code
+
+- Updated the Arduino Editor to v0.5.5
+  - Optimized text translations
+  - Optimized string conversion code
+  - Optimized event polling conversion code
+  - Optimized data types
+
+- Updated the Block Editor
+  - Added TTS20 speech synthesis extension
+  - Updated analog value extension to Simple Sensor extension
+  - Updated WS2812 RGB LED extension blocks
+  - Updated Button extension blocks
+  - Updated Infrared Communication extension blocks
+  - Updated OLED display extension blocks
+  - Updated multiple extension icons
+  - Updated Chinese variable and function name conversion
+
+- Fixed some bugs
+
 ### v1.3.6
 
 - Updated the Arduino Editor to v0.5.4
