@@ -39,8 +39,8 @@ If your Apple computer is equipped with an M-series chip, please download the [A
 
 <!-- select:end -->
 
-[1]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.3.7/BlockCodePlaygrounds-win-x64-1.3.7.zip
-[2]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.3.7/BlockCodePlaygrounds-win-x86-1.3.7.zip
-[3]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.3.7/BlockCodePlaygrounds-win7-1.3.7.zip
-[4]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.3.7/BlockCodePlaygrounds-macos-apple-silicon-1.3.7.zip
-[5]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.3.7/BlockCodePlaygrounds-macos-intel-1.3.7.zip
+[1]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.3.8/BlockCodePlaygrounds-win64-1.3.8.zip
+[2]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.3.8/BlockCodePlaygrounds-win32-1.3.8.zip
+[3]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.3.8/BlockCodePlaygrounds-win7-1.3.8.zip
+[4]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.3.8/BlockCodePlaygrounds-macos-apple-silicon-1.3.8.zip
+[5]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.3.8/BlockCodePlaygrounds-macos-intel-1.3.8.zip

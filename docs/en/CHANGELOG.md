@@ -1,5 +1,23 @@
 ## CHANGELOG
 
+### v1.3.8
+
+- Updated the Arduino Editor to v0.5.6
+  - Optimized pin code logic
+
+- Updated the Block Editor
+  - Added ESP32C2 MQTT communication extension (Arduino only)
+  - Updated IO extension to support ESP32
+  - Updated MD40 motor driver to support ESP32
+  - Updated DM11 motor driver to support ESP32
+  - Updated Matrix Keypad extension to support ESP32
+  - Updated Touch Piano extension to support ESP32
+  - Updated Ultrasonic Ranging extension to support ESP32
+  - Updated OLED display driver type
+  - Fixed WS2812 RGB LED extension error
+
+- Fixed known bugs
+
 ### v1.3.7
 
 - Updated the ESP32 Editor to v0.2.3
