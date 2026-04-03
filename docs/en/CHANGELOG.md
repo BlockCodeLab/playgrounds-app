@@ -1,5 +1,15 @@
 ## CHANGELOG
 
+### v1.3.9
+
+- Updated the Block Editor
+  - Updated RFID extension to support ESP32
+  - Updated OLED monochrome display extension to support ESP32
+  - Updated LCD1602 display extension to support ESP32
+  - Updated Color Recognition extension to support ESP32
+  - Updated MIDI module extension to support ESP32
+  - Fixed block screenshot being cropped due to scaling
+
 ### v1.3.8
 
 - Updated the Arduino Editor to v0.5.6
