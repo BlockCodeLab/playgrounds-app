@@ -1,11 +1,12 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
 /* register contribs */
-// import 'monaco-editor/esm/vs/editor/contrib/find/browser/findController';
+import 'monaco-editor/esm/vs/editor/contrib/find/browser/findController';
 import 'monaco-editor/esm/vs/editor/contrib/folding/browser/folding';
 import 'monaco-editor/esm/vs/editor/contrib/format/browser/formatActions.js';
 import 'monaco-editor/esm/vs/editor/contrib/suggest/browser/suggestController';
 import 'monaco-editor/esm/vs/editor/contrib/tokenization/browser/tokenization';
+import 'monaco-editor/esm/vs/editor/contrib/wordHighlighter/browser/wordHighlighter';
 
 /* register languages */
 import 'monaco-editor/esm/vs/language/json/monaco.contribution';

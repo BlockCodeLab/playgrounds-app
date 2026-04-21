@@ -40,7 +40,7 @@ const updateContent = (editor, modelname, file, keyName = 'content') => {
   return modelname;
 };
 
-export function CodeEditor({ className, keyName, options, readOnly, onLoad, onRegisterCompletionItems }) {
+export function CodeEditor({ className, style, keyName, options, readOnly, onLoad, onRegisterCompletionItems }) {
   const { language } = useLocalesContext();
 
   const { file, modified } = useProjectContext();
@@ -102,6 +102,7 @@ export function CodeEditor({ className, keyName, options, readOnly, onLoad, onRe
   return (
     <div
       ref={ref}
+      style={style}
       className={classNames(styles.editorWrapper, className)}
     />
   );
