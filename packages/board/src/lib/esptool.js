@@ -1,10 +1,28 @@
-import { crypto } from '@blockcode/utils';
+import { crypto, sleepMs } from '@blockcode/utils';
 import { ESPLoader, Transport } from 'esptool-js';
 
 export class ESPTool {
   static async connect(filters, baudrate = 921600) {
     const device = await navigator.serial.requestPort({ filters });
     const transport = new Transport(device);
+    const esploader = new ESPLoader({
+      baudrate,
+      transport,
+    });
+
+    // await esploader.main();
+    // Temporarily broken
+    // await esploader.flashId();
+
+    return esploader;
+  }
+
+  static async reconnect(device, baudrate = 921600) {
+    if (device.connected) {
+      await device.serial.close(false);
+      await sleepMs(500);
+    }
+    const transport = new Transport(device.serial.port);
     const esploader = new ESPLoader({
       baudrate,
       transport,
