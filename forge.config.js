@@ -24,7 +24,7 @@ module.exports = {
       '/\\.editorconfig$',
       '/\\.gitignore$',
       '/\\.gitmodules$',
-      '/\\.prettierrc$',
+      '/\\.oxfmtrc\\.json$',
       '/build\\.config\\.js$',
       '/bun\\.lock$',
       '/forge.config\\.js$',
