@@ -1,5 +1,27 @@
 ## CHANGELOG
 
+### v1.4.0
+
+- Added LGT8F328P Editor v0.1.0
+  - Supports three development boards: NULLLAB LGT Mango UNO, LGT Nano, and Mini Nano
+
+- Updated the Arduino Editor to v0.5.7
+  - Added multitasking event blocks
+
+- Updated the ESP32 Editor to v0.2.4
+  - Optimized WiFi connection process
+  - Log panel opened by default
+
+- Updated the Code Editor
+  - Optimized default configuration
+
+- Updated the Block Editor
+  - Added Sentry/Sengo vision sensor
+  - Updated Matrix7219 block pin order
+  - Updated BMX280 barometric pressure unit display
+  - Updated LCD initial screen brightness
+  - Made code preview window resizable
+
 ### v1.3.9
 
 - Updated the Block Editor
