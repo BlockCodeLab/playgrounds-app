@@ -2,9 +2,9 @@ import{addLocalesMessages as R,Text as _}from"@blockcode/core";import{Text as s}
 `,i+=`analogWrite(_${e}[1], round((float)${r} * 2.55));
 `;else i+=`digitalWrite(_${e}[0], 1);
 `,i+=`analogWrite(_${e}[1], round((float)(100 - ${r}) * 2.55));
-`;return i},mpy(o){let e=o.getFieldValue("MOTOR"),t=this.valueToCode(o,"DIR",this.ORDER_NONE),r=this.valueToCode(o,"SPEED",this.ORDER_NONE),i="";if(t>0)i+=`_${e}[0].value(1)
+`;return i},mpy(o){let e=o.getFieldValue("MOTOR"),t=this.valueToCode(o,"DIR",this.ORDER_NONE),r=this.valueToCode(o,"SPEED",this.ORDER_NONE),i="";if(t>0)i+=`_${e}[0].value(0)
 `,i+=`_${e}[1].duty(round(${r} * 10.23))
-`;else i+=`_${e}[0].value(0)
+`;else i+=`_${e}[0].value(1)
 `,i+=`_${e}[1].duty(round((100 - ${r}) * 10.23))
 `;return i}},{id:"stop",text:d(s,{id:"blocks.motor.stop",defaultMessage:"stop [MOTOR]"}),inputs:{MOTOR:{menu:"Motor"}},ino(o){let e=o.getFieldValue("MOTOR"),t="";return t+=`digitalWrite(_${e}[0], 0);
 `,t+=`analogWrite(_${e}[1], 0);
