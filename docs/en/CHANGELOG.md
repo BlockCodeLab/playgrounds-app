@@ -1,5 +1,25 @@
 ## CHANGELOG
 
+### v1.4.1
+
+- Updated the IOT:BIT Editor to v0.2.3
+  - Optimized WiFi connection process
+  - Optimized firmware recovery process
+
+- Updated the ESP32 Editor to v0.2.5
+  - Optimized firmware recovery process
+
+- Updated the Arduino Editor to v0.6.0
+  - Added RF-NANO development board
+
+- Updated the Block Editor
+  - Added RF communication extension
+  - Added LD3320 voice recognition extension
+  - Optimized event polling code
+  - Fixed REG LED light code conversion error
+
+- Fixed known bugs
+
 ### v1.4.0
 
 - Added LGT8F328P Editor v0.1.0
