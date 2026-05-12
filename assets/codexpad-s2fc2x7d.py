@@ -1,11 +1,9 @@
 import bluetooth
 import struct
 import aioble
-import asyncio
-from collections import deque
 from micropython import const
 
-__version__ = "2.3.0"
+__version__ = "2.3.1"
 
 TX_POWER_MINUS_16_DBM = const(-16)
 TX_POWER_MINUS_12_DBM = const(-12)
@@ -207,7 +205,6 @@ class CodexPad:
             inputs_service = await self._connection.service(_INPUTS_SERVICE_UUID)
             inputs_characteristic = await inputs_service.characteristic(_INPUTS_CHARACTERISTIC_UUID)
             await inputs_characteristic.subscribe(notify=True)
-            inputs_characteristic._notify_queue = deque((), 5)
             self._inputs_characteristic = inputs_characteristic
         except Exception as e:
             await self._reset()
@@ -304,7 +301,7 @@ class CodexPad:
     async def update(self):
         self._prev_inputs.assign(self._current_inputs)
 
-        if self._connection == None or self._inputs_characteristic == None or not self._connection.is_connected():
+        if self._connection is None or self._inputs_characteristic is None or not self._connection.is_connected():
             return
 
         try:
