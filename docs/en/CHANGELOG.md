@@ -1,5 +1,20 @@
 ## CHANGELOG
 
+### v1.4.2
+
+- Updated Arduino Editor to v0.6.1
+  - Added HEX format numeric input block
+  - Optimized random number block
+
+- Updated Block Editor
+  - Added RTC clock module supporting DS1307/DS3231/PCF8563/PCF8523/MCP7940
+  - Added QMC5883L compass extension
+  - Added CodexPad series wireless gamepad extension
+  - Updated motor extension to distinguish single/dual PWM mode driving
+  - Updated infrared communication extension blocks
+  - Updated WS2812 LED strip batch update block
+  - Fixed WS2812 animation error on ESP32
+
 ### v1.4.1
 
 - Updated the IOT:BIT Editor to v0.2.3
@@ -16,7 +31,7 @@
   - Added RF communication extension
   - Added LD3320 voice recognition extension
   - Optimized event polling code
-  - Fixed REG LED light code conversion error
+  - Fixed RGB LED light code conversion error
 
 - Fixed known bugs
 
