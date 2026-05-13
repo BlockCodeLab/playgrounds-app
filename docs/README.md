@@ -40,8 +40,8 @@
 
 国内用户请通过[百度网盘](https://pan.baidu.com/s/1TfC8zsTF9CK7p2sBnPnNng?pwd=sytt)加速下载。
 
-[1]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.1/BlockCodePlaygrounds-win64-1.4.1.zip
-[2]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.1/BlockCodePlaygrounds-win32-1.4.1.zip
-[3]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.1/BlockCodePlaygrounds-win7-1.4.1.zip
-[4]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.1/BlockCodePlaygrounds-macos-apple-silicon-1.4.1.zip
-[5]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.1/BlockCodePlaygrounds-macos-intel-1.4.1.zip
+[1]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.2/BlockCodePlaygrounds-win64-1.4.2.zip
+[2]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.2/BlockCodePlaygrounds-win32-1.4.2.zip
+[3]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.2/BlockCodePlaygrounds-win7-1.4.2.zip
+[4]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.2/BlockCodePlaygrounds-macos-apple-silicon-1.4.2.zip
+[5]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.2/BlockCodePlaygrounds-macos-intel-1.4.2.zip
