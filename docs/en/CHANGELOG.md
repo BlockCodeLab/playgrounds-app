@@ -1,5 +1,18 @@
 ## CHANGELOG
 
+### v1.4.3
+
+- Updated ESP32 Editor to v0.2.6
+  - Added firmware download links for ESP32/ESP32S3
+
+- Updated LGT8F328P Editor to v0.2.0
+  - Updated blocks
+
+- Updated Block Editor
+  - Added Arduino motor driver shield
+  - Added MP3 player module
+  - Added comment block
+
 ### v1.4.2
 
 - Updated Arduino Editor to v0.6.1
