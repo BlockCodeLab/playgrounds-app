@@ -1,0 +1,61 @@
+#ifndef JoystickHandle_H
+#define JoystickHandle_H
+
+#include <Arduino.h>
+#include <Wire.h>
+#include <stdint.h>
+#include <string.h>
+
+#define JOYSTICK_I2C_ADDR 0x5A
+#define JOYSTICK_BASE_REG 0x10
+#define JOYSTICK_LEFT_X_REG 0x10
+#define JOYSTICK_LEFT_Y_REG 0x11
+#define JOYSTICK_RIGHT_X_REG 0x12
+#define JOYSTICK_RIGHT_Y_REG 0x13
+
+#define BUTTON_BASE 0x20
+
+#define BUTTON_D_REG 0x24
+#define BUTTON_B_REG 0x23
+#define BUTTON_A_REG 0x22
+#define BUTTON_C_REG 0x21
+#define BUTTON_OK_REG 0x20
+
+#define PRESS_DOWN 0
+#define PRESS_UP 1
+#define PRESS_REPEAT 2
+#define SINGLE_CLICK 3
+#define DOUBLE_CLICK 4
+#define LONG_PRESS_START 5
+#define LONG_PRESS_HOLD 6
+#define number_of_event 7
+#define NONE_PRESS 8
+
+enum { BUTTON_A = 0, BUTTON_B, BUTTON_C, BUTTON_D, BUTTON_OK };
+
+class JoystickHandle {
+private:
+  uint8_t lastButtonStatus[5];
+  uint8_t ReadByte(uint8_t reg);
+  boolean WireWriteByte(uint8_t val);
+  boolean WireWriteDataArray(uint8_t reg, uint8_t *val, unsigned int len);
+  int WireReadDataArray(uint8_t reg, uint8_t *val, unsigned int len);
+
+public:
+  uint8_t Left_x, Left_y;
+  uint8_t BOARD_ADDR;
+
+  JoystickHandle(void);
+  JoystickHandle(uint8_t reg);
+
+  boolean
+  ButtonPressed(uint8_t button); // will be TRUE if button was JUST pressed
+  boolean
+  ButtonReleased(uint8_t button); // will be TRUE if button was JUST released
+  uint8_t AnalogRead_X(void);
+  uint8_t AnalogRead_Y(void);
+  uint8_t Get_Button_Status(uint8_t button);
+  ~JoystickHandle();
+};
+
+#endif
