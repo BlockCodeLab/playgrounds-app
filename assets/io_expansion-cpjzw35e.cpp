@@ -1,4 +1,6 @@
 #include "io_expansion.h"
+
+#include <Arduino.h>
 #include <Wire.h>
 
 #define ADDRESS_VERSION (0x00)
@@ -11,7 +13,9 @@
 #define ADDRESS_PWM_FREQUENCY (0x60)
 
 IOExpansion::IOExpansion(uint8_t device_i2c_address)
-    : device_i2c_address_(device_i2c_address) {}
+    : device_i2c_address_(device_i2c_address) {
+  Wire.begin();
+}
 
 bool IOExpansion::SetGpioMode(IOExpansion::GpioPin gpio_pin,
                               IOExpansion::GpioMode mode) {
@@ -83,6 +87,7 @@ bool IOExpansion::SetPwmDuty(GpioPin gpio_pin, uint16_t duty) {
 }
 
 bool IOExpansion::SetServoAngle(GpioPin gpio_pin, float angle) {
-  return SetPwmFrequency(50) && SetGpioMode(gpio_pin, kPwm) &&
-         SetPwmDuty(gpio_pin, ((angle / 90) + 0.5) / 20 * 4095);
+  return SetPwmFrequency(50) &&
+         SetPwmDuty(gpio_pin, ((angle / 90) + 0.5) / 20 * 4095) &&
+         SetGpioMode(gpio_pin, kPwm);
 }
