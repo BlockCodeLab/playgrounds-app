@@ -38,8 +38,8 @@
 
 <!-- select:end -->
 
-[1]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.3/BlockCodePlaygrounds-win64-1.4.3.zip
-[2]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.3/BlockCodePlaygrounds-win32-1.4.3.zip
-[3]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.3/BlockCodePlaygrounds-win7-1.4.3.zip
-[4]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.3/BlockCodePlaygrounds-macos-apple-silicon-1.4.3.zip
-[5]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.3/BlockCodePlaygrounds-macos-intel-1.4.3.zip
+[1]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.4/BlockCodePlaygrounds-win64-1.4.4.zip
+[2]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.4/BlockCodePlaygrounds-win32-1.4.4.zip
+[3]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.4/BlockCodePlaygrounds-win7-1.4.4.zip
+[4]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.4/BlockCodePlaygrounds-macos-apple-silicon-1.4.4.zip
+[5]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.4/BlockCodePlaygrounds-macos-intel-1.4.4.zip

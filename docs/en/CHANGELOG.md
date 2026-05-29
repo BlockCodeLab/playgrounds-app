@@ -1,5 +1,18 @@
 ## CHANGELOG
 
+### v1.4.4
+
+- Updated the iot:bit Editor to v0.2.4
+  - Updated code preview
+  - Optimized simulator
+
+- Updated the Block Editor
+  - Added Mini-Joystick gamepad extension
+  - Optimized default pins for extensions (for iot:bit)
+  - Optimized translation texts
+
+- Fixed known bugs
+
 ### v1.4.3
 
 - Updated ESP32 Editor to v0.2.6
@@ -9,7 +22,7 @@
   - Updated blocks
 
 - Updated Block Editor
-  - Added Arduino motor driver shield
+  - Added Motor Driver Board extension
   - Added MP3 player module
   - Added comment block
 
