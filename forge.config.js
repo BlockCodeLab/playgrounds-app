@@ -8,7 +8,7 @@ const modulesConfig = readdirSync(resolve(__dirname, './packages/gui/editors'), 
 module.exports = {
   packagerConfig: {
     name: 'BlockCode Playgrounds',
-    executableName: 'playgrounds',
+    executableName: 'playgrounds-app',
     icon: 'public/icon',
     appCopyright: 'Copyright© BlockCode Lab, 2023-2026.',
     // asar: true,
@@ -42,7 +42,7 @@ module.exports = {
       name: '@electron-forge/maker-deb',
       config: {
         options: {
-          icon: 'public/icon/icon.png',
+          icon: 'public/icon.png',
           maintainer: 'BlockCode Lab',
           homepage: 'https://app.blockcode.fun',
         },
