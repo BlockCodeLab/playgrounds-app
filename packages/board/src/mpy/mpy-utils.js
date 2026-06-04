@@ -1,4 +1,5 @@
 import { mime } from '@blockcode/utils';
+import { extname } from 'node:path';
 import { MPYBoard, ESP32BLEMPYBoard } from './mpy-board';
 import { getImageBase64 } from '../lib/image-base64';
 
@@ -139,9 +140,10 @@ export class MPYUtils {
       // 根据类型处理
       if (file.type) {
         // 添加后缀名
-        const extname = '.' + mime.getExtension(file.type);
-        if (!filename.endsWith(extname)) {
-          filename += extname;
+        const ext = extname(filename);
+        const type = mime.getExtension(file.type);
+        if (!ext || !ext.endsWith(type)) {
+          filename += '.' + mime.getExtension(file.type);
         }
         // 从数据生成内容
         if (!content) {
