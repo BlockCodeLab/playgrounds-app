@@ -15,15 +15,15 @@
 
 .terminal :global(.xterm-scrollable-element .scrollbar),
 .terminal :global(.xterm-scrollable-element .slider) {
-  width: 6px!important;
-  border-radius: 3px!important;
+  width: 6px !important;
+  border-radius: 3px !important;
 }
 
 .input-wrapper {
   display: flex;
   padding: var(--space);
   width: 100%;
-  align-items: center
+  align-items: center;
 }
 
 .input {
@@ -37,7 +37,8 @@
   align-items: stretch;
 }
 
-.send-button, .dropdown-button {
+.send-button,
+.dropdown-button {
   background: var(--theme-primary);
   border: var(--theme-primary);
   color: var(--ui-white);
@@ -63,4 +64,14 @@
 
 .clean-button {
   margin-left: var(--space);
+}
+
+.check-icon {
+  margin-right: calc(var(--space) / 2);
+  visibility: hidden;
+  width: 14px;
+}
+
+.check-icon.checked {
+  visibility: visible;
 }

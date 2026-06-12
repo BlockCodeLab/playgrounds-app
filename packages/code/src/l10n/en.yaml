@@ -6,7 +6,8 @@ code.terminalMode.hex: HEX
 code.terminalMode.text: Text
 code.terminalSend: Send
 code.terminalSendChar: Send {char}
-code.terminalSendEnter: Send with Enter
+code.terminalSendEnter: Add \\r to line end
+code.terminalSendNewline: Add \\n to line end
 code.terminalHexError: HEX data format error.
-code.terminalWaitforConnect: "Waiting for device connection..."
+code.terminalWaitforConnect: 'Waiting for device connection...'
 code.terminalClean: Clean

@@ -2,10 +2,10 @@ import '@xterm/xterm/css/xterm.css';
 
 import { useRef, useEffect, useCallback } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
-import { keyMirror } from '@blockcode/utils';
+import { keyMirror, classNames } from '@blockcode/utils';
 import { useAppContext, translate, setAlert, setAppState } from '@blockcode/core';
 
-import { Text, ToggleButtons, BufferedInput, Button, Dropdown, Keys } from '@blockcode/core';
+import { Text, ToggleButtons, BufferedInput, Button, Dropdown } from '@blockcode/core';
 import { Terminal as Xterm } from '@xterm/xterm';
 import { WebglAddon } from '@xterm/addon-webgl';
 import { FitAddon } from '@xterm/addon-fit';
@@ -13,6 +13,7 @@ import { defaultOptions } from './terminal-options';
 
 import styles from './terminal.module.css';
 import sendIcon from './icon-send.svg';
+import checkIcon from './icon-check.svg';
 
 const InputModes = keyMirror({
   REPL: null,
@@ -31,6 +32,10 @@ export function Terminal({ compactMode, textValue, disabledREPL, options }) {
   const terminalMode = useSignal(
     typeof textBuffer.value === 'string' || compactMode || disabledREPL ? InputModes.Text : InputModes.REPL,
   );
+
+  const crMode = useSignal(false);
+
+  const lfMode = useSignal(false);
 
   useEffect(() => {
     if (ref.xterm && typeof textBuffer.value === 'string') {
@@ -109,11 +114,15 @@ export function Terminal({ compactMode, textValue, disabledREPL, options }) {
     [],
   );
 
-  const handleSubmit = useCallback((value, crlf) => {
+  const handleSubmit = useCallback((value) => {
     if (!value) return;
 
+    let cr = crMode.value;
+    let lf = lfMode.value;
+
     if (terminalMode.value === InputModes.REPL) {
-      crlf = true;
+      cr = true;
+      lf = true;
     }
 
     if (terminalMode.value === InputModes.HEX) {
@@ -137,21 +146,20 @@ export function Terminal({ compactMode, textValue, disabledREPL, options }) {
         );
         return;
       }
-    } else if (crlf === true) {
-      value += '\r\n';
+    } else {
+      if (cr === true) {
+        value += '\r';
+      }
+      if (lf === true) {
+        value += '\n';
+      }
     }
     appState.value?.device?.serial.write(value, typeof value === 'string' ? 'text' : 'binary');
   }, []);
 
-  const handleSend = useCallback((value) => {
+  const handleSend = useCallback(() => {
     inputRef.current.base.blur();
     handleSubmit(inputRef.current.base.value);
-    inputRef.current.base.focus();
-  }, []);
-
-  const handleSendEnter = useCallback(() => {
-    inputRef.current.base.blur();
-    handleSubmit(inputRef.current.base.value, true);
     inputRef.current.base.focus();
   }, []);
 
@@ -255,7 +263,6 @@ export function Terminal({ compactMode, textValue, disabledREPL, options }) {
           )}
 
           <BufferedInput
-            autoClear
             enterSubmit
             ref={inputRef}
             disabled={terminalMode.value === InputModes.REPL || !appState.value?.device}
@@ -314,10 +321,40 @@ export function Terminal({ compactMode, textValue, disabledREPL, options }) {
                 ],
                 [
                   {
-                    label: translate('code.terminalSendEnter', 'Send with Enter'),
-                    hotkey: [Keys.CONTROL, Keys.ENTER],
+                    label: (
+                      <>
+                        <img
+                          className={classNames(styles.checkIcon, {
+                            [styles.checked]: crMode.value,
+                          })}
+                          src={checkIcon}
+                        />
+                        <Text
+                          id="code.terminalSendEnter"
+                          defaultMessage="add \\r to line end"
+                        />
+                      </>
+                    ),
                     disabled: terminalMode.value === InputModes.REPL || !appState.value?.device,
-                    onClick: handleSendEnter,
+                    onClick: useCallback(() => (crMode.value = !crMode.value), []),
+                  },
+                  {
+                    label: (
+                      <>
+                        <img
+                          className={classNames(styles.checkIcon, {
+                            [styles.checked]: lfMode.value,
+                          })}
+                          src={checkIcon}
+                        />
+                        <Text
+                          id="code.terminalSendNewline"
+                          defaultMessage="add \\n to line end"
+                        />
+                      </>
+                    ),
+                    disabled: terminalMode.value === InputModes.REPL || !appState.value?.device,
+                    onClick: useCallback(() => (lfMode.value = !lfMode.value), []),
                   },
                 ],
               ].filter(Boolean)}
