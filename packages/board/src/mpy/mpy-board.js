@@ -11,9 +11,10 @@ const CTRL_E = '\x05'; // paste mode (ctrl-e)
 const CTRL_F = '\x06'; // safe boot (ctrl-f)
 
 const CMD_CHUNK_SIZE = 512;
+const CMD_CHUNK_SIZE_BLE = 256;
 const FILE_CHUNK_SIZE = 80;
 const FILE_CHUNK_SIZE_BLE = 32;
-//const BAUD_RATE = 115200;
+// const BAUD_RATE = 115200;
 const BAUD_RATE = 460800;
 
 const encoder = new TextEncoder();
@@ -121,7 +122,7 @@ export class MPYBoard {
   }
 
   setSignals(options) {
-    this.serial.setSignals({ dataTerminalReady: true, requestToSend: true });
+    this.serial.setSignals(options);
   }
 
   readUntil(ending, dataConsumer) {
@@ -150,19 +151,18 @@ export class MPYBoard {
     });
   }
 
-  writeAndReadUntil(cmd, expect, dataConsumer) {
-    return new Promise(async (resolve, reject) => {
-      if (expect) {
-        this.readUntil(expect, dataConsumer).then(resolve).catch(reject);
-      }
-      for (let i = 0; i < cmd.length; i += CMD_CHUNK_SIZE) {
-        await this.serial.write(cmd.slice(i, i + CMD_CHUNK_SIZE));
-        await sleepMs(10);
-      }
-      if (!expect) {
-        resolve();
-      }
-    });
+  async writeAndReadUntil(cmd, expect, dataConsumer) {
+    for (let i = 0; i < cmd.length; i += CMD_CHUNK_SIZE) {
+      const data = cmd.slice(i, i + CMD_CHUNK_SIZE);
+      await sleepMs(5);
+      await this.serial.write(data);
+    }
+    let out;
+    if (expect) {
+      out = await this.readUntil(expect, dataConsumer);
+    }
+    await sleepMs(10);
+    return out;
   }
 
   async getPrompt() {
@@ -230,6 +230,8 @@ export class MPYBoard {
     }
     // Dismiss any data with ctrl-C
     await this.serial.write(CTRL_C);
+    await sleepMs(50);
+    await this.serial.write(CTRL_C);
     if (force) {
       await sleepMs(50);
       await this.serial.write(CTRL_C);
@@ -243,7 +245,7 @@ export class MPYBoard {
       this.rejectRun(new Error('pre reset'));
       this.rejectRun = null;
     }
-    await this.stop();
+    await this.stop(true);
     // Soft reboot
     await this.serial.write(CTRL_D);
   }
@@ -410,8 +412,6 @@ export class MPYBoard {
         return;
       }
     }
-
-    const hexArray = Array.from(contentUint8).map((c) => c.toString(16).padStart(2, '0'));
     let out = '';
     out += await this.enterRawRepl();
     // mkdir
@@ -431,6 +431,7 @@ export class MPYBoard {
       }
     }
     // write file
+    const hexArray = Array.from(contentUint8).map((c) => c.toString(16).padStart(2, '0'));
     out += await this.execRaw(`f=open('${dest}','w')\nw=f.write`);
     for (let i = 0; i < hexArray.length; i += FILE_CHUNK_SIZE) {
       // const bytes = hexArray.slice(i, i + FILE_CHUNK_SIZE).map((h) => `0x${h}`);
@@ -483,6 +484,26 @@ export class ESP32BLEMPYBoard extends MPYBoard {
     return this.serial.server.connected;
   }
 
+  async reset() {
+    await super.reset();
+    // await sleepMs(100);
+    // await this.disconnect();
+  }
+
+  async writeAndReadUntil(cmd, expect, dataConsumer) {
+    for (let i = 0; i < cmd.length; i += CMD_CHUNK_SIZE_BLE) {
+      const data = cmd.slice(i, i + CMD_CHUNK_SIZE_BLE);
+      await sleepMs(10);
+      await this.serial.write(data);
+    }
+    let out;
+    if (expect) {
+      out = await this.readUntil(expect, dataConsumer);
+    }
+    await sleepMs(30);
+    return out;
+  }
+
   async put(content, dest, progress = function () {}) {
     if (!dest) {
       throw new Error(`Must specify content and destination path`);
@@ -512,7 +533,6 @@ export class ESP32BLEMPYBoard extends MPYBoard {
       }
     }
 
-    const hexArray = Array.from(contentUint8).map((c) => c.toString(16).padStart(2, '0'));
     let out = '';
     out += await this.enterRawRepl();
     // mkdir
@@ -532,13 +552,14 @@ export class ESP32BLEMPYBoard extends MPYBoard {
       }
     }
     // write file
-    out += await this.execRaw(`f=open('${dest}','w')`);
+    const hexArray = Array.from(contentUint8).map((c) => c.toString(16).padStart(2, '0'));
+    out += await this.execRaw(`f=open('${dest}','w')\nw=f.write`);
     for (let i = 0; i < hexArray.length; i += FILE_CHUNK_SIZE_BLE) {
       // const bytes = hexArray.slice(i, i + FILE_CHUNK_SIZE_BLE).map((h) => `0x${h}`);
       // out += await this.execRaw(`w(bytes([${bytes.join(',')}]))`);
       const bytes = hexArray.slice(i, i + FILE_CHUNK_SIZE_BLE).map((h) => `\\x${h}`);
-      out += await this.execRaw(`f.write(b"${bytes.join('')}")`);
-      progress(parseInt(((i + FILE_CHUNK_SIZE_BLE) / hexArray.length) * 100));
+      out += await this.execRaw(`w(b"${bytes.join('')}")`);
+      progress(parseInt(((i + FILE_CHUNK_SIZE) / hexArray.length) * 100));
     }
     out += await this.execRaw(`f.close()`);
     out += await this.exitRawRepl();
