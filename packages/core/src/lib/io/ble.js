@@ -103,11 +103,11 @@ export class BLE extends EventEmitter {
       const characteristic = await service.getCharacteristic(characteristicId);
       if (withResponse && characteristic.writeValueWithResponse) {
         await characteristic.writeValueWithResponse(data);
-      }
-      if (withResponse === false && characteristic.writeValueWithoutResponse) {
+      } else if (withResponse === false && characteristic.writeValueWithoutResponse) {
         await characteristic.writeValueWithoutResponse(data);
+      } else {
+        await characteristic.writeValue(data);
       }
-      await characteristic.writeValue(data);
     } catch (err) {
       this.emit('error', err);
     }
