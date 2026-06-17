@@ -11,3 +11,10 @@ code.terminalSendNewline: Add \\n to line end
 code.terminalHexError: HEX data format error.
 code.terminalWaitforConnect: 'Waiting for device connection...'
 code.terminalClean: Clean
+
+code.panelBox.logs: Logs
+code.panelBox.logsCopy: Copy
+code.panelBox.serial: Serial
+code.panelBox.serialClean: Clean
+code.panelBox.files: Files
+code.panelBox.filesAdd: Add

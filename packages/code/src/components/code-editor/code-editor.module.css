@@ -1,18 +1,37 @@
-.editor-wrapper {
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
-  position: relative;
 }
 
-.editor-wrapper :global(.scrollbar.horizontal) {
+.editor-wrapper {
+}
+
+.editor {
+  width: 100%;
+  height: 100%;
+}
+
+.editor :global(.scrollbar.horizontal) {
   bottom: 1px !important;
 }
 
-.editor-wrapper :global(.scrollbar.vertical) {
+.editor :global(.scrollbar.vertical) {
   right: 1px !important;
 }
 
-.editor-wrapper :global(.slider) {
+.editor :global(.slider) {
   border-radius: 3px;
   overflow: hidden;
+}
+
+.panel-box-wrapper {
+}
+
+.resize {
+  height: 4px;
+  cursor: row-resize;
+  background: #f9f9f9;
 }

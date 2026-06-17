@@ -11,3 +11,10 @@ code.terminalSendNewline: 末尾加换行
 code.terminalHexError: HEX 格式错误。
 code.terminalWaitforConnect: 正在等待连接设备…
 code.terminalClean: 清除
+
+code.panelBox.logs: 日志
+code.panelBox.logsCopy: 复制
+code.panelBox.serial: 串口
+code.panelBox.serialClean: 清除
+code.panelBox.files: 文件管理
+code.panelBox.logsAdd: 添加

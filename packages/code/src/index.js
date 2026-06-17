@@ -11,3 +11,5 @@ export { Terminal } from './components/terminal/terminal';
 export { codeTab } from './components/tabs/code-tab';
 
 export { terminalTab } from './components/tabs/terminal-tab';
+
+export { PanelBox, PanelBoxes } from './components/panel-box/panel-box';

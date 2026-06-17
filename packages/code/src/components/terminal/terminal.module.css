@@ -4,8 +4,16 @@
   flex-direction: column;
 }
 
-.terminal {
+.terminal-box {
   flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.terminal {
+  position: absolute;
+  width: 100%;
+  height: 100%;
   padding: 4px;
 }
 

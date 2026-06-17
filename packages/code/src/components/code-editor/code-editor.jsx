@@ -1,11 +1,12 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
-import { useRef, useEffect } from 'preact/hooks';
+import { useRef, useEffect, useCallback } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
 import { mime, classNames } from '@blockcode/utils';
-import { useLocalesContext, useProjectContext, setFile } from '@blockcode/core';
+import { useLocalesContext, useAppContext, useProjectContext, setFile } from '@blockcode/core';
 import { createEditor } from '../../lib/create-monaco';
 import { registerCompletionProvider } from '../../lib/register-completion-provider';
+import { PanelBox } from '../panel-box/panel-box';
 import styles from './code-editor.module.css';
 
 const setModel = (editor, file, keyName = 'content') => {
@@ -43,6 +44,8 @@ const updateContent = (editor, modelname, file, keyName = 'content') => {
 export function CodeEditor({ className, style, keyName, options, readOnly, onLoad, onRegisterCompletionItems }) {
   const { language } = useLocalesContext();
 
+  const { appState } = useAppContext();
+
   const { file, modified } = useProjectContext();
 
   const ref = useRef(null);
@@ -50,6 +53,32 @@ export function CodeEditor({ className, style, keyName, options, readOnly, onLoa
   const modelname = useSignal(null);
 
   const completionProvider = useSignal(null);
+
+  const handleResize = useCallback((e) => {
+    const editorBox = ref.current.parentElement;
+    if (!editorBox) return;
+
+    const editorBoxRect = editorBox.getBoundingClientRect();
+    let posY = e.clientY;
+
+    const panelBox = editorBox.nextSibling;
+
+    const resize = (e) => {
+      let y = e.clientY - posY;
+      editorBox.style.height = `${editorBoxRect.height + y}px`;
+      editorBox.style.flex = 'unset';
+      panelBox.style.flex = '1';
+    };
+
+    const endResize = () => {
+      document.removeEventListener('pointerup', endResize);
+      document.removeEventListener('pointermove', resize);
+    };
+
+    resize(e);
+    document.addEventListener('pointerup', endResize);
+    document.addEventListener('pointermove', resize);
+  }, []);
 
   useEffect(() => {
     if (!ref.editor) return;
@@ -99,11 +128,45 @@ export function CodeEditor({ className, style, keyName, options, readOnly, onLoa
     };
   }, []);
 
+  useEffect(() => {
+    const editorBox = ref.current.parentElement;
+    const panelBox = editorBox.nextSibling;
+    const container = editorBox.parentElement;
+    if (!appState.value?.panelBoxId || !panelBox) {
+      editorBox.style.flex = '1';
+    } else if (panelBox.dataset.panelId == null) {
+      const rect = container.getBoundingClientRect();
+      panelBox.style.flex = '1';
+      editorBox.style.flex = 'unset';
+      editorBox.style.height = `${rect.height - 350}px`;
+    }
+    if (panelBox) {
+      panelBox.dataset.panelId = appState.value?.panelBoxId;
+    }
+  }, [appState.value?.panelBoxId]);
+
   return (
     <div
-      ref={ref}
+      className={styles.container}
       style={style}
-      className={classNames(styles.editorWrapper, className)}
-    />
+    >
+      <div className={styles.editorWrapper}>
+        <div
+          ref={ref}
+          className={classNames(styles.editor, className)}
+        />
+      </div>
+
+      {appState.value?.panelBoxId && (
+        <div className={styles.panelBoxWrapper}>
+          <div
+            className={styles.resize}
+            onPointerDown={handleResize}
+          />
+
+          <PanelBox />
+        </div>
+      )}
+    </div>
   );
 }

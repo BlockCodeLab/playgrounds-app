@@ -154,6 +154,7 @@ export function Terminal({ compactMode, textValue, disabledREPL, options }) {
         value += '\n';
       }
     }
+    console.log(value);
     appState.value?.device?.serial.write(value, typeof value === 'string' ? 'text' : 'binary');
   }, []);
 
@@ -212,7 +213,11 @@ export function Terminal({ compactMode, textValue, disabledREPL, options }) {
       ref.xterm = xterm;
       ref.current.style.backgroundColor = xterm.options.theme.background;
 
-      ref.resizeObserver = new ResizeObserver(() => fitAddon.fit());
+      let timer;
+      ref.resizeObserver = new ResizeObserver(() => {
+        clearTimeout(timer);
+        timer = setTimeout(() => fitAddon.fit(), 50);
+      });
       ref.resizeObserver.observe(ref.current);
 
       if (terminalMode.value === InputModes.REPL) {
@@ -234,10 +239,12 @@ export function Terminal({ compactMode, textValue, disabledREPL, options }) {
 
   return (
     <div className={styles.terminalWrapper}>
-      <div
-        ref={ref}
-        className={styles.terminal}
-      />
+      <div className={styles.terminalBox}>
+        <div
+          ref={ref}
+          className={styles.terminal}
+        />
+      </div>
 
       {typeof textBuffer.value !== 'string' && (
         <div className={styles.inputWrapper}>
