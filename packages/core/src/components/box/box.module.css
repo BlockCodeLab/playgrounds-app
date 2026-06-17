@@ -5,9 +5,31 @@
   min-width: 468px;
   bottom: var(--space);
   right: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.box-wrapper-row,
+.box-wrapper-center {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.box-wrapper-center {
+  flex: 1;
+}
+
+.resize:hover {
+  background: var(--ui-black-transparent);
+}
+
+.resize.disabled {
+  pointer-events: none;
 }
 
 .box {
+  flex: 1;
   border: 1px solid var(--ui-tertiary);
   border-radius: calc(var(--space) * 1.8);
   display: flex;
@@ -67,4 +89,5 @@
   position: relative;
   color: var(--text-primary);
   display: flex;
+  flex: 1;
 }
