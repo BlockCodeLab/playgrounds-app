@@ -18,3 +18,6 @@ code.panelBox.serial: 串口
 code.panelBox.serialClean: 清除
 code.panelBox.files: 文檔管理
 code.panelBox.logsAdd: 添加
+
+code.alert.logsCopied: 日誌已複製。
+code.alert.logsCopyFailed: 日誌複製失敗。

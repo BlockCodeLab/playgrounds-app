@@ -18,3 +18,6 @@ code.panelBox.serial: Serial
 code.panelBox.serialClean: Clean
 code.panelBox.files: Files
 code.panelBox.filesAdd: Add
+
+code.alert.logsCopied: Logs copied to clipboard.
+code.alert.logsCopyFailed: Failed to copy logs to clipboard.

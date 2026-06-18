@@ -61,6 +61,8 @@ export function PanelBox({ compactMode }) {
     }
   }, []);
 
+  const handleClearTerminal = useCallback(() => setAppState('terminalCache', null), []);
+
   return (
     <div
       ref={boxRef}
@@ -143,10 +145,11 @@ export function PanelBox({ compactMode }) {
               />
             </div>
           )}
+
           {panelId.value === PanelBoxes.Serial && (
             <div
               className={styles.headerButton}
-              onClick={useCallback(() => setAppState('terminalCache', null), [])}
+              onClick={handleClearTerminal}
             >
               <img
                 className={styles.buttonIcon}
@@ -158,6 +161,7 @@ export function PanelBox({ compactMode }) {
               />
             </div>
           )}
+
           <div
             className={styles.headerButton}
             onClick={useCallback(() => setAppState('panelBoxId', null), [])}
