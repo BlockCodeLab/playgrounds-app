@@ -2,6 +2,7 @@ import { useEffect } from 'preact/hooks';
 import { useSignal } from '@preact/signals';
 import { useAppContext, setAppState, Text } from '@blockcode/core';
 import { Terminal } from '../terminal/terminal';
+import { PanelBoxes } from '../panel-box/panel-box';
 
 import terminalIcon from './icon-terminal.svg';
 
@@ -10,29 +11,22 @@ export const terminalTab = {
   label: (
     <Text
       id="code.tabs.terminal"
-      defaultMessage="Terminal"
+      defaultMessage="Serial Terminal"
     />
   ),
   Content: (props) => {
     const { appState } = useAppContext();
-    const panelBoxId = useSignal(null);
+    const panelBoxId = useSignal(
+      appState.value?.panelBoxId === PanelBoxes.Serial ? PanelBoxes.Logs : appState.value?.panelBoxId,
+    );
 
-    // 强制关闭 Serial
-    if (appState.value?.panelBoxId === 'Serial') {
-      panelBoxId.value = 'Serial';
-      setAppState('panelBoxId', null);
-    } else if (appState.value?.panelBoxId) {
+    // 强制切换
+    if (appState.value?.panelBoxId === PanelBoxes.Serial) {
+      setAppState('panelBoxId', panelBoxId.value || PanelBoxes.Logs);
+    } else {
       panelBoxId.value = appState.value?.panelBoxId;
     }
 
-    // 恢复关闭的 Serial
-    useEffect(() => {
-      return () => {
-        if (panelBoxId.value === 'Serial') {
-          setAppState('panelBoxId', 'Serial');
-        }
-      };
-    }, []);
     return <Terminal {...props} />;
   },
 };

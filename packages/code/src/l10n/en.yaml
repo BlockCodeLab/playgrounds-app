@@ -1,5 +1,5 @@
 code.tabs.code: Code
-code.tabs.terminal: Terminal
+code.tabs.terminal: Serial Terminal
 
 code.terminalMode.repl: REPL
 code.terminalMode.hex: HEX

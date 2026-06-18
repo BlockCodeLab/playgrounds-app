@@ -1,5 +1,5 @@
 code.tabs.code: 代码
-code.tabs.terminal: 终端
+code.tabs.terminal: 串口终端
 
 code.terminalMode.repl: REPL
 code.terminalMode.hex: HEX

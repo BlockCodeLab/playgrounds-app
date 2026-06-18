@@ -343,7 +343,10 @@ export function Terminal({ compactMode, textValue, disabledREPL, options }) {
                       </>
                     ),
                     disabled: terminalMode.value === InputModes.REPL || !appState.value?.device,
-                    onClick: useCallback(() => (crMode.value = !crMode.value), []),
+                    onClick: useCallback((e) => {
+                      e.stopPropagation();
+                      crMode.value = !crMode.value;
+                    }, []),
                   },
                   {
                     label: (
@@ -361,7 +364,10 @@ export function Terminal({ compactMode, textValue, disabledREPL, options }) {
                       </>
                     ),
                     disabled: terminalMode.value === InputModes.REPL || !appState.value?.device,
-                    onClick: useCallback(() => (lfMode.value = !lfMode.value), []),
+                    onClick: useCallback((e) => {
+                      e.stopPropagation();
+                      lfMode.value = !lfMode.value;
+                    }, []),
                   },
                 ],
               ].filter(Boolean)}
