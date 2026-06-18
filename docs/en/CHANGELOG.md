@@ -1,5 +1,41 @@
 ## CHANGELOG
 
+### v1.4.5
+
+- Updated the ESP32 Editor to v0.2.7
+  - Added pin low‑level detection block
+  - Added color value block
+  - Optimized program download and firmware restore
+  - Optimized block adjustments
+
+- Updated the iot:bit Editor to v0.2.5
+  - Added pin low‑level detection block
+  - Added color value block
+  - Optimized program download and firmware restore
+  - Optimized block adjustments
+
+- Updated the Arduino Editor to v0.6.2
+  - Added pin low‑level detection block
+  - Added color value block
+  - Optimized block adjustments
+
+- Updated the LGT8F328P Editor to v0.2.1
+  - Added pin low‑level detection block
+  - Added color value block
+  - Optimized block adjustments
+
+- Updated the Block Editor
+  - Added support for holding Ctrl (Command on macOS) to drag only a single block
+  - Added support for holding Alt to copy the dragged block (or group)
+  - Updated library files for the Motor Driver Board extension
+  - Updated library files for the CodexPad extension
+
+- Updated the Code Editor
+  - Updated log and serial panel styles, now resizable
+  - Optimized data sending in the terminal serial
+
+- Fixed known bugs
+
 ### v1.4.4
 
 - Updated the iot:bit Editor to v0.2.4
