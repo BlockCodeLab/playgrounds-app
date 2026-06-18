@@ -54,8 +54,10 @@ export function CodeEditor({ className, style, keyName, options, readOnly, onLoa
 
   const completionProvider = useSignal(null);
 
+  const compactMode = useSignal(false);
+
   const handleResize = useCallback((e) => {
-    const editorBox = ref.current.parentElement;
+    const editorBox = ref.current?.parentElement;
     if (!editorBox) return;
 
     const editorBoxRect = editorBox.getBoundingClientRect();
@@ -79,6 +81,13 @@ export function CodeEditor({ className, style, keyName, options, readOnly, onLoa
     document.addEventListener('pointerup', endResize);
     document.addEventListener('pointermove', resize);
   }, []);
+
+  useEffect(() => {
+    const editorBox = ref.current?.parentElement;
+    if (!editorBox) return;
+    const editorBoxRect = editorBox.getBoundingClientRect();
+    compactMode.value = editorBoxRect.width < 370;
+  }, [style]);
 
   useEffect(() => {
     if (!ref.editor) return;
@@ -164,7 +173,7 @@ export function CodeEditor({ className, style, keyName, options, readOnly, onLoa
             onPointerDown={handleResize}
           />
 
-          <PanelBox />
+          <PanelBox compactMode={compactMode.value} />
         </div>
       )}
     </div>
