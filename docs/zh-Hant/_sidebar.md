@@ -1,1 +1,2 @@
-
+- **入門**
+  - [快速開始](zh-Hant/quickstart.md)
