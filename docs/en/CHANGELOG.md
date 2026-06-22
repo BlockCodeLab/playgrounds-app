@@ -1,5 +1,16 @@
 ## CHANGELOG
 
+### v1.4.6
+
+- Updated the iot:bit Editor to v0.3.0
+  - Updated simulator functionality
+  - Optimized pin values
+  - Optimized code panel and serial port panel display
+
+- Removed the writing component and writing editor (will be loaded independently in the future)
+- Fixed simulator getting stuck in an infinite loop
+- Fixed known bugs
+
 ### v1.4.5
 
 - Updated the ESP32 Editor to v0.2.7
