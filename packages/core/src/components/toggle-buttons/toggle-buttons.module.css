@@ -6,6 +6,10 @@
   margin-left: -1px;
 }
 
+.rounded {
+  border-radius: 50%;
+}
+
 .toggle-button:disabled {
   cursor: not-allowed;
   filter: grayscale();

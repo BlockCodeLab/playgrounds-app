@@ -4,7 +4,7 @@ import { maybeTranslate } from '../../contexts/locales-context';
 import { Button } from '../button/button';
 import styles from './toggle-buttons.module.css';
 
-export function ToggleButtons({ disabled, items, value, onChange }) {
+export function ToggleButtons({ disabled, rounded, items, value, onChange }) {
   const lastIndex = items.length - 1;
 
   return (
@@ -14,6 +14,7 @@ export function ToggleButtons({ disabled, items, value, onChange }) {
           key={index}
           disabled={item.disabled || disabled}
           className={classNames(styles.toggleButton, {
+            [styles.rounded]: rounded,
             [styles.autoWidth]: item.title && !item.icon,
             [styles.toggleButtonFirst]: index === 0,
             [styles.toggleButtonMiddle]: index > 0 && index < lastIndex,
