@@ -37,11 +37,6 @@ export class ArduinoUtils {
     return firmata;
   }
 
-  static bindingTransport(board) {
-    const transport = new FirmataTransport(board);
-    return transport;
-  }
-
   static async write(board, hex, progress) {
     const data = parseIntelHex(hex);
     await board.put(data, progress);

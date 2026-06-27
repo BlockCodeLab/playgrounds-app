@@ -29,6 +29,7 @@ export const Keys = {
   DELETE: 'Delete',
   ENTER: 'Enter',
   RETURN: 'Enter',
+  SPACE: 'Space',
   A: 'KeyA',
   B: 'KeyB',
   C: 'KeyC',
