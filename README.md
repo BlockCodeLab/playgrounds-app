@@ -1,5 +1,7 @@
 ![](docs/_media/bar.png 'BlockCode Playgrounds')
 
+[点击在线体验](https://make.blockcode.fun) | [下载离线版](https://app.blockcode.fun)
+
 ## 关于本代码库
 
 本代码库的各级目录功能如下：
@@ -46,7 +48,3 @@ $ bun run dev
 ```
 
 > 开发新的**编辑器扩展**或**图形积木扩展**请参考 [examples/](examples/) 中对应的案例。
-
-### 编译指令
-
-####
