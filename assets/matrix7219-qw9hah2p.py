@@ -109,7 +109,7 @@ FONTS = (
 
 
 class Matrix7219:
-    def __init__(self, sck_pin, din_pin, cs_pin, num_devices=1):
+    def __init__(self, din_pin, sck_pin, cs_pin, num_devices=1):
         """初始化 MAX7219/MAX7221 LED 矩阵控制器"""
 
         # 初始化SPI
