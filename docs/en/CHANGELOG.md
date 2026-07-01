@@ -1,5 +1,26 @@
 ## CHANGELOG
 
+### v1.4.7
+
+- Updated the Arduino Editor to v0.6.3
+  - Added code generation for multidimensional arrays
+
+- Updated the LGT8F328P Editor to v0.2.2
+  - Added code generation for multidimensional arrays
+
+- Updated the iot:bit Editor to v0.3.1
+  - Added simulator control panel
+  - Optimized simulator resource loading
+
+- Updated the Scratch Arcade Editor to v1.1.4
+  - Fixed issue where blank dialog content did not disappear
+
+- Updated the Block Editor
+  - Updated the MAX7219 dot matrix extension to support multiple devices connected
+  - Added multidimensional array blocks
+
+- Fixed known bugs
+
 ### v1.4.6
 
 - Updated the iot:bit Editor to v0.3.0

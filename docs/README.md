@@ -7,7 +7,7 @@
 ## 特性
 
 - **开放**：完全开源，所有人都可以参与开发；
-- **轻块**：基于全新技术开发，更加轻量和高效；
+- **轻快**：基于全新技术开发，更加轻量和高效；
 - **整合**：融合了多种图形化编程工具，让您更便捷地启动新项目；
 - **强大**：为创客提供强大支持，无论何种硬件都能轻松接入；
 - **熟悉**：采用与 Scratch 相似的界面元素，零学习门槛。
@@ -40,8 +40,8 @@
 
 国内用户请通过[百度网盘](https://pan.baidu.com/s/1TfC8zsTF9CK7p2sBnPnNng?pwd=sytt)加速下载。
 
-[1]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.6/BlockCodePlaygrounds-win64-1.4.6.zip
-[2]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.6/BlockCodePlaygrounds-win32-1.4.6.zip
-[3]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.6/BlockCodePlaygrounds-win7-1.4.6.zip
-[4]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.6/BlockCodePlaygrounds-macos-apple-silicon-1.4.6.zip
-[5]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.6/BlockCodePlaygrounds-macos-intel-1.4.6.zip
+[1]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.7/BlockCodePlaygrounds-win64-1.4.7.zip
+[2]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.7/BlockCodePlaygrounds-win32-1.4.7.zip
+[3]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.7/BlockCodePlaygrounds-win7-1.4.7.zip
+[4]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.7/BlockCodePlaygrounds-macos-apple-silicon-1.4.7.zip
+[5]: https://github.com/BlockCodeLab/playgrounds-app/releases/download/v1.4.7/BlockCodePlaygrounds-macos-intel-1.4.7.zip
