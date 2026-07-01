@@ -2,7 +2,7 @@
 
 #include "matrix7219.h"
 
-Matrix7219::Matrix7219(int clkPin, int dataPin, int csPin, int numDevices)
+Matrix7219::Matrix7219(int dataPin, int clkPin, int csPin, int numDevices)
     : LedControl(dataPin, clkPin, csPin, numDevices) {
 
   bufferSize = 8 * numDevices;

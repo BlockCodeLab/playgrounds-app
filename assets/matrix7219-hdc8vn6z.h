@@ -19,7 +19,7 @@ private:
   void refreshText();
 
 public:
-  Matrix7219(int clkPin, int dataPin, int csPin, int numDevices = 1);
+  Matrix7219(int dataPin, int clkPin, int csPin, int numDevices = 1);
   ~Matrix7219() { delete[] textBuffer; };
 
   void showMatrix(int addr, const byte (&matrix)[8]);
