@@ -148,7 +148,7 @@ export function Dropdown({ className, iconClassName, menuClassName, items, place
         {items && (
           <Menu
             name={dropdownId}
-            className={classNames(menuClassName, styles.dropdownMenu)}
+            className={classNames(styles.dropdownMenu, menuClassName)}
           >
             {mapMenuItems(items)}
           </Menu>

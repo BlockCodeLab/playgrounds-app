@@ -35,7 +35,8 @@
   display: block !important;
 }
 
-.open {
+.open label,
+.open li {
   background: var(--ui-black-transparent);
 }
 
