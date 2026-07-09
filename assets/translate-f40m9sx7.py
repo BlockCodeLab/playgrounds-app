@@ -1,4 +1,4 @@
-import _sparkai as sparkai
+import sparkai
 
 LANGUAGES = {
     "en": "English",
