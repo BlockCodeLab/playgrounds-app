@@ -11,8 +11,15 @@ const electronObj = {
     return ipcRenderer.sendSync('local:home');
   },
 
-  loadBlocksZip() {
-    return ipcRenderer.invoke('local:blocks:select');
+  loadBlocksZip(zip) {
+    return ipcRenderer.invoke('local:blocks:select', zip);
+  },
+
+  readBlocksFiles(id) {
+    return new Promise((resolve) => {
+      ipcRenderer.on('local:blocks:zip:reply', (event, files) => resolve(files));
+      ipcRenderer.send('local:blocks:zip', id);
+    });
   },
 
   getLocalBlocks() {

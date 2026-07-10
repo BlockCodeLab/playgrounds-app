@@ -20,6 +20,7 @@ const getEditorsInfo = (path) => {
             id: info.name,
             main: join(path, editorDir, info.exports['.'].import),
             info: join(path, editorDir, info.exports['./info'].import),
+            basepath: dirname(join(path, editorDir, info.exports['./info'].import)),
           },
         ];
       }),

@@ -59,16 +59,22 @@ export function translate(id, defaultMessage, options = {}) {
 
 // 检查是否为需要翻译的字符串
 export function maybeTranslate(message, options = {}) {
-  if (!message?.props) {
-    return message;
+  if (!message) return;
+  let props = message.props;
+  if (!props) {
+    if (message.id && message.defaultMessage) {
+      props = message;
+    } else {
+      return message;
+    }
   }
-  if (message.props.children) {
+  if (props.children) {
     return []
-      .concat(message.props.children)
+      .concat(props.children)
       .map((child) => maybeTranslate(child))
       .join('');
   }
-  return translate(message.props.id, message.props.defaultMessage, Object.assign(message.props, options));
+  return translate(props.id, props.defaultMessage, Object.assign(props, options));
 }
 
 // 本地化上下文组件

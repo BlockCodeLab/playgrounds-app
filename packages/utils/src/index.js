@@ -42,6 +42,8 @@ export { mime } from './lib/mime';
 
 export { nanoid, nanoidLooks } from './lib/nanoid';
 
+export { pathResolve } from './lib/path';
+
 export { pinyin } from './lib/pinyin';
 
 export { saveProjectToComputer, openProjectFromComputer, openProjectFromURL } from './lib/project-file';
