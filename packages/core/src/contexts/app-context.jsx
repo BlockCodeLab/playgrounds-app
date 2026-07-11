@@ -154,6 +154,14 @@ export function addLessons(lessons) {
   });
 }
 
+// 移除教程
+export function removeLessons(lessons) {
+  const oldLessons = tutorials.value?.lessons ?? {};
+  tutorials.value = nullObject(tutorials.value ?? {}, {
+    lessons: Object.fromEntries(Object.entries(oldLessons).filter(([key, _]) => !lessons[key])),
+  });
+}
+
 // 设置应用状态
 export function setAppState(state, value) {
   if (typeof state === 'string') {

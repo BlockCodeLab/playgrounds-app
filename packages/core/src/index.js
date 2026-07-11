@@ -28,6 +28,7 @@ export {
   openTab,
   addTabs,
   addLessons,
+  removeLessons,
   setAppState,
   openUserStorage,
   closeUserStorage,
