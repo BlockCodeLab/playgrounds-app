@@ -59,7 +59,7 @@ export function translate(id, defaultMessage, options = {}) {
 
 // 检查是否为需要翻译的字符串
 export function maybeTranslate(message, options = {}) {
-  if (!message) return;
+  if (!message) return message;
   let props = message.props;
   if (!props) {
     if (message.id && message.defaultMessage) {
