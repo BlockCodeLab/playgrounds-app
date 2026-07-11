@@ -58,12 +58,19 @@ public:
 
   ErrorCode Initialize();
 
-  bool GetColor(Color *const color) const;
-  uint16_t GetRed() const;
-  uint16_t GetGreen() const;
-  uint16_t GetBlue() const;
+  bool ReadColor(Color *const color);
 
-  uint32_t GetColor() const;
+  uint16_t GetRed();
+  uint16_t GetRedToGamma();
+
+  uint16_t GetGreen();
+  uint16_t GetGreenToGamma();
+
+  uint16_t GetBlue();
+  uint16_t GetBlueToGamma();
+
+  uint32_t GetColor();
+  uint32_t GetColorToGamma();
 
 private:
   NLCS11(const NLCS11 &) = delete;

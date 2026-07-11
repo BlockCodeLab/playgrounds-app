@@ -30,13 +30,13 @@ NLCS11::ErrorCode NLCS11::Initialize() {
     x = pow(x, 2.5);
     x *= 255;
     // Serial.println(i);
-    gammatable[i] = x;
+    gammatable[i] = (int)(x + 0.5);
   }
 
   return ret;
 }
 
-bool NLCS11::GetColor(Color *const color) const {
+bool NLCS11::ReadColor(Color *const color) {
   if (color == nullptr) {
     return false;
   }
@@ -79,23 +79,46 @@ bool NLCS11::GetColor(Color *const color) const {
   return true;
 }
 
-uint16_t NLCS11::GetRed() const {
-  GetColor(&color_);
-  return (uint16_t)gammatable[(int)(((float)color_.r / color_.c) * 255)];
+uint16_t NLCS11::GetRed() {
+  ReadColor(&color_);
+  return (uint16_t)(((float)color_.r / color_.c) * 255);
 }
 
-uint16_t NLCS11::GetGreen() const {
-  GetColor(&color_);
-  return (uint16_t)gammatable[(int)(((float)color_.g / color_.c) * 255)];
+uint16_t NLCS11::GetRedToGamma() {
+  uint16_t r = GetRed();
+  return (uint16_t)gammatable[r];
 }
 
-uint16_t NLCS11::GetBlue() const {
-  GetColor(&color_);
-  return (uint16_t)gammatable[(int)(((float)color_.b / color_.c) * 255)];
+uint16_t NLCS11::GetGreen() {
+  ReadColor(&color_);
+  return (uint16_t)(((float)color_.g / color_.c) * 255);
 }
 
-uint32_t NLCS11::GetColor() const {
-  GetColor(&color_);
+uint16_t NLCS11::GetGreenToGamma() {
+  uint16_t g = GetGreen();
+  return (uint16_t)gammatable[g];
+}
+
+uint16_t NLCS11::GetBlue() {
+  ReadColor(&color_);
+  return (uint16_t)(((float)color_.b / color_.c) * 255);
+}
+
+uint16_t NLCS11::GetBlueToGamma() {
+  uint16_t b = GetBlue();
+  return (uint16_t)gammatable[b];
+}
+
+uint32_t NLCS11::GetColor() {
+  ReadColor(&color_);
+  uint16_t r = (uint16_t)(((float)color_.r / color_.c) * 255);
+  uint16_t g = (uint16_t)(((float)color_.g / color_.c) * 255);
+  uint16_t b = (uint16_t)(((float)color_.b / color_.c) * 255);
+  return ((uint32_t)r << 16) | ((uint32_t)g << 8) | (uint32_t)b;
+}
+
+uint32_t NLCS11::GetColorToGamma() {
+  ReadColor(&color_);
   uint16_t r = (uint16_t)gammatable[(int)(((float)color_.r / color_.c) * 255)];
   uint16_t g = (uint16_t)gammatable[(int)(((float)color_.g / color_.c) * 255)];
   uint16_t b = (uint16_t)gammatable[(int)(((float)color_.b / color_.c) * 255)];

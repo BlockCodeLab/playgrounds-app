@@ -60,6 +60,7 @@ class NLCS11:
         self._last_read_time = 0
         self._initialized = False
         self._gamma_table = self._compute_gamma_table()
+        self._last_raw = None
 
     def _compute_gamma_table(self):
         """Precompute gamma correction table (gamma = 2.5)."""
@@ -68,7 +69,7 @@ class NLCS11:
             x = i / 255.0
             x = x**2.5
             x *= 255
-            table[i] = int(x)
+            table[i] = round(x)
         return table
 
     def init(self):
@@ -106,7 +107,7 @@ class NLCS11:
             return None
 
         if time.ticks_diff(current_time, self._last_read_time) < integration_ms:
-            return None
+            return self._last_raw
 
         self._last_read_time = current_time
 
@@ -126,13 +127,14 @@ class NLCS11:
             b = data[4] | (data[5] << 8)
             c = data[6] | (data[7] << 8)
 
+            self._last_raw = (r, g, b, c)
             return (r, g, b, c)
         except Exception:
             return None
 
     def get_color(self):
         """
-        Read and return the gamma-corrected RGB color.
+        Read and return the RGB color.
 
         :return: Tuple (r, g, b) with values 0-255, or (0,0,0) if read fails
         """
@@ -150,6 +152,16 @@ class NLCS11:
         g_norm = min(255, int((g / c) * 255))
         b_norm = min(255, int((b / c) * 255))
 
+        return (r_norm, g_norm, b_norm)
+
+    def get_color_gamma(self):
+        """
+        Read and return the gamma-corrected RGB color.
+
+        :return: Tuple (r, g, b) with values 0-255, or (0,0,0) if read fails
+        """
+        r_norm, g_norm, b_norm = self.get_color()
+
         r_gamma = self._gamma_table[r_norm]
         g_gamma = self._gamma_table[g_norm]
         b_gamma = self._gamma_table[b_norm]
@@ -157,16 +169,28 @@ class NLCS11:
         return (r_gamma, g_gamma, b_gamma)
 
     def get_red(self):
-        """Return gamma-corrected red value."""
+        """Return red value."""
         return self.get_color()[0]
 
+    def get_red_gamma(self):
+        """Return gamma-corrected red value."""
+        return self.get_color_gamma()[0]
+
     def get_green(self):
-        """Return gamma-corrected green value."""
+        """Return green value."""
         return self.get_color()[1]
 
+    def get_green_gamma(self):
+        """Return gamma-corrected green value."""
+        return self.get_color_gamma()[1]
+
     def get_blue(self):
-        """Return gamma-corrected blue value."""
+        """Return blue value."""
         return self.get_color()[2]
+
+    def get_blue_gamma(self):
+        """Return gamma-corrected blue value."""
+        return self.get_color_gamma()[2]
 
     def get_raw(self):
         """
