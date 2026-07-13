@@ -6,7 +6,7 @@
 
 ## 使用自定义扩展
 
-自定义扩展保存的位置：
+自定义扩展保存的位置（如果文件夹不存在请自行创建）：
 
 - Windows：`C:\Users\<用户名>\BlockCode\blocks\`
 - macOS：`/Users/<用户名>\BlockCode\blocks\`
@@ -46,7 +46,7 @@
 macOS 用户进入 `/Users/<用户名>\BlockCode\blocks\`（Windows 用户进入 `C:\Users\<用户名>\BlockCode\blocks\`），新建一个 `dust` 的文件夹，`dust` 也是扩展ID。
 
 ```
-- blocks
+- /Users/<用户名>\BlockCode\blocks
   |- dust
     |- info.js
     |- index.js
