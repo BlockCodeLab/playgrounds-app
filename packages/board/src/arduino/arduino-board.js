@@ -343,6 +343,8 @@ export class ArduinoBLEBoard extends ArduinoBoard {
 
   async put(data, progress) {
     const baudRate = this.baudRate;
+    await this.serial.sendATMessage('AT+ROLE=1');
+    await sleepMs(100);
 
     await this.reconnect({ baudRate: BAUD_RATE });
     await sleepMs(100);
@@ -358,6 +360,6 @@ export class ArduinoBLEBoard extends ArduinoBoard {
 
     if (baudRate === BAUD_RATE) return;
     await sleepMs(100);
-    await this.serial.sendATMessage('AT+BLEUSB=3');
+    // await this.serial.sendATMessage('AT+BLEUSB=3');
   }
 }

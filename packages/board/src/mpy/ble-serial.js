@@ -6,6 +6,10 @@ export const SERVICE_UUID = '00000001-8c26-476f-89a7-a108033a69c7';
 const FILE_CHAR = '00000002-8c26-476f-89a7-a108033a69c7';
 const STDIO_CHAR = '00000003-8c26-476f-89a7-a108033a69c7';
 
+// export const SERVICE_UUID = '6e400001-b5a3-f393-e0a9-e50e24dcca9e';
+// const TX_CHAR_UUID = '6e400002-b5a3-f393-e0a9-e50e24dcca9e';
+// const RX_CHAR_UUID = '6e400003-b5a3-f393-e0a9-e50e24dcca9e';
+
 const encoder = new TextEncoder();
 
 export class ESP32BLESerial extends BLE {

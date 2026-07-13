@@ -30,8 +30,9 @@ export class BLESerial extends BLE {
     await this.sendATMessage(`AT+BAUD=${baudValue}`);
 
     await sleepMs(100);
-    await this.sendATMessage('AT+BLEUSB=3');
-    await this.sendATMessage('AT+ALL');
+    // await this.sendATMessage('AT+BLEUSB=3');
+    await this.sendATMessage('AT+ROLE=1');
+    // await this.sendATMessage('AT+ALL');
   }
 
   sendATMessage(message) {
