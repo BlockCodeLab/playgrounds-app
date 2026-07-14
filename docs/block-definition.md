@@ -35,7 +35,7 @@ function blocks(metadata) {
   return [
     {
       // 显示标签
-      { label: '微尘检测' },
+      { label: '粉尘检测' },
       // 积木 ID，扩展内的每个积木 ID 必须唯一
       id: 'pm25value',
       // 积木的文本描述，[ARG] 是输入参数的占位符，ARG 是参数名
