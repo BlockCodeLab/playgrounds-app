@@ -54,31 +54,38 @@ macOS 用户进入 `/Users/<用户名>\BlockCode\blocks\`（Windows 用户进入
     |- index.js
     |- icon.png
     |- feature.png
-    |- pm25_sensor.h
-    |- pm25_sensor.cpp
+    |- lib
+      |- pm25_sensor.h
+      |- lib/pm25_sensor.cpp
 ```
 
-除了 `info.js` 和 `index.js`，其他文件都是静态资源文件，使用扩展时会按需被自动加载。
+除了 `info.js` 和 `index.js`，其他文件都是静态资源文件，可以根据需要按文件夹整理，使用扩展时会按需被自动加载。
 
-!> 扩展文件夹中，保持目录结构扁平化，不要嵌套文件夹。
+!> `info.js` 和 `index.js` 必须放在自定义扩展文件夹的首层路径。
 
 ### `info.js` 扩展信息
 
 ```javascript
 export default {
+  // 版本
+  version: '1.0.0',
   // 主题图，相对路径
   image: './feature.png',
   // 图标，相对路径
   icon: './icon.png',
   // 扩展名
-  name: '微尘检测',
+  name: '粉尘检测',
   // 扩展描述
   description: 'PM2.5 颗粒检测传感器。',
+  // 合作者/作者
+  collaborator: 'Emakefun',
   // 扩展过滤标签
   tags: [
     'arduino', // Arduino 系列开发板可用
     'sensor', // 分类标签：传感器
   ],
+  // 信息外链
+  readme: 'https://docs.emakefun.com/#/zh-cn/ph2.0_sensors/sensors/pm2.5_dust_sensor/pm2.5_dust_sensor',
 };
 ```
 
@@ -116,7 +123,7 @@ export default {
   // 积木边框颜色
   // otherColor: "#0b8e69",
   // 扩展名
-  name: '微尘检测',
+  name: '粉尘检测',
   // 图形积木定义列表
   blocks,
   // 转换代码库文件列表
@@ -181,11 +188,11 @@ function files(metadata) {
           // 保存文件名
           name: 'pm25_sensor.h',
           // 文件位置，相对路径
-          uri: './pm25_sensor.h',
+          uri: './lib/pm25_sensor.h',
         },
         {
           name: 'pm25_sensor.cpp',
-          uri: './pm25_sensor.cpp',
+          uri: './lib/pm25_sensor.cpp',
         },
       ]
     : [
@@ -244,7 +251,7 @@ function files(metadata) {
 可选字段：
 
 - `header`: 指明该库文件会被转换代码自动引用（`#include <name>` 或 `import <name>`）
-- `common`: 指明 MicroPython 库文件为公共库，会被放入 `/lib/<库文件名>` 路径下
+- `common`: 指明 MicroPython 库文件为公共库，会被放入设备的 `/lib/<库文件名>` 路径下
 
 Arduino 项目编译后才会下载到开发板，扩展的库文件只和项目有关，因此在使用库文件无需额外注意。
 
