@@ -91,8 +91,9 @@ ipcMain.handle('local:blocks:select', async (event, data) => {
     if (result.canceled || result.filePaths.length === 0) return;
     data = readFileSync(result.filePaths[0]);
   } else {
-    const res = await fetch(data);
-    data = await res.arrayBuffer();
+    const raw = atob(data);
+    const uint8Array = Uint8Array.from(Array.prototype.map.call(raw, (x) => x.charCodeAt(0)));
+    data = uint8Array.buffer;
   }
 
   // 读取 ZIP 文件
@@ -118,12 +119,13 @@ ipcMain.handle('local:blocks:select', async (event, data) => {
 
   // 将每一个入口文件对应的扩展复制到本地
   for (const entry of entries) {
-    const entryName = dirname(entry.name) === '.' ? '' : `${dirname(entry.name)}/`;
-    const files = Object.values(zipFiles).filter((file) => !file.dir && file.name.startsWith(entryName));
+    const entryName = dirname(entry.name) === '.' ? '' : `${dirname(entry.name)}`;
+    const re = new RegExp(`^${entryName}[/\\\\]`);
+    const files = Object.values(zipFiles).filter((file) => !file.dir && re.test(file.name));
     if (files.length === 0) continue;
 
     // 如果有 package.json 用 package.json 中的 name 作为文件夹名，避免重名
-    let entryDir = entry.name.split('/')[0];
+    let entryDir = entry.name.split(/[/\\\\]/)[0];
     if (entry.name.endsWith('package.json')) {
       const entryJson = JSON.parse(await entry.async('string'));
       entryDir = escape(entryJson.name);

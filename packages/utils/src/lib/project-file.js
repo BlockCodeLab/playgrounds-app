@@ -59,7 +59,7 @@ export function openProjectFromComputer() {
       // 尝试解析包含的本地扩展
       if (window.electron) {
         const data = await fileToBase64(file);
-        await window.electron?.loadBlocksZip(data);
+        await window.electron?.loadBlocksZip(data.split('base64,')[1]);
       }
 
       const zip = await JSZip.loadAsync(file);
