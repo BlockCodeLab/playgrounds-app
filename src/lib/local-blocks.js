@@ -42,6 +42,25 @@ const getBlocksInfo = (path) => {
   );
 };
 
+const walkDir = (dirpath, dirrel) => {
+  const entries = readdirSync(dirpath, { withFileTypes: true }).filter((entry) => !entry.name.endsWith('.DS_Store'));
+  const filePaths = [];
+  for (const entry of entries) {
+    const fullPath = join(dirpath, entry.name);
+    const relPath = join(dirrel, entry.name);
+    if (entry.isDirectory()) {
+      const subFiles = walkDir(fullPath, relPath);
+      filePaths.push(...subFiles);
+    } else if (entry.isFile()) {
+      filePaths.push({
+        path: relPath,
+        uri: fullPath,
+      });
+    }
+  }
+  return filePaths;
+};
+
 export const readLoaclBlocks = () => {
   ipcMain.on('local:blocks', (event) => {
     try {
@@ -54,12 +73,7 @@ export const readLoaclBlocks = () => {
   ipcMain.on('local:blocks:zip', (event, id) => {
     let files = [];
     try {
-      files = readdirSync(join(localPath.blocks, escape(id)))
-        .filter((file) => !file.endsWith('.DS_Store'))
-        .map((file) => ({
-          path: join(escape(id), file),
-          uri: join(localPath.blocks, escape(id), file),
-        }));
+      files = walkDir(join(localPath.blocks, escape(id)), escape(id));
     } catch (err) {}
     event.reply('local:blocks:zip:reply', files);
   });
