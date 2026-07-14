@@ -110,7 +110,7 @@ class TCS34725(object):
             x = i / 255.0
             x = x**2.5
             x *= 255
-            table[i] = int(x)
+            table[i] = round(x)
         return table
 
     def __read_register(self, reg):
@@ -256,7 +256,7 @@ class TCS34725(object):
         return counts
 
     @property
-    def color_to_gamma(self):
+    def color(self):
         """
         Return gamma-corrected RGB values (0-255 each) normalized by clear channel.
         Gamma = 2.5.
@@ -268,11 +268,44 @@ class TCS34725(object):
         r_norm = min(255, int((red / clear) * 256))
         g_norm = min(255, int((green / clear) * 256))
         b_norm = min(255, int((blue / clear) * 256))
+        return (r_norm, g_norm, b_norm)
+
+    @property
+    def color_to_gamma(self):
+        """
+        Return gamma-corrected RGB values (0-255 each) normalized by clear channel.
+        Gamma = 2.5.
+        """
+        r_norm, g_norm, b_norm = self.color
         # Apply gamma table
         r_gamma = self._gamma_table[r_norm]
         g_gamma = self._gamma_table[g_norm]
         b_gamma = self._gamma_table[b_norm]
         return (r_gamma, g_gamma, b_gamma)
+
+    @property
+    def red(self):
+        return self.color[0]
+
+    @property
+    def green(self):
+        return self.color[1]
+
+    @property
+    def blue(self):
+        return self.color[2]
+
+    @property
+    def red_to_gamma(self):
+        return self.color_to_gamma[0]
+
+    @property
+    def green_to_gamma(self):
+        return self.color_to_gamma[1]
+
+    @property
+    def blue_to_gamma(self):
+        return self.color_to_gamma[2]
 
     # Asynchronous methods
     async def _async_wait(self, ms):
@@ -303,10 +336,10 @@ class TCS34725(object):
                 counts = unpack(format_counts, self.__buf8)
         return counts
 
-    async def async_get_color_to_gamma(self):
+    async def async_get_color(self):
         """
-        Asynchronous version of color_to_gamma property.
-        Returns tuple (r_gamma, g_gamma, b_gamma).
+        Asynchronous version of color property.
+        Returns tuple (r_norm, g_norm, b_norm).
         """
         clear, red, green, blue = await self.async_get_colors()
         if clear == 0:
@@ -314,7 +347,33 @@ class TCS34725(object):
         r_norm = min(255, int((red / clear) * 256))
         g_norm = min(255, int((green / clear) * 256))
         b_norm = min(255, int((blue / clear) * 256))
+        return (r_norm, g_norm, b_norm)
+
+    async def async_get_color_to_gamma(self):
+        """
+        Asynchronous version of color_to_gamma property.
+        Returns tuple (r_gamma, g_gamma, b_gamma).
+        """
+        r_norm, g_norm, b_norm = await self.async_get_color()
         r_gamma = self._gamma_table[r_norm]
         g_gamma = self._gamma_table[g_norm]
         b_gamma = self._gamma_table[b_norm]
         return (r_gamma, g_gamma, b_gamma)
+
+    async def async_get_red(self):
+        return (await self.async_get_color())[0]
+
+    async def async_get_green(self):
+        return (await self.async_get_color())[1]
+
+    async def async_get_blue(self):
+        return (await self.async_get_color())[2]
+
+    async def async_get_red_to_gamma(self):
+        return (await self.async_get_color_to_gamma())[0]
+
+    async def async_get_green_to_gamma(self):
+        return (await self.async_get_color_to_gamma())[1]
+
+    async def async_get_blue_to_gamma(self):
+        return (await self.async_get_color_to_gamma())[2]
