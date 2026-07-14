@@ -71,10 +71,12 @@ export function Terminal({ compactMode, textValue, disabledREPL, options }) {
 
   // 缓存
   const handleTermCache = useCallback((data) => {
+    const maxCacheSize = 1024 * 10;
     const cache = appState.value?.terminalCache ?? Uint8Array.from([]);
-    const newCache = new Uint8Array(cache.length + data.length);
-    newCache.set(cache);
-    newCache.set(data, cache.length);
+    const buffer = new Uint8Array(cache.length + data.length);
+    buffer.set(cache);
+    buffer.set(data, cache.length);
+    const newCache = buffer.length > maxCacheSize ? buffer.slice(buffer.length - maxCacheSize) : buffer;
     setAppState('terminalCache', newCache);
   }, []);
 
@@ -154,7 +156,6 @@ export function Terminal({ compactMode, textValue, disabledREPL, options }) {
         value += '\n';
       }
     }
-    console.log(value);
     appState.value?.device?.serial.write(value, typeof value === 'string' ? 'text' : 'binary');
   }, []);
 
