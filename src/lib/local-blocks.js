@@ -108,32 +108,37 @@ ipcMain.handle('local:blocks:select', async (event, data) => {
   const packageEntries = Object.fromEntries(
     Object.values(zipFiles)
       .filter((file) => file.name.endsWith('package.json'))
-      .map((file) => [file.name.split('/')[0], file]),
+      .map((file) => [file.name.split(/[/\\\\]/)[0], file]),
   );
   const noPackageEntries = Object.fromEntries(
     Object.values(zipFiles)
       .filter((file) => file.name.endsWith('index.js'))
-      .map((file) => [file.name.split('/')[0], file]),
+      .map((file) => [file.name.split(/[/\\\\]/)[0], file]),
   );
-  const entries = Object.values({ ...packageEntries, ...noPackageEntries });
+  const entries = Object.values({ ...noPackageEntries, ...packageEntries });
 
   // 将每一个入口文件对应的扩展复制到本地
   for (const entry of entries) {
-    const entryName = dirname(entry.name) === '.' ? '' : `${dirname(entry.name)}`;
-    const re = new RegExp(`^${entryName}[/\\\\]`);
+    const entryPathes = entry.name.split(/[/\\\\]/);
+    if (entryPathes.length <= 1) continue;
+
+    const entryName = entryPathes[0];
+    const re = new RegExp(`^${entryName}\\b`);
     const files = Object.values(zipFiles).filter((file) => !file.dir && re.test(file.name));
     if (files.length === 0) continue;
 
     // 如果有 package.json 用 package.json 中的 name 作为文件夹名，避免重名
-    let entryDir = entry.name.split(/[/\\\\]/)[0];
+    let entryDirName = entryName;
     if (entry.name.endsWith('package.json')) {
       const entryJson = JSON.parse(await entry.async('string'));
-      entryDir = escape(entryJson.name);
+      entryDirName = escape(entryJson.name);
     }
 
     for (const file of files) {
-      const fileName = entryName ? file.name.replace(entryName, '') : file.name;
-      const filePath = join(localPath.blocks, entryDir, fileName);
+      let fileName = entryName ? file.name.replace(entryName, '') : file.name;
+      fileName = fileName.replace(/^[/\\]/, '');
+
+      const filePath = join(localPath.blocks, entryDirName, ...fileName.split(/[/\\\\]/));
 
       // 创建目录
       const dirPath = dirname(filePath);
