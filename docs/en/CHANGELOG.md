@@ -1,5 +1,15 @@
 ## CHANGELOG
 
+### v1.5.0
+
+- Updated the Block Editor
+  - Updated CodexPad blocks to add more key‑state blocks
+  - Optimized some block description texts
+
+- Added loading and saving of local custom extensions, [Custom Extension Documentation](https://app.blockcode.fun/#/custom-extension)
+- Updated the download button in the menu bar to connect directly to devices
+- Fixed known bugs
+
 ### v1.4.7
 
 - Updated the Arduino Editor to v0.6.3
