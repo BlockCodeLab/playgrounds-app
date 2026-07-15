@@ -1,6 +1,6 @@
 {
   "name": "playgrounds-app",
-  "version": "1.4.7",
+  "version": "1.5.0",
   "private": "true",
   "description": "The BlockCode Playgrounds application.",
   "author": {
@@ -14,7 +14,7 @@
   ],
   "main": "dist/main.js",
   "scripts": {
-    "docs": "bun x serve docs",
+    "docs": "bun x serve docs -p 8000",
     "dev": "bun run build && bun run combine -- watch",
     "build": "playground-build packages/blocks/extensions/* && playground-build packages/gui/editors/* && playground-build packages/*",
     "combine": "bun --smol ./scripts/combine.js",
