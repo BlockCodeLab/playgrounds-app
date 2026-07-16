@@ -6,7 +6,7 @@
   - 更新 CodexPad 积木增加更多按键状态积木
   - 优化一些积木描述文本
 
-- 添加本地自定义扩展加载和保存，[自定义扩展开发文档](https://app.blockcode.fun/#/custom-extension)
+- 添加本地自定义扩展加载和保存，[自定义扩展开发文档](https://app.blockcode.fun/#/zh-hans/custom-extension)
 - 更新菜单栏下载按钮，可直接连接设备
 - 修复已知错误
 
