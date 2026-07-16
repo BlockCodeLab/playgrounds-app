@@ -1,6 +1,6 @@
 ## 多語言文本支持
 
-多語言可以讓擴展在不同語言環境下用本地語言顯示（默認通常為英語）。要啟用多語言，需要先使用 `addLocalesMessages` 函數添加多種語言的文本，然後在需要顯示文本的地方使用本文 ID 來配置多語言文本，以[粉塵顆粒檢測傳感器擴展案例](custom-extension.md#自製擴展案例)的 `info.js` 文件為例：
+多語言可以讓擴展在不同語言環境下用本地語言顯示（默認通常為英語）。要啟用多語言，需要先使用 `addLocalesMessages` 函數添加多種語言的文本，然後在需要顯示文本的地方使用本文 ID 來配置多語言文本，以[粉塵顆粒檢測傳感器擴展案例](zh-hant/custom-extension.md#自製擴展案例)的 `info.js` 文件為例：
 
 ```javascript
 // 引用 addLocalesMessages 函數
@@ -38,6 +38,6 @@ addLocalesMessages({
     'blocks.dust.description': 'PM2.5 顆粒檢測傳感器。',
   },
   // 繁體中文
-  'zh-Hant': { ... },
+  'zh-hant': { ... },
 });
 ```

@@ -6,7 +6,7 @@
   - 更新 CodexPad 積木增加更多按鍵狀態積木
   - 優化一些積木描述文本
 
-- 添加本地自製擴展加載和保存，[自製擴展文檔](https://app.blockcode.fun/#/zh-Hant/custom-extension)
+- 添加本地自製擴展加載和保存，[自製擴展文檔](https://app.blockcode.fun/#/zh-hant/custom-extension)
 - 更新菜單欄下載按鈕，可直接連接設備
 - 修復已知錯誤
 

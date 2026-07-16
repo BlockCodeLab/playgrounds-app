@@ -1,6 +1,6 @@
 - 繁體中文
-  - [简体中文](/)
-  - [繁體中文](/zh-Hant/)
-  - [English](/en/)
+  - [简体中文](zh-hans/)
+  - [繁體中文](zh-hant/)
+  - [English](en/)
 
-- [新功能](/zh-Hant/CHANGELOG.md)
+- [新功能](zh-hant/CHANGELOG.md)

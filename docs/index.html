@@ -47,18 +47,18 @@
         font-size: 1em;
       }
     </style>
-    <div id="app">...</div>
+    <div id="app"></div>
     <script>
       window.$docsify = {
+        repo: 'BlockCodeLab/playgrounds-app',
+        logo: '/_media/bar.png',
         name: 'BlockCode Playgrounds',
         nameLink: {
-          '/zh-Hant/': '#/zh-Hant/README',
           '/en/': '#/en/README',
-          '/': '#/README',
+          '/zh-hans/': '#/zh-hans/README',
+          '/zh-hant/': '#/zh-hant/README',
         },
-        logo: '/_media/bar.png',
-        repo: 'BlockCodeLab/playgrounds-app',
-        coverpage: ['/', '/en/', '/zh-Hant/'],
+        coverpage: ['/en/', '/zh-hans/', '/zh-hant/'],
         loadNavbar: true,
         loadSidebar: true,
         subMaxLevel: 4,
@@ -70,13 +70,13 @@
           paths: 'auto',
           placeholder: {
             '/en/': 'Type to search',
-            '/zh-Hant/': '搜索',
-            '/': '搜索',
+            '/zh-hans/': '搜索',
+            '/zh-hant/': '搜索',
           },
           noData: {
             '/en/': 'No Results',
-            '/zh-Hant/': '找不到結果',
-            '/': '找不到结果',
+            '/zh-hans/': '找不到结果',
+            '/zh-hant/': '找不到結果',
           },
           depth: 2,
           hideOtherSidebarContent: false,
@@ -84,30 +84,30 @@
         copyCode: {
           buttonText: {
             '/en/': 'Copy to clipboard',
-            '/zh-Hant/': '點擊複製',
-            '/': '点击复制',
+            '/zh-hans/': '点击复制',
+            '/zh-hant/': '點擊複製',
           },
           errorText: {
             '/en/': 'Error',
-            '/zh-Hant/': '錯誤',
-            '/': '错误',
+            '/zh-hans/': '错误',
+            '/zh-hant/': '錯誤',
           },
           successText: {
             '/en/': 'Copied',
-            '/zh-Hant/': '複製',
-            '/': '复制',
+            '/zh-hans/': '复制',
+            '/zh-hant/': '複製',
           },
         },
         pagination: {
           previousText: {
             '/en/': 'PREVIOUS',
-            '/zh-Hant/': '上一篇',
-            '/': '上一篇',
+            '/zh-hans/': '上一篇',
+            '/zh-hant/': '上一篇',
           },
           nextText: {
             '/en/': 'NEXT',
-            '/zh-Hant/': '下一篇',
-            '/': '下一篇',
+            '/zh-hans/': '下一篇',
+            '/zh-hant/': '下一篇',
           },
           crossChapter: true,
           crossChapterText: true,
@@ -120,8 +120,30 @@
           },
         },
 
-        // apply pangu.js
-        plugins: [(hook) => hook.doneEach(() => pangu && pangu.spacingNode(document.getElementById('main')))],
+        plugins: [
+          (hook, vm) => {
+            // 自动切换语言
+            hook.mounted(() => {
+              if (vm.route.path === '/') {
+                const langs = navigator.languages || [navigator.language];
+                for (let raw of langs) {
+                  const lang = raw.toLowerCase();
+                  if (!lang.startsWith('zh')) continue;
+                  if (lang.includes('hant') || lang.includes('tw') || lang.includes('hk') || lang.includes('mo')) {
+                    location.href = '#/zh-hant/';
+                    return;
+                  }
+                  location.href = '#/zh-hans/';
+                  return;
+                }
+                // 没有中文
+                location.href = '#/en/';
+              }
+            });
+            // 应用 pangu.js
+            hook.doneEach(() => pangu && pangu.spacingNode(document.getElementById('main')));
+          },
+        ],
       };
     </script>
     <script src="//unpkg.com/pangu/dist/browser/pangu.umd.js"></script>

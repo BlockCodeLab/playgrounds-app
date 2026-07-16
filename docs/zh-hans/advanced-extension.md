@@ -1,6 +1,6 @@
 ## 多语言文本支持
 
-多语言可以让扩展在不同语言环境下用本地语言显示（默认通常为英语）。要启用多语言，需要先使用 `addLocalesMessages` 函数添加多种语言的文本，然后在需要显示文本的地方使用本文 ID 来配置多语言文本，以[微尘颗粒检测传感器扩展案例](custom-extension.md#自定义扩展案例)的 `info.js` 文件为例：
+多语言可以让扩展在不同语言环境下用本地语言显示（默认通常为英语）。要启用多语言，需要先使用 `addLocalesMessages` 函数添加多种语言的文本，然后在需要显示文本的地方使用本文 ID 来配置多语言文本，以[微尘颗粒检测传感器扩展案例](zh-hans/custom-extension.md#自定义扩展案例)的 `info.js` 文件为例：
 
 ```javascript
 // 引用 addLocalesMessages 函数
