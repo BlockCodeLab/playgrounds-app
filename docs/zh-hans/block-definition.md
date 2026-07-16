@@ -59,13 +59,14 @@ function blocks(metadata) {
       // Arduino 转换代码
       // block：当前积木
       // args：输入的参数列表，用的文本描述中占位符的参数名作为 key
+      // defs：代码头（初始代码）定义
       ino(block, args) {
         // 代码头定义：引用库文件，文件列表中该文件以设为自动引用，可不用再添加
-        // this.definitions_[`include_pm25_sensor`] = `#include "pm25_sensor.h"`;
+        // defs[`include_pm25_sensor`] = `#include "pm25_sensor.h"`;
         // 代码头定义：定义全局变量
-        this.definitions_[`variable_pm25`] = `em::Pm25Sensor pm25(${args.DPin}, ${args.APin});`;
+        defs[`variable_pm25`] = `em::Pm25Sensor pm25(${args.DPin}, ${args.APin});`;
         // 代码头定义：setup 前置代码（保持在 setup 内最前面的代码）
-        this.definitions_[`setup_pm25_init`] = `pm25.Init();`;
+        defs[`setup_pm25_init`] = `pm25.Init();`;
         // 积木转换的实际工作代码
         const code = `pm25.Read()`;
         return [code]; // 输出类型的积木，返回的转换代码必须是 [code] 数组形式
@@ -110,13 +111,13 @@ function blocks(metadata) {
         return code;
       },
       // MicroPython 代码转换函数
-      mpy(block, args) {
+      mpy(block, args, defs) {
         // 代码头定义：引用库，每一个需要的库单独引用
-        this.definitions_['import_time'] = 'import time';
-        this.definitions_['import_pin'] = 'from machine import Pin';
-        this.definitions_['import_pwm'] = 'from machine import PWM';
+        defs['import_time'] = 'import time';
+        defs['import_pin'] = 'from machine import Pin';
+        defs['import_pwm'] = 'from machine import PWM';
         // 代码头定义：定义全局变量
-        this.definitions_['variable_tone'] = `tone = PWM(Pin(${args.PIN}))`;
+        defs['variable_tone'] = `tone = PWM(Pin(${args.PIN}))`;
         // frequencyFromNote 辅助函数
         const freq = frequencyFromNote(args.Note);
         // 使用 MicroPython 的 PWM 播放音符（频率）
@@ -175,42 +176,38 @@ function blocks(metadata) {
 
 定义积木转为真正的程序代码的规则，根据不同的开发板进行转换，可将图形积木转为 Arduino 系列程序代码片段和 MicroPython 系列程序代码片段。如果不定义任何转换函数图形积木将仅作为显示，不具备功能，可以只定义一种或者都定义。
 
-转换函数的 `this` 对象指向当前当前编辑器的 `Blockly.generator` 代码转换器。`this.definitions_` 对象中可以定义特定的转换代码，对于整体代码转换有很重要的作用，详见[`this.definitions_`](#thisdefinitions) 说明。
-
 转换后的代码以字符串的形式返回，多行代码需要再每行代码末尾加 `\n` 换行符，代码无需额外给每行代码行首加空格（缩进）——除非代码需要。
 
 - `ino()`：将图形积木转为 Arduino 系列程序代码片段，Arduino 代码为 C/C++ 语言格式
 - `mpy()`：将图形积木转为 MicroPython 系列程序代码片段，代码为 Python3 语言格式
 
 > 1. 转换函数，必须至少返回一个空字符串，否则会出错。
-> 2. `output` 输出类型积木必须返回为数组，将转换后的代码字符串放入数组再返回，例如，`return [code];`。
+> 2. 转换函数的 `this` 对象指向当前当前编辑器的 `Blockly.generator` 代码转换器。
+> 3. `output` 输出类型积木必须返回为数组，将转换后的代码字符串放入数组再返回，例如，`return [code];`。
 
 ##### 转换函数参数
 
 - `block`：当前积木对象，原始的 `Blockly.block` 对象
 - `args`：获取当前积木的参数列表，用文本描述中的参数名作为 **key** 获取值，例如：`args.Pin` 获取引脚值
+- `defs`: 定义初始代码
 
 !> `args` 获取参数的值时，如果参数数据类型是 `string` 返回的值会根据内容不是有效数字，在守首尾加上引号（`'`或`"`），例如，`abc123` 返回 `'abc123'` 或 `"abc123"`、`-13.2`返回`-13.2`
 
-##### `this.definitions_` 对象 :id=thisdefinitions
+##### `defs` 定义初始代码 :id=thisdefinitions
 
-在这个对象中可以添加用于整体代码转换的规则，例如，引用头文件、声明全局变量（不是“变量”积木）、在 `setup` 或 `loop` 函数添加代码（限 `Arduino` 系列程序）等等。
+在这个对象中可以添加用户代码转换最初的代码内容，例如，引用头文件、声明全局变量（不是“变量”积木）、在 `setup` 或 `loop` 函数添加代码（限 `Arduino` 系列程序）等等。
 
 ###### 用于 `Arduino` 程序：
 
-- `this.definitions_['include_xxx'] =`：在 `Arduino` 程序最前面添加引用的库<br>
-  例如，`this.definitions_['include_wire'] = '#include <Wire.h>';`
-- `this.definitions_['variable_xxx'] =`：在所有积木转换的代码的前面添加全局变量<br>
-  例如，`this.definitions_['variable_compass] = QMC5883LCompass compass;`
-- `this.definitions_['setup_xxx'] =`：将定义的代码添加到 `setup` 函数中其他积木转换的代码前面
-- `this.definitions_['loop_xxx'] =`：将定义的代码添加到 `loop` 函数中其他积木转换的代码前面
+- `defs['include_xxx'] =`：在 `Arduino` 程序最前面添加引用的库<br>
+  例如，`defs['include_wire'] = '#include <Wire.h>';`
+- `defs['variable_xxx'] =`：在所有积木转换的代码的前面添加全局变量<br>
+  例如，`defs['variable_compass'] = QMC5883LCompass compass;`
+- `defs['setup_xxx'] =`：将定义的代码添加到 `setup` 函数中其他积木转换的代码前面
+- `defs['loop_xxx'] =`：将定义的代码添加到 `loop` 函数中其他积木转换的代码前面
 
 !> `xxx` 作为添加代码的唯一性 **key**，避免被添加的代码在多个积木转换中同时定义，导致最终转换的代码中重复出现。
 
-###### 用于 `MicroPython` 程序：
-
-- `this.definitions_['import_xxx'] =`：`MicroPython` 程序最前面添加引用的库
-
 ###### 用于所有程序：
 
-- `this.definitions_['xxx'] =`：将定义的代码添加到所有积木转换代码的前面
+- `defs['xxx'] =`：将定义的代码添加到所有积木转换代码的前面

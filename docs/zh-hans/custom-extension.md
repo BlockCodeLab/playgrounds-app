@@ -158,15 +158,16 @@ function blocks(metadata) {
       // Arduino 代码转换函数
       // block：当前积木
       // args：输入的参数列表，用的文本描述中占位符的参数名作为 key
-      ino(block, args) {
+      // defs：代码头（初始代码）定义
+      ino(block, args, defs) {
         // 代码头定义：引用库文件，文件列表中该文件以设为自动引用，可不用再添加
-        // this.definitions_[`include_pm25_sensor`] = `#include "pm25_sensor.h"`;
+        // defs[`include_pm25_sensor`] = `#include "pm25_sensor.h"`;
         // 代码头定义：定义全局变量
-        this.definitions_[`variable_pm25`] = `em::Pm25Sensor pm25(${args.DPin}, ${args.APin});`;
+        defs[`variable_pm25`] = `em::Pm25Sensor pm25(${args.DPin}, ${args.APin});`;
         // 代码头定义：setup 前置代码（保持在 setup 内最前面的代码）
-        this.definitions_[`setup_pm25_init`] = `pm25.Init();`;
+        defs[`setup_pm25_init`] = `pm25.Init();`;
         // 代码头定义：loop 前置代码（保持在 loop 内最前面的代码）
-        // this.definitions_[`loop_...`] = `...`;
+        // defs[`loop_...`] = `...`;
         // 积木转换的实际工作代码
         const code = `pm25.Read()`;
         return [code]; // 输出类型的积木，返回的转换代码必须是 [code] 数组形式

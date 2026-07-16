@@ -1,4 +1,4 @@
-完整自製擴展案例見[自製擴展](zh-hant/custom-extension.md)文檔，這裡僅給出一個用於介紹積木定義參數的演示案例。
+完整自定義擴展案例見[自定義擴展](zh-hant/custom-extension.md)文檔，這裡僅給出一個用於介紹積木定義參數的演示案例。
 
 ## `blocks` 圖形積木列表
 
@@ -59,13 +59,14 @@ function blocks(metadata) {
       // Arduino 轉換代碼
       // block：當前積木
       // args：輸入的參數列表，用的文本描述中占位符的參數名作為 key
+      // defs：代碼頭（初始代碼）定義
       ino(block, args) {
         // 代碼頭定義：引用庫文件，文件列表中該文件以設為自動引用，可不用再添加
-        // this.definitions_[`include_pm25_sensor`] = `#include "pm25_sensor.h"`;
+        // defs[`include_pm25_sensor`] = `#include "pm25_sensor.h"`;
         // 代碼頭定義：定義全局變量
-        this.definitions_[`variable_pm25`] = `em::Pm25Sensor pm25(${args.DPin}, ${args.APin});`;
+        defs[`variable_pm25`] = `em::Pm25Sensor pm25(${args.DPin}, ${args.APin});`;
         // 代碼頭定義：setup 前置代碼（保持在 setup 內最前面的代碼）
-        this.definitions_[`setup_pm25_init`] = `pm25.Init();`;
+        defs[`setup_pm25_init`] = `pm25.Init();`;
         // 積木轉換的實際工作代碼
         const code = `pm25.Read()`;
         return [code]; // 輸出類型的積木，返回的轉換代碼必須是 [code] 數組形式
@@ -102,7 +103,7 @@ function blocks(metadata) {
       },
       // Arduino 代碼轉換函數
       ino(block, args) {
-        // frequencyFromNote 輔助函數（自製），可將 note 音符轉為頻率數字
+        // frequencyFromNote 輔助函數（自定義），可將 note 音符轉為頻率數字
         const freq = frequencyFromNote(args.Note);
         // 使用 Arduino 的 tone() 函數播放音符（頻率）
         const code = `tone(${args.Pin}, ${freq}, ${args.Duration});\n`;
@@ -110,13 +111,13 @@ function blocks(metadata) {
         return code;
       },
       // MicroPython 代碼轉換函數
-      mpy(block, args) {
+      mpy(block, args, defs) {
         // 代碼頭定義：引用庫，每一個需要的庫單獨引用
-        this.definitions_['import_time'] = 'import time';
-        this.definitions_['import_pin'] = 'from machine import Pin';
-        this.definitions_['import_pwm'] = 'from machine import PWM';
+        defs['import_time'] = 'import time';
+        defs['import_pin'] = 'from machine import Pin';
+        defs['import_pwm'] = 'from machine import PWM';
         // 代碼頭定義：定義全局變量
-        this.definitions_['variable_tone'] = `tone = PWM(Pin(${args.PIN}))`;
+        defs['variable_tone'] = `tone = PWM(Pin(${args.PIN}))`;
         // frequencyFromNote 輔助函數
         const freq = frequencyFromNote(args.Note);
         // 使用 MicroPython 的 PWM 播放音符（頻率）
@@ -175,42 +176,38 @@ function blocks(metadata) {
 
 定義積木轉為真正的程序代碼的規則，根據不同的開發板進行轉換，可將圖形積木轉為 Arduino 系列程序代碼片段和 MicroPython 系列程序代碼片段。如果不定義任何轉換函數圖形積木將僅作為顯示，不具備功能，可以只定義一種或者都定義。
 
-轉換函數的 `this` 對象指向當前當前編輯器的 `Blockly.generator` 代碼轉換器。`this.definitions_` 對象中可以定義特定的轉換代碼，對於整體代碼轉換有很重要的作用，詳見[`this.definitions_`](#thisdefinitions) 說明。
-
 轉換後的代碼以字符串的形式返回，多行代碼需要再每行代碼末尾加 `\n` 換行符，代碼無需額外給每行代碼行首加空格（縮進）——除非代碼需要。
 
 - `ino()`：將圖形積木轉為 Arduino 系列程序代碼片段，Arduino 代碼為 C/C++ 語言格式
 - `mpy()`：將圖形積木轉為 MicroPython 系列程序代碼片段，代碼為 Python3 語言格式
 
 > 1. 轉換函數，必須至少返回一個空字符串，否則會出錯。
-> 2. `output` 輸出類型積木必須返回為數組，將轉換後的代碼字符串放入數組再返回，例如，`return [code];`。
+> 2. 轉換函數的 `this` 對象指向當前當前編輯器的 `Blockly.generator` 代碼轉換器。
+> 3. `output` 輸出類型積木必須返回為數組，將轉換後的代碼字符串放入數組再返回，例如，`return [code];`。
 
 ##### 轉換函數參數
 
 - `block`：當前積木對象，原始的 `Blockly.block` 對象
 - `args`：獲取當前積木的參數列表，用文本描述中的參數名作為 **key** 獲取值，例如：`args.Pin` 獲取引腳值
+- `defs`: 定義初始代碼
 
 !> `args` 獲取參數的值時，如果參數數據類型是 `string` 返回的值會根據內容不是有效數字，在守首尾加上引號（`'`或`"`），例如，`abc123` 返回 `'abc123'` 或 `"abc123"`、`-13.2`返回`-13.2`
 
-##### `this.definitions_` 對象 :id=thisdefinitions
+##### `defs` 定義初始代碼 :id=thisdefinitions
 
-在這個對象中可以添加用於整體代碼轉換的規則，例如，引用頭文件、聲明全局變量（不是「變量」積木）、在 `setup` 或 `loop` 函數添加代碼（限 `Arduino` 系列程序）等等。
+在這個對象中可以添加用戶代碼轉換最初的代碼內容，例如，引用頭文件、聲明全局變量（不是「變量」積木）、在 `setup` 或 `loop` 函數添加代碼（限 `Arduino` 系列程序）等等。
 
 ###### 用於 `Arduino` 程序：
 
-- `this.definitions_['include_xxx'] =`：在 `Arduino` 程序最前面添加引用的庫<br>
-  例如，`this.definitions_['include_wire'] = '#include <Wire.h>';`
-- `this.definitions_['variable_xxx'] =`：在所有積木轉換的代碼的前面添加全局變量<br>
-  例如，`this.definitions_['variable_compass] = QMC5883LCompass compass;`
-- `this.definitions_['setup_xxx'] =`：將定義的代碼添加到 `setup` 函數中其他積木轉換的代碼前面
-- `this.definitions_['loop_xxx'] =`：將定義的代碼添加到 `loop` 函數中其他積木轉換的代碼前面
+- `defs['include_xxx'] =`：在 `Arduino` 程序最前面添加引用的庫<br>
+  例如，`defs['include_wire'] = '#include <Wire.h>';`
+- `defs['variable_xxx'] =`：在所有積木轉換的代碼的前面添加全局變量<br>
+  例如，`defs['variable_compass'] = QMC5883LCompass compass;`
+- `defs['setup_xxx'] =`：將定義的代碼添加到 `setup` 函數中其他積木轉換的代碼前面
+- `defs['loop_xxx'] =`：將定義的代碼添加到 `loop` 函數中其他積木轉換的代碼前面
 
 !> `xxx` 作為添加代碼的唯一性 **key**，避免被添加的代碼在多個積木轉換中同時定義，導致最終轉換的代碼中重複出現。
 
-###### 用於 `MicroPython` 程序：
-
-- `this.definitions_['import_xxx'] =`：`MicroPython` 程序最前面添加引用的庫
-
 ###### 用於所有程序：
 
-- `this.definitions_['xxx'] =`：將定義的代碼添加到所有積木轉換代碼的前面
+- `defs['xxx'] =`：將定義的代碼添加到所有積木轉換代碼的前面
