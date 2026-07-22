@@ -87,12 +87,12 @@ public:
   void clearPixels(uint16_t start, uint16_t end);
 
   // 填充所有LED为指定颜色，亮度等级设为100（最大）
-  void fill(cRGB color);
+  void fill(cRGB color, uint8_t brightness = 100);
 
-  // 设置单个LED（brightness为1~100等级，内部映射到3~255）
+  // 设置单个LED（brightness为0~100等级，内部映射到0~255）
   void setPixel(uint16_t index, uint8_t brightness, cRGB color);
 
-  // 设置多个LEDs（brightness为1~100等级，内部映射到3~255）
+  // 设置多个LEDs（brightness为0~100等级，内部映射到0~255）
   void setPixels(uint16_t start, uint16_t end, uint8_t brightness, cRGB color);
 
   // 获取LED的当前颜色（原始颜色，未应用亮度）
@@ -139,9 +139,11 @@ private:
   uint8_t *pixels_bak;     // 上一次发送的数据备份，用于避免重复发送
   uint8_t count_led;       // LED 数量
   uint16_t
-      brightness;  // 全局亮度因子，范围 1~256（用户输入 0~255 映射为 1~256）
+      brightness;  // 全局亮度因子，范围 1~256（用户输入 0~255 映射为 0~256）
   uint8_t pinMask; // 引脚位掩码
   volatile uint8_t *ws2812_port; // 端口寄存器指针
+
+  uint8_t gammaTable[101] = {};
 
   // 内部函数：设置指定索引（0-based）的颜色，同时更新原始和当前缓冲区
   bool setColorAt(uint8_t index, uint8_t red, uint8_t green, uint8_t blue);
@@ -160,7 +162,7 @@ private:
   static cRGB hsvToRgb(uint16_t hue, uint8_t sat, uint8_t val);
 
   // ==================== 新增私有辅助函数与状态 ====================
-  // 亮度等级（1~10）映射到实际亮度（0~255）
+  // 亮度等级（0~100）映射到实际亮度（0~255）
   uint8_t levelToActual(uint8_t level) const;
 
   // 将所有LED的亮度衰减指定量（实际亮度值减少amount，不低于0）

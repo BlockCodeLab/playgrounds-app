@@ -7,7 +7,7 @@ LedPixel::LedPixel(uint8_t port, uint8_t led_num) {
   pinMask = digitalPinToBitMask(port);
   ws2812_port = portOutputRegister(digitalPinToPort(port));
   pinMode(port, OUTPUT);
-  brightness = 256;
+  brightness = 255;
   pixels = NULL;
   orig_pixels = NULL;
   led_brightness = NULL;
@@ -142,15 +142,14 @@ void LedPixel::updatePixel(uint8_t led_index) {
   uint8_t r = orig_pixels[tmp + 1];
   uint8_t b = orig_pixels[tmp + 2];
   uint8_t local = led_brightness[led_index]; // 0~255
-  // 最终像素值 = 原始颜色 * 全局亮度 * 局部亮度 >> 16
-  // 全局亮度 brightness 范围 1~256，局部亮度 local 范围 0~255
-  uint32_t temp;
-  temp = (uint32_t)g * brightness * local;
-  pixels[tmp] = temp >> 16;
-  temp = (uint32_t)r * brightness * local;
-  pixels[tmp + 1] = temp >> 16;
-  temp = (uint32_t)b * brightness * local;
-  pixels[tmp + 2] = temp >> 16;
+  // 最终像素值 = 原始颜色 * 局部亮度 >> 8
+  uint16_t temp;
+  temp = (uint16_t)g * local;
+  pixels[tmp] = temp >> 8;
+  temp = (uint16_t)r * local;
+  pixels[tmp + 1] = temp >> 8;
+  temp = (uint16_t)b * local;
+  pixels[tmp + 2] = temp >> 8;
 }
 
 //==============================================================================
@@ -205,18 +204,15 @@ bool LedPixel::setColor(uint8_t index, long value) {
 //==============================================================================
 // 全局亮度设置
 //==============================================================================
-void LedPixel::setBrightness(uint8_t b) {
-  uint16_t new_brightness = b + 1; // 将用户 0~255 映射到内部 1~256
+void LedPixel::setBrightness(uint8_t new_brightness) {
   if (new_brightness == brightness)
     return;
   brightness = new_brightness;
 
   // 根据原始颜色和每个LED的独立亮度重新计算所有显示像素
-  if (count_led == 0)
-    return;
-  for (uint8_t i = 0; i < count_led; i++) {
-    updatePixel(i);
-  }
+  uint16_t actual = levelToActual(brightness); // 将用户 0~100 映射到内部 0~255
+  setBrightnessAt(0, actual);
+  show();
 }
 
 //==============================================================================
@@ -460,7 +456,7 @@ void LedPixel::setHSV(uint16_t hue, uint8_t sat, uint8_t val) {
 uint8_t LedPixel::levelToActual(uint8_t level) const {
   if (level == 0)
     return 0;
-  return (uint16_t(level - 1) * (255 - 3) / (100 - 1) + 3);
+  return gammaTable[level];
 }
 
 // 将所有LED的亮度衰减指定量（实际亮度值减少amount，不低于0）
@@ -491,6 +487,13 @@ cRGB LedPixel::randomColor(uint8_t minBrightness) {
 
 // 初始化
 void LedPixel::begin() {
+  gammaTable[0] = 0;
+  for (int i = 1; i <= 100; i++) {
+    uint8_t val = (uint8_t)(253.0 * pow(i / 100.0, 2.2) + 0.5) + 2;
+    Serial.println(val);
+    gammaTable[i] = val;
+  }
+
   // 已在构造函数中完成，无需额外操作
   clear();
 }
@@ -503,9 +506,9 @@ void LedPixel::clearPixels(uint16_t start, uint16_t end) {
   show();
 }
 
-// 填充所有LED为指定颜色，亮度等级设为80
-void LedPixel::fill(cRGB color) {
-  uint8_t actual = levelToActual(80);
+// 填充所有LED为指定颜色，亮度等级设为100
+void LedPixel::fill(cRGB color, uint8_t brightness) {
+  uint8_t actual = levelToActual(brightness);
   uint8_t r = (color >> 16) & 0xFF;
   uint8_t g = (color >> 8) & 0xFF;
   uint8_t b = color & 0xFF;
@@ -522,11 +525,11 @@ void LedPixel::setPixel(uint16_t index, uint8_t brightness, cRGB color) {
   if (index >= count_led)
     return;
   uint8_t actual = levelToActual(brightness);
-  setBrightnessAt(index + 1, actual); // setBrightnessAt使用1-based索引
   uint8_t r = (color >> 16) & 0xFF;
   uint8_t g = (color >> 8) & 0xFF;
   uint8_t b = color & 0xFF;
-  setColorAt(index, r, g, b); // setColorAt自动调用updatePixel
+  setColorAt(index, r, g, b);         // setColorAt自动调用updatePixel
+  setBrightnessAt(index + 1, actual); // setBrightnessAt使用1-based索引
 }
 
 // 设置多个LED（brightness为1~100等级）
@@ -539,8 +542,8 @@ void LedPixel::setPixels(uint16_t start, uint16_t end, uint8_t brightness,
   uint8_t g = (color >> 8) & 0xFF;
   uint8_t b = color & 0xFF;
   for (uint16_t i = start; i <= end; i++) {
-    setBrightnessAt(i + 1, actual); // setBrightnessAt使用1-based索引
     setColorAt(i, r, g, b);         // setColorAt自动调用updatePixel
+    setBrightnessAt(i + 1, actual); // setBrightnessAt使用1-based索引
   }
 }
 
@@ -561,7 +564,7 @@ void LedPixel::rainbow(uint8_t hue) {
   for (uint8_t i = 0; i < count_led; i++) {
     uint8_t h = hue + i * step;
     cRGB color = hsvToRgb(h, 255, 255);
-    setPixel(i, 80, color);
+    setPixel(i, brightness, color);
   }
   show();
 }
@@ -569,14 +572,14 @@ void LedPixel::rainbow(uint8_t hue) {
 // 环形彩虹效果（色相环绕）
 void LedPixel::rainbowCycle(uint8_t hueOffset) {
   _lastEffect = RAINBOW_CYCLE;
-  _rainbowHue += 256 / count_led;
   if (count_led == 0)
     return;
+  _rainbowHue += 256 / count_led;
   uint16_t step = 256 / count_led;
   for (uint8_t i = 0; i < count_led; i++) {
     uint8_t h = _rainbowHue + i * step + hueOffset;
     cRGB color = hsvToRgb(h, 255, 255);
-    setPixel(i, 80, color);
+    setPixel(i, brightness, color);
   }
   show();
 }
@@ -587,14 +590,10 @@ void LedPixel::chase(cRGB color, uint8_t spacing) {
   if (count_led == 0)
     return;
   // 先全部清除
-  for (uint8_t i = 0; i < count_led; i++) {
-    setColorAt(i, 0, 0, 0);
-    led_brightness[i] = 0;
-    updatePixel(i);
-  }
+  fill(0);
   // 设置追逐点
   for (uint8_t i = _chaseOffset; i < count_led; i += spacing) {
-    setPixel(i, 80, color);
+    setPixel(i, brightness, color);
   }
   _chaseOffset = (_chaseOffset + 1) % spacing;
   show();
@@ -604,7 +603,7 @@ void LedPixel::chase(cRGB color, uint8_t spacing) {
 void LedPixel::twinkle(cRGB color) {
   _lastEffect = TWINKLE;
   if (_twinkleState) {
-    fill(color);
+    fill(color, brightness);
   } else {
     clear();
   }
@@ -620,11 +619,7 @@ void LedPixel::sparkle(cRGB color, uint8_t sparkleCount) {
   // 渐弱（所有LED亮度减半或减固定值，这里使用减半模拟fadeToBlackBy
   // 255？原代码fadeToBlackBy(_leds, NUM_LEDS, 255)相当于全黑
   // 为了模拟，我们直接清除所有LED，然后生成新火花
-  for (uint8_t i = 0; i < count_led; i++) {
-    setColorAt(i, 0, 0, 0);
-    led_brightness[i] = 0;
-    updatePixel(i);
-  }
+  fadeAll(100);
 
   // 生成新火花
   _sparkleCount = min(sparkleCount, (uint8_t)5);
@@ -632,9 +627,9 @@ void LedPixel::sparkle(cRGB color, uint8_t sparkleCount) {
     _sparkleIndices[i] = random(count_led);
   }
 
-  // 设置火花（随机亮度10~80）
+  // 设置火花（随机亮度10~100）
   for (uint8_t i = 0; i < _sparkleCount; i++) {
-    uint8_t level = random(10, 80);
+    uint8_t level = brightness > 10 ? random(10, brightness) : 10;
     setPixel(_sparkleIndices[i], level, color);
   }
   show();
@@ -646,10 +641,10 @@ void LedPixel::breathing(cRGB color) {
   if (count_led == 0)
     return;
 
-  // 更新呼吸亮度等级（1~80）
+  // 更新呼吸亮度等级（1~100）
   _breathBrightness += _breathIncreasing ? 5 : -5;
-  if (_breathBrightness >= 80) {
-    _breathBrightness = 80;
+  if (_breathBrightness >= brightness) {
+    _breathBrightness = brightness;
     _breathIncreasing = false;
   }
   if (_breathBrightness <= 0) {
@@ -680,7 +675,7 @@ void LedPixel::scanner(cRGB color) {
 
   // 设置新扫描点
   if (_scannerPosition >= 0 && _scannerPosition < count_led) {
-    setPixel(_scannerPosition, 80, color);
+    setPixel(_scannerPosition, brightness, color);
   }
 
   // 更新扫描位置
@@ -711,7 +706,7 @@ void LedPixel::waterfall(cRGB color) {
 
   // 设置新点
   if (_waterfallPosition < count_led) {
-    setPixel(_waterfallPosition, 80, color);
+    setPixel(_waterfallPosition, brightness, color);
   }
 
   // 更新位置
@@ -733,7 +728,7 @@ void LedPixel::whirlpool(cRGB color) {
 
   // 设置新点
   if (_waterpoolPosition < count_led) {
-    setPixel(_waterpoolPosition, 80, color);
+    setPixel(_waterpoolPosition, brightness, color);
   }
 
   // 更新位置
@@ -751,7 +746,7 @@ void LedPixel::lightSpot(cRGB color) {
     return;
 
   clear();
-  setPixel(_spotPosition, 80, color);
+  setPixel(_spotPosition, brightness, color);
 
   _spotPosition = (_spotPosition + 1) % count_led;
   show();
@@ -763,7 +758,7 @@ void LedPixel::lightWheel(cRGB color) {
   if (count_led == 0)
     return;
 
-  fill(color);
+  fill(color, brightness);
   setPixel(_wheelPosition, 0, 0); // 亮度0，黑色
 
   _wheelPosition = (_wheelPosition + 1) % count_led;

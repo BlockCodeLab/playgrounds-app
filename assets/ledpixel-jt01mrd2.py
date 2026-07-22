@@ -25,6 +25,8 @@ class LedPixel(NeoPixel):
         self.set_gamma(_DEFAULT_GAMMA)
         self._last_effect = LedPixel.NO_EFFECT
         self._frame_states = {}
+        self._brightness = 100
+        self._colors = [(0, 0, 0)] * num_pixels
 
     def _clear_frame_state(self, effect_key):
         if effect_key in self._frame_states:
@@ -40,8 +42,9 @@ class LedPixel(NeoPixel):
 
     def set_gamma(self, gamma):
         self._gamma_table = bytearray(256)
-        for i in range(256):
-            self._gamma_table[i] = int(pow(i / 255.0, gamma) * 255.0 + 0.5)
+        self._gamma_table[0] = 0
+        for i in range(1, 256):
+            self._gamma_table[i] = int(pow(i / 253.0, gamma) * 253.0 + 0.5) + 2
 
     @staticmethod
     def hsv_to_rgb(hue, sat=1.0, val=1.0):
@@ -78,10 +81,17 @@ class LedPixel(NeoPixel):
         g = self._gamma_table[round(g * brightness)]
         b = self._gamma_table[round(b * brightness)]
         self[index] = (r, g, b)
+        self._colors[index] = color
 
     def set_leds(self, start, end, brightness, color):
         for i in range(start, end + 1):
             self.set_led(i, brightness, color)
+
+    def set_brightness(self, brightness):
+        self._brightness = max(0, min(brightness, 100))
+        for i in range(0, len(self)):
+            self.set_led(i, self._brightness, self._colors[i])
+        self.write()
 
     # ==================== 特效实现 ====================
 
@@ -101,7 +111,7 @@ class LedPixel(NeoPixel):
             for j in range(num_pixels):
                 color = self.wheel(j * steps)
                 n = (offset + j) % num_pixels
-                self.set_led(n, 80, color)
+                self.set_led(n, self._brightness, color)
             self.write()
 
             offset = (offset + 1) % num_pixels
@@ -132,7 +142,7 @@ class LedPixel(NeoPixel):
             i, j = state["i"], state["j"]
             self.fill((0, 0, 0))
             for n in range(j, len(self), 2):
-                self.set_led(n, 80, cur_color)
+                self.set_led(n, self._brightness, cur_color)
             self.write()
 
             j += 1
@@ -170,7 +180,7 @@ class LedPixel(NeoPixel):
 
             if step % 2 == 0:
                 for n in range(len(self)):
-                    self.set_led(n, 80, cur_color)
+                    self.set_led(n, self._brightness, cur_color)
             else:
                 self.fill((0, 0, 0))
             self.write()
@@ -219,15 +229,15 @@ class LedPixel(NeoPixel):
                 state["leds"] = leds
                 state["last_leds"] = leds
                 for n in leds:
-                    self.set_led(n, 80, cur_color)
+                    self.set_led(n, self._brightness, cur_color)
                 self.write()
             elif sub == 1:
                 for n in leds:
-                    self.set_led(n, 30, cur_color)
+                    self.set_led(n, self._brightness * 0.5, cur_color)
                 self.write()
             elif sub == 2:
                 for n in leds:
-                    self.set_led(n, 10, cur_color)
+                    self.set_led(n, self._brightness * 0.3, cur_color)
                 self.write()
             elif sub == 3:
                 self.fill((0, 0, 0))
@@ -274,8 +284,8 @@ class LedPixel(NeoPixel):
             self.write()
 
             bright += 5 * state["dir"]
-            if bright >= 80:
-                bright = 80
+            if bright >= self._brightness:
+                bright = self._brightness
                 state["dir"] = -1
             elif bright <= 0:
                 bright = 0
@@ -315,13 +325,17 @@ class LedPixel(NeoPixel):
             if phase == 0:
                 for n in range(step + 1):
                     if n < num_pixels:
-                        brightness = 80 - (step - n) * 15
+                        brightness = self._brightness - round(
+                            (step - n) * (self._brightness / step)
+                        )
                         if brightness > 0:
                             self.set_led(n, brightness, cur_color)
             else:
                 for n in range(step + 1):
                     if n < num_pixels:
-                        brightness = 80 - (step - n) * 15
+                        brightness = self._brightness - round(
+                            (step - n) * (self._brightness / step)
+                        )
                         if brightness > 0:
                             idx = num_pixels - n - 1
                             if idx >= 0:
@@ -367,7 +381,9 @@ class LedPixel(NeoPixel):
             self.fill((0, 0, 0))
             for n in range(step + 1):
                 if n < num_pixels:
-                    brightness = 80 - (step - n) * 15
+                    brightness = self._brightness - round(
+                        (step - n) * (self._brightness / step)
+                    )
                     if brightness > 0:
                         self.set_led(n, brightness, cur_color)
             self.write()
@@ -404,7 +420,9 @@ class LedPixel(NeoPixel):
             self.fill((0, 0, 0))
             for n in range(step + 1):
                 idx = n % num_pixels
-                brightness = 80 - (step - n) * 15
+                brightness = self._brightness - round(
+                    (step - n) * (self._brightness / step)
+                )
                 if brightness > 0:
                     self.set_led(idx, brightness, cur_color)
             self.write()
@@ -440,7 +458,7 @@ class LedPixel(NeoPixel):
             cur_color = state["color"] if color is None else color
             pos = state["pos"]
             self.fill((0, 0, 0))
-            self.set_led(pos, 80, cur_color)
+            self.set_led(pos, self._brightness, cur_color)
             self.write()
 
             pos += 1
@@ -474,7 +492,7 @@ class LedPixel(NeoPixel):
             cur_color = state["color"] if color is None else color
             pos = state["pos"]
             self.fill(cur_color)
-            self.set_led(pos, 80, (0, 0, 0))
+            self.set_led(pos, self._brightness, (0, 0, 0))
             self.write()
 
             pos += 1
