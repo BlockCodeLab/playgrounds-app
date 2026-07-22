@@ -1,5 +1,15 @@
 ## CHANGELOG
 
+### v1.5.1
+
+- Updated the Block Editor
+  - Added rotary encoder extension
+  - Added option to disable blocks
+  - Updated QMC5883L compass library files and blocks
+  - Updated WS2812 RGB LED global brightness setting block
+
+- Fixed known bugs
+
 ### v1.5.0
 
 - Updated the Block Editor
