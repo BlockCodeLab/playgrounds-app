@@ -3,7 +3,7 @@
   border-radius: calc(var(--space) / 2);
   overflow: visible;
   padding: var(--space);
-  font-size: 0.8rem;
+  font-size: var(--standard-font-size);
   color: var(--blocks-monitor-primary);
   display: flex;
   justify-content: space-between;
