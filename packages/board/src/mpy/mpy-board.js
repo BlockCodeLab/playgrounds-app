@@ -1,7 +1,7 @@
 /* inspired by https://github.com/arduino/micropython.js/blob/main/micropython.js */
 import { sleepMs } from '@blockcode/utils';
 import { Serial } from '@blockcode/core';
-import { ESP32BLESerial, BLE_SERVICE_UUID, SERVICE_UUID } from './ble-serial';
+import { ESP32BLESerial, SERVICE_UUID } from './ble-serial';
 
 const CTRL_A = '\x01'; // raw repl
 const CTRL_B = '\x02'; // exit raw repl
@@ -468,7 +468,7 @@ export class ESP32BLEMPYBoard extends MPYBoard {
   }
 
   requestDevice() {
-    const filters = [{ services: [BLE_SERVICE_UUID] }];
+    const filters = [{ services: [SERVICE_UUID] }];
     const optionalServices = [SERVICE_UUID];
     return navigator.bluetooth.requestDevice({ filters, optionalServices }).then(async (device) => {
       if (device._serial) {
@@ -485,9 +485,8 @@ export class ESP32BLEMPYBoard extends MPYBoard {
   }
 
   async reset() {
+    this.serial._manualDisconnect = true;
     await super.reset();
-    // await sleepMs(100);
-    // await this.disconnect();
   }
 
   async writeAndReadUntil(cmd, expect, dataConsumer) {
