@@ -1,5 +1,18 @@
 ## CHANGELOG
 
+### v1.5.2
+
+- Updated the iot:bit Editor to v0.3.1
+  - Added BLE connection and download
+  - Updated iot:bit firmware
+
+- Updated the ESP32 Editor to v0.3.0
+  - Optimized BLE connection and download
+  - Updated IOT Board firmware to support the new BLE download
+
+- Updated BLE download
+- Fixed known bugs
+
 ### v1.5.1
 
 - Updated the Block Editor
