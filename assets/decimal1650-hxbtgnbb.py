@@ -1,4 +1,4 @@
-from machine import Pin, I2C
+from machine import I2C, Pin
 from micropython import const
 from tm1650 import TM1650
 
@@ -35,15 +35,6 @@ class Decimal(TM1650):
             0x71,  # F
         )
     )
-
-    def __init__(self, scl, sda) -> None:
-        """Construct four digit LED instance
-
-        Parameters:
-        scl: I2C scl
-        sda: I2C sda
-        """
-        super().__init__(I2C(1, scl=Pin(scl), sda=Pin(sda)))
 
     def show_digit_number(self, position: int, number: int, dot: bool = False) -> None:
         """Display digit value at given position

@@ -40,15 +40,16 @@ class TTS20:
 
     """TTS20 语音合成模块驱动类。"""
 
-    def __init__(self, scl: int, sda: int, i2c_address: int = DefaultI2cAddress):
+    def __init__(self, i2c: I2C, i2c_address: int = DefaultI2cAddress):
         """
         初始化 TTS20 驱动。
 
         :param i2c: 已配置好的 machine.I2C 对象。
         :param i2c_address: 模块的 7 位 I2C 地址。
         """
+        i2c.freq(100000)
         self.addr = i2c_address
-        self.i2c = I2C(1, scl=Pin(scl), sda=Pin(sda), freq=100000)
+        self.i2c = i2c
         self.rx_buffer_capacity = 0  # 将在 init() 中获取
         self.init()
 

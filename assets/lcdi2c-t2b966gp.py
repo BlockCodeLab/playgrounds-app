@@ -38,10 +38,8 @@ class LCD_I2C:
     LCD_RW_WRITE = 0
     LCD_RW_READ = 1
 
-    def __init__(
-        self, scl, sda, num_columns, num_lines, i2c_addr=Default_I2C_ADDR, i2c_id=1
-    ):
-        self.i2c = I2C(i2c_id, scl=Pin(scl), sda=Pin(sda))
+    def __init__(self, i2c, num_columns, num_lines, i2c_addr=Default_I2C_ADDR):
+        self.i2c = i2c
         self.i2c_addr = i2c_addr
         self.num_lines = num_lines
         self.num_columns = num_columns

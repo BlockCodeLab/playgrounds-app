@@ -45,7 +45,7 @@ class OneButton:
         return self.pin.value() == 0
 
     def _reset_state(self):
-        """重置所有状态到初始值 - 这是关键修复！"""
+        """重置所有状态到初始化值 - 这是关键修复！"""
         self.click_count = 0
         self.long_press_detected = False
         self.ignore_next_release = False

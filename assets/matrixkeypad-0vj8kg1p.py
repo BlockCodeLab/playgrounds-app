@@ -1,8 +1,6 @@
 import struct
 import time
 
-import machine
-
 
 class MatrixKeypad:
     DefaultI2cAddress = 0x65
@@ -26,19 +24,10 @@ class MatrixKeypad:
         "D",
     ]
 
-    def __init__(
-        self,
-        scl_pin,
-        sda_pin,
-        i2c_address=DefaultI2cAddress,
-        debounce_duration_ms=40,
-        i2c_id=1,
-    ):
+    def __init__(self, i2c, i2c_address=DefaultI2cAddress, debounce_duration_ms=40):
+        self.i2c = i2c
         self.addr = i2c_address
         self.debounce_duration = debounce_duration_ms
-        self.i2c = machine.I2C(
-            i2c_id, scl=machine.Pin(scl_pin), sda=machine.Pin(sda_pin)
-        )
 
         self.last_key_states = 0  # 上次读取的原始状态
         self.key_states = 0  # 稳定后的按键状态

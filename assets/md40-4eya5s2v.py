@@ -369,8 +369,8 @@ class MD40:
                 "<h", self._i2c.readfrom_mem(self._i2c_address, mem_addr, 2)
             )[0]
 
-    def __init__(self, scl_pin, sda_pin, i2c_address=DEFAULT_I2C_ADDRESS):
-        self._i2c = I2C(0, scl=Pin(scl_pin), sda=Pin(sda_pin))
+    def __init__(self, i2c, i2c_address=DEFAULT_I2C_ADDRESS):
+        self._i2c = i2c
         self._i2c_address = i2c_address
         self._motors = []
         for i in range(MOTOR_NUM):

@@ -394,13 +394,14 @@ class MFRC522:
 
     MAX_LEN = 16
 
-    def __init__(self, scl, sda, i2c_addr=0x28, i2c_id=1, freq=400000):
+    def __init__(self, i2c, i2c_addr=0x28, freq=400000):
         """
         Initialize MFRC522 driver.
         :param i2c: machine.I2C object already configured
         :param addr: I2C address of MFRC522 (default 0x28)
         """
-        self.i2c = I2C(i2c_id, scl=Pin(scl), sda=Pin(sda), freq=freq)
+        i2c.freq(freq)
+        self.i2c = i2c
         self.addr = i2c_addr
         self.__MFRC522_init()
 

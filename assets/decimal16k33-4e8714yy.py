@@ -1,4 +1,4 @@
-from machine import Pin, I2C
+from machine import I2C, Pin
 from micropython import const
 from x16k33 import X16k33
 
@@ -38,14 +38,9 @@ class Decimal(X16k33):
     _DIGIT_NUMBER: int = const(4)
     _COLON_POSITION: int = const(2)
 
-    def __init__(self, scl, sda) -> None:
-        """Construct four digit LED instance
-
-        Parameters:
-        scl: I2C scl
-        sda: I2C sda
-        """
-        super().__init__(I2C(1, scl=Pin(scl), sda=Pin(sda)))
+    def __init__(self, i2c) -> None:
+        """Construct four digit LED instance"""
+        super().__init__(i2c)
         self.brightness(8)
 
     def show_colon(self, show: bool) -> None:

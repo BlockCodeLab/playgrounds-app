@@ -29,11 +29,12 @@ Example code:
 
 """
 
-from micropython import const
-from machine import I2C, Pin
-import uctypes as ctypes
 import math
 import time
+
+import uctypes as ctypes
+from machine import I2C, Pin
+from micropython import const
 
 DEV_ADDR = const(0x76)
 ADDR_CALA = const(0x88)
@@ -119,8 +120,8 @@ CALIBRATION = {
 
 
 class BMx280:
-    def __init__(self, scl, sda, addr=DEV_ADDR):
-        self.i2c = I2C(1, scl=Pin(scl), sda=Pin(sda))
+    def __init__(self, i2c, addr=DEV_ADDR):
+        self.i2c = i2c
         self.addr = addr
         self._sea_hPa = SEA_LEVEL_HPA
         self._data_buf = bytearray(ctypes.sizeof(DATA, ctypes.BIG_ENDIAN))
