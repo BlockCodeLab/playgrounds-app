@@ -26,8 +26,8 @@ class TouchPiano:
         :param sdo_pin: SDO 引脚编号
         """
         self.scl = machine.Pin(scl_pin, machine.Pin.OUT)
-        self.sdo = machine.Pin(sdo_pin, machine.Pin.OUT)  # 初始设为输出
-        self.scl.value(0)  # SCL 初始低电平
+        self.sdo = machine.Pin(sdo_pin, machine.Pin.OUT)  # 初始化设为输出
+        self.scl.value(0)  # SCL 初始化低电平
         self.sdo.value(0)
 
     def get_key_code(self):

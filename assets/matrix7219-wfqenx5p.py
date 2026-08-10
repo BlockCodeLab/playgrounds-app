@@ -117,7 +117,7 @@ class Matrix7219:
 
         # 初始化片选引脚
         self.cs_pin = Pin(cs_pin, Pin.OUT)
-        self.cs_pin.value(1)  # 初始为高电平
+        self.cs_pin.value(1)  # 初始化为高电平
 
         # 限制设备数量在 1-8 之间
         self.max_devices = min(max(1, num_devices), 8)
@@ -141,7 +141,7 @@ class Matrix7219:
             self.set_scan_limit(addr, 7)  # 扫描所有8行
             self.spi_transfer(addr, OP_DECODEMODE, 0)  # 无解码模式(使用LED矩阵)
             self.shutdown(addr, False)  # 启动时进入开机模式
-            self.set_intensity(addr, 7)  # 设置初始亮度
+            self.set_intensity(addr, 7)  # 设置初始化亮度
             self.clear_display(addr)  # 清空显示
 
     def get_device_count(self):

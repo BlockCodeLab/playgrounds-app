@@ -1,8 +1,9 @@
-from micropython import const
-from machine import Pin, ADC, PWM
-from dht import DHT11
-import machine
 import time
+
+import machine
+from dht import DHT11
+from machine import ADC, PWM, Pin
+from micropython import const
 
 PORTS = {
     "M1": const((14, 15)),

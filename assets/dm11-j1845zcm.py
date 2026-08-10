@@ -24,15 +24,8 @@ class DM11:
     MAX_PWM_DUTY: int = const(4095)
     PWM_CHANNEL_NUM: int = const(4)
 
-    def __init__(
-        self,
-        scl_pin,
-        sda_pin,
-        i2c_address=DEFAULT_I2C_ADDRESS,
-        i2c_id=1,
-        frequency_hz=1000,
-    ):
-        self._i2c = I2C(i2c_id, scl=Pin(scl_pin), sda=Pin(sda_pin))
+    def __init__(self, i2c, i2c_address=DEFAULT_I2C_ADDRESS, frequency_hz=1000):
+        self._i2c = i2c
         self._i2c_address = i2c_address
 
         """

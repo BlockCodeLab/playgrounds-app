@@ -37,11 +37,9 @@ _INTEGRATION_TIMES_MS = [10, 20, 40, 80, 100, 200, 400, 800]
 class NLCS11:
     def __init__(
         self,
-        scl,
-        sda,
+        i2c,
         addr=NLCS11_I2C_ADDR,
         freq=100000,
-        i2c_id=1,
         gain=GAIN_1X,
         integration_time=INTEGRATION_TIME_10MS,
     ):
@@ -53,7 +51,8 @@ class NLCS11:
         :param gain: Gain setting (GAIN_1X, GAIN_1P5X, GAIN_2X, GAIN_2P5X)
         :param integration_time: Integration time setting (INTEGRATION_TIME_10MS, etc.)
         """
-        self.i2c = I2C(i2c_id, scl=Pin(scl), sda=Pin(sda), freq=freq)
+        i2c.freq(freq)
+        self.i2c = i2c
         self.addr = addr
         self.gain = gain
         self.integration_time = integration_time

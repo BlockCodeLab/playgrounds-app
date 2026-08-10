@@ -59,7 +59,7 @@ class TCS34725(object):
     but these may be changed any time by the user program.
     """
 
-    def __init__(self, scl, sda, addr=TCS34725_I2C_ADDR, freq=TCS34725_FREQ, i2c_id=1):
+    def __init__(self, i2c, addr=TCS34725_I2C_ADDR, freq=TCS34725_FREQ):
         self.__addr = addr  # I2C address
         self.__buf1 = bytearray(1)  # one-byte buffer
         self.__buf8 = bytearray(8)  # eight-byte buffer
@@ -68,7 +68,8 @@ class TCS34725(object):
         self.__id = 0x00  # device id
         self.__autogain = False  # no automatic gain
         self.__connected = False  # no device connected yet
-        self.__bus = I2C(i2c_id, scl=Pin(scl), sda=Pin(sda), freq=freq)
+        self.__bus = i2c
+        i2c.freq(freq)
         try:
             self.__bus.writeto(self.__addr, b"\x80")  # basic write
         except OSError:

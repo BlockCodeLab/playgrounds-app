@@ -490,7 +490,6 @@ void LedPixel::begin() {
   gammaTable[0] = 0;
   for (int i = 1; i <= 100; i++) {
     uint8_t val = (uint8_t)(253.0 * pow(i / 100.0, 2.2) + 0.5) + 2;
-    Serial.println(val);
     gammaTable[i] = val;
   }
 

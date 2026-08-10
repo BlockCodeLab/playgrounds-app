@@ -43,7 +43,7 @@ StepperMotor::StepperMotor(int pin_a, int pin_b, int pin_c, int pin_d) {
   pinMode(pinC, OUTPUT);
   pinMode(pinD, OUTPUT);
 
-  // 初始状态：所有引脚为低
+  // 初始化状态：所有引脚为低
   digitalWrite(pinA, LOW);
   digitalWrite(pinB, LOW);
   digitalWrite(pinC, LOW);
