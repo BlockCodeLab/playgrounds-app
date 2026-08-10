@@ -1,5 +1,24 @@
 ## CHANGELOG
 
+### v1.5.3
+
+- Updated the iot:bit Editor to v0.3.3
+  - Optimized analog pin data display
+
+- Updated the Arduino Editor to v0.6.4
+  - Added I2C device scanning block (sensing category)
+  - Optimized basic blocks
+
+- Updated the ESP32 Editor to v0.3.1
+  - Added I2C device scanning block (sensing category)
+  - Optimized basic blocks
+
+- Updated the Block Editor
+  - Optimized I2C initialization block text
+  - Fixed WS2812 RGB LED error
+
+- Fixed known bugs
+
 ### v1.5.2
 
 - Updated the iot:bit Editor to v0.3.1
