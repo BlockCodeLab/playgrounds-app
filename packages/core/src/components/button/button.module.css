@@ -14,10 +14,6 @@
   outline: 0;
 }
 
-.outlined:active {
-  background: var(--theme-light-transparent);
-}
-
 .content {
   white-space: nowrap;
   width: 100%;
