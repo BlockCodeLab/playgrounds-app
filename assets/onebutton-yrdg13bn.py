@@ -32,7 +32,7 @@ class OneButton:
         self.long_press_detected = False
         self.ignore_next_release = False
         self.state = OneButton.IDLE
-        self.timer = Timer(-1)
+        self.timer = Timer(1)
 
         # 绑定中断
         self.pin.irq(
