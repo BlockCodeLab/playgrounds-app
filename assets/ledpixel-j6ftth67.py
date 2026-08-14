@@ -25,7 +25,7 @@ class LedPixel(NeoPixel):
         self.set_gamma(_DEFAULT_GAMMA)
         self._last_effect = LedPixel.NO_EFFECT
         self._frame_states = {}
-        self._brightness = 100
+        self._brightness = 50
         self._colors = [(0, 0, 0)] * num_pixels
 
     def _clear_frame_state(self, effect_key):
@@ -89,7 +89,7 @@ class LedPixel(NeoPixel):
 
     def set_brightness(self, brightness):
         self._brightness = max(0, min(brightness, 100))
-        for i in range(0, len(self)):
+        for i in range(len(self)):
             self.set_led(i, self._brightness, self._colors[i])
         self.write()
 
