@@ -7,7 +7,7 @@ LedPixel::LedPixel(uint8_t port, uint8_t led_num) {
   pinMask = digitalPinToBitMask(port);
   ws2812_port = portOutputRegister(digitalPinToPort(port));
   pinMode(port, OUTPUT);
-  brightness = 255;
+  brightness = 50;
   pixels = NULL;
   orig_pixels = NULL;
   led_brightness = NULL;
@@ -98,9 +98,10 @@ void LedPixel::setNumber(uint8_t num_leds) {
   memset(pixels, 0, count_led * 3);
   memset(orig_pixels, 0, count_led * 3);
   memset(pixels_bak, 0, count_led * 3);
-  // 每个LED的亮度默认设为最大值255
+  // 每个LED的亮度默认设为最大值255*0.8
+  uint16_t actual = levelToActual(brightness); // 将用户 0~100 映射到内部 0~255
   for (uint8_t i = 0; i < count_led; i++) {
-    led_brightness[i] = 255;
+    led_brightness[i] = actual;
   }
 }
 

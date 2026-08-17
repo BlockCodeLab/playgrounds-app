@@ -36,6 +36,16 @@ class Decimal(TM1650):
         )
     )
 
+    def show_dot(self, position: int, dot: bool = True) -> None:
+        """Show or hide decimal point at given position
+
+        Parameters:
+        position: Digit position 0-3
+        dot: Show decimal point (default True)
+        """
+        self[position] |= dot << 7
+        self.write()
+
     def show_digit_number(self, position: int, number: int, dot: bool = False) -> None:
         """Display digit value at given position
 

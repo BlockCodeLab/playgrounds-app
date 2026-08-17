@@ -139,7 +139,7 @@ private:
   uint8_t *pixels_bak;     // 上一次发送的数据备份，用于避免重复发送
   uint8_t count_led;       // LED 数量
   uint16_t
-      brightness;  // 全局亮度因子，范围 1~256（用户输入 0~255 映射为 0~256）
+      brightness;  // 全局亮度因子，范围 0~100（用户输入 0~100 映射为 0~256）
   uint8_t pinMask; // 引脚位掩码
   volatile uint8_t *ws2812_port; // 端口寄存器指针
 

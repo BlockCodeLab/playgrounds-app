@@ -1,8 +1,8 @@
 """
-MicroPython unified OLED driver for SSD1306 and SH1106 (I2C)
-- Incremental page update for both drivers (only changed pages are sent)
-- Common methods: poweron, poweroff, contrast, invert, rotate, show
-- SH1106 supports 0/90/180/270 degree rotation, SSD1306 supports 0/180
+MicroPython 统一 OLED 驱动程序，支持 SSD1306 和 SH1106（I2C 接口）
+- 增量页面更新：仅发送内容发生变化的页面
+- 公共方法：poweron, poweroff, contrast, invert, rotate, show
+- 两种驱动均只支持 0° 和 180° 旋转（与 SSD1306 行为一致）
 """
 
 import time
@@ -11,11 +11,11 @@ import framebuf
 from machine import I2C, Pin
 from micropython import const
 
-# ---------- SSD1306 register definitions ----------
+# ---------- SSD1306 寄存器定义 ----------
 SET_CONTRAST = const(0x81)
 SET_ENTIRE_ON = const(0xA4)
 SET_NORM_INV = const(0xA6)
-SET_DISP = const(0xAE)
+SET_DISP = const(0xAE)  # 显示开关（最低位=1 开启，0 关闭）
 SET_MEM_ADDR = const(0x20)
 SET_COL_ADDR = const(0x21)
 SET_PAGE_ADDR = const(0x22)
@@ -31,16 +31,17 @@ SET_PRECHARGE = const(0xD9)
 SET_VCOM_DESEL = const(0xDB)
 SET_CHARGE_PUMP = const(0x8D)
 
-# ---------- SH1106 register definitions ----------
+# ---------- SH1106 寄存器定义 ----------
 _SH_SET_CONTRAST = const(0x81)
 _SH_SET_NORM_INV = const(0xA6)
 _SH_SET_DISP = const(0xAE)
 _SH_SET_SCAN_DIR = const(0xC0)
 _SH_SET_SEG_REMAP = const(0xA0)
-_SH_LOW_COLUMN_ADDRESS = const(0x00)
-_SH_HIGH_COLUMN_ADDRESS = const(0x10)
-_SH_SET_PAGE_ADDRESS = const(0xB0)
+_SH_LOW_COLUMN_ADDRESS = const(0x00)  # 低 4 位列地址
+_SH_HIGH_COLUMN_ADDRESS = const(0x10)  # 高 4 位列地址
+_SH_SET_PAGE_ADDRESS = const(0xB0)  # 页地址（0~7）
 
+# ---------- 5x7 点阵字体数据（用于 draw_char / draw_text） ----------
 _FONT_HEIGHT = 12
 _FONT_DATA = {
     " ": b"\x00\x00\x00\x00\x00\x00\x00\x00",
@@ -141,115 +142,158 @@ _FONT_DATA = {
 }
 
 
+# ============================== 基类 OLED ==============================
 class OLED(framebuf.FrameBuffer):
-    """Base class with incremental page update support."""
+    """
+    所有 OLED 驱动的基类。
+    提供增量页面更新（只发送变化的页面）以及统一的图形接口。
+    所有绘图方法都会自动标记受影响的页面为“脏页”，在调用 show() 时只发送脏页。
+    """
 
     def __init__(self, width, height, external_vcc):
+        """
+        参数:
+            width  : 显示宽度（像素）
+            height : 显示高度（像素）
+            external_vcc : 是否使用外部供电（True 表示外部供电，False 表示内部电荷泵）
+        """
         self.width = width
         self.height = height
         self.external_vcc = external_vcc
-        self.pages = self.height // 8
-        self.buffer = bytearray((height // 8) * width)
-        self.pages_to_update = 0  # bitmask of dirty pages
+        self.pages = self.height // 8  # 页数（每页 8 像素高）
+        self.buffer = bytearray(self.pages * width)  # 帧缓冲区
+        self.pages_to_update = 0  # 位掩码，标记哪些页需要更新
+        # 初始化父类 FrameBuffer（使用 MONO_VLSB 格式，即每字节低位在上）
         super().__init__(self.buffer, self.width, self.height, framebuf.MONO_VLSB)
 
-    # ----- Abstract methods (must be implemented by subclass) -----
+    # ----- 以下抽象方法由子类实现 -----
     def write_cmd(self, cmd):
+        """发送一个命令字节"""
         raise NotImplementedError
 
     def write_data(self, buf):
+        """发送数据（字节序列）"""
         raise NotImplementedError
 
     def init_display(self):
+        """执行显示初始化序列"""
         raise NotImplementedError
 
     def show(self, full_update=False):
+        """
+        将脏页发送到显示器。
+        如果 full_update=True，则强制更新所有页面。
+        """
         raise NotImplementedError
 
     def rotate(self, angle):
+        """旋转屏幕，仅支持 0° 或 180°"""
         raise NotImplementedError
 
-    # ----- Power and display control -----
+    # ----- 电源与显示控制（公共方法） -----
     def poweroff(self):
-        self.write_cmd(
-            SET_DISP if hasattr(self, "_is_ssd1306") else _SH_SET_DISP | 0x00
-        )
+        """关闭显示（但保持供电）"""
+        if hasattr(self, "_is_ssd1306"):
+            self.write_cmd(SET_DISP | 0x00)  # SSD1306 关闭
+        else:
+            self.write_cmd(_SH_SET_DISP | 0x00)  # SH1106 关闭
 
     def poweron(self):
-        self.write_cmd(
-            (SET_DISP | 0x01) if hasattr(self, "_is_ssd1306") else (_SH_SET_DISP | 0x01)
-        )
+        """开启显示"""
+        if hasattr(self, "_is_ssd1306"):
+            self.write_cmd(SET_DISP | 0x01)
+        else:
+            self.write_cmd(_SH_SET_DISP | 0x01)
 
     def contrast(self, value):
-        cmd = SET_CONTRAST if hasattr(self, "_is_ssd1306") else _SH_SET_CONTRAST
-        self.write_cmd(cmd)
+        """设置对比度（0~255）"""
+        if hasattr(self, "_is_ssd1306"):
+            self.write_cmd(SET_CONTRAST)
+        else:
+            self.write_cmd(_SH_SET_CONTRAST)
         self.write_cmd(value)
 
     def invert(self, invert):
-        cmd = SET_NORM_INV if hasattr(self, "_is_ssd1306") else _SH_SET_NORM_INV
-        self.write_cmd(cmd | (invert & 1))
+        """设置反转显示（True=反色，False=正常）"""
+        if hasattr(self, "_is_ssd1306"):
+            self.write_cmd(SET_NORM_INV | (invert & 1))
+        else:
+            self.write_cmd(_SH_SET_NORM_INV | (invert & 1))
 
-    # ----- Graphics primitives with automatic page tracking -----
+    # ----- 绘图方法（覆盖父类，加入脏页标记） -----
     def pixel(self, x, y, color=1):
+        """画一个像素点"""
         super().pixel(x, y, color)
         self._register_updates(y)
 
     def text(self, text, x, y, color=1):
+        """使用内置 8x8 字体绘制字符串（父类提供）"""
         super().text(text, x, y, color)
         self._register_updates(y, y + 7)
 
     def line(self, x0, y0, x1, y1, color=1):
+        """画直线"""
         super().line(x0, y0, x1, y1, color)
         self._register_updates(y0, y1)
 
     def hline(self, x, y, w, color=1):
+        """画水平线"""
         super().hline(x, y, w, color)
         self._register_updates(y)
 
     def vline(self, x, y, h, color=1):
+        """画垂直线"""
         super().vline(x, y, h, color)
         self._register_updates(y, y + h - 1)
 
     def fill(self, color=1):
+        """填充整个屏幕"""
         super().fill(color)
-        self.pages_to_update = (1 << self.pages) - 1
+        self.pages_to_update = (1 << self.pages) - 1  # 所有页都脏
 
     def blit(self, fbuf, x, y, key=-1, palette=None):
+        """将另一个帧缓冲绘制到当前缓冲"""
         super().blit(fbuf, x, y, key, palette)
         self._register_updates(y, y + fbuf.height)
 
     def scroll(self, x, y):
+        """滚动屏幕（内容移动）"""
         super().scroll(x, y)
-        self.pages_to_update = (1 << self.pages) - 1
+        self.pages_to_update = (1 << self.pages) - 1  # 全屏更新
 
     def fill_rect(self, x, y, w, h, color=1):
+        """填充矩形"""
         super().fill_rect(x, y, w, h, color)
         self._register_updates(y, y + h - 1)
 
     def rect(self, x, y, w, h, color=1):
+        """画矩形框"""
         super().rect(x, y, w, h, color)
         self._register_updates(y, y + h - 1)
 
     def ellipse(self, x, y, xr, yr, color=1):
+        """画椭圆"""
         super().ellipse(x, y, xr, yr, color)
         self._register_updates(y - yr, y + yr - 1)
 
+    # ----- 自定义变宽字体绘制 -----
     def draw_char(self, x, y, ch, color=1, bg=None, font=_FONT_DATA):
         """
-        Draw a variable-width character at (x, y).
-        ch: single character string
-        color: foreground color (0/1)
-        bg: background color (None for transparent)
-        Returns width of the character (in pixels) for chaining.
+        绘制一个可变宽度字符。
+        参数:
+            x, y   : 左上角坐标
+            ch     : 单个字符
+            color  : 前景色（0 或 1）
+            bg     : 背景色（None 表示透明）
+            font   : 字体数据字典
+        返回字符宽度（像素），便于连续绘制。
         """
         if not isinstance(ch, str) or len(ch) != 1:
-            raise ValueError("ch must be a single character")
-
-        bitmap = font[ch]
+            raise ValueError("ch 必须是单个字符")
+        bitmap = font.get(ch)
         if not bitmap:
             return 0
-        width = len(bitmap) // 2
-
+        width = len(bitmap) // 2  # 每个字符用 2 字节表示一列（16 像素高）
         for col in range(width):
             col_data = bitmap[col * 2 : col * 2 + 2]
             for byte_idx in range(2):
@@ -262,39 +306,52 @@ class OLED(framebuf.FrameBuffer):
         return width
 
     def draw_text(self, x, y, s, color=1, bg=None, font=_FONT_DATA):
-        """Draw a string at (x, y) using variable-width font."""
+        """
+        绘制字符串（可变宽度字体）。
+        字符间自动添加 1 像素间距。
+        """
         cx = x
         for ch in s:
             w = self.draw_char(cx, y, ch, color, bg, font)
-            cx += w + 1  # add one pixel spacing between characters
+            cx += w + 1  # 字符间距 1 像素
 
+    # ----- 内部辅助：标记脏页 -----
     def _register_updates(self, y0, y1=None):
-        """Mark pages that contain the given y range as dirty."""
+        """
+        根据 y 坐标范围，标记所有涉及的页面为脏。
+        如果 y1 为 None，则只标记 y0 所在的页。
+        """
         start_page = max(0, y0 // 8)
-        end_page = max(0, (y1 // 8) if y1 is not None else start_page)
-        if start_page > end_page:
-            start_page, end_page = end_page, start_page
+        if y1 is None:
+            end_page = start_page
+        else:
+            end_page = max(0, y1 // 8)
+            if start_page > end_page:
+                start_page, end_page = end_page, start_page
         for page in range(start_page, end_page + 1):
             self.pages_to_update |= 1 << page
 
 
-# ============================== SSD1306 ==============================
+# ============================== SSD1306 驱动 ==============================
 class SSD1306(OLED):
+    """SSD1306 基类（提供初始化、旋转和 show 实现）"""
+
     def __init__(self, width, height, external_vcc):
-        self._is_ssd1306 = True
+        self._is_ssd1306 = True  # 标识用于区分驱动类型
         super().__init__(width, height, external_vcc)
         self.init_display()
 
     def init_display(self):
+        """SSD1306 初始化序列"""
         for cmd in (
-            SET_DISP,
+            SET_DISP,  # 关闭显示
             SET_MEM_ADDR,
-            0x00,
-            SET_DISP_START_LINE,
-            SET_SEG_REMAP | 0x01,
+            0x00,  # 水平寻址模式
+            SET_DISP_START_LINE,  # 起始行 0
+            SET_SEG_REMAP | 0x01,  # 列映射 127->0（水平翻转）
             SET_MUX_RATIO,
             self.height - 1,
-            SET_COM_OUT_DIR | 0x08,
+            SET_COM_OUT_DIR | 0x08,  # 行映射（垂直翻转）
             SET_DISP_OFFSET,
             0x00,
             SET_COM_PIN_CFG,
@@ -307,28 +364,35 @@ class SSD1306(OLED):
             0x30,
             SET_CONTRAST,
             0xFF,
-            SET_ENTIRE_ON,
-            SET_NORM_INV,
+            SET_ENTIRE_ON,  # 正常显示（不使用全亮模式）
+            SET_NORM_INV,  # 正常显示（非反色）
             SET_IREF_SELECT,
             0x30,
             SET_CHARGE_PUMP,
-            0x10 if self.external_vcc else 0x14,
-            SET_DISP | 0x01,
+            0x10 if self.external_vcc else 0x14,  # 内部电荷泵
+            SET_DISP | 0x01,  # 开启显示
         ):
             self.write_cmd(cmd)
         self.fill(0)
         self.show()
 
     def rotate(self, angle):
-        """SSD1306 only supports 0 or 180 degrees."""
+        """
+        旋转屏幕，仅支持 0° 或 180°。
+        SSD1306 通过改变段映射和 COM 输出方向实现 180° 翻转。
+        """
         if angle not in (0, 180):
-            raise ValueError("SSD1306 only supports 0 or 180 degree rotation")
+            raise ValueError("SSD1306 只支持 0° 或 180° 旋转")
         flip = angle == 180
         self.write_cmd(SET_COM_OUT_DIR | ((flip & 1) << 3))
         self.write_cmd(SET_SEG_REMAP | (flip & 1))
 
     def show(self, full_update=False):
-        # Determine column offset for displays narrower than 128
+        """
+        发送脏页到 SSD1306。
+        如果 full_update=True，强制发送所有页。
+        """
+        # 计算列地址范围（部分屏幕可能有偏移，例如 128x32 采用居中显示）
         x0 = 0
         x1 = self.width - 1
         if self.width != 128:
@@ -336,118 +400,76 @@ class SSD1306(OLED):
             x0 += offset
             x1 += offset
 
-        # Which pages to update
         if full_update:
             pages_mask = (1 << self.pages) - 1
         else:
             pages_mask = self.pages_to_update
 
-        # Send each dirty page
         for page in range(self.pages):
             if pages_mask & (1 << page):
+                # 设置页地址（只更新单页）
                 self.write_cmd(SET_PAGE_ADDR)
-                self.write_cmd(page)  # start page
-                self.write_cmd(page)  # end page (single page)
+                self.write_cmd(page)
+                self.write_cmd(page)
+                # 设置列地址
                 self.write_cmd(SET_COL_ADDR)
                 self.write_cmd(x0)
                 self.write_cmd(x1)
+                # 发送该页数据
                 start = page * self.width
                 self.write_data(self.buffer[start : start + self.width])
-
         self.pages_to_update = 0
 
 
 class SSD1306_I2C(SSD1306):
+    """SSD1306 I2C 接口实现"""
+
     def __init__(self, width, height, i2c, addr=0x3C, external_vcc=False):
         self.i2c = i2c
         self.addr = addr
-        self.temp = bytearray(2)
-        self.write_list = [b"\x40", None]  # Co=0, D/C#=1
+        self.temp = bytearray(2)  # 用于发送命令
+        self.write_list = [b"\x40", None]  # 数据头（Co=0, D/C#=1） + 数据负载
         super().__init__(width, height, external_vcc)
 
     def write_cmd(self, cmd):
+        """发送单字节命令（控制字节 0x80）"""
         self.temp[0] = 0x80  # Co=1, D/C#=0
         self.temp[1] = cmd
         self.i2c.writeto(self.addr, self.temp)
 
     def write_data(self, buf):
+        """发送数据（控制字节 0x40 后面跟数据）"""
         self.write_list[1] = buf
         self.i2c.writevto(self.addr, self.write_list)
 
 
-# ============================== SH1106 ==============================
+# ============================== SH1106 驱动（修正版） ==============================
 class SH1106(OLED):
-    def __init__(self, width, height, external_vcc, rotate=0):
-        self._is_ssd1306 = False
-        self.width = width
-        self.height = height
-        self.external_vcc = external_vcc
-        self.rotate90 = rotate == 90 or rotate == 270
-        self.flip_en = rotate == 180 or rotate == 270
-        self.pages = self.height // 8
-        self.bufsize = self.pages * self.width
-        self.renderbuf = bytearray(self.bufsize)
-        self.delay = 0
+    """
+    SH1106 驱动（仅支持 0°/180° 旋转，与 SSD1306 行为一致）
+    注意：SH1106 的列地址从 2 开始（硬件偏移），因此发送列地址时固定加 2。
+    """
 
-        if self.rotate90:
-            self.displaybuf = bytearray(self.bufsize)
-            # HMSB needed for byte‑wise remapping to VLSB display
-            super().__init__(
-                self.renderbuf, self.height, self.width, framebuf.MONO_HMSB
-            )
-        else:
-            self.displaybuf = self.renderbuf
-            super().__init__(
-                self.renderbuf, self.width, self.height, framebuf.MONO_VLSB
-            )
+    def __init__(self, width, height, external_vcc):
+        self._is_ssd1306 = False  # 标识为非 SSD1306
+        self.flip_en = False  # 当前是否 180° 翻转
+        super().__init__(width, height, external_vcc)
 
-        self.init_display()
+    # ----- 抽象方法由子类实现 -----
+    def write_cmd(self, cmd):
+        raise NotImplementedError
+
+    def write_data(self, buf):
+        raise NotImplementedError
 
     def init_display(self):
-        self.reset()
-        self.fill(0)
-        self.show()
-        self.poweron()
-        self.flip(self.flip_en)  # apply 0/180 rotation
-
-    def poweron(self):
-        self.write_cmd(_SH_SET_DISP | 0x01)
-        if self.delay:
-            time.sleep_ms(self.delay)
-
-    def poweroff(self):
-        self.write_cmd(_SH_SET_DISP | 0x00)
-
-    def flip(self, flag=None, update=True):
-        """Set horizontal+vertical mirror (0/180 degree rotation)."""
-        if flag is None:
-            flag = not self.flip_en
-        mir_v = flag ^ self.rotate90
-        mir_h = flag
-        self.write_cmd(_SH_SET_SEG_REMAP | (0x01 if mir_v else 0x00))
-        self.write_cmd(_SH_SET_SCAN_DIR | (0x08 if mir_h else 0x00))
-        self.flip_en = flag
-        if update:
-            self.show(True)
-
-    def rotate(self, angle):
-        """0, 90, 180, 270 degrees."""
-        if angle not in (0, 90, 180, 270):
-            raise ValueError("Rotation must be 0, 90, 180 or 270")
-        # Recreate instance with new rotation (simplest, discards current content)
-        self.__init__(self.width, self.height, self.external_vcc, rotate=angle)
-        self.pages_to_update = (1 << self.pages) - 1
-        self.show(True)
+        raise NotImplementedError
 
     def show(self, full_update=False):
-        w, p = self.width, self.pages
-        db, rb = self.displaybuf, self.renderbuf
-
-        # Remap buffer if 90/270 rotation is active
-        if self.rotate90:
-            for i in range(self.bufsize):
-                db[w * (i % p) + (i // p)] = rb[i]
-
+        """
+        发送脏页到 SH1106。
+        注意：SH1106 的列地址从 2 开始（硬件偏移）。
+        """
         if full_update:
             pages_mask = (1 << self.pages) - 1
         else:
@@ -456,50 +478,121 @@ class SH1106(OLED):
         for page in range(self.pages):
             if pages_mask & (1 << page):
                 self.write_cmd(_SH_SET_PAGE_ADDRESS | page)
-                self.write_cmd(_SH_LOW_COLUMN_ADDRESS | 2)  # column offset 2
+                # 列地址低 4 位 = 2（硬件偏移），高 4 位 = 0
+                self.write_cmd(_SH_LOW_COLUMN_ADDRESS | 2)
                 self.write_cmd(_SH_HIGH_COLUMN_ADDRESS | 0)
-                self.write_data(db[w * page : w * page + w])
-
+                start = page * self.width
+                self.write_data(self.buffer[start : start + self.width])
         self.pages_to_update = 0
 
-    def reset(self, res=None):
-        if res is not None:
-            res(1)
-            time.sleep_ms(1)
-            res(0)
-            time.sleep_ms(20)
-            res(1)
-            time.sleep_ms(20)
+    def rotate(self, angle):
+        """仅支持 0° 或 180° 旋转，通过 flip() 实现"""
+        if angle not in (0, 180):
+            raise ValueError("SH1106 只支持 0° 或 180° 旋转")
+        self.flip(angle == 180, update=True)
+
+    def flip(self, flag=None, update=True):
+        """
+        设置水平+垂直镜像（即 180° 翻转）。
+        参数:
+            flag  : True 表示翻转，False 表示正常；若为 None 则切换当前状态
+            update: 是否立即刷新显示
+        """
+        if flag is None:
+            flag = not self.flip_en
+        # 设置段映射（水平翻转）和扫描方向（垂直翻转）
+        self.write_cmd(_SH_SET_SEG_REMAP | (0x01 if flag else 0x00))
+        self.write_cmd(_SH_SET_SCAN_DIR | (0x08 if flag else 0x00))
+        self.flip_en = flag
+        if update:
+            self.show(True)
+
+    # 重写电源控制（使用 SH1106 专用命令）
+    def poweroff(self):
+        self.write_cmd(_SH_SET_DISP | 0x00)
+
+    def poweron(self):
+        self.write_cmd(_SH_SET_DISP | 0x01)
+
+    def contrast(self, value):
+        self.write_cmd(_SH_SET_CONTRAST)
+        self.write_cmd(value)
+
+    def invert(self, invert):
+        self.write_cmd(_SH_SET_NORM_INV | (invert & 1))
 
 
 class SH1106_I2C(SH1106):
+    """SH1106 I2C 接口实现（已修复初始化缺失问题）"""
+
     def __init__(
-        self,
-        width,
-        height,
-        i2c,
-        res=None,
-        addr=0x3C,
-        rotate=0,
-        external_vcc=False,
-        delay=0,
+        self, width, height, i2c, res=None, addr=0x3C, external_vcc=False, delay=0
     ):
+        """
+        参数:
+            width, height : 显示尺寸
+            i2c           : machine.I2C 对象
+            res           : 复位引脚（Pin 对象），可选
+            addr          : I2C 设备地址，默认 0x3C
+            external_vcc  : 是否外部供电
+            delay         : 开机后额外延时（毫秒），某些屏幕需要
+        """
         self.i2c = i2c
         self.addr = addr
         self.res_pin = res
-        self.temp = bytearray(2)
         self.delay = delay
         if res is not None:
             res.init(res.OUT, value=1)
-        super().__init__(width, height, external_vcc, rotate)
+        super().__init__(width, height, external_vcc)
+        # <<< 修改：此处调用初始化（之前缺失） >>>
+        self.init_display()
 
     def write_cmd(self, cmd):
-        self.temp[0] = 0x80
-        self.temp[1] = cmd
-        self.i2c.writeto(self.addr, self.temp)
+        """发送单字节命令（控制字节 0x80）"""
+        self.i2c.writeto(self.addr, bytes([0x80, cmd]))
 
     def write_data(self, buf):
+        """发送数据（控制字节 0x40 后面跟数据）"""
         self.i2c.writeto(self.addr, b"\x40" + buf)
 
     def reset(self):
-        super().reset(self.res_pin)
+        """硬件复位（拉低复位引脚）"""
+        if self.res_pin is not None:
+            self.res_pin(1)
+            time.sleep_ms(1)
+            self.res_pin(0)
+            time.sleep_ms(20)
+            self.res_pin(1)
+            time.sleep_ms(20)
+
+    # <<< 修改：增强初始化序列，确保显示正常 >>>
+    def init_display(self):
+        """
+        SH1106 初始化序列（参照常见驱动，增加关键命令）
+        """
+        self.reset()
+        # 关闭显示
+        self.write_cmd(0xAE)
+        # 设置列地址低 4 位（起始列 = 2，因为 SH1106 硬件偏移 2 列）
+        self.write_cmd(0x02)  # 低 4 位 = 2
+        self.write_cmd(0x10)  # 高 4 位 = 0
+        # 设置起始行（通常为 0）
+        self.write_cmd(0x40)
+        # 设置对比度（中等）
+        self.write_cmd(0x81)
+        self.write_cmd(0x7F)
+        # 段重映射（0xA1 水平翻转，0xA0 正常；这里根据用户习惯可调）
+        self.write_cmd(0xA1)
+        # COM 扫描方向（0xC8 垂直翻转，0xC0 正常）
+        self.write_cmd(0xC8)
+        # 正常显示（非反色）
+        self.write_cmd(0xA6)
+        # 开启显示
+        self.write_cmd(0xAF)
+
+        # 清除屏幕
+        self.fill(0)
+        self.show()
+        # 如果有额外延时
+        if self.delay:
+            time.sleep_ms(self.delay)
