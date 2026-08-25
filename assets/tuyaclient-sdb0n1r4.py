@@ -1,5 +1,4 @@
 import asyncio
-import gc
 import hashlib
 import hmac
 import json
@@ -49,7 +48,7 @@ def get_property(prop):
         or "data" not in received_cache
         or prop not in received_cache["data"]
     ):
-        return ""
+        return False
     value = received_cache["data"][prop]
     return value
 
