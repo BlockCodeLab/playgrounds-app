@@ -37,8 +37,8 @@ export class ArduinoUtils {
     return firmata;
   }
 
-  static async write(board, hex, progress) {
+  static async write(board, hex, progress, prepare) {
     const data = parseIntelHex(hex);
-    await board.put(data, progress);
+    await board.put(data, progress, prepare);
   }
 }

@@ -75,13 +75,13 @@ export class Serial extends EventEmitter {
     data = encoding === 'text' ? encoder.encode(data) : data;
     try {
       await writer.write(data);
-      writer.releaseLock();
+      return writer.releaseLock();
     } catch (err) {
       this.emit('error', err);
     }
   }
 
   setSignals(options) {
-    this.port.setSignals(options);
+    return this.port.setSignals(options);
   }
 }
