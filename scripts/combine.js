@@ -3,7 +3,7 @@ import handler from 'serve-handler';
 
 import { cwd, argv } from 'node:process';
 import { basename, join, relative, resolve } from 'node:path';
-import { readdirSync, existsSync, rmdirSync, mkdirSync, watch, watchFile } from 'node:fs';
+import { readdirSync, existsSync, rmSync, mkdirSync, watch, watchFile } from 'node:fs';
 import { copyfile, copydir } from './copy.js';
 import { workspaces } from '../package.json';
 
@@ -18,7 +18,7 @@ const isWatch = argv[2] === 'watch';
 const isClean = argv[2] === 'clean';
 
 if (isClean && existsSync(distDir)) {
-  rmdirSync(distDir, { recursive: true, force: true });
+  rmSync(distDir, { recursive: true, force: true });
   mkdirSync(distDir, { recursive: true });
 }
 
