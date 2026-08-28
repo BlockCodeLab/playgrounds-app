@@ -1,5 +1,21 @@
 ## CHANGELOG
 
+### v1.5.5
+
+- Updated Arduino Editor to v0.6.5
+  - Optimized program download
+  - Fixed pin block code conversion
+  - Fixed random number range
+
+- Updated the Block Editor
+  - Added Tuya Link extension
+  - Optimized TM1650 digital tube extension data display
+  - Fixed WS2812 RGB LED initial brightness
+  - Fixed OLED display extension driver
+  - Fixed Pen extension
+
+- Fixed known bugs
+
 ### v1.5.3
 
 - Updated the iot:bit Editor to v0.3.3
