@@ -1,6 +1,5 @@
 from popui.color import rgb565
 from scratch import runtime
-from _stage_ import stage
 import colorsys
 import math
 
@@ -12,11 +11,11 @@ PEN_LAST_POS = "PEN_LAST_POS"
 num = runtime.number
 
 
-def clear():
+def clear(stage):
     stage.clear_paints(PEN_PAINT)
 
 
-def stamp(target):
+def stamp(target, stage):
     frame_module = target.frames[target.frame_index]
     image = frame_module.BITMAP
     x, y = target._x, target._y
@@ -50,7 +49,7 @@ def stamp(target):
     runtime.request_render()
 
 
-def pen_goto(target, *args, **kwargs):
+def pen_goto(target, stage, *args, **kwargs):
     target.__class__.goto(target, *args, **kwargs)
     x, y = target.data[PEN_LAST_POS]
     nx, ny = stage.CENTER_X + target.x, stage.CENTER_Y - target.y
@@ -67,10 +66,10 @@ def pen_goto(target, *args, **kwargs):
     target.data[PEN_LAST_POS] = nx, ny
 
 
-def down(target):
+def down(target, stage):
     x, y = stage.CENTER_X + target.x, stage.CENTER_Y - target.y
     target.data[PEN_LAST_POS] = x, y
-    target.goto = lambda *args, **kwargs: pen_goto(target, *args, **kwargs)
+    target.goto = lambda *args, **kwargs: pen_goto(target, stage, *args, **kwargs)
 
 
 def up(target):
