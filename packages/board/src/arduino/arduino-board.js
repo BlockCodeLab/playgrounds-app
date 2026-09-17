@@ -315,6 +315,7 @@ export class ArduinoBLEBoard extends ArduinoBoard {
     if (baudRate !== this.baudRate) {
       const baudValue = BAUD_RATE_VALUE[baudRate] ?? 4;
       await this.serial.sendATMessage(`AT+BAUD=${baudValue}`);
+      await sleepMs(100);
       this._baudRate = baudRate;
     }
     await this.serial.sendATMessage('AT+TARGE_RESET');
