@@ -8,17 +8,20 @@ class MPU6050:
         self.addr = addr
         self._a_cal = [0.0, 0.0, 0.0]
         self._g_cal = [0.0, 0.0, 0.0]
+        self._raw = bytearray(15)
+        self.init()
 
     def init(self):
-        self.i2c.start()
         self.i2c.writeto(self.addr, bytearray([107, 0]))
-        self.i2c.stop()
 
     def read_raw(self):
-        self.i2c.start()
-        raw = self.i2c.readfrom_mem(self.addr, 0x3B, 14)
-        self.i2c.stop()
-        return struct.unpack(">hhhhhhh", raw)
+        try:
+            self._raw = self.i2c.readfrom_mem(self.addr, 0x3B, 14)
+        except OSError as error:
+            print("OSError", error)
+            pass  # just silently re-use the old values
+
+        return struct.unpack(">hhhhhhh", self._raw)
 
     def read(self):
         x = self.read_raw()
@@ -45,13 +48,18 @@ class MPU6050:
     def get_pitch(self):
         data = self.read()
         acc_x, acc_y, acc_z = data["a"]
-        pitch = math.atan2(-acc_x, math.sqrt(acc_y * acc_y + acc_z * acc_z))
+        pitch = math.atan2(acc_x, math.sqrt(acc_y * acc_y + acc_z * acc_z))
         pitch_deg = math.degrees(pitch)
-        return -round(pitch_deg, 3)
+        if acc_z < 0:
+            if pitch_deg > 0:
+                pitch_deg = 180 - pitch_deg
+            else:
+                pitch_deg = -180 - pitch_deg
+        return round(pitch_deg, 3)
 
     def get_roll(self):
         data = self.read()
-        acc_x, acc_y, acc_z = data["a"]
-        roll = math.atan2(acc_y, -acc_z)
+        _, acc_y, acc_z = data["a"]
+        roll = math.atan2(acc_y, acc_z)
         roll_deg = math.degrees(roll)
-        return -round(roll_deg, 3)
+        return round(roll_deg, 3)
