@@ -1,5 +1,23 @@
 ## CHANGELOG
 
+### v1.5.6
+
+- Updated Arduino Editor to v0.6.6
+  - Fixed I2C viewing error
+
+- Updated LGT8F328P Editor to v0.3.0
+  - Upgraded compilation libraries and pins
+  - Optimized multilingual text
+  - Fixed I2C viewing error
+  - Fixed prompt error when connecting hardware
+
+- Updated the Block Editor
+  - Added MPU6050 gyroscope extension
+  - Added UBT-H04 servo extension
+  - Optimized initialization of the Sentry/Sengo vision extension
+
+- Fixed known bugs
+
 ### v1.5.5
 
 - Updated Arduino Editor to v0.6.5
