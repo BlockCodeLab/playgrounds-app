@@ -6,6 +6,7 @@
 
 namespace em {
 esp_at::ResultCode EspAtManager::Init() {
+  stream_.println(F("AT+ECHO=0"));
   const auto ret = Restart();
   if (ret != esp_at::ResultCode::kOK) {
     CLOGD("restart failed");
