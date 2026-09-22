@@ -3,49 +3,14 @@
 // 所以在浏览器端用 WebSocket 模拟 fetch 通过 HTTP 调用，
 // 尽可能的与单片机上一致。
 
-import hmacSHA256 from 'crypto-js/hmac-sha256';
-import Base64 from 'crypto-js/enc-base64';
 
-const SPARK_HOST = 'spark-api.xf-yun.com';
-
-const getPathname = (domain) => {
-  switch (domain) {
-    case 'lite':
-      return '/v1.1/chat';
-    case 'generalv3':
-      return '/v3.1/chat';
-    case 'pro-128k':
-      return '/chat/pro-128k';
-    case 'generalv3.5':
-      return '/v3.5/chat';
-    case 'max-32k':
-      return '/chat/max-32k';
-    case '4.0Ultra':
-      return '/v4.0/chat';
-  }
-};
-
-const getWebSocketUrl = (domain, apiSecret, apiKey) => {
-  const date = new Date().toGMTString();
-
-  const pathname = getPathname(domain);
-
-  const signatureRaw = `host: ${SPARK_HOST}\ndate: ${date}\nGET ${pathname} HTTP/1.1`;
-  const signature = Base64.stringify(hmacSHA256(signatureRaw, apiSecret));
-
-  const authorizationRaw = `api_key="${apiKey}", algorithm="hmac-sha256", headers="host date request-line", signature="${signature}"`;
-  const authorization = btoa(authorizationRaw);
-
-  return `wss://${SPARK_HOST}${pathname}?authorization=${authorization}&date=${date}&host=${SPARK_HOST}`;
-};
 
 export function fetchSpark(url, options) {
-  const auth = options.auth;
   const body = JSON.parse(options.body);
 
   const data = {
     header: {
-      app_id: auth.appId,
+      app_id: options.appId || body.app_id,
       uid: body.user,
     },
     parameter: {
@@ -62,8 +27,6 @@ export function fetchSpark(url, options) {
       },
     },
   };
-
-  url = getWebSocketUrl(body.model, auth.apiSecret, auth.apiKey);
 
   return new Promise((resolve, reject) => {
     let message = '';
