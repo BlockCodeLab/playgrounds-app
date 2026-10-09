@@ -247,11 +247,11 @@ export class ArduinoBoard {
     progress(100);
   }
 
-  async put(data, progress, prepare) {
-    const baudRate = this.baudRate;
+  async put(data, progress, prepare, baudRate = BAUD_RATE) {
+    const userBaudRate = this.baudRate;
 
-    // 总是以 115200 重连开始下载
-    await this.reconnect({ baudRate: BAUD_RATE });
+    // 以 baudRate 重连开始下载
+    await this.reconnect({ baudRate });
     await sleepMs(100);
 
     // 下载前置处理
@@ -269,7 +269,7 @@ export class ArduinoBoard {
     await this.leaveProgMode();
 
     await sleepMs(100);
-    await this.reconnect({ baudRate });
+    await this.reconnect({ baudRate: userBaudRate });
   }
 }
 
