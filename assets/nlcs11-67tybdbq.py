@@ -51,7 +51,7 @@ class NLCS11:
         :param gain: Gain setting (GAIN_1X, GAIN_1P5X, GAIN_2X, GAIN_2P5X)
         :param integration_time: Integration time setting (INTEGRATION_TIME_10MS, etc.)
         """
-        i2c.freq(freq)
+        # i2c.freq(freq)
         self.i2c = i2c
         self.addr = addr
         self.gain = gain

@@ -400,7 +400,7 @@ class MFRC522:
         :param i2c: machine.I2C object already configured
         :param addr: I2C address of MFRC522 (default 0x28)
         """
-        i2c.freq(freq)
+        # i2c.freq(freq)
         self.i2c = i2c
         self.addr = i2c_addr
         self.__MFRC522_init()
