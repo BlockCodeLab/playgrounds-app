@@ -1,5 +1,16 @@
 ## CHANGELOG
 
+### v1.5.7
+
+- Updated LGT8F328P Editor to v0.4.0
+  - Added LGT-Mini-Nano development board
+
+- Updated the Block Editor
+  - Added Encoder Motor extension
+  - Updated MQTT extension
+
+- Fixed known bugs
+
 ### v1.5.6
 
 - Updated Arduino Editor to v0.6.6
